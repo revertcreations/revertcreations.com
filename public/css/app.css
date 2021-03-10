@@ -31175,31 +31175,6 @@ video {
           animation: bounce 1s infinite;
 }
 
-li {
-  list-style: none;
-}
-
-ul {
-  margin-left: unset;
-  padding-left: unset;
-  display: flex ;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-#content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-#content .contract-wrap {
-  max-width: 800px;
-  height: 75vh;
-  align-self: center;
-  overflow-y: auto;
-}
-
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::domain('admin.revertcreations.test')->group(function () {
+
     Route::get('/', function () {
         return view('admin.dashboard');
-    });
+    })->name('admin.dashboard');
+
     Route::resource('proposal', ProposalController::class);
 
 });
