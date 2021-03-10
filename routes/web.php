@@ -1,6 +1,6 @@
 <?php
 
-use Cartalyst\Stripe\Api\Customers;
+use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::domain('admin.revertcreations.test')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    });
+    Route::resource('proposal', ProposalController::class);
+
+});
 
 Route::get('/', function () {
     return view('home');
@@ -35,7 +43,6 @@ Route::get('/photography/contract', function () {
     return view('photography-contract');
 })->name('photography.contract');
 
-// Route::resource('Proposals', [ProposalsController::class]);
 // Route::resource('Invoices', [InvoicesController::class]);
 // Route::resource('Images', [ImagesController::class]);
 // Route::resource('Customers',[CustomersController::class]);
