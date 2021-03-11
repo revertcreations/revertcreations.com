@@ -15,16 +15,21 @@ class CreatePhotographyContractsTable extends Migration
     {
         Schema::create('photography_contracts', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('client_id')->constrained('clients');
+            $table->foreignId('client_id')->constrained('clients');
             $table->foreignId('proposal_id')->constrained('proposals');
             $table->enum('status', ['client_pending', 'client_approved', 'client_declined', 'active', 'declined'])->default('client_pending');
             $table->dateTime('event_starts')->nullable();
             $table->dateTime('event_ends')->nullable();
-            $table->string('photoshoot_location')->nullable();
-            $table->decimal('late_fee_percentage',5,4)->default(0.00);
-            $table->decimal('retainer_fee', 10, 2)->default(0.00);
+            $table->decimal('late_fee_percentage',5,4)->default(0);
+            $table->decimal('retainer_fee', 10, 2)->default(0);
             $table->tinyInteger('delivered_images_count')->nullable();
             $table->decimal('price_per_image',10,2)->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('photography_contract_addresses', function (Blueprint $table) {
+            $table->foreignId('photography_contract_id')->constrained('photography_contracts');
+            $table->foreignId('address_id')->constrained('addresses');
             $table->timestamps();
         });
     }
@@ -37,5 +42,6 @@ class CreatePhotographyContractsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('photography_contracts');
+        Schema::dropIfExists('photography_contract_addresses');
     }
 }

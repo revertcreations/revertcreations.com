@@ -20,8 +20,20 @@
                     </div>
                     <div class="mt-5 md:mt-0 md:col-span-2">
                         <form action="{{ route('proposal.store') }}" method="POST">
+                            @csrf
                             <div class="shadow overflow-hidden sm:rounded-md">
                                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label for="client_id" class="block text-sm font-medium text-gray-700">Client</label>
+                                        <select id="client_id" name="client_id" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                           @forelse ($clients as $client)
+                                                <option value="{{ $client->id }}">{{ $client->organization }} - {{ $client->first_name }} {{ $client->last_name }}</option>
+                                            @empty
+                                                <option value=""><a href="{{ route('client.create') }}">You need one of these first</a></option>
+                                            @endforelse
+                                        </select>
+                                    </div>
 
                                     <div class="col-span-6 sm:col-span-3">
                                         <label for="type" class="block text-sm font-medium text-gray-700">Type</label>

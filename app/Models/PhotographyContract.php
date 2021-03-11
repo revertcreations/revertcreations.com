@@ -9,6 +9,8 @@ class PhotographyContract extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function client()
     {
         return $this->belongsTo(Client::class);
@@ -17,5 +19,10 @@ class PhotographyContract extends Model
     public function proposal()
     {
         return $this->belongsTo(Proposal::class);
+    }
+
+    public function address()
+    {
+        return $this->hasManyThrough(Address::class, PhotographyContractAddress::class);
     }
 }
