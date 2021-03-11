@@ -6,7 +6,7 @@ use App\Models\PhotographyContract;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
 
-class PhotographyContractsController extends Controller
+class PhotographyContractController extends Controller
 {
     /**
      * Display a listing of the resource.

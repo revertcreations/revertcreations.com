@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use CommerceGuys\Addressing\Address;
-use CommerceGuys\Addressing\Formatter\DefaultFormatter;
-use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
-use CommerceGuys\Addressing\Country\CountryRepository;
-use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
+use App\Models\Address;
+use App\Models\Client;
+use App\Models\ClientAddress;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -18,7 +16,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return view('admin.client.index');
+        $clients = Client::all();
+        return view('admin.client.index', compact('clients'));
     }
 
     /**
@@ -37,23 +36,33 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Address $address)
+    public function store(Request $request)
     {
 
-        $addressFormatRepository = new AddressFormatRepository();
-        $countryRepository = new CountryRepository();
-        $subdivisionRepository = new SubdivisionRepository();
-        $formatter = new DefaultFormatter($addressFormatRepository, $countryRepository, $subdivisionRepository);
 
-        $address = $address
-        ->withCountryCode('US')
-        ->withAdministrativeArea('CA')
-        ->withLocality('Mountain View')
-        ->withAddressLine1('1098 Alta Ave');
+        $client = Client::create([
+            'organization' => $request->organization,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone_number
+        ]);
 
-        dd($formatter->format($address));
+        $address = Address::create([
+            'street_address' => $request->street_address,
+            'street_address_2' => $request->street_address_2,
+            'city' => $request->city,
+            'state_code' => $request->state,
+            'country_code' => $request->country,
+            'postal_code' => $request->postal_code
+        ]);
 
-        return back();
+        ClientAddress::create([
+            'client_id' => $client->id,
+            'address_id' => $address->id
+        ]);
+
+        return redirect()->route('client.index');
     }
 
     /**

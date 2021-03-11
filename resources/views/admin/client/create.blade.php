@@ -27,7 +27,8 @@
                     </div>
 
                     <div class="mt-5 md:mt-0 md:col-span-2">
-                        <form action="#" method="POST">
+                        <form action="{{ route('client.store') }}" method="POST">
+                            @csrf
                             <div class="shadow overflow-hidden sm:rounded-md">
                                 <div class="px-4 py-5 bg-white sm:p-6">
                                     <div class="grid grid-cols-6 gap-6">
@@ -48,8 +49,8 @@
                                         </div>
 
                                         <div class="col-span-6 sm:col-span-4">
-                                            <label for="email_address" class="block text-sm font-medium text-gray-700">Email address</label>
-                                            <input type="text" name="email_address" id="email_address" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                            <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                                            <input type="text" name="email" id="email" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                         </div>
 
                                         <div class="col-span-6 sm:col-span-4">

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\PhotographyController;
+use App\Http\Controllers\PhotographyContractController;
 use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,7 +24,7 @@ Route::domain('admin.revertcreations.test')->group(function () {
 
     Route::resource('proposal', ProposalController::class);
     Route::resource('client', ClientController::class);
-    Route::resource('photography', PhotographyController::class);
+    // Route::resource('photography', PhotographyContractController::class);
 
 });
 
@@ -42,8 +42,8 @@ Route::get('/about', function () {
 })->name('about');
 
 
-Route::get('/photography', [PhotographyController::class, 'publicIndex'])->name('photography');
-Route::get('/photography/proposal/{proposal}/{token}', [PhotographyController::class, 'publicProposal'])->name('photography.proposal');
+Route::get('/photography', [PhotographyContractController::class, 'publicIndex'])->name('photography');
+Route::get('/photography/proposal/{proposal}/{token}', [PhotographyContractController::class, 'publicProposal'])->name('photography.proposal');
 
 // Route::resource('Invoices', [InvoicesController::class]);
 // Route::resource('Images', [ImagesController::class]);

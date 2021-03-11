@@ -8,13 +8,13 @@
 </div>
 
 <div class="col-span-6">
-    <label for="address1" class="block text-sm font-medium text-gray-700">Street address</label>
-    <input type="text" name="address1" autocomplete="address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+    <label for="street_address" class="block text-sm font-medium text-gray-700">Street address</label>
+    <input type="text" name="street_address" autocomplete="address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
 </div>
 
 <div class="col-span-6">
-    <label for="address2" class="block text-sm font-medium text-gray-700">Street address 2</label>
-    <input type="text" name="address2" autocomplete="address2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+    <label for="street_address_2" class="block text-sm font-medium text-gray-700">Street address 2</label>
+    <input type="text" name="street_address_2" autocomplete="street_address_2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
 </div>
 
 <div class="col-span-6 sm:col-span-6 lg:col-span-2">
@@ -32,6 +32,6 @@
 </div>
 
 <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-    <label for="postal-code" class="block text-sm font-medium text-gray-700">ZIP / Postal</label>
-    <input type="text" name="postal-code" autocomplete="postal-code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+    <label for="postal_code" class="block text-sm font-medium text-gray-700">ZIP / Postal</label>
+    <input type="text" name="postal_code" autocomplete="postal_code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
 </div>
