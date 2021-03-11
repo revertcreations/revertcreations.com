@@ -19,7 +19,7 @@ class CreateProposalsTable extends Migration
             $table->enum('status', ['pending', 'approved', 'archived'])->default('pending');
             $table->string('public_token');
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->timestamps();
         });
     }

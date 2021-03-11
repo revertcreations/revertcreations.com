@@ -1,7 +1,7 @@
 <x-layout>
-    <div class="contract-wrap">
+    <div class="self-center flex-col max-w-7xl h-96 overflow-y-scroll">
 
-        <h2>Photography Contract</h3>
+        <h2 class="mt-1 text-gray-800 font-bold text-2xl">Photography Contract</h3>
         <p>
             This agreement is between Revert Creations, hereinafter referred to as the &quot;
             <strong>Photographer</strong>&quot;, operating in the State of New Mexico, and the signers
@@ -35,8 +35,8 @@
             and place.
         </p>
         <p>
-            The Photographer and the Client are to arrive for the Shoot at {{ $proposal->event_starts }}
-            at {{ $proposal->photoshoot_location }} on {{ $proposal->event_ends }}
+            The Photographer and the Client are to arrive for the Shoot at {{ $proposal->photoshoot_location }}
+            on {{ date('date("F j, Y, g:i a")', strtotime($proposal->event_starts)) }}
         </p>
         <p>
             The Photographer agrees to edit and deliver a minimum of {{ $proposal->delivered_images_count }}
@@ -190,19 +190,3 @@
 
     </div>
 </x-layout>
-
-
-$table->id();
-$table->foreignId('client_id')->constrained('clients')->nullable();
-$table->enum('type', ['photography', 'design', 'development'])->default('photography');
-$table->enum('status', ['pending', 'approved', 'archived'])->default('pending');
-$table->string('title');
-$table->string('description');
-$table->dateTime('event_starts');
-$table->dateTime('event_ends');
-$table->string('photoshoot_location')->nullable();
-$table->decimal('late_fee_percentage',5,4)->default(0.00);
-$table->decimal('retainer_fee', 10, 2)->default(0.00);
-$table->tinyInteger('delivered_images')->nullable();
-$table->decimal('price_per_image',10,2)->nullable();
-$table->timestamps();

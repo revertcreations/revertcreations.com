@@ -26,6 +26,7 @@ class CreateAddressesTable extends Migration
         });
 
         Schema::create('client_addresses', function(Blueprint $table) {
+            $table->id();
             $table->foreignId('client_id')->constrained('clients');
             $table->foreignId('address_id')->constrained('addresses');
             $table->timestamps();

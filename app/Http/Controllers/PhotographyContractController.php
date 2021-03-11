@@ -86,9 +86,11 @@ class PhotographyContractController extends Controller
 
     public function publicProposal(Proposal $proposal, $token='')
     {
-        if(!$proposal || $token !== $proposal->public_token)
+        if(!$proposal || $token !== urldecode($proposal->public_token))
             return redirect('home');
 
-        return view('photography.proposal', compact('proposal'));
+        dd($proposal->photographyContract);
+
+        return view('photography-proposal', compact('proposal'));
     }
 }

@@ -15,4 +15,9 @@ class Proposal extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function photographyContract()
+    {
+        return $this->belongsTo(PhotographyContract::class);
+    }
 }

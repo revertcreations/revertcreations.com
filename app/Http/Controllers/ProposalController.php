@@ -67,8 +67,8 @@ class ProposalController extends Controller
                 $photography_contract = PhotographyContract::create([
                     'client_id' => $request->client_id,
                     'proposal_id' => $proposal->id,
-                    'event_starts' => date('Y-m-d H:i:s', $request->event_starts),
-                    'event_ends' => date('Y-m-d H:i:s', $request->event_ends),
+                    'event_starts' => date('Y-m-d H:i:s', strtotime($request->event_starts)),
+                    'event_ends' => date('Y-m-d H:i:s', strtotime($request->event_ends)),
                     'late_fee_percentage' => $request->late_fee_percentage ?: 0,
                     'retainer_fee' => $request->retainer_fee ?: 0,
                     'delivered_images_count' => $request->delivered_images_count,

@@ -28,6 +28,7 @@ class CreatePhotographyContractsTable extends Migration
         });
 
         Schema::create('photography_contract_addresses', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('photography_contract_id')->constrained('photography_contracts');
             $table->foreignId('address_id')->constrained('addresses');
             $table->timestamps();

@@ -18,7 +18,7 @@ class PhotographyContract extends Model
 
     public function proposal()
     {
-        return $this->belongsTo(Proposal::class);
+        return $this->hasOne(Proposal::class);
     }
 
     public function address()
