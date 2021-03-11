@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use CommerceGuys\Addressing\Address;
+use CommerceGuys\Addressing\Formatter\DefaultFormatter;
+use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
+use CommerceGuys\Addressing\Country\CountryRepository;
+use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use Illuminate\Http\Request;
 
-class ProposalController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +18,7 @@ class ProposalController extends Controller
      */
     public function index()
     {
-        return view('admin.proposal.index');
+        return view('admin.client.index');
     }
 
     /**
@@ -23,7 +28,7 @@ class ProposalController extends Controller
      */
     public function create()
     {
-        return view('admin.proposal.create');
+        return view('admin.client.create');
     }
 
     /**
@@ -32,20 +37,23 @@ class ProposalController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Address $address)
     {
-        // $table->foreignId('client_id')->constrained('clients')->nullable();
-        // $table->enum('type', ['photography', 'design', 'development'])->default('photography');
-        // $table->enum('status', ['pending', 'approved', 'archived'])->default('pending');
-        // $table->string('title');
-        // $table->string('description');
-        // $table->dateTime('event_starts');
-        // $table->dateTime('event_ends');
-        // $table->string('photoshoot_location')->nullable();
-        // $table->decimal('late_fee_percentage',5,4)->default(0.00);
-        // $table->decimal('retainer_fee', 10, 2)->default(0.00);
-        // $table->tinyInteger('delivered_images')->nullable();
-        // $table->decimal('price_per_image',10,2)->nullable();
+
+        $addressFormatRepository = new AddressFormatRepository();
+        $countryRepository = new CountryRepository();
+        $subdivisionRepository = new SubdivisionRepository();
+        $formatter = new DefaultFormatter($addressFormatRepository, $countryRepository, $subdivisionRepository);
+
+        $address = $address
+        ->withCountryCode('US')
+        ->withAdministrativeArea('CA')
+        ->withLocality('Mountain View')
+        ->withAddressLine1('1098 Alta Ave');
+
+        dd($formatter->format($address));
+
+        return back();
     }
 
     /**

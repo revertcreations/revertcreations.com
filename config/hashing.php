@@ -17,6 +17,8 @@ return [
 
     'driver' => 'bcrypt',
 
+    'public_token_salt' => env('PUBLIC_TOKEN_SALT', null),
+
     /*
     |--------------------------------------------------------------------------
     | Bcrypt Options

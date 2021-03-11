@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PhotographyContract;
+use App\Models\Proposal;
 use Illuminate\Http\Request;
 
-class ProposalController extends Controller
+class PhotographyContractsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +15,7 @@ class ProposalController extends Controller
      */
     public function index()
     {
-        return view('admin.proposal.index');
+        //
     }
 
     /**
@@ -23,7 +25,7 @@ class ProposalController extends Controller
      */
     public function create()
     {
-        return view('admin.proposal.create');
+        //
     }
 
     /**
@@ -34,27 +36,16 @@ class ProposalController extends Controller
      */
     public function store(Request $request)
     {
-        // $table->foreignId('client_id')->constrained('clients')->nullable();
-        // $table->enum('type', ['photography', 'design', 'development'])->default('photography');
-        // $table->enum('status', ['pending', 'approved', 'archived'])->default('pending');
-        // $table->string('title');
-        // $table->string('description');
-        // $table->dateTime('event_starts');
-        // $table->dateTime('event_ends');
-        // $table->string('photoshoot_location')->nullable();
-        // $table->decimal('late_fee_percentage',5,4)->default(0.00);
-        // $table->decimal('retainer_fee', 10, 2)->default(0.00);
-        // $table->tinyInteger('delivered_images')->nullable();
-        // $table->decimal('price_per_image',10,2)->nullable();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\PhotographyContract  $contract
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PhotographyContract $contract)
     {
         //
     }
@@ -62,10 +53,10 @@ class ProposalController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Photography  $contract
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(PhotographyContract $contract)
     {
         //
     }
@@ -74,10 +65,10 @@ class ProposalController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Photography  $contract
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, PhotographyContract $contract)
     {
         //
     }
@@ -85,11 +76,19 @@ class ProposalController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Photography  $contract
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PhotographyContract $contract)
     {
         //
+    }
+
+    public function publicProposal(Proposal $proposal, $token='')
+    {
+        if(!$proposal || $token !== $proposal->public_token)
+            return redirect('home');
+
+        return view('photography.proposal', compact('proposal'));
     }
 }

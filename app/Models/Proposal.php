@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Proposal extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 }
