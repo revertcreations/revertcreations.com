@@ -57,14 +57,14 @@
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                                        <label for="image_price" class="block text-sm font-medium text-gray-700">
+                                        <label for="price_per_image" class="block text-sm font-medium text-gray-700">
                                             Price Per Full Released Images
                                         </label>
                                         <div class="mt-1 flex rounded-md shadow-sm">
                                             <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                                                 $
                                             </span>
-                                            <input type="number" name="image_price" id="image_price" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
+                                            <input type="number" name="price_per_image" id="price_per_image" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
                                         </div>
                                     </div>
 
@@ -81,14 +81,14 @@
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                                        <label for="num_delivered_images" class="block text-sm font-medium text-gray-700">
+                                        <label for="delivered_images_count" class="block text-sm font-medium text-gray-700">
                                             Delivered Images
                                         </label>
                                         <div class="mt-1 flex rounded-md shadow-sm">
                                             <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                                                 #
                                             </span>
-                                            <input type="number" name="num_delivered_images" id="num_delivered_images" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
+                                            <input type="number" name="delivered_images_count" id="delivered_images_count" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300">
                                         </div>
                                     </div>
 

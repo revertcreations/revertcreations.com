@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Client;
-use App\Models\ClientAddress;
+use App\Models\AddressClient;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -57,7 +57,7 @@ class ClientController extends Controller
             'postal_code' => $request->postal_code
         ]);
 
-        ClientAddress::create([
+        AddressClient::create([
             'client_id' => $client->id,
             'address_id' => $address->id
         ]);

@@ -13,7 +13,7 @@ class Client extends Model
 
     public function addresses()
     {
-        return $this->hasManyThrough(Address::class, ClientAddress::class);
+        return $this->belongsToMany(Address::class);
     }
 
     public function proposals()

@@ -13,6 +13,6 @@ class Address extends Model
 
     public function client()
     {
-        return $this->hasOneThrough(Client::class, ClientAddress::class);
+        return $this->belongsToMany(Client::class);
     }
 }

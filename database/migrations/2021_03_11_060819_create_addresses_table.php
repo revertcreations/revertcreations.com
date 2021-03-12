@@ -25,7 +25,7 @@ class CreateAddressesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('client_addresses', function(Blueprint $table) {
+        Schema::create('address_client', function(Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients');
             $table->foreignId('address_id')->constrained('addresses');
@@ -41,6 +41,6 @@ class CreateAddressesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('addresses');
-        Schema::dropIfExists('client_addresses');
+        Schema::dropIfExists('address_client');
     }
 }

@@ -75,6 +75,8 @@ class ProposalController extends Controller
                     'price_per_image' => $request->price_per_image
                 ]);
 
+                $proposal->update(['photography_contract_id' => $photography_contract->id]);
+
                 if (isset($address)) {
                     PhotographyContractAddress::create([
                         'photography_contract_id' => $photography_contract->id,

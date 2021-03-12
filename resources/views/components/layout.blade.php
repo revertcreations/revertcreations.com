@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>revert creations</title>
+    <title>REVERT CREATIONS</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
@@ -26,7 +26,7 @@
 
         <div id="content" class="flex flex-col">
 
-            <h1 class="self-center  justify-center">REVERT CREATIONS</h1>
+            <h1 class="self-end text-8xl mt-3 mb-3 bg-blue-50 text-gray-700">REVERT CREATIONS</h1>
 
             {{ $slot }}
 

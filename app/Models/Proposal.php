@@ -18,6 +18,6 @@ class Proposal extends Model
 
     public function photographyContract()
     {
-        return $this->belongsTo(PhotographyContract::class);
+        return $this->belongsTo(PhotographyContract::class, 'photography_contract_id', 'id');
     }
 }

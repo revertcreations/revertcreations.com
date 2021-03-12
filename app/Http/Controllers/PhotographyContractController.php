@@ -84,12 +84,18 @@ class PhotographyContractController extends Controller
         //
     }
 
-    public function publicProposal(Proposal $proposal, $token='')
+    public function publicIndex()
     {
-        if(!$proposal || $token !== urldecode($proposal->public_token))
-            return redirect('home');
+        return view('photography');
+    }
 
-        dd($proposal->photographyContract);
+    public function publicProposal(Proposal $proposal, $token)
+    {
+
+        if(base64_decode($token) !== $proposal->public_token)
+            return redirect()->route('home');
+
+        // dd($proposal->photographyContract->event_ends);
 
         return view('photography-proposal', compact('proposal'));
     }

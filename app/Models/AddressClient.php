@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ClientAddress extends Model
+class AddressClient extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
+    protected $table = 'address_client';
 
 }

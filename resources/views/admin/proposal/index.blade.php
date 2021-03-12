@@ -56,7 +56,7 @@
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a target="_blank" href="{{ route('photography.proposal', ['proposal' => $proposal->id, 'token' => urlencode($proposal->public_token)]) }}" class="text-indigo-600 hover:text-indigo-900">Preview</a>
+                                            <a target="_blank" href="{{ route('photography.proposal', ['proposal' => $proposal->id, 'token' => base64_encode($proposal->public_token)]) }}" class="text-indigo-600 hover:text-indigo-900">Preview</a>
                                         </td>
 
                                     </tr>
