@@ -6,20 +6,17 @@
 
         <i class="mt-1 bg-gray-800 text-gray-200 text-5xl">Photoshoot Proposal</i>
 
-        <div class="m-5  self-center justify-around flex flex-col md:flex-row">
+        <p class="m-5">
+            Hi there <span class=" underline font-bold text-lg">{{ $proposal->client->first_name }}</span>! Looks like we got some business to go over, how exciting!
+            Below you will see my proposal for the upcoming photoshoot that we have discussed. Feel free to edit any of the details below. Once you are happy
+            with the terms on your side, check the agreement checkbox below, and click the "I Agree" button. I'll be notified, and review all changes, if any. Once we both agree,
+            I'll send you an email a copy of the finalized agreement, along with pre-shoot invoices, if any.
+        </p>
 
-            <div class="flex flex-col">
+        <p class="m-5">
+            Thanks so much for the opportunity, and I look forward to creating just the perfect content with you!
+        </p>
 
-                <p class="m-5">
-                    Hi there <span class=" underline font-bold text-lg">{{ $proposal->client->first_name }}</span>! Looks like we got some business to go over, how exciting!
-                    Below you will see my proposal for the upcoming photoshoot that we have discussed. Feel free to edit any of the details below. Once you are happy
-                    with the terms on your side, check the agreement checkbox below, and click the "I Agree" button. I'll be notified, and review all changes, if any. Once we both agree,
-                    I'll send you an email a copy of the finalized agreement, along with pre-shoot invoices, if any.
-                </p>
-
-                <p class="m-5">
-                    Thanks so much for the opportunity, and I look forward to creating just the perfect content with you!
-                </p>
         <br>
 
         <i class="mt-1 bg-gray-300 text-3xl">Details &amp; Pricing</i>
@@ -30,26 +27,26 @@
 
                 <label for="title">Photoshoot Name</label>
                 <div>
-                    <input name="title" class="w-full inline border-none mt-1 text-gray-800 font-bold text-2xl" type="text" value="{{ $proposal->title }}">
+                    <input name="title" class="w-full border-none mt-1 text-gray-800 font-bold text-2xl" type="text" value="{{ $proposal->title }}">
                 </div>
 
                 <label for="description">Brief Description</label>
                 <div>
-                    <textarea data-autoresize name="description" class="w-full  h-full inline border-none mt-1 text-gray-800 font-bold text-2xl" rows="6" cols="50" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ $proposal->description }}</textarea>
+                    <textarea data-autoresize name="description" class="w-full h-full inline border-none mt-1 text-gray-800 font-bold text-2xl" rows="6" cols="50" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ $proposal->description }}</textarea>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
                     <label for="event_starts" class="block text-sm font-medium text-gray-700">
                         Start Date / Time
                     </label>
-                    <input type="text" name="event_starts" id="event_starts" class="w-full inline border-none mt-1 text-gray-800 font-bold text-4xl" value="{{ $proposal->photographyContract->event_starts }}">
+                    <input x-bind-contract type="text" name="event_starts" id="event_starts" class="w-full inline border-none mt-1 text-gray-800 font-bold text-4xl" value="{{ $proposal->photographyContract->event_starts }}">
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
                     <label for="event_ends" class="block text-sm font-medium text-gray-700">
                         End Date / Time
                     </label>
-                    <input type="text" name="event_ends" id="event_ends" class="w-full inline border-none mt-1 text-gray-800 font-bold text-4xl" value="{{ $proposal->photographyContract->event_ends }}">
+                    <input x-bind-contract type="text" name="event_ends" id="event_ends" class="w-full inline border-none mt-1 text-gray-800 font-bold text-4xl" value="{{ $proposal->photographyContract->event_ends }}">
                 </div>
             </div>
 
@@ -58,20 +55,21 @@
                 <label for="price_per_image">Price Per Photo</label>
                 <div>
                     <span class="inline">$</span>
-                    <input name="price_per_image" class="inline border-none mt-1 text-gray-800 font-bold text-4xl" type="number" min="1" step="any" value="{{ $proposal->photographyContract->price_per_image }}">
+                    <input x-bind-contract name="price_per_image" id="price_per_image" class="inline border-none mt-1 text-gray-800 font-bold text-4xl" type="number" min="1" step="any" value="{{ $proposal->photographyContract->price_per_image }}">
+                    <input type="hidden" name="" id="price_per_image_bound">
                 </div>
 
                 <label for="delivered_images_count">Number Of Edited Images Delivered</label>
                 <div>
                     <span class="inline">#</span>
-                    <input name="delivered_images_count" class="inline border-none mt-1 text-gray-800 font-bold text-4xl" type="number" min="1" value="{{ $proposal->photographyContract->delivered_images_count }}">
+                    <input x-bind-contract name="delivered_images_count" id="delivered_images_count" class="inline border-none mt-1 text-gray-800 font-bold text-4xl" type="number" min="1" value="{{ $proposal->photographyContract->delivered_images_count }}">
                 </div>
 
-                <div class=" justify-end">
-                    <label for="">Total Billing Amount <small>(pre taxes)</small></label>
+                <div class="justify-end">
+                    <label>Total Billing Amount <small>(pre taxes)</small></label>
                     <div>
                         <span class="inline">$</span>
-                        <div class="inline border-none mt-1 text-gray-800 font-bold text-4xl" type="text">{{ $proposal->photographyContract->price_per_image * $proposal->photographyContract->delivered_images_count }}</div>
+                        <div id="total_billing_amount_bound_1" class="inline border-none mt-1 text-gray-800 font-bold text-4xl" type="text">{{ $proposal->photographyContract->price_per_image * $proposal->photographyContract->delivered_images_count }}</div>
                     </div>
                 </div>
             </div>
@@ -85,19 +83,19 @@
             <div class="flex flex-col">
 
                 <label for="organization">Organization</label>
-                <input name="organization" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->organization }}">
+                <input x-bind-contract name="client_organization" id="organization" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->organization }}">
 
                 <label for="first_name">First Name</label>
-                <input name="first_name" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->first_name }}">
+                <input x-bind-contract id="first_name" name="first_name" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->first_name }}">
 
                 <label for="last_name">Last Name</label>
-                <input name="last_name" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->last_name }}">
+                <input x-bind-contract id="last_name" name="last_name" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->last_name }}">
 
                 <label for="email">Email</label>
-                <input name="email" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->email }}">
+                <input x-bind-contract id="email" name="email" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->email }}">
 
                 <label for="phone">Phone</label>
-                <input name="phone" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->phone }}">
+                <input x-bind-contract id="phone" name="phone" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->phone }}">
 
                 <label for="website">Website</label>
                 <input name="website" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->website }}">
@@ -107,19 +105,19 @@
             <div class="flex flex-col">
 
                 <label for="street_address">Street</label>
-                <input name="street_address" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->street_address }}">
+                <input x-bind-contract id="client_street_address" name="street_address" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->street_address }}">
 
                 <label for="street_address_2">Street2</label>
-                <input name="street_address_2" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->street_address_2 }}">
+                <input x-bind-contract id="client_street_address_2" name="street_address_2" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->street_address_2 }}">
 
                 <label for="city">City</label>
-                <input name="city" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->city }}">
+                <input x-bind-contract id="client_city" name="city" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->city }}">
 
                 <label for="state_code">State</label>
-                <input name="state_code" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->state_code }}">
+                <input x-bind-contract id="client_state_code" name="state_code" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->state_code }}">
 
                 <label for="postal_code">Zip</label>
-                <input name="postal_code" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->postal_code }}">
+                <input x-bind-contract id="client_postal_code" name="postal_code" class="border-none mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ $proposal->client->addresses()->first()->postal_code }}">
 
             </div>
 
@@ -138,12 +136,12 @@
 
             <h3 class="text-4xl mb-1 mt-1">Contracting Parties</h3>
             <p class="m-3">
-                <p class="m-3"><span class="bg-yellow-400">{{ $proposal->photographyContract->client->organization }}</span></p>
-                <p class="m-3"><span class="bg-yellow-400">{{ $proposal->photographyContract->client->first_name }} {{ $proposal->photographyContract->client->last_name }}</span></p>
-                <p class="m-3"><span class="bg-yellow-400">{{ $proposal->photographyContract->client->email }}</span></p>
-                <p class="m-3"><span class="bg-yellow-400">{{ $proposal->photographyContract->client->addresses()->first()->street_address }}</span></p>
-                <p class="m-3"><span class="bg-yellow-400">{{ $proposal->photographyContract->client->addresses()->first()->city }}, {{ $proposal->photographyContract->client->addresses()->first()->state_code }}</span></p>
-                <p class="m-3"><span class="bg-yellow-400">{{ $proposal->photographyContract->client->addresses()->first()->postal_code }}</span></p>
+                <p class="m-3"><span x-bind-contract id="organization_bound" class="bg-yellow-400">{{ $proposal->photographyContract->client->organization }}</span></p>
+                <p class="m-3"><span x-bind-contract id="first_name_bound" class="bg-yellow-400">{{ $proposal->photographyContract->client->first_name }}</span> <span  x-bind-contract id="last_name" class="bg-yellow-400">{{ $proposal->photographyContract->client->last_name }}</span></p>
+                <p class="m-3"><span x-bind-contract id="email" class="bg-yellow-400">{{ $proposal->photographyContract->client->email }}</span></p>
+                <p class="m-3"><span x-bind-contract id="" class="bg-yellow-400">{{ $proposal->photographyContract->client->addresses()->first()->street_address }}</span></p>
+                <p class="m-3"><span x-bind-contract id="client_city_bound" class="bg-yellow-400">{{ $proposal->photographyContract->client->addresses()->first()->city }}, {{ $proposal->photographyContract->client->addresses()->first()->state_code }}</span></p>
+                <p class="m-3"><span x-bind-contract id="client_postal_code_bound" class="bg-yellow-400">{{ $proposal->photographyContract->client->addresses()->first()->postal_code }}</span></p>
             </p>
 
             <h3 class="text-4xl mb-1 mt-1">Agreement Overview</h3>
@@ -165,8 +163,10 @@
                 and place.
             </p>
             <p class="m-3">
-                The Photographer and the Client are to arrive for the Shoot at {{ $proposal->photoshoot_location }}
-                on <span class="bg-yellow-400">{{ date("F j, Y, g:i a", strtotime($proposal->photographyContract->event_starts)) }}</span>
+                The Photographer and the Client are to arrive for the Shoot at <span id="shoot_street_address_bound" class="bg-yellow-400">{{ $proposal->street_address }}</span>
+                <span id="street_address_2_bound" class="bg-yellow-400">{{ $proposal->street_address_2 }}</span> <span id="city_bound" class="bg-yellow-400">{{ $proposal->city }}</span>
+                <span id="state_code_bound" class="bg-yellow-400">{{ $proposal->state_code }}</span> <span id="postal_code_bound" class="bg-yellow-400">{{ $proposal->postal_code }}</span>
+                on <span id="event_starts_bound" class="bg-yellow-400">{{ date("F j, Y, g:i a", strtotime($proposal->photographyContract->event_starts)) }}</span>
             </p>
             <p class="m-3">
                 The Photographer agrees to edit and deliver a minimum of <span id="delivered_images_count_bound" class="bg-yellow-400">{{ $proposal->photographyContract->delivered_images_count }}</span>
@@ -191,7 +191,7 @@
             <h3 class="text-4xl mb-1 mt-1">Fees</h3>
             <p class="m-3">
                 In consideration for the photography services provided by the Photographer, the Client agrees to pay
-                <span class="bg-yellow-400">${{ $proposal->photographyContract->price_per_image * $proposal->photographyContract->delivered_images_count }}</span>.
+                <span class="bg-yellow-400">$</span><span id="total_billing_amount_bound_2" class="bg-yellow-400">{{ $proposal->photographyContract->price_per_image * $proposal->photographyContract->delivered_images_count }}</span>.
                 The Photographer agrees to not advertise the availability of this same time slot to any other
                 potential clients. The balance of the payment for photography services must be paid in full no later
                 than 7 days after the Shoot. If the Client is failed to pay on time without a prior discussion with the
@@ -337,26 +337,22 @@
 
 
     <script type="text/javascript">
-        function addAutoResize() {
-            document.querySelectorAll('[data-autoresize]').forEach(function (element) {
-                element.style.boxSizing = 'border-box';
-                var offset = element.offsetHeight - element.clientHeight;
-                element.addEventListener('input', function (event) {
-                event.target.style.height = 'auto';
-                event.target.style.height = event.target.scrollHeight + offset + 'px';
-                });
-                element.removeAttribute('data-autoresize');
-            });
 
-            (function(){
-                var resize_texarea
-                function (event) {
-                event.target.style.height = 'auto';
-                event.target.style.height = event.target.scrollHeight + offset + 'px';
-                })
+            // document.getElementById('delivered_images_count').addEventListener('keydown', function(el){
+            //     console.log('el: ', el.target.value)
+            //     clearTimeout(bound_interval)
+            //     var bound_interval = setTimeout(function(){
+            //         document.getElementById('delivered_images_count_bound').innerText = el.target.value
+            //     }, 400)
+            // });
 
+            // document.getElementById('delivered_images_count').addEventListener('keydown', function(el){
+            //     console.log('el: ', el.target.value)
+            //     clearTimeout(bound_interval)
+            //     var bound_interval = setTimeout(function(){
+            //         document.getElementById('delivered_images_count_bound').innerText = el.target.value
+            //     }, 400)
+            // });
 
-             })();
-        }
     </script>
 </x-layout>

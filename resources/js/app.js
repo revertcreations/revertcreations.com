@@ -26,21 +26,61 @@ window.flatpickr = flatpickr;
         })
 
 
-        if(document.getElementById('event_starts'))
-            var event_starts = window.flatpickr(document.getElementById('event_starts'),
+    if(document.getElementById('event_starts'))
+        var event_starts = window.flatpickr(document.getElementById('event_starts'),
+            {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                onChange: function(selectedDates, dateStr, instance){
+
+                    if(document.getElementById('event_starts_bound')) {
+                        document.getElementById('event_starts_bound').innerText = dateStr
+                    }
+                },
+            }
+        );
+
+    if(document.getElementById('event_ends'))
+        var event_ends = window.flatpickr(document.getElementById('event_ends'),
                 {
                     enableTime: true,
                     dateFormat: "Y-m-d H:i",
                 }
-            );
+        );
 
-        if(document.getElementById('event_ends'))
-            var event_ends = window.flatpickr(document.getElementById('event_ends'),
-                    {
-                        enableTime: true,
-                        dateFormat: "Y-m-d H:i",
-                    }
-            );
+
+    function addAutoResize() {
+        document.querySelectorAll('[data-autoresize]').forEach(function (element) {
+            element.style.boxSizing = 'border-box';
+            var offset = element.offsetHeight - element.clientHeight;
+            element.addEventListener('input', function (event) {
+            event.target.style.height = 'auto';
+            event.target.style.height = event.target.scrollHeight + offset + 'px';
+            });
+            element.removeAttribute('data-autoresize');
+        });
+    }
+
+    document.querySelectorAll('[x-bind-contract]').forEach(el => {
+
+        el.addEventListener('keydown', function(el){
+
+            console.log('el: ', el.target.value)
+            clearTimeout(bound_interval)
+            var bound_interval = setTimeout(function(){
+                console.log('in time out el: ', el.target.value)
+                document.getElementById(el.target.id+'_bound').innerText = el.target.value
+                if(el.target.id == 'delivered_images_count' || el.target.id == 'price_per_image') {
+                    var price_per_image = document.getElementById('price_per_image')
+                    var delivered_images_count = document.getElementById('delivered_images_count')
+                    var billing_total_ammount = isNaN(parseInt(price_per_image.value) * parseInt(delivered_images_count.value)) ? "0.00" : parseInt(price_per_image.value) * parseInt(delivered_images_count.value)
+                    document.getElementById('total_billing_amount_bound_1').innerText = billing_total_ammount
+                    document.getElementById('total_billing_amount_bound_2').innerText = billing_total_ammount
+                }
+            }, 400)
+        });
+    })
+
 
 })();
 
