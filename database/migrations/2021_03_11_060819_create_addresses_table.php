@@ -15,7 +15,7 @@ class CreateAddressesTable extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['billing', 'shipping', 'primary', 'archived'])->default('primary');
+            $table->enum('type', ['billing', 'shipping', 'primary', 'archived', 'photoshoot'])->default('primary');
             $table->string('street_address');
             $table->string('street_address_2')->nullable();
             $table->string('city');
@@ -31,6 +31,11 @@ class CreateAddressesTable extends Migration
             $table->foreignId('address_id')->constrained('addresses');
             $table->timestamps();
         });
+
+        Schema::create('address_photoshoot', function(Blueprint $table){
+            $table->foreignId('photoshoot_id')->constrained('photoshoots');
+            $table->foreignId('address_id')->contrained('addresses');
+        });
     }
 
     /**
@@ -42,5 +47,6 @@ class CreateAddressesTable extends Migration
     {
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('address_client');
+        Schema::dropIfExists('address_photoshoot');
     }
 }

@@ -43,6 +43,7 @@ Route::get('/about', function () {
 
 
 Route::get('/photography', [PhotographyContractController::class, 'publicIndex'])->name('photography');
+Route::get('/photography/proposal/success', [PhotographyContractController::class, 'publicProposalSuccess'])->name('photography.proposal.success');
 Route::get('/photography/proposal/{proposal}/{token?}', [PhotographyContractController::class, 'publicProposal'])->name('photography.proposal');
 
 // Route::resource('Invoices', [InvoicesController::class]);

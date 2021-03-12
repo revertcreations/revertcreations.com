@@ -86,7 +86,7 @@ class PhotographyContractController extends Controller
 
     public function publicIndex()
     {
-        return view('photography');
+        return view('photography.index');
     }
 
     public function publicProposal(Proposal $proposal, $token)
@@ -97,6 +97,11 @@ class PhotographyContractController extends Controller
 
         // dd($proposal->photographyContract->event_ends);
 
-        return view('photography-proposal', compact('proposal'));
+        return view('photography.proposal', compact('proposal'));
+    }
+
+    public function publicProposalSuccess(Proposal $proposal)
+    {
+        return view('photography.proposal.success', compact('proposal'));
     }
 }

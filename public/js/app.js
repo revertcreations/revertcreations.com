@@ -35,7 +35,9 @@ window.flatpickr = flatpickr__WEBPACK_IMPORTED_MODULE_0__.default;
     dateFormat: "Y-m-d H:i",
     onChange: function onChange(selectedDates, dateStr, instance) {
       if (document.getElementById('event_starts_bound')) {
-        document.getElementById('event_starts_bound').innerText = dateStr;
+        var date = new Date(dateStr);
+        var formatted_date = date.toDateString() + ' ' + date.toLocaleTimeString();
+        document.getElementById('event_starts_bound').innerText = formatted_date;
       }
     }
   });
@@ -74,6 +76,42 @@ window.flatpickr = flatpickr__WEBPACK_IMPORTED_MODULE_0__.default;
       }, 400);
     });
   });
+
+  if (document.getElementById('contract_agreement_checkbox')) {
+    var agreement = document.getElementById('contract_agreement_checkbox');
+    var contract_agreement_button = document.getElementById('contract_agreement_button');
+    agreement.addEventListener('click', function (event) {
+      if (agreement.checked) contract_agreement_button.disabled = false;else contract_agreement_button.disabled = true;
+    });
+  }
+
+  window.send_agreement = function (event) {
+    event = event || window.event;
+    event.preventDefault();
+    console.log('send this out');
+    var csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var token = document.getElementById('proposal_token').value;
+    var proposal = document.getElementById('proposal_id').value;
+    var url = '/api/proposal/' + proposal + '/' + token;
+    var redirect = '/photography/proposal/success';
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text-plain, */*",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRF-TOKEN": csrf_token
+      },
+      method: 'PUT',
+      credentials: "same-origin",
+      body: JSON.stringify({})
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      if (data.status == 'ok') window.location.href = redirect;
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  };
 })();
 
 /***/ }),
