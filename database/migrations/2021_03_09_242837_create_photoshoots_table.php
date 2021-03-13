@@ -19,7 +19,7 @@ class CreatePhotoshootsTable extends Migration
             $table->foreignId('photography_contract_id')->nullable();
             $table->enum('status', ['pending', 'approved', 'archived', 'complete'])->default('pending');
             $table->dateTime('event_date')->nullable();
-            $table->string('public_token');
+            $table->string('public_token')->nullable();
             $table->string('title');
             $table->text('description');
             $table->timestamps();

@@ -19,7 +19,7 @@ class PhotoshootController extends Controller
      */
     public function index()
     {
-        $photoshoots = Photoshoot::all();
+        $photoshoots = Photoshoot::where('photography_contract_id', '!=', 'NULL')->get();
         return view('admin.photoshoot.index', compact('photoshoots'));
     }
 

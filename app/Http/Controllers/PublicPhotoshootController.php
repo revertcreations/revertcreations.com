@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PublicPhotoshootContractAcceptsRequest;
+use App\Http\Requests\PublicPhotoshootStoreRequest;
 use App\Models\PhotographyContract;
 use App\Models\Address;
+use App\Models\AddressClient;
 use App\Models\Client;
 use App\Models\PhotographyContractAddress;
 use App\Models\Photoshoot;
@@ -19,36 +21,23 @@ class PublicPhotoshootController extends Controller
         return view('photography.photoshoot.create');
     }
 
-    public function store(Request $request)
+    public function store(PublicPhotoshootStoreRequest $request)
     {
         //do validation
+        $validated = $request->validated();
+
+        // dd($validated);
         //do client stuff
         $client = Client::where('email', $request->email)->get();
         if (!isset($client->id)) {
-            $client = Client::create($this->validateClient());
+            $client = Client::create($this->validatedClient($validated));
 
             if (!$client)
                 return back();
-
-            if (!empty($request->street_address)) {
-                $address = Address::create([
-                    'street_address' => $request->street_address,
-                    'street_address_2' => $request->street_address_2,
-                    'city' => $request->city,
-                    'state_code' => $request->state,
-                    'country_code' => $request->country,
-                    'postal_code' => $request->postal_code
-                ]);
-            }
         }
 
-        $photoshoot = Photoshoot::create([
-            'client_id' => $client->id,
-            'public_token' => Hash::make($request->client_id.config('hashing.public_token_salt').$request->title),
-            'title' => $request->title,
-            'description' => $request->description
-        ]);
-
+        $validated['client_id'] = $client->id;
+        $photoshoot = Photoshoot::create($this->validatedPhotoshoot($validated));
 
         return redirect()->route('public.photoshoot.success', compact('photoshoot'));
     }
@@ -56,9 +45,8 @@ class PublicPhotoshootController extends Controller
 
     public function show(Photoshoot $photoshoot, $token)
     {
-
         if(base64_decode($token) !== $photoshoot->public_token)
-        return redirect()->route('home');
+            return redirect()->route('home');
 
         return view('photography.photoshoot.show', compact('photoshoot'));
     }
@@ -67,7 +55,7 @@ class PublicPhotoshootController extends Controller
     {
 
         if(base64_decode($token) !== $photoshoot->public_token)
-        return redirect()->route('home');
+            return redirect()->route('home');
 
         return view('photography.photoshoot.edit', compact('photoshoot'));
     }
@@ -80,8 +68,9 @@ class PublicPhotoshootController extends Controller
     public function accepts(PublicPhotoshootContractAcceptsRequest $request, Photoshoot $photoshoot)
     {
 
-        $create = false;
+        $validated = $request->validated();
 
+        $create = false;
         foreach($photoshoot->contract->getAttributes() as $key => $value)
             if($request[$key] && $request[$key] != $value)
                 $create = true;
@@ -91,7 +80,10 @@ class PublicPhotoshootController extends Controller
                 'client_id' => $photoshoot->client->id,
                 'photoshoot_id' => $photoshoot->id,
                 'status' => 'client_approved',
-                'delivered_images_count' => $request->delivered_images_count,
+                'delivered_images_count' => $validated['delivered_images_count'],
+                'price_per_image' => $validated['price_per_image'],
+                'title' => $validated['title'],
+                'description' => $validated['description']
 
             ]);
 
@@ -100,7 +92,7 @@ class PublicPhotoshootController extends Controller
 
             $photoshoot->update([
                 'photography_contract_id' => $client_contract->id,
-                'public_token' => Hash::make($request->client_id.config('hashing.public_token_salt').$request->title)
+                'public_token' => Hash::make($photoshoot->id.config('hashing.public_token_salt').$request->title)
             ]);
 
         } else {
@@ -108,25 +100,57 @@ class PublicPhotoshootController extends Controller
             $photoshoot->contract->update(['status' => 'client_approved']);
 
             $photoshoot->update([
-                'public_token' => Hash::make($request->client_id.config('hashing.public_token_salt').$request->title)
+                'public_token' => Hash::make($photoshoot->id.config('hashing.public_token_salt').$request->title)
             ]);
         }
 
-        $photoshoot->client->update($this->validateClient());
+        $photoshoot->client->update($this->validatedClient($validated));
+
+        if(!empty($photoshoot->client->addresses()->first())) {
+            $photoshoot->client->addresses()->first()->update($this->validatedClientAddress($validated));
+        } else {
+            $client_address = Address::create($this->validatedClientAddress($validated));
+            AddressClient::create([
+                'client_id' => $photoshoot->client->id,
+                'address_id' => $client_address->id
+            ]);
+        }
 
         return redirect()->route('public.photoshoot.success', ['photoshoot' => $photoshoot->id]);
     }
 
-    protected function validateClient()
+    protected function validatedClient($validated=[])
     {
-        return request()->validate([
-            'organization' => 'nullable|string',
-            'website' => 'nullable|url',
-            'phone' => 'nullable|numeric',
-            'email' => 'required|email',
-            'first_name' => 'required',
-            'last_name' => 'required'
-        ]);
+        return [
+            'organization' => $validated['organization'],
+            'website' => $validated['website'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name']
+        ];
+    }
+
+    protected function validatedClientAddress($validated=[])
+    {
+        return [
+            'street_address' => $validated['street_address'],
+            'street_address_2' => $validated['street_address_2'],
+            'city' => $validated['city'],
+            'state_code' => $validated['state_code'],
+            'postal_code' => $validated['postal_code'],
+            'country_code' => $validated['country_code']
+        ];
+    }
+
+    protected function validatedPhotoshoot($validated=[])
+    {
+        return [
+            'client_id' => $validated['client_id'],
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'event_date' => $validated['event_date'],
+        ];
     }
 
 }

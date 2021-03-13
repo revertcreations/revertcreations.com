@@ -24,20 +24,39 @@
 
             <div class="flex flex-col mx-1">
 
-                <label for="title">Photoshoot Name</label>
+                <label for="title">
+                    Photoshoot Title
+                    @error('title')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
                 <div>
-                    <input name="title" class="w-full border-none mt-1 font-bold text-2xl" type="text" value="{{ $photoshoot->title }}">
+                    <input
+                        name="title"
+                        class="w-full @error('title') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-2xl"
+                        type="text"
+                        value="{{ old('title') ?: $photoshoot->title }}">
                 </div>
 
-                <label for="description">Brief Description</label>
+                <label for="description">
+                    Brief Description
+                    @error('description')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
                 <div>
-                    <textarea data-autoresize name="description" class="w-full h-full inline border-none mt-1 font-bold text-2xl" rows="6" cols="50" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ $photoshoot->description }}</textarea>
+                    <textarea
+                        data-autoresize
+                        name="description"
+                        class="w-full h-full inline @error('description') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-2xl"
+                        rows="6"
+                        cols="50"
+                        oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ old('description') ?: $photoshoot->description }}</textarea>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                    <label for="arrival_at" class="block text-sm font-medium text-gray-700">
+                    <label for="arrival_at">
                         Arrival Date / Time
-                        {{-- {{ dd($errors->all()) }} --}}
                         @error('arrival_at')
                         <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
                         @enderror
@@ -47,23 +66,41 @@
                         x-bind-contract
                         type="text"
                         name="arrival_at"
-                        class="w-full inline  @error('arrival_at') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                        class="w-full inline @error('arrival_at') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
                         value="{{ old('arrival_at') ?: $photoshoot->contract->arrival_at }}"
                     >
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                    <label for="event_starts" class="block text-sm font-medium text-gray-700">
+                    <label for="event_starts">
                         Shoot Start Date / Time
+                        @error('event_starts')
+                        <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                        @enderror
                     </label>
-                    <input x-bind-contract type="text" name="event_starts" id="event_starts" class="w-full inline border-none mt-1 font-bold text-4xl" value="{{ $photoshoot->contract->event_starts }}">
+                    <input
+                        x-bind-contract
+                        type="text"
+                        name="event_starts"
+                        id="event_starts"
+                        class="w-full inline @error('event_starts') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                        value="{{ old('event_starts') ?: $photoshoot->contract->event_starts }}">
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                    <label for="event_ends" class="block text-sm font-medium text-gray-700">
+                    <label for="event_ends">
                         Shoot End Date / Time
+                        @error('event_ends')
+                        <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                        @enderror
                     </label>
-                    <input x-bind-contract type="text" name="event_ends" id="event_ends" class="w-full inline border-none mt-1 font-bold text-4xl" value="{{ $photoshoot->contract->event_ends }}">
+                    <input
+                        x-bind-contract
+                        type="text"
+                        name="event_ends"
+                        id="event_ends"
+                        class="w-full inline @error('event_ends') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                        value="{{ old('event_ends') ?: $photoshoot->contract->event_ends }}">
                 </div>
             </div>
 
@@ -101,7 +138,7 @@
                         x-bind-contract
                         name="delivered_images_count"
                         id="delivered_images_count"
-                        class="inline @error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl" type="number" min="1" value="{{ $photoshoot->contract->delivered_images_count }}">
+                        class="inline @error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl" type="number" min="1" value="{{ old('delivered_images_count') ?: $photoshoot->contract->delivered_images_count }}">
                 </div>
 
                 <div class="justify-end">
@@ -129,7 +166,7 @@
                 </label>
                 <input
                     x-bind-contract
-                    name="client_organization"
+                    name="organization"
                     id="organization"
                     class="@error('organization') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
                     type="text"
@@ -177,30 +214,105 @@
                     type="text"
                     value="{{ old('email') ?: $photoshoot->client->email }}">
 
-                <label for="phone">Phone</label>
-                <input x-bind-contract id="phone" name="phone" class="@error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->phone }}">
+                <label for="phone">
+                    Phone
+                    @error('phone')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="phone"
+                    name="phone"
+                    class="@error('phone') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ old('phone') ?: $photoshoot->client->phone }}">
 
-                <label for="website">Website</label>
-                <input name="website" class="@error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->website }}">
+                <label for="website">
+                    Website
+                    @error('website')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    name="website"
+                    class="@error('website') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ old('website') ?: $photoshoot->client->website }}">
 
             </div>
 
             <div class="flex flex-col">
 
-                <label for="street_address">Street</label>
-                <input x-bind-contract id="client_street_address" name="street_address" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->addresses()->first()->street_address }}">
+                <label for="street_address">
+                    Street | P.0. Box
+                    @error('street_address')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="street_address"
+                    name="street_address"
+                    class="@error('street_address') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ (old('street_address') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->street_address : '')) }}">
 
-                <label for="street_address_2">Street2</label>
-                <input x-bind-contract id="client_street_address_2" name="street_address_2" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->addresses()->first()->street_address_2 }}">
+                <label for="street_address_2">
+                    Street2
+                    @error('street_address_2')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="street_address_2"
+                    name="street_address_2"
+                    class="@error('street_address_2') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ (old('street_address_2') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->street_address_2 : '')) }}">
 
-                <label for="city">City</label>
-                <input x-bind-contract id="client_city" name="city" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->addresses()->first()->city }}">
+                <label for="city">
+                    City
+                    @error('city')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="city"
+                    name="city"
+                    class="@error('city') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ (old('city') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->city : '')) }}">
 
-                <label for="state_code">State</label>
-                <input x-bind-contract id="client_state_code" name="state_code" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->addresses()->first()->state_code }}">
+                <label for="state_code">
+                    State
+                    @error('state_code')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="state_code"
+                    name="state_code"
+                    class="@error('state_code') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ (old('state_code') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->state_code : '')) }}">
 
-                <label for="postal_code">Zip</label>
-                <input x-bind-contract id="client_postal_code" name="postal_code" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->addresses()->first()->postal_code }}">
+                <label for="postal_code">
+                    Zip Code
+                    @error('postal_code')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="postal_code"
+                    name="postal_code"
+                    class="@error('postal_code') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ (old('postal_code') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->postal_code : '')) }}">
 
             </div>
 
@@ -219,12 +331,13 @@
 
             <h3 class="text-4xl mb-1 mt-1">Contracting Parties</h3>
             <p class="m-3">
-                <p class="m-3"><span id="organization_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->client->organization }}</span></p>
-                <p class="m-3"><span id="first_name_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->client->first_name }}</span> <span  id="last_name_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->client->last_name }}</span></p>
-                <p class="m-3"><span id="email_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->client->email }}</span></p>
-                <p class="m-3"><span id="client_street_address_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->client->addresses()->first()->street_address }}</span></p>
-                <p class="m-3"><span id="client_city_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->client->addresses()->first()->city }}</span>, <span id="client_state_code_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->client->addresses()->first()->state_code }}</span></p>
-                <p class="m-3"><span id="client_postal_code_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->client->addresses()->first()->postal_code }}</span></p>
+                <p class="m-3"><span id="organization_bound" class="font-bold bg-yellow-400">{{ old('organization') ?: $photoshoot->contract->client->organization }}</span></p>
+                <p class="m-3"><span id="first_name_bound" class="font-bold bg-yellow-400">{{ old('first_name') ?: $photoshoot->contract->client->first_name }}</span> <span  id="last_name_bound" class="font-bold bg-yellow-400">{{ old('last_name') ?: $photoshoot->contract->client->last_name }}</span></p>
+                <p class="m-3"><span id="email_bound" class="font-bold bg-yellow-400">{{ old('email') ?: $photoshoot->contract->client->email }}</span></p>
+                <p class="m-3"><span id="street_address_bound" class="font-bold bg-yellow-400">{{ (old('street_address') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->street_address : '')) }}</span></p>
+                <p class="m-3"><span id="street_address_bound" class="font-bold bg-yellow-400">{{ (old('street_address_2') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->street_address_2 : '')) }}</span></p>
+                <p class="m-3"><span id="city_bound" class="font-bold bg-yellow-400">{{ (old('city') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->city : '')) }}</span>, <span id="state_code_bound" class="font-bold bg-yellow-400">{{ (old('state_code') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->state_code : '')) }}</span></p>
+                <p class="m-3"><span id="postal_code_bound" class="font-bold bg-yellow-400">{{ (old('postal_code') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->postal_code : '')) }}</span></p>
             </p>
 
             <h3 class="text-4xl mb-1 mt-1">Agreement Overview</h3>
