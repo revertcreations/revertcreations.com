@@ -45,6 +45,10 @@ window.flatpickr = flatpickr__WEBPACK_IMPORTED_MODULE_0__.default;
     enableTime: true,
     dateFormat: "Y-m-d H:i"
   });
+  if (document.getElementById('arrival_at')) var event_ends = window.flatpickr(document.getElementById('arrival_at'), {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i"
+  });
 
   function addAutoResize() {
     document.querySelectorAll('[data-autoresize]').forEach(function (element) {
@@ -83,35 +87,37 @@ window.flatpickr = flatpickr__WEBPACK_IMPORTED_MODULE_0__.default;
     agreement.addEventListener('click', function (event) {
       if (agreement.checked) contract_agreement_button.disabled = false;else contract_agreement_button.disabled = true;
     });
-  }
+  } // window.send_agreement = function(event) {
+  //     event = event || window.event
+  //     event.preventDefault();
+  //     console.log('send this out')
+  //     let csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  //     let token = document.getElementById('photoshoot_token').value;
+  //     let photoshoot = document.getElementById('photoshoot_id').value;
+  //     let url = '/api/photoshoot/'+photoshoot+'/'+token;
+  //     let redirect = '/photography/photoshoot/success'
+  //     fetch(url, {
+  //         headers: {
+  //             "Content-Type": "application/json",
+  //             "Accept": "application/json, text-plain, */*",
+  //             "X-Requested-With": "XMLHttpRequest",
+  //             "X-CSRF-TOKEN": csrf_token
+  //             },
+  //         method: 'PUT',
+  //         credentials: "same-origin",
+  //         body: JSON.stringify({
+  //         })
+  //     })
+  //     .then(response => response.json())
+  //     .then((data) => {
+  //         if(data.status == 'ok')
+  //             window.location.href = redirect;
+  //     })
+  //     .catch(function(error) {
+  //         console.log(error);
+  //     });
+  // }
 
-  window.send_agreement = function (event) {
-    event = event || window.event;
-    event.preventDefault();
-    console.log('send this out');
-    var csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    var token = document.getElementById('proposal_token').value;
-    var proposal = document.getElementById('proposal_id').value;
-    var url = '/api/proposal/' + proposal + '/' + token;
-    var redirect = '/photography/proposal/success';
-    fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json, text-plain, */*",
-        "X-Requested-With": "XMLHttpRequest",
-        "X-CSRF-TOKEN": csrf_token
-      },
-      method: 'PUT',
-      credentials: "same-origin",
-      body: JSON.stringify({})
-    }).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      if (data.status == 'ok') window.location.href = redirect;
-    })["catch"](function (error) {
-      console.log(error);
-    });
-  };
 })();
 
 /***/ }),

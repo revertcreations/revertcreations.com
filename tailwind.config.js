@@ -1,21 +1,27 @@
 module.exports = {
-  purge: [
-    './resources/**/*.blade.php',
-    './resources/**/*.js',
-    './resources/**/*.vue',
-  ],
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {
-        backgroundColor: ['disabled'],
-        textColor: ['disabled'],
-        cursor: ['disabled'],
+    purge: [
+        './resources/**/*.blade.php',
+        './resources/**/*.js',
+        './resources/**/*.vue',
+    ],
+    darkMode: false, // or 'media' or 'class'
+    theme: {
+        extend: {
+            colors: {
+                'gruvbox-green': '#98971a',
+                'gruvbox-purple': '#d3869b',
+                'gruvbox-black': '#282828',
+            },
+        }
     },
-  },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+    variants: {
+        extend: {
+            backgroundColor: ['disabled'],
+            textColor: ['disabled'],
+            cursor: ['disabled'],
+        },
+    },
+    plugins: [
+        require('@tailwindcss/forms'),
+    ],
 }

@@ -16,8 +16,8 @@ class Client extends Model
         return $this->belongsToMany(Address::class);
     }
 
-    public function proposals()
+    public function photoshoots()
     {
-        return $this->hasMany(Proposal::class);
+        return $this->hasMany(Photoshoot::class);
     }
 }

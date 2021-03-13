@@ -16,10 +16,8 @@ class CreatePhotographyContractsTable extends Migration
         Schema::create('photography_contracts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients');
-            $table->foreignId('proposal_id')->constrained('proposals');
+            $table->foreignId('photoshoot_id')->constrained('photoshoots');
             $table->enum('status', ['client_pending', 'client_approved', 'client_declined', 'active', 'declined'])->default('client_pending');
-            $table->dateTime('event_starts')->nullable();
-            $table->dateTime('event_ends')->nullable();
             $table->decimal('late_fee_percentage',5,4)->default(0);
             $table->decimal('retainer_fee', 10, 2)->default(0);
             $table->tinyInteger('delivered_images_count')->nullable();

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Proposal extends Model
+class Photoshoot extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class Proposal extends Model
         return $this->belongsTo(Client::class);
     }
 
-    public function photographyContract()
+    public function contract()
     {
         return $this->belongsTo(PhotographyContract::class, 'photography_contract_id', 'id');
     }

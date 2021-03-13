@@ -3,7 +3,7 @@
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold text-gray-900">
-                Create Proposal
+                Create Photoshoot
             </h1>
         </div>
     </header>
@@ -15,11 +15,11 @@
                 <div class="md:grid md:grid-cols-3 md:gap-6">
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">Proposal</h3>
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Photoshoot</h3>
                         </div>
                     </div>
                     <div class="mt-5 md:mt-0 md:col-span-2">
-                        <form action="{{ route('proposal.store') }}" method="POST">
+                        <form action="{{ route('photoshoot.store') }}" method="POST">
                             @csrf
                             <div class="shadow overflow-hidden sm:rounded-md">
                                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">

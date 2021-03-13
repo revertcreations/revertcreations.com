@@ -16,9 +16,9 @@ class PhotographyContract extends Model
         return $this->belongsTo(Client::class);
     }
 
-    public function proposal()
+    public function photoshoot()
     {
-        return $this->belongsTo(Proposal::class, 'proposal_id', 'id');
+        return $this->belongsTo(Photoshoot::class, 'photoshoot_id', 'id');
     }
 
     public function address()

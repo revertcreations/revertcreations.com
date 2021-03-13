@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PublicProposalController;
+use App\Http\Controllers\PublicPhotoshootController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +15,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/proposal', [PublicProposalController::class, 'index']);
-Route::get('/proposal/create', [PublicProposalController::class, 'create']);
-Route::put('/proposal/{proposal}/{token?}', [PublicProposalController::class, 'update']);
+

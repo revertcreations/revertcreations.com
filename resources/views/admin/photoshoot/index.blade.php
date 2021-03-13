@@ -3,9 +3,9 @@
     <header class="bg-white shadow">
         <div class="flex justify-between max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <h1 class="text-3xl font-bold text-gray-900">
-            Proposals
+            Photoshoots
           </h1>
-          <a class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end" href="{{ route('proposal.create') }}">
+          <a class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end" href="{{ route('photoshoot.create') }}">
             Create
           </a>
         </div>
@@ -38,25 +38,25 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse($proposals as $proposal)
+                                    @forelse($photoshoots as $photoshoot)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $proposal->title }}</div>
-                                            <div class="text-sm text-gray-700">{{ $proposal->client->orginazation }}</div>
+                                            <div class="text-sm text-gray-900">{{ $photoshoot->title }}</div>
+                                            <div class="text-sm text-gray-700">{{ $photoshoot->client->orginazation }}</div>
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $proposal->description }}</div>
+                                            <div class="text-sm text-gray-900">{{ $photoshoot->description }}</div>
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                {{ $proposal->status }}
+                                                {{ $photoshoot->status }}
                                             </span>
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a target="_blank" href="{{ route('photography.proposal', ['proposal' => $proposal->id, 'token' => base64_encode($proposal->public_token)]) }}" class="text-indigo-600 hover:text-indigo-900">Preview</a>
+                                            <a target="_blank" href="{{ route('public.photoshoot.show', ['photoshoot' => $photoshoot->id, 'token' => base64_encode($photoshoot->public_token)]) }}" class="text-indigo-600 hover:text-indigo-900">Preview</a>
                                         </td>
 
                                     </tr>

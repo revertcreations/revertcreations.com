@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PhotographyContract;
-use App\Models\Proposal;
+use App\Models\Photoshoot;
 use Illuminate\Http\Request;
 
 class PhotographyContractController extends Controller
@@ -84,24 +84,4 @@ class PhotographyContractController extends Controller
         //
     }
 
-    public function publicIndex()
-    {
-        return view('photography.index');
-    }
-
-    public function publicProposal(Proposal $proposal, $token)
-    {
-
-        if(base64_decode($token) !== $proposal->public_token)
-            return redirect()->route('home');
-
-        // dd($proposal->photographyContract->event_ends);
-
-        return view('photography.proposal', compact('proposal'));
-    }
-
-    public function publicProposalSuccess(Proposal $proposal)
-    {
-        return view('photography.proposal.success', compact('proposal'));
-    }
 }

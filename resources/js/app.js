@@ -51,6 +51,15 @@ window.flatpickr = flatpickr;
         );
 
 
+    if(document.getElementById('arrival_at'))
+        var event_ends = window.flatpickr(document.getElementById('arrival_at'),
+                {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                }
+        );
+
+
     function addAutoResize() {
         document.querySelectorAll('[data-autoresize]').forEach(function (element) {
             element.style.boxSizing = 'border-box';
@@ -96,39 +105,39 @@ window.flatpickr = flatpickr;
         })
     }
 
-    window.send_agreement = function(event) {
-        event = event || window.event
-        event.preventDefault();
-        console.log('send this out')
+    // window.send_agreement = function(event) {
+    //     event = event || window.event
+    //     event.preventDefault();
+    //     console.log('send this out')
 
-        let csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        let token = document.getElementById('proposal_token').value;
-        let proposal = document.getElementById('proposal_id').value;
-        let url = '/api/proposal/'+proposal+'/'+token;
-        let redirect = '/photography/proposal/success'
+    //     let csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    //     let token = document.getElementById('photoshoot_token').value;
+    //     let photoshoot = document.getElementById('photoshoot_id').value;
+    //     let url = '/api/photoshoot/'+photoshoot+'/'+token;
+    //     let redirect = '/photography/photoshoot/success'
 
-        fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": csrf_token
-                },
-            method: 'PUT',
-            credentials: "same-origin",
-            body: JSON.stringify({
-            })
-        })
-        .then(response => response.json())
-        .then((data) => {
-            if(data.status == 'ok')
-                window.location.href = redirect;
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
+    //     fetch(url, {
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Accept": "application/json, text-plain, */*",
+    //             "X-Requested-With": "XMLHttpRequest",
+    //             "X-CSRF-TOKEN": csrf_token
+    //             },
+    //         method: 'PUT',
+    //         credentials: "same-origin",
+    //         body: JSON.stringify({
+    //         })
+    //     })
+    //     .then(response => response.json())
+    //     .then((data) => {
+    //         if(data.status == 'ok')
+    //             window.location.href = redirect;
+    //     })
+    //     .catch(function(error) {
+    //         console.log(error);
+    //     });
 
-    }
+    // }
 
 
 })();

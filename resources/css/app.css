@@ -2,3 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 @import "~flatpickr/dist/flatpickr.css";
+
+
+.logo-link.home {
+    @apply text-black cursor-not-allowed;
+}
+
+.logo-link.web-development {
+    @apply bg-gruvbox-black text-gruvbox-green hover:text-gruvbox-purple;
+}
+
+.logo-link.photography {
+    @apply bg-black text-white hover:text-black hover:bg-white;
+}
