@@ -17,11 +17,14 @@ class CreatePhotographyContractsTable extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained('clients');
             $table->foreignId('photoshoot_id')->constrained('photoshoots');
-            $table->enum('status', ['client_pending', 'client_approved', 'client_declined', 'active', 'declined'])->default('client_pending');
+            $table->enum('status', ['client_pending', 'client_approved', 'client_declined', 'active', 'inactive', 'declined'])->default('client_pending');
             $table->decimal('late_fee_percentage',5,4)->default(0);
             $table->decimal('retainer_fee', 10, 2)->default(0);
             $table->tinyInteger('delivered_images_count')->nullable();
             $table->decimal('price_per_image',10,2)->nullable();
+            $table->dateTime('arrival_at');
+            $table->dateTime('event_starts');
+            $table->dateTime('event_ends');
             $table->timestamps();
         });
 

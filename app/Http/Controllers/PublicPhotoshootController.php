@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PublicPhotoshootContractAcceptsRequest;
 use App\Models\PhotographyContract;
 use App\Models\Address;
 use App\Models\Client;
@@ -12,10 +13,6 @@ use Illuminate\Support\Facades\Hash;
 
 class PublicPhotoshootController extends Controller
 {
-    public function index()
-    {
-        return response()->json(['status' => 'all goooood']);
-    }
 
     public function create()
     {
@@ -53,7 +50,7 @@ class PublicPhotoshootController extends Controller
         ]);
 
 
-        return redirect()->route('photography.photoshoot.success', compact('photoshoot'));
+        return redirect()->route('public.photoshoot.success', compact('photoshoot'));
     }
 
 
@@ -80,51 +77,56 @@ class PublicPhotoshootController extends Controller
         return view('photography.photoshoot.success', compact('photoshoot'));
     }
 
-    public function accepts(Request $request, Photoshoot $photoshoot)
+    public function accepts(PublicPhotoshootContractAcceptsRequest $request, Photoshoot $photoshoot)
     {
 
-        // need to insert a new contract
-        PhotographyContract::create($this->validatePhotographyContract());
+        $create = false;
 
-        // update the photoshoot
-        // $photoshoot()->update();
+        foreach($photoshoot->contract->getAttributes() as $key => $value)
+            if($request[$key] && $request[$key] != $value)
+                $create = true;
 
-        // if errors
-        return back();
+        if ($create) {
+            $client_contract = PhotographyContract::create([
+                'client_id' => $photoshoot->client->id,
+                'photoshoot_id' => $photoshoot->id,
+                'status' => 'client_approved',
+                'delivered_images_count' => $request->delivered_images_count,
 
-        // else
-        // return redirect()->route('photography.photoshoot.success');
+            ]);
+
+            // update the previous contract
+            $photoshoot->contract->update(['status' => 'inactive']);
+
+            $photoshoot->update([
+                'photography_contract_id' => $client_contract->id,
+                'public_token' => Hash::make($request->client_id.config('hashing.public_token_salt').$request->title)
+            ]);
+
+        } else {
+            // update the previous contract
+            $photoshoot->contract->update(['status' => 'client_approved']);
+
+            $photoshoot->update([
+                'public_token' => Hash::make($request->client_id.config('hashing.public_token_salt').$request->title)
+            ]);
+        }
+
+        $photoshoot->client->update($this->validateClient());
+
+        return redirect()->route('public.photoshoot.success', ['photoshoot' => $photoshoot->id]);
     }
 
     protected function validateClient()
     {
         return request()->validate([
+            'organization' => 'nullable|string',
+            'website' => 'nullable|url',
+            'phone' => 'nullable|numeric',
             'email' => 'required|email',
             'first_name' => 'required',
-            'last_name' => 'required',
-
+            'last_name' => 'required'
         ]);
     }
 
-    protected function validatePhotographyContract()
-    {
-        return request()->validate([
-            'price_per_image' => 'required|numeric',
-            'delivered_images_count' => 'required|numeric',
-            'arrival_at' => 'required|date',
-            'event_starts' => 'required|date',
-            'event_ends' => 'required|date'
-        ]);
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'price_per_image' => intval($this->price_per_image),
-            'delivered_images_count' => intval($this->delivered_images_count),
-            'arrival_at' => date('Y-m-d H:i:s', strtotime($this->arrival_at)),
-            'event_starts' => date('Y-m-d H:i:s', strtotime($this->event_starts)),
-            'event_ends' => date('Y-m-d H:i:s', strtotime($this->event_ends))
-        ]);
-    }
 }

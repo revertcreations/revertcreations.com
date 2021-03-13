@@ -47,10 +47,9 @@ Route::get('/photography', function(){
     return view('photography.index');
 })->name('photography');
 
-Route::get('/photography/photoshoot', [PublicPhotoshootController::class, 'index'])->name('public.photoshoot.index');
+Route::get('/photography/book', [PublicPhotoshootController::class, 'create'])->name('public.photoshoot.create');
 Route::post('/photography/photoshoot', [PublicPhotoshootController::class, 'store'])->name('public.photoshoot.store');
-Route::get('/photography/photoshoot/create', [PublicPhotoshootController::class, 'create'])->name('public.photoshoot.create');
-Route::get('/photography/photoshoot/success', [PublicPhotoshootController::class, 'success'])->name('public.photoshoot.success');
+Route::get('/photography/photoshoot/{photoshoot}/success', [PublicPhotoshootController::class, 'success'])->name('public.photoshoot.success');
 Route::put('/photgraphy/photoshoot/{photoshoot}/{token?}', [PublicPhotoshootController::class, 'update'])->name('public.photoshoot.update');
 Route::get('/photography/photoshoot/{photoshoot}/{token?}', [PublicPhotoshootController::class, 'show'])->name('public.photoshoot.show');
 Route::get('/photography/photoshoot/{photoshoot}/{token}/edit', [PublicPhotoshootController::class, 'edit'])->name('public.photoshoot.edit');

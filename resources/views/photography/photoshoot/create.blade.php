@@ -7,7 +7,7 @@
 
         <br>
 
-        <i class="mt-1 text-3xl">Photoshoot Details</i>
+        <i class="mt-1 text-3xl">Details</i>
 
         <div class="m-5 self-center justify-around flex flex-col md:flex-row">
 
@@ -15,19 +15,19 @@
             <div class="flex flex-col">
 
                 <label for="organization">Organization</label>
-                <input x-bind-contract name="client_organization" id="organization" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('organization') }}">
+                <input name="client_organization" id="organization" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('organization') }}">
 
                 <label for="first_name">First Name</label>
-                <input x-bind-contract id="first_name" name="first_name" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('first_name') }}">
+                <input id="first_name" name="first_name" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('first_name') }}">
 
                 <label for="last_name">Last Name</label>
-                <input x-bind-contract id="last_name" name="last_name" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('last_name') }}">
+                <input id="last_name" name="last_name" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('last_name') }}">
 
                 <label for="email">Email</label>
-                <input x-bind-contract id="email" name="email" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('email') }}">
+                <input id="email" name="email" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('email') }}">
 
                 <label for="phone">Phone</label>
-                <input x-bind-contract id="phone" name="phone" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('phone') }}">
+                <input id="phone" name="phone" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('phone') }}">
 
                 <label for="website">Website</label>
                 <input name="website" class="border-1 mt-1 text-gray-800 font-bold text-4xl" type="text" value="{{ old('website') }}">
@@ -47,24 +47,10 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                    <label for="arrival_at">
-                        Photographer Arrival Date / Time
+                    <label for="event_date">
+                        Event Date
                     </label>
-                    <input x-bind-contract type="text" name="arrival_at" id="arrival_at" class="w-full inline border-1 mt-1 text-gray-800 font-bold text-4xl" value="{{ old('arrival_at') }}">
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                    <label for="event_starts">
-                        Shoot Starts Date / Time
-                    </label>
-                    <input x-bind-contract type="text" name="event_starts" id="event_starts" class="w-full inline border-1 mt-1 text-gray-800 font-bold text-4xl" value="{{ old('event_starts') }}">
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                    <label for="event_ends">
-                        Shoot Ends Date / Time
-                    </label>
-                    <input x-bind-contract type="text" name="event_ends" id="event_ends" class="w-full inline border-1 mt-1 text-gray-800 font-bold text-4xl" value="{{ old('event_ends') }}">
+                    <input type="text" name="event_date" id="event_date" class="w-full inline border-1 mt-1 text-gray-800 font-bold text-4xl" value="{{ old('arrival_at') }}">
                 </div>
             </div>
 

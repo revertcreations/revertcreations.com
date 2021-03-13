@@ -50,6 +50,12 @@ window.flatpickr = flatpickr;
                 }
         );
 
+    if(document.getElementById('event_date'))
+        var event_ends = window.flatpickr(document.getElementById('event_date'),
+                {
+                    dateFormat: "Y-m-d H:i",
+                }
+        );
 
     if(document.getElementById('arrival_at'))
         var event_ends = window.flatpickr(document.getElementById('arrival_at'),
@@ -74,7 +80,7 @@ window.flatpickr = flatpickr;
 
     document.querySelectorAll('[x-bind-contract]').forEach(el => {
 
-        el.addEventListener('keydown', function(el){
+        el.addEventListener('change', function(el){
 
             console.log('el: ', el.target.value)
             clearTimeout(bound_interval)

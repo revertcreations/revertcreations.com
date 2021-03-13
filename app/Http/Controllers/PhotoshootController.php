@@ -48,9 +48,7 @@ class PhotoshootController extends Controller
             'public_token' => Hash::make($request->client_id.config('hashing.public_token_salt').$request->title),
             'title' => $request->title,
             'description' => $request->description,
-            'arrival_at' => date('Y-m-d H:i:s', strtotime($request->arrival_at)),
-            'event_starts' => date('Y-m-d H:i:s', strtotime($request->event_starts)),
-            'event_ends' => date('Y-m-d H:i:s', strtotime($request->event_ends))
+            'event_date' => date('Y-m-d H:i:s', strtotime($request->event_starts))
         ]);
 
         if (!empty($request->street_address)) {
@@ -70,7 +68,10 @@ class PhotoshootController extends Controller
             'late_fee_percentage' => $request->late_fee_percentage ?: 0,
             'retainer_fee' => $request->retainer_fee ?: 0,
             'delivered_images_count' => $request->delivered_images_count,
-            'price_per_image' => $request->price_per_image
+            'price_per_image' => $request->price_per_image,
+            'arrival_at' => date('Y-m-d H:i:s', strtotime($request->arrival_at)),
+            'event_starts' => date('Y-m-d H:i:s', strtotime($request->event_starts)),
+            'event_ends' => date('Y-m-d H:i:s', strtotime($request->event_ends))
         ]);
 
         $photoshoot->update(['photography_contract_id' => $photography_contract->id]);

@@ -48,7 +48,7 @@
                         type="text"
                         name="arrival_at"
                         class="w-full inline  @error('arrival_at') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
-                        value="{{ old('arrival_at') ?: $photoshoot->arrival_at }}"
+                        value="{{ old('arrival_at') ?: $photoshoot->contract->arrival_at }}"
                     >
                 </div>
 
@@ -56,14 +56,14 @@
                     <label for="event_starts" class="block text-sm font-medium text-gray-700">
                         Shoot Start Date / Time
                     </label>
-                    <input x-bind-contract type="text" name="event_starts" id="event_starts" class="w-full inline border-none mt-1 font-bold text-4xl" value="{{ $photoshoot->event_starts }}">
+                    <input x-bind-contract type="text" name="event_starts" id="event_starts" class="w-full inline border-none mt-1 font-bold text-4xl" value="{{ $photoshoot->contract->event_starts }}">
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
                     <label for="event_ends" class="block text-sm font-medium text-gray-700">
                         Shoot End Date / Time
                     </label>
-                    <input x-bind-contract type="text" name="event_ends" id="event_ends" class="w-full inline border-none mt-1 font-bold text-4xl" value="{{ $photoshoot->event_ends }}">
+                    <input x-bind-contract type="text" name="event_ends" id="event_ends" class="w-full inline border-none mt-1 font-bold text-4xl" value="{{ $photoshoot->contract->event_ends }}">
                 </div>
             </div>
 
@@ -72,7 +72,7 @@
                 <label for="price_per_image">
                     Price Per Image
                     @error('price_per_image')
-                    {{ $message }}
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
                     @enderror
                 </label>
                 <div>
@@ -81,7 +81,7 @@
                         x-bind-contract
                         name="price_per_image"
                         id="price_per_image"
-                        class="inline border-none mt-1 font-bold text-4xl"
+                        class="inline @error('price_per_image') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
                         type="number"
                         min="1"
                         step="any"
@@ -89,10 +89,19 @@
                     <input type="hidden" name="" id="price_per_image_bound">
                 </div>
 
-                <label for="delivered_images_count">Number Of Edited Images Delivered</label>
+                <label for="delivered_images_count">
+                    Number Of Edited Images Delivered
+                    @error('delivered_images_count')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
                 <div>
                     <span class="inline">#</span>
-                    <input x-bind-contract name="delivered_images_count" id="delivered_images_count" class="inline border-none mt-1 font-bold text-4xl" type="number" min="1" value="{{ $photoshoot->contract->delivered_images_count }}">
+                    <input
+                        x-bind-contract
+                        name="delivered_images_count"
+                        id="delivered_images_count"
+                        class="inline @error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl" type="number" min="1" value="{{ $photoshoot->contract->delivered_images_count }}">
                 </div>
 
                 <div class="justify-end">
@@ -112,23 +121,67 @@
 
             <div class="flex flex-col">
 
-                <label for="organization">Organization</label>
-                <input x-bind-contract name="client_organization" id="organization" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->organization }}">
+                <label for="organization">
+                    Organization
+                    @error('organization')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    name="client_organization"
+                    id="organization"
+                    class="@error('organization') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ old('organization') ?: $photoshoot->client->organization }}">
 
-                <label for="first_name">First Name</label>
-                <input x-bind-contract id="first_name" name="first_name" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->first_name }}">
+                <label for="first_name">
+                    First Name
+                    @error('first_name')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="first_name"
+                    name="first_name"
+                    class="@error('first_name') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ old('first_name') ?: $photoshoot->client->first_name }}">
 
-                <label for="last_name">Last Name</label>
-                <input x-bind-contract id="last_name" name="last_name" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->last_name }}">
+                <label for="last_name">
+                    Last Name
+                    @error('last_name')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="last_name"
+                    name="last_name"
+                    class="@error('last_name') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ old('last_name') ?: $photoshoot->client->last_name }}">
 
-                <label for="email">Email</label>
-                <input x-bind-contract id="email" name="email" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->email }}">
+                <label for="email">
+                    Email
+                    @error('email')
+                    <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
+                    @enderror
+                </label>
+                <input
+                    x-bind-contract
+                    id="email"
+                    name="email"
+                    class="@error('email') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                    type="text"
+                    value="{{ old('email') ?: $photoshoot->client->email }}">
 
                 <label for="phone">Phone</label>
-                <input x-bind-contract id="phone" name="phone" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->phone }}">
+                <input x-bind-contract id="phone" name="phone" class="@error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->phone }}">
 
                 <label for="website">Website</label>
-                <input name="website" class="border-none mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->website }}">
+                <input name="website" class="@error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl" type="text" value="{{ $photoshoot->client->website }}">
 
             </div>
 
@@ -196,7 +249,7 @@
                 The Photographer and the Client are to arrive for the Shoot at <span id="shoot_street_address_bound" class="font-bold bg-yellow-400">{{ $photoshoot->street_address }}</span>
                 <span id="street_address_2_bound" class="font-bold bg-yellow-400">{{ $photoshoot->street_address_2 }}</span> <span id="city_bound" class="font-bold bg-yellow-400">{{ $photoshoot->city }}</span>
                 <span id="state_code_bound" class="font-bold bg-yellow-400">{{ $photoshoot->state_code }}</span> <span id="postal_code_bound" class="font-bold bg-yellow-400">{{ $photoshoot->postal_code }}</span>
-                on <span id="event_starts_bound" class="font-bold bg-yellow-400">{{ date("F j, Y, g:i a", strtotime($photoshoot->event_starts)) }}</span>
+                on <span id="event_starts_bound" class="font-bold bg-yellow-400">{{ date("F j, Y, g:i a", strtotime($photoshoot->contract->event_starts)) }}</span>
             </p>
             <p class="m-3">
                 The Photographer agrees to edit and deliver a minimum of <span id="delivered_images_count_bound" class="font-bold bg-yellow-400">{{ $photoshoot->contract->delivered_images_count }}</span>
