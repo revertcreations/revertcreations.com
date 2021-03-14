@@ -3,7 +3,7 @@
     <form class="" id="photoshoot_form" action="{{ route('public.photoshoot.store') }}" method="POST">
         @csrf
 
-        <i class="mt-1 bg-black text-white text-5xl">Photoshoot Inquiry</i>
+        <i class="mt-1 bg-black text-white text-4xl">Photoshoot Inquiry</i>
 
         <br>
 

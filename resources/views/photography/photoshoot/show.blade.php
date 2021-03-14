@@ -2,7 +2,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-        <i class="mt-1 bg-gray-800 text-gray-200 text-5xl">Photoshoot Photoshoot</i>
+        <i class="mt-1 bg-gray-800 text-gray-200 text-4xl">Photoshoot</i>
 
         <p class="m-5">
             Hi there <span class=" underline font-bold text-lg">{{ $photoshoot->client->first_name }}</span>! Looks like we got some business to go over, how very exciting!

@@ -34,7 +34,46 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/web-development', function () {
-    return view('web-development');
+
+    $skills = collect([
+        ['name' => 'CSS', 'ranking' => 8.8],
+        ['name' => 'HTML', 'ranking' => 9.8],
+        ['name' => 'Javascript', 'ranking' => 9.1],
+        ['name' => 'PHP', 'ranking' => 9.6],
+        ['name' => 'Linux', 'ranking' => 8.7],
+        ['name' => 'Laravel', 'ranking' => 7.8],
+        ['name' => 'CodeIgniter', 'ranking' => 7.9],
+        ['name' => 'Docker', 'ranking' => 8.6],
+        ['name' => 'Kubernetes', 'ranking' => 8.4],
+        ['name' => 'Digital Ocean', 'ranking' => 9.3],
+        ['name' => 'DNS', 'ranking' => 8.1],
+        ['name' => 'Redis', 'ranking' => 8.8],
+        ['name' => 'SQL', 'ranking' => 8.7],
+        ['name' => 'JSON', 'ranking' => 9.4],
+        ['name' => 'tailwindcss', 'ranking' => 6.1],
+        ['name' => 'Vim', 'ranking' => 8.5],
+        ['name' => 'Bash', 'ranking' => 7.4],
+        ['name' => 'Heroku', 'ranking' => 6.3],
+        ['name' => 'NodeJS', 'ranking' => 6.8],
+        ['name' => 'GoLang', 'ranking' => 2.8],
+        ['name' => 'Python', 'ranking' => 3.1],
+        ['name' => 'riot.js.org', 'ranking' => 8.5],
+        ['name' => 'NGINX', 'ranking' => 8.4],
+        ['name' => 'APACHE', 'ranking' => 6.2],
+        ['name' => 'Git', 'ranking' => 9.4],
+        ['name' => 'Vue', 'ranking' => 3.6],
+        ['name' => 'React', 'ranking' => 5.5],
+        ['name' => 'Bootstrap', 'ranking' => 4.1],
+        ['name' => 'JQuery', 'ranking' => 7.6],
+        ['name' => 'npm', 'ranking' => 8.6],
+        ['name' => 'webpack', 'ranking' => 5.5],
+        ['name' => 'Cloudinary', 'ranking' => 7.3],
+        ['name' => 'Photoshop', 'ranking' => 9.4],
+        ['name' => 'Illustrator', 'ranking' => 8.9],
+        ['name' => 'Lightroom', 'ranking' => 9.3]
+    ]);
+
+    return view('web-development', compact('skills'));
 })->name('web-development');
 
 

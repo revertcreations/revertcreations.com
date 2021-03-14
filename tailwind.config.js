@@ -11,6 +11,7 @@ module.exports = {
                 'gruvbox-green': '#98971a',
                 'gruvbox-purple': '#d3869b',
                 'gruvbox-black': '#282828',
+                'hmt-green': '#b9cc33'
             },
         }
     },

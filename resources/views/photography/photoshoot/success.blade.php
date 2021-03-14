@@ -1,7 +1,7 @@
 <x-layout>
 
     <span>
-        <i class="mt-1 bg-black text-white text-5xl">Thanks!</i>
+        <i class="mt-1 bg-black text-white text-4xl">Thanks!</i>
     </span>
         <br>
 

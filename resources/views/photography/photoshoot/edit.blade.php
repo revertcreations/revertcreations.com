@@ -3,7 +3,7 @@
     <form id="photoshoot_form" action="{{ route('public.photoshoot.accepts', ['photoshoot' => $photoshoot->id, 'token' => request()->token]) }}" method="POST">
         @csrf
 
-        <i class="mt-1 bg-black text-white text-5xl">Photoshoot</i>
+        <i class="mt-1 bg-black text-white text-4xl">Photoshoot</i>
 
         <p class="m-5">
             Hi there <span class=" underline font-bold text-lg">{{ $photoshoot->client->first_name }}</span>! Looks like we got some business to go over, how very exciting!
