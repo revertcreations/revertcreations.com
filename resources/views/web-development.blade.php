@@ -25,8 +25,12 @@
                 I've been hacking with for years.
             </p>
 
-            <div class="flex-grow bg-red-600">
+            {{-- <div class="flex-grow bg-red-600">
                 <canvas id="canvas"></canvas>
+            </div> --}}
+
+            <div onmousemove="mousePosition(event)" id="playground" class="flex-grow bg-gruvbox-black relative">
+
             </div>
             {{-- <div class="flex flew-row flex-wrap w-4/5 bg-gray-200 items-center justify-center">
                 @foreach($skills as $skill => $points)
@@ -52,55 +56,100 @@
     <script>
 
         const data = JSON.parse('@json($skills)');
+        const playground = document.getElementById('playground')
 
-        function getFontBasedOnKnowledge(rating){
-            // console.log(((rating * 10) / 10)+'em Monospace');
-            return ((rating * 40) / 100)+'em Monospace';
-        }
 
-        function resizeCanvas(canvas, canvasWrap) {
-            document.getElementById('canvas').parentElement
-            canvas.height = canvasWrap.offsetHeight;
-            canvas.width = canvasWrap.offsetWidth;
-        }
+        for (const skill in data) {
 
-        function draw()
-        {
+            data[skill].element = document.createElement('div')
+            let element = data[skill].element
+            let name = data[skill].name
+            let ranking = data[skill].ranking
 
-            const canvas = document.getElementById('canvas');
-            const canvasWrap = canvas.parentElement;
-            const ctx = canvas.getContext('2d');
-            const red = '#cc241d'
+            styleElement(element, name, ranking)
+            playground.appendChild(element)
+            positionElement(element)
 
-            resizeCanvas(canvas, canvasWrap)
 
-            ctx.fillStyle = '#282828';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            let timePressed = 0;
+            let press = false;
 
-            for (const skill in data) {
+            data[skill].listeners = []
+            data[skill].listeners.push(element.addEventListener('mousedown', pressingDown, false))
+            data[skill].listeners.push(element.addEventListener('mouseup', notPressingDown, false))
+            // data[skill].listeners.push(element.addEventListener('mouseleave', notPressingDown, false))
 
-                data[skill].ctx = canvas.getContext('2d')
+            data[skill].listeners.push(element.addEventListener('touchstart', pressingDown, false))
+            data[skill].listeners.push(element.addEventListener('touchend', notPressingDown, false))
 
-                data[skill].ctx.font = getFontBasedOnKnowledge(data[skill].ranking);
-                data[skill].ctx.fillStyle = "white";
 
-                let textMetrics = data[skill].ctx.measureText(data[skill].name)
-                let textHeight = textMetrics.fontBoundingBoxAscent+textMetrics.fontBoundingBoxDescent
-                let textWidth = textMetrics.width
+            function counter() {
+                if (press) {
+                    timePressed++;
 
-                let textXBound = (Math.random() * ((canvas.width-textWidth) - textWidth/2) + textWidth/2)
-                let textYBound = (Math.random() * ((canvas.height-textHeight) - textHeight/2) + textHeight/2)
-                // console.log('textmetrics height', textMetrics)
-                //  = ctx.fillText(data[skill].name,  (Math.random() * (canvas.width - textWidth) + 0), (Math.random() * (canvas.height - textWidth) + 0));
-                data[skill].ctx.fillText(data[skill].name, textXBound, textYBound)
-                // ctx.fillTexst()
+                    console.log('click', window.mouseClientY, window.mouseClientX)
+
+                    setTimeout(() => {
+                        element.style.top = window.mouseClientY+'px'
+                        element.style.left = window.mouseClientX+'px'
+                    }, 200);
+
+                    // element.style.top = event
+                    // element.style.left = textXBound+'px'
+                } else {
+                    timePressed = 0;
+                    element.style.top = element.style.top
+                    element.style.left = element.style.left
+                }
+
+                requestAnimationFrame(counter);
             }
+            counter();
 
+            function pressingDown(e) {
+                console.log('upclick')
+                press = true;
+                e.preventDefault();
+            }
+            function notPressingDown(e) {
+                cancelAnimationFrame(timePressed);
+                press = false;
+            }
         }
 
-        window.addEventListener('resize', draw);
+        function getFontBasedOnKnowledge(ranking){
+            return ((ranking * 40) / 100)+'em';
+        }
 
-        draw();
+        function styleElement(element, name, ranking) {
+            element.innerText = name
+            element.style.position = "absolute"
+            element.style.display = "hidden"
+            element.style.fontSize = getFontBasedOnKnowledge(ranking)
+            element.style.color = '#98971a'
+            element.style.background = '#282828'
+        }
+
+        function positionElement(element) {
+            let width = element.offsetWidth
+            let height = element.offsetHeight
+            let textXBound = (Math.random() * ((playground.offsetWidth-width) - width/2) + width/2)
+            let textYBound = (Math.random() * ((playground.offsetHeight-height) - height/2) + height/2)
+
+            element.style.top = textYBound+'px'
+            element.style.left = textXBound+'px'
+        }
+
+
+
+        function mousePosition(e) {
+            // console.log(e)
+            window.mouseClientX = e.x
+            window.mouseClientY = e.y
+        }
+
+        // window.addEventListener('resize', draw);
+
 
     </script>
 
