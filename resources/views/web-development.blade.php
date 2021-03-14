@@ -29,7 +29,7 @@
                 <canvas id="canvas"></canvas>
             </div> --}}
 
-            <div onmousemove="mousePosition(event)" id="playground" class="flex-grow bg-gruvbox-black relative">
+            <div id="playground" class="flex-grow bg-gruvbox-black relative">
 
             </div>
             {{-- <div class="flex flew-row flex-wrap w-4/5 bg-gray-200 items-center justify-center">
@@ -58,7 +58,6 @@
         const data = JSON.parse('@json($skills)');
         const playground = document.getElementById('playground')
 
-
         for (const skill in data) {
 
             data[skill].element = document.createElement('div')
@@ -66,55 +65,19 @@
             let name = data[skill].name
             let ranking = data[skill].ranking
 
+            data[skill].active = false;
+            data[skill].currentX;
+            data[skill].currentY;
+            data[skill].initialX;
+            data[skill].initialY;
+            data[skill].xOffset = 0;
+            data[skill].yOffset = 0;
+
             styleElement(element, name, ranking)
             playground.appendChild(element)
             positionElement(element)
+            addClickMove(data[skill])
 
-
-            let timePressed = 0;
-            let press = false;
-
-            data[skill].listeners = []
-            data[skill].listeners.push(element.addEventListener('mousedown', pressingDown, false))
-            data[skill].listeners.push(element.addEventListener('mouseup', notPressingDown, false))
-            // data[skill].listeners.push(element.addEventListener('mouseleave', notPressingDown, false))
-
-            data[skill].listeners.push(element.addEventListener('touchstart', pressingDown, false))
-            data[skill].listeners.push(element.addEventListener('touchend', notPressingDown, false))
-
-
-            function counter() {
-                if (press) {
-                    timePressed++;
-
-                    console.log('click', window.mouseClientY, window.mouseClientX)
-
-                    setTimeout(() => {
-                        element.style.top = window.mouseClientY+'px'
-                        element.style.left = window.mouseClientX+'px'
-                    }, 200);
-
-                    // element.style.top = event
-                    // element.style.left = textXBound+'px'
-                } else {
-                    timePressed = 0;
-                    element.style.top = element.style.top
-                    element.style.left = element.style.left
-                }
-
-                requestAnimationFrame(counter);
-            }
-            counter();
-
-            function pressingDown(e) {
-                console.log('upclick')
-                press = true;
-                e.preventDefault();
-            }
-            function notPressingDown(e) {
-                cancelAnimationFrame(timePressed);
-                press = false;
-            }
         }
 
         function getFontBasedOnKnowledge(ranking){
@@ -124,10 +87,12 @@
         function styleElement(element, name, ranking) {
             element.innerText = name
             element.style.position = "absolute"
-            element.style.display = "hidden"
+            // element.style.display = "none"
             element.style.fontSize = getFontBasedOnKnowledge(ranking)
-            element.style.color = '#98971a'
             element.style.background = '#282828'
+            element.classList.add('cursor-pointer')
+            element.classList.add('hover:text-gruvbox-purple')
+            element.classList.add('text-gruvbox-green')
         }
 
         function positionElement(element) {
@@ -141,15 +106,89 @@
         }
 
 
+        function addClickMove(skill) {
 
-        function mousePosition(e) {
-            // console.log(e)
-            window.mouseClientX = e.x
-            window.mouseClientY = e.y
+            skill.element.addEventListener('mousedown', dragStart, false)
+            skill.element.addEventListener('mouseup', dragEnd, false)
+            skill.element.addEventListener('mousemove', drag, false)
+
+            skill.element.addEventListener('touchstart', dragStart, false)
+            skill.element.addEventListener('touchend', dragEnd, false)
+            skill.element.addEventListener('touchmove', dragStart, false)
+
+            function dragStart(e) {
+
+                skill.element.style.zIndex = "2"
+                if (e.type === "touchstart") {
+                    skill.initialX = e.touches[0].clientX - skill.xOffset;
+                    skill.initialY = e.touches[0].clientY - skill.yOffset;
+                } else {
+                    skill.initialX = e.clientX - skill.xOffset;
+                    skill.initialY = e.clientY - skill.yOffset;
+                }
+
+                if (e.target === skill.element) {
+                    skill.active = true;
+                }
+            }
+
+            function dragEnd(e) {
+                skill.initialX = skill.currentX;
+                skill.initialY = skill.currentY;
+
+                if(skill.elementChild) {
+                    skill.element.removeChild(skill.elementChild)
+                    delete skill.elementChild
+                }
+
+                skill.active = false;
+            }
+
+            function drag(e) {
+                if (skill.active) {
+
+                    e.preventDefault();
+
+                    if(e.movementX > 15 || e.movementX < -15) {
+                        console.log('shake it like a poloriod picture')
+
+                        if(skill.elementChild) {
+                            skill.element.removeChild(skill.elementChild)
+                            delete skill.elementChild
+                        } else {
+                            skill.elementChild =  document.createElement('div')
+                            skill.elementChild.innerText = 'more info here'
+                            skill.elementChild.style.position = "block"
+                            skill.elementChild.style.background = '#282828'
+                            skill.elementChild.classList.add('cursor-pointer')
+                            skill.elementChild.classList.add('p-4')
+                            skill.elementChild.classList.add('text-white')
+
+                            skill.element.appendChild(skill.elementChild)
+                        }
+                    }
+
+                    // console.log('e', e.movementX)
+
+                    if (e.type === "touchmove") {
+                        skill.currentX = e.touches[0].clientX - skill.initialX;
+                        skill.currentY = e.touches[0].clientY - skill.initialY;
+                    } else {
+                        skill.currentX = e.clientX - skill.initialX;
+                        skill.currentY = e.clientY - skill.initialY;
+                    }
+
+                    skill.xOffset = skill.currentX;
+                    skill.yOffset = skill.currentY;
+
+                    setTranslate(skill.currentX, skill.currentY, skill.element);
+                }
+            }
+
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+            }
         }
-
-        // window.addEventListener('resize', draw);
-
 
     </script>
 
