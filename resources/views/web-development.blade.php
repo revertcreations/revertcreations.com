@@ -80,18 +80,56 @@
 
         }
 
-        function getFontBasedOnKnowledge(experience){
-            return (experience/ 20)+'em';
+        function getFontSizeBasedOnExperience(experience){
+            return (experience/ 25)+'em';
+        }
+
+
+        function getColorBasedOnExperience(experience) {
+            // console.log('experience', experience)
+            switch (true) {
+                case (experience > 10 && experience < 20) :
+                    return 'gruvbox-aqua'
+                    break;
+                case (experience > 20 && experience < 30) :
+                    return 'gruvbox-light-blue'
+                    break;
+                case (experience > 30 && experience < 40) :
+                    return 'gruvbox-blue'
+                    break;
+                case (experience > 40 && experience < 50) :
+                    return 'gruvbox-light-yellow'
+                    break;
+                case (experience > 50 && experience < 60) :
+                    return 'gruvbox-yellow'
+                    break;
+                case (experience > 60 && experience < 70) :
+                    return 'gruvbox-light-orange'
+                    break;
+                case (experience > 70 && experience < 80) :
+                    return 'gruvbox-orange'
+                    break;
+                case (experience > 80 && experience < 90) :
+                    return 'gruvbox-light-red'
+                    break;
+                case (experience >= 90) :
+                    return 'gruvbox-red'
+                    break;
+
+                default:
+                    return 'gruvbox-light-aqua'
+                    break;
+            }
         }
 
         function styleElement(element, name, experience) {
             element.innerText = name
             element.style.position = "absolute"
             // element.style.display = "none"
-            element.style.fontSize = getFontBasedOnKnowledge(experience)
+            element.style.fontSize = getFontSizeBasedOnExperience(experience)
             // element.style.background = '#282828'
 
-            element.classList.add('select-none', 'text-gruvbox-green', 'hover:text-gruvbox-purple', 'cursor-pointer')
+            element.classList.add('select-none', 'text-'+getColorBasedOnExperience(experience), 'cursor-pointer')
 
         }
 
@@ -177,14 +215,14 @@
 
                     // e.preventDefault();
 
-                    if(e.movementX > 15) {
+                    if(e.movementX > 12) {
                         skill.elementMovementXRightExceeded = true
                         skill.elementMovementXTimeout = setTimeout(function(){
                             skill.elementMovementXRightExceeded = false
                         }, 200)
                     }
 
-                    if(e.movementX < -15) {
+                    if(e.movementX < -12) {
                         skill.elementMovementXLeftExceeded = true
                         skill.elementMovementXTimeout = setTimeout(function(){
                             skill.elementMovementXLeftExceeded = false
@@ -195,10 +233,7 @@
 
                         skill.infoShowing = true
 
-                        if(skill.elementShakeHint){
-                            skill.element.removeChild(skill.elementShakeHint)
-                            delete skill.elementShakeHint
-                        }
+                        removeShakeHint(skill)
 
                         console.log('shake it like a poloriod picture')
 
@@ -231,46 +266,78 @@
                     'flex-col',
                     'bg-gruvbox-black',
                     'cursor-pointer',
-                    'p-4',
-                    'text-gruvbox-white'
+                    'p-4'
                 );
+
+                buildExperienceDiv(skill)
+
+                skill.elementChildExcerpt =  document.createElement('div')
+                skill.elementChildExcerpt.classList.add(
+                    'cursor-pointer',
+                    'p-4',
+                    'max-w-md',
+                    'text-gruvbox-gray'
+                );
+                skill.elementChildExcerpt.innerText = skill.excerpt
+                skill.elementChild.appendChild(skill.elementChildExcerpt)
+
+            }
+
+            function buildExperienceDiv(skill) {
 
                 skill.element.appendChild(skill.elementChild)
 
-                skill.elementChildexperience =  document.createElement('div')
-                skill.elementChildexperience.classList.add(
+                skill.elementChildExperienceWrap =  document.createElement('div')
+                skill.elementChildExperienceWrap.classList.add(
                     'flex',
-                    'flex-col',
+                    'flex-row',
                     'cursor-pointer',
-                    'p-4',
-                    'text-gruvbox-yellow'
+                    'p-4'
                 );
-                skill.elementChildexperience.innerText = 'experience: '+skill.experience+' / 100 '
-                skill.elementChild.appendChild(skill.elementChildexperience)
+                skill.elementChild.appendChild(skill.elementChildExperienceWrap)
 
-                skill.elementChildexperience =  document.createElement('div')
-                skill.elementChildexperience.classList.add(
-                    'text-gruvbox-black',
-                    'cursor-pointer',
-                    'p-4',
-                    'text-gruvbox-white',
-                    'max-w-md'
+                skill.elementChildExperienceWrapLabel = document.createElement('div')
+                skill.elementChildExperienceWrapLabel.innerHTML = 'Experience: &nbsp; &nbsp;'
+                skill.elementChildExperienceWrapLabel.classList.add(
+                    'text-gruvbox-gray',
+                    'mr-4'
                 );
-                skill.elementChildexperience.innerText = skill.excerpt
-                skill.elementChild.appendChild(skill.elementChildexperience)
+                skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabel)
+
+                skill.elementChildExperienceWrapLabelExperience = document.createElement('div')
+                skill.elementChildExperienceWrapLabelExperience.innerText = skill.experience
+                skill.elementChildExperienceWrapLabelExperience.classList.add(
+                    'text-'+getColorBasedOnExperience(skill.experience)+'',
+                );
+                skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperience)
+
+                skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div')
+                skill.elementChildExperienceWrapLabelExperienceSlash.innerHTML = '&nbsp;/&nbsp;'
+                skill.elementChildExperienceWrapLabelExperienceSlash.classList.add(
+                    'text-gruvbox-white',
+                );
+                skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash)
+
+
+                skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div')
+                skill.elementChildExperienceWrapLabelExperienceSlash.innerText = '100'
+                skill.elementChildExperienceWrapLabelExperienceSlash.classList.add(
+                    'text-gruvbox-red',
+                );
+                skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash)
 
             }
 
             function addShakeHint(skill) {
                 skill.elementShakeHint =  document.createElement('div')
                 skill.elementShakeHint.classList.add(
-                    'text-gruvbox-black',
                     'self-center',
                     'justify-self-center',
                     'cursor-pointer',
                     'text-sm',
-                    'text-gruvbox-white',
-                    'max-w-md'
+                    'text-gruvbox-gray',
+                    'max-w-md',
+                    'text-center'
                 );
                 skill.elementShakeHint.innerHTML = '&Ll; shake me! &Gg;'
                 skill.element.appendChild(skill.elementShakeHint)
