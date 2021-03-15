@@ -15,7 +15,10 @@ class SkillSeeder extends Seeder
     public function run()
     {
         $skills = collect([
-            ['name' => 'CSS', 'experience' => 88],
+            ['name' => 'CSS',
+                       'experience' => 91,
+                       'excerpt' => "The first time I interacted with CSS was back in the 7th grade. I took a beginner course at my middle school. Considering I was born in the late 80's, and lived out in the middle of nowhere New Mexico, this was a fairly unique opportunity. I remember most of the home work was learning HTML, and writing markup over and over. While bored writing div's p's and a's, I browsed around for some cool menus I've been seeing on the internet. I found a few examples, and spent the rest of the time building my own drop down menu with CSS. Don't think I ever actually finished the home work, and probably passed with a C. But I learned more than anyone in that class, no doubt. Needless to say, I'm pretty comfortable with CSS."
+            ],
             ['name' => 'HTML', 'experience' => 98],
             ['name' => 'Javascript', 'experience' => 91],
             ['name' => 'PHP', 'experience' => 96],

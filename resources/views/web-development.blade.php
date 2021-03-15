@@ -108,17 +108,36 @@
 
         function addClickMove(skill) {
 
-            skill.element.addEventListener('mousedown', dragStart, false)
-            skill.element.addEventListener('mouseup', dragEnd, false)
-            skill.element.addEventListener('mousemove', drag, false)
+            skill.element.addEventListener('mousedown', dragStart, {passive: true})
+            skill.element.addEventListener('mouseup', dragEnd, {passive: true})
+            skill.element.addEventListener('mousemove', drag, {passive: true})
 
-            skill.element.addEventListener('touchstart', dragStart, false)
-            skill.element.addEventListener('touchend', dragEnd, false)
-            skill.element.addEventListener('touchmove', dragStart, false)
+            skill.element.addEventListener('touchstart', dragStart, {passive: true})
+            skill.element.addEventListener('touchend', dragEnd, {passive: true})
+            skill.element.addEventListener('touchmove', dragStart, {passive: true})
 
             function dragStart(e) {
 
                 skill.element.style.zIndex = "2"
+
+                if(!skill.elementShakeHint) {
+                    skill.heldCounter = 0;
+                    skill.heldInterval = setInterval(() => {
+                        skill.heldCounter += 1;
+
+                        if (skill.heldCounter === 1 && !skill.infoShowing) {
+                            addShakeHint(skill)
+                            clearInterval(skill.heldInterval);
+                        } else if(skill.heldCounter > 1) {
+                            removeShakeHint(skill)
+                        }
+                    }, 1000);
+                }
+
+                if(skill.heldCounter && skill.heldCounter > 2) {
+                    clearInterval(skill.heldCounter)
+                }
+
                 if (e.type === "touchstart") {
                     skill.initialX = e.touches[0].clientX - skill.xOffset;
                     skill.initialY = e.touches[0].clientY - skill.yOffset;
@@ -129,6 +148,8 @@
 
                 if (e.target === skill.element) {
                     skill.active = true;
+                } else {
+                    skill.active = false;
                 }
             }
 
@@ -139,32 +160,52 @@
                 skill.element.style.zIndex = "1"
 
                 if(skill.elementChild) {
+                    clearTimeout(skill.elementMovementXTimeout)
+                    clearTimeout(skill.elementMovementYTimeout)
                     skill.element.removeChild(skill.elementChild)
                     delete skill.elementChild
                 }
 
-                skill.active = false;
+                removeShakeHint(skill)
+
+                skill.active = false
+                skill.infoShowing = false
             }
 
             function drag(e) {
                 if (skill.active) {
 
-                    e.preventDefault();
+                    // e.preventDefault();
 
-                    if(e.movementX > 10 || e.movementX < -10) {
-                        console.log('shake it like a poloriod picture')
-
-                        if(skill.elementChild) {
-                            // skill.element.removeChild(skill.elementChild)
-                            // delete skill.elementChild
-                        } else {
-
-                            buildInfoCard(skill)
-                        }
-
+                    if(e.movementX > 15) {
+                        skill.elementMovementXRightExceeded = true
+                        skill.elementMovementXTimeout = setTimeout(function(){
+                            skill.elementMovementXRightExceeded = false
+                        }, 200)
                     }
 
-                    // console.log('e', e.movementX)
+                    if(e.movementX < -15) {
+                        skill.elementMovementXLeftExceeded = true
+                        skill.elementMovementXTimeout = setTimeout(function(){
+                            skill.elementMovementXLeftExceeded = false
+                        }, 200)
+                    }
+
+                    if(skill.elementMovementXLeftExceeded && skill.elementMovementXRightExceeded && !skill.infoShowing) {
+
+                        skill.infoShowing = true
+
+                        if(skill.elementShakeHint){
+                            skill.element.removeChild(skill.elementShakeHint)
+                            delete skill.elementShakeHint
+                        }
+
+                        console.log('shake it like a poloriod picture')
+
+                        if(!skill.elementChild)
+                            buildInfoCard(skill)
+
+                    }
 
                     if (e.type === "touchmove") {
                         skill.currentX = e.touches[0].clientX - skill.initialX;
@@ -209,16 +250,43 @@
 
                 skill.elementChildexperience =  document.createElement('div')
                 skill.elementChildexperience.classList.add(
-                    'flex',
-                    'flex-col',
                     'text-gruvbox-black',
                     'cursor-pointer',
                     'p-4',
                     'text-gruvbox-white',
-                    'max-w-xs'
+                    'max-w-md'
                 );
                 skill.elementChildexperience.innerText = skill.excerpt
                 skill.elementChild.appendChild(skill.elementChildexperience)
+
+            }
+
+            function addShakeHint(skill) {
+                skill.elementShakeHint =  document.createElement('div')
+                skill.elementShakeHint.classList.add(
+                    'text-gruvbox-black',
+                    'self-center',
+                    'justify-self-center',
+                    'cursor-pointer',
+                    'text-sm',
+                    'text-gruvbox-white',
+                    'max-w-md'
+                );
+                skill.elementShakeHint.innerHTML = '&Ll; shake me! &Gg;'
+                skill.element.appendChild(skill.elementShakeHint)
+            }
+
+            function removeShakeHint(skill) {
+
+                skill.heldCounter = 0
+
+                if(skill.heldInterval)
+                    clearTimeout(skill.heldInterval)
+
+                if(skill.elementShakeHint){
+                    skill.element.removeChild(skill.elementShakeHint)
+                    delete skill.elementShakeHint
+                }
 
             }
 
