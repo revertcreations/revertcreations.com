@@ -27,9 +27,20 @@
                         <div class="hidden md:block">
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                <a href="{{ route('admin.dashboard') }}" class="{{ Route::is('admin.dashboard') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-
+                                <a
+                                    href="{{ route('admin.dashboard') }}"
+                                    class="px-3 py-2 rounded-md text-sm font-medium
+                                        {{
+                                            Route::is('admin.dashboard') ?
+                                            "bg-gray-900 text-white" :
+                                            "text-gray-300 hover:bg-gray-700 hover:text-white"
+                                        }}"
+                                >
+                                    Dashboard
+                                </a>
                                 <a href="{{ route('client.index') }}" class="{{ Route::is('client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Clients</a>
+
+                                <a href="{{ route('skills.index') }}" class="{{ Route::is('skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
 
                                 <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a>
 

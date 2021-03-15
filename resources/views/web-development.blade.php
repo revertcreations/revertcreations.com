@@ -15,9 +15,9 @@
     </div> --}}
     <div class="flex flex-col flex-1">
 
-        <div class="flex flex-row flex-grow">
+        <div class="flex flex-col md:flex-row flex-grow">
 
-            <p class="m-4 max-w-xs align-top self-start">
+            <p class="m-4 max-w-xs align-top  md:self-start self-center">
                 Over the past 7+ years, 5 of which spent building ticketing software with the great people at
                 <span class="bg-hmt-green underline font-bold text-xl"><a href="tickets.holdmyticket.com">HoldMyTicket</a></span>,
                 I've gained a lot of confidence in many technologies, languages, and software. These are the tools that
@@ -63,7 +63,7 @@
             data[skill].element = document.createElement('div')
             let element = data[skill].element
             let name = data[skill].name
-            let ranking = data[skill].ranking
+            let experience = data[skill].experience
 
             data[skill].active = false;
             data[skill].currentX;
@@ -73,26 +73,26 @@
             data[skill].xOffset = 0;
             data[skill].yOffset = 0;
 
-            styleElement(element, name, ranking)
+            styleElement(element, name, experience)
             playground.appendChild(element)
             positionElement(element)
             addClickMove(data[skill])
 
         }
 
-        function getFontBasedOnKnowledge(ranking){
-            return ((ranking * 40) / 100)+'em';
+        function getFontBasedOnKnowledge(experience){
+            return (experience/ 20)+'em';
         }
 
-        function styleElement(element, name, ranking) {
+        function styleElement(element, name, experience) {
             element.innerText = name
             element.style.position = "absolute"
             // element.style.display = "none"
-            element.style.fontSize = getFontBasedOnKnowledge(ranking)
-            element.style.background = '#282828'
-            element.classList.add('cursor-pointer')
-            element.classList.add('hover:text-gruvbox-purple')
-            element.classList.add('text-gruvbox-green')
+            element.style.fontSize = getFontBasedOnKnowledge(experience)
+            // element.style.background = '#282828'
+
+            element.classList.add('select-none', 'text-gruvbox-green', 'hover:text-gruvbox-purple', 'cursor-pointer')
+
         }
 
         function positionElement(element) {
@@ -136,6 +136,8 @@
                 skill.initialX = skill.currentX;
                 skill.initialY = skill.currentY;
 
+                skill.element.style.zIndex = "1"
+
                 if(skill.elementChild) {
                     skill.element.removeChild(skill.elementChild)
                     delete skill.elementChild
@@ -149,23 +151,17 @@
 
                     e.preventDefault();
 
-                    if(e.movementX > 15 || e.movementX < -15) {
+                    if(e.movementX > 10 || e.movementX < -10) {
                         console.log('shake it like a poloriod picture')
 
                         if(skill.elementChild) {
-                            skill.element.removeChild(skill.elementChild)
-                            delete skill.elementChild
+                            // skill.element.removeChild(skill.elementChild)
+                            // delete skill.elementChild
                         } else {
-                            skill.elementChild =  document.createElement('div')
-                            skill.elementChild.innerText = 'more info here'
-                            skill.elementChild.style.position = "block"
-                            skill.elementChild.style.background = '#282828'
-                            skill.elementChild.classList.add('cursor-pointer')
-                            skill.elementChild.classList.add('p-4')
-                            skill.elementChild.classList.add('text-white')
 
-                            skill.element.appendChild(skill.elementChild)
+                            buildInfoCard(skill)
                         }
+
                     }
 
                     // console.log('e', e.movementX)
@@ -183,6 +179,47 @@
 
                     setTranslate(skill.currentX, skill.currentY, skill.element);
                 }
+            }
+
+            function buildInfoCard(skill) {
+                skill.elementChild =  document.createElement('div')
+
+                skill.elementChild.style.fontSize = '16px'
+                skill.elementChild.classList.add(
+                    'flex',
+                    'flex-col',
+                    'bg-gruvbox-black',
+                    'cursor-pointer',
+                    'p-4',
+                    'text-gruvbox-white'
+                );
+
+                skill.element.appendChild(skill.elementChild)
+
+                skill.elementChildexperience =  document.createElement('div')
+                skill.elementChildexperience.classList.add(
+                    'flex',
+                    'flex-col',
+                    'cursor-pointer',
+                    'p-4',
+                    'text-gruvbox-yellow'
+                );
+                skill.elementChildexperience.innerText = 'experience: '+skill.experience+' / 100 '
+                skill.elementChild.appendChild(skill.elementChildexperience)
+
+                skill.elementChildexperience =  document.createElement('div')
+                skill.elementChildexperience.classList.add(
+                    'flex',
+                    'flex-col',
+                    'text-gruvbox-black',
+                    'cursor-pointer',
+                    'p-4',
+                    'text-gruvbox-white',
+                    'max-w-xs'
+                );
+                skill.elementChildexperience.innerText = skill.excerpt
+                skill.elementChild.appendChild(skill.elementChildexperience)
+
             }
 
             function setTranslate(xPos, yPos, el) {
