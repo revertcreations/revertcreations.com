@@ -161,7 +161,7 @@
                     break;
 
                 default:
-                    return 'gruvbox-white'
+                    return 'gruvbox-white' 
                     break;
             }
         }
@@ -176,6 +176,20 @@
 
         }
 
+        function resetElement(skill) {
+            for(position in placedSkills){
+                if (placedSkills[position].name == skill.name) {
+                    window.exampleSkill = skill
+                    
+                    console.log('placedSkills[position].cords.y', placedSkills[position].cords.y+'px')
+                    
+                    skill.element.style.top = String(placedSkills[position].cords.y)+'px'
+                    skill.element.style.left = String(placedSkills[position].cords.x)+'px'
+                    break
+                }
+            }
+        }
+
         function positionElement(element) {
             let width = element.offsetWidth
             let height = element.offsetHeight
@@ -183,14 +197,11 @@
             let textYBound = (Math.random() * ((playground.offsetHeight-height) - height/2) + height/2)
 
             let cords = {
-                'top': [textXBound, textYBound],
-                'bottomRight': [textXBound+width, textYBound],
-                'y1': textYBound,
-                'y2': textYBound+height,
-                'x1': textXBound,
-                'x2': textXBound+width,
+                'width': width,
+                'height': height,
+                'x': textXBound,
+                'y': textYBound,
             }
-
 
             let overlaps = false;
             for(position in placedSkills){
@@ -200,19 +211,10 @@
                     overlaps = true
                     break
                 }
-                // if(textXBound >= placedSkills[position].top && (textXBound <= (placedSkills[position].bottom))) {
-                //     collides = true
-                //     if(textXBound > (playground.offsetHeight/2)) {
-                //         textXBound = textXBound + width
-                //     } else {
-                //         textXBound = textXBound - width
-                //     }
-                // }
             }
 
             if(overlaps) {
                 positionElement(element)
-                console.log('collides')
                 return
             } else {
 
@@ -223,64 +225,20 @@
 
                 element.style.top = textYBound+'px'
                 element.style.left = textXBound+'px'
-                console.log(element.innerText, placedSkills)
             }
         }
 
-        function skillsOverlap(skill1, skill2) {
+        function skillsOverlap(rect1, rect2) {
 
-            if(skill1.y1 < skill2.y2 || skill2.y1 < skill1.y2)
-                return false;
+            if (rect1.x < rect2.x + rect2.width &&
+                rect1.x + rect1.width > rect2.x &&
+                rect1.y < rect2.y + rect2.height &&
+                rect1.y + rect1.height > rect2.y) {
+                return true;
+            }
 
-            if(skill1.x2 < skill2.x1 || skill2.x2 < skill1.x1)
-                return false;
-
-            return true;
-
-            // if (skill1.x1 < skill2.x2 && skill1.x2 > skill2.x1 &&
-            //     skill1.y1 > skill2.y2 && skill1.y2 < skill2.y1)
-            //     return true;
-
-            // return false;
+            return false;
         }
-
-            // // top left
-            // let div = document.createElement('div')
-            // div.style.width = '5px'
-            // div.style.height = '5px'
-            // div.classList.add('bg-red-500', 'absolute')
-            // div.style.top = textYBound+'px'
-            // div.style.left = textXBound+'px'
-            // playground.appendChild(div)
-
-            // // top left
-            // div = document.createElement('div')
-            // div.style.width = '5px'
-            // div.style.height = '5px'
-            // div.classList.add('bg-red-500', 'absolute')
-            // div.style.top = textYBound+'px'
-            // div.style.left = (textXBound+width)+'px'
-            // playground.appendChild(div)
-
-
-            // // bottom left
-            // div = document.createElement('div')
-            // div.style.width = '5px'
-            // div.style.height = '5px'
-            // div.classList.add('bg-yellow-500', 'absolute')
-            // div.style.top = (textYBound+height)+'px'
-            // div.style.left = (textXBound)+'px'
-            // playground.appendChild(div)
-
-            // // bottom right
-            // div = document.createElement('div')
-            // div.style.width = '5px'
-            // div.style.height = '5px'
-            // div.classList.add('bg-blue-500', 'absolute')
-            // div.style.top = (textYBound+height)+'px'
-            // div.style.left = (textXBound+width)+'px'
-            // playground.appendChild(div)
-
 
 
         function addClickMove(skill) {
@@ -331,8 +289,6 @@
             }
 
             function dragEnd(e) {
-                skill.initialX = skill.currentX;
-                skill.initialY = skill.currentY;
 
                 skill.element.style.zIndex = "1"
 
@@ -351,6 +307,7 @@
                 }
 
                 removeShakeHint(skill)
+                resetElement(skill)
 
                 skill.active = false
                 skill.infoShowing = false
