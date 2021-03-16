@@ -1,5 +1,47 @@
 <x-layout>
 
+    <input
+        type="hidden"
+        class="
+            text-gruvbox-light-red
+            text-gruvbox-red
+            text-gruvbox-light-yellow
+            text-gruvbox-yellow
+            text-gruvbox-light-orange
+            text-gruvbox-orange
+            text-gruvbox-light-blue
+            text-gruvbox-blue
+            text-gruvbox-light-aqua
+            text-gruvbox-aqua
+            text-gruvbox-gray
+            text-gruvbox-light-green
+            text-gruvbox-green
+            text-gruvbox-light-purple
+            text-gruvbox-purple
+            text-gruvbox-black
+            text-gruvbox-white
+            text-hmt-green
+
+            bg-gruvbox-light-red
+            bg-gruvbox-red
+            bg-gruvbox-light-yellow
+            bg-gruvbox-yellow
+            bg-gruvbox-light-orange
+            bg-gruvbox-orange
+            bg-gruvbox-light-blue
+            bg-gruvbox-blue
+            bg-gruvbox-light-aqua
+            bg-gruvbox-aqua
+            bg-gruvbox-gray
+            bg-gruvbox-light-green
+            bg-gruvbox-green
+            bg-gruvbox-light-purple
+            bg-gruvbox-purple
+            bg-gruvbox-black
+            bg-gruvbox-white
+            bg-hmt-green
+        ">
+
     <span>
         <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl"><input style="width:272px;" class="bg-gruvbox-black italic w-min" value="Web Development" /></i>
     </span>
@@ -57,6 +99,7 @@
 
         const data = JSON.parse('@json($skills)');
         const playground = document.getElementById('playground')
+        let placedSkills = [];
 
         for (const skill in data) {
 
@@ -89,7 +132,7 @@
             // console.log('experience', experience)
             switch (true) {
                 case (experience > 10 && experience < 20) :
-                    return 'gruvbox-aqua'
+                    return 'gruvbox-gray'
                     break;
                 case (experience > 20 && experience < 30) :
                     return 'gruvbox-light-blue'
@@ -98,36 +141,36 @@
                     return 'gruvbox-blue'
                     break;
                 case (experience > 40 && experience < 50) :
-                    return 'gruvbox-light-yellow'
+                    return 'gruvbox-light-green'
+
                     break;
                 case (experience > 50 && experience < 60) :
-                    return 'gruvbox-yellow'
+                    return 'gruvbox-green'
                     break;
                 case (experience > 60 && experience < 70) :
-                    return 'gruvbox-light-orange'
+                    return 'gruvbox-light-yellow'
                     break;
                 case (experience > 70 && experience < 80) :
-                    return 'gruvbox-orange'
+                    return 'gruvbox-yellow'
                     break;
                 case (experience > 80 && experience < 90) :
-                    return 'gruvbox-light-red'
+                    return 'gruvbox-light-orange'
                     break;
                 case (experience >= 90) :
-                    return 'gruvbox-red'
+                    return 'gruvbox-orange'
                     break;
 
                 default:
-                    return 'gruvbox-light-aqua'
+                    return 'gruvbox-white'
                     break;
             }
         }
 
         function styleElement(element, name, experience) {
+
             element.innerText = name
             element.style.position = "absolute"
-            // element.style.display = "none"
             element.style.fontSize = getFontSizeBasedOnExperience(experience)
-            // element.style.background = '#282828'
 
             element.classList.add('select-none', 'text-'+getColorBasedOnExperience(experience), 'cursor-pointer')
 
@@ -139,9 +182,105 @@
             let textXBound = (Math.random() * ((playground.offsetWidth-width) - width/2) + width/2)
             let textYBound = (Math.random() * ((playground.offsetHeight-height) - height/2) + height/2)
 
-            element.style.top = textYBound+'px'
-            element.style.left = textXBound+'px'
+            let cords = {
+                'top': [textXBound, textYBound],
+                'bottomRight': [textXBound+width, textYBound],
+                'y1': textYBound,
+                'y2': textYBound+height,
+                'x1': textXBound,
+                'x2': textXBound+width,
+            }
+
+
+            let overlaps = false;
+            for(position in placedSkills){
+
+                if(skillsOverlap(cords, placedSkills[position].cords)) {
+                    console.error('upppp')
+                    overlaps = true
+                    break
+                }
+                // if(textXBound >= placedSkills[position].top && (textXBound <= (placedSkills[position].bottom))) {
+                //     collides = true
+                //     if(textXBound > (playground.offsetHeight/2)) {
+                //         textXBound = textXBound + width
+                //     } else {
+                //         textXBound = textXBound - width
+                //     }
+                // }
+            }
+
+            if(overlaps) {
+                positionElement(element)
+                console.log('collides')
+                return
+            } else {
+
+                placedSkills.push({
+                        'name': element.innerText,
+                        'cords': cords
+                    })
+
+                element.style.top = textYBound+'px'
+                element.style.left = textXBound+'px'
+                console.log(element.innerText, placedSkills)
+            }
         }
+
+        function skillsOverlap(skill1, skill2) {
+
+            if(skill1.y1 < skill2.y2 || skill2.y1 < skill1.y2)
+                return false;
+
+            if(skill1.x2 < skill2.x1 || skill2.x2 < skill1.x1)
+                return false;
+
+            return true;
+
+            // if (skill1.x1 < skill2.x2 && skill1.x2 > skill2.x1 &&
+            //     skill1.y1 > skill2.y2 && skill1.y2 < skill2.y1)
+            //     return true;
+
+            // return false;
+        }
+
+            // // top left
+            // let div = document.createElement('div')
+            // div.style.width = '5px'
+            // div.style.height = '5px'
+            // div.classList.add('bg-red-500', 'absolute')
+            // div.style.top = textYBound+'px'
+            // div.style.left = textXBound+'px'
+            // playground.appendChild(div)
+
+            // // top left
+            // div = document.createElement('div')
+            // div.style.width = '5px'
+            // div.style.height = '5px'
+            // div.classList.add('bg-red-500', 'absolute')
+            // div.style.top = textYBound+'px'
+            // div.style.left = (textXBound+width)+'px'
+            // playground.appendChild(div)
+
+
+            // // bottom left
+            // div = document.createElement('div')
+            // div.style.width = '5px'
+            // div.style.height = '5px'
+            // div.classList.add('bg-yellow-500', 'absolute')
+            // div.style.top = (textYBound+height)+'px'
+            // div.style.left = (textXBound)+'px'
+            // playground.appendChild(div)
+
+            // // bottom right
+            // div = document.createElement('div')
+            // div.style.width = '5px'
+            // div.style.height = '5px'
+            // div.classList.add('bg-blue-500', 'absolute')
+            // div.style.top = (textYBound+height)+'px'
+            // div.style.left = (textXBound+width)+'px'
+            // playground.appendChild(div)
+
 
 
         function addClickMove(skill) {
@@ -201,6 +340,13 @@
                     clearTimeout(skill.elementMovementXTimeout)
                     clearTimeout(skill.elementMovementYTimeout)
                     skill.element.removeChild(skill.elementChild)
+
+                    skill.element.classList.remove('text-gruvbox-black')
+                    skill.element.classList.remove('bg-'+getColorBasedOnExperience(skill.experience))
+                    skill.element.classList.add('text-'+getColorBasedOnExperience(skill.experience))
+
+                    skill.element.style.fontSize = getFontSizeBasedOnExperience(skill.experience)
+
                     delete skill.elementChild
                 }
 
@@ -258,6 +404,13 @@
             }
 
             function buildInfoCard(skill) {
+
+                skill.element.classList.remove('text-'+getColorBasedOnExperience(skill.experience))
+                skill.element.classList.add('text-gruvbox-black')
+                skill.element.classList.add('bg-'+getColorBasedOnExperience(skill.experience))
+
+                skill.element.style.fontSize = '3.8em';
+
                 skill.elementChild =  document.createElement('div')
 
                 skill.elementChild.style.fontSize = '16px'

@@ -13,7 +13,7 @@ module.exports = {
                 'gruvbox-light-yellow': '#d79921',
                 'gruvbox-yellow': '#fabd2f',
                 'gruvbox-light-orange': '#d65d0e',
-                'gruvbox-orange': '#fabd2f',
+                'gruvbox-orange': '#fe8019',
                 'gruvbox-light-blue': '#458588',
                 'gruvbox-blue': '#83a598',
                 'gruvbox-light-aqua': '#689d6a',
