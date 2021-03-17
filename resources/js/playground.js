@@ -5,6 +5,7 @@ Playground = {
     fontScale: 25,
     placedSkills: [],
     placedSkillAttempts: 0,
+    speedLimit: 15,
 
     init: (data) => {
 
@@ -45,6 +46,7 @@ Playground = {
 
     styleElement: (skill) => {
 
+        skill.element.id = skill.name
         skill.element.innerText = skill.name
         skill.element.style.position = "absolute"
         skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience)
@@ -132,12 +134,22 @@ Playground = {
             if (Playground.placedSkills[position].name == skill.name) {
                 window.exampleSkill = skill
 
-                console.log('Playground.placedSkills[position].cords.y', Playground.placedSkills[position].cords.y+'px')
+                skill.currentX = 0;
+                skill.currentY = 0;
+                skill.initialX;
+                skill.initialY;
+                skill.xOffset = 0;
+                skill.yOffset = 0;
 
-                skill.element.style.top = String(Playground.placedSkills[position].cords.y)+'px'
-                skill.element.style.left = String(Playground.placedSkills[position].cords.x)+'px'
-                break
+                Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
             }
+        }
+    },
+
+    getSkillBasedOnName: (name) => {
+        for(skill in Playground.skills) {
+            if(Playground.skills[skill].name == name)
+                return Playground.skills[skill]
         }
     },
 
@@ -146,7 +158,7 @@ Playground = {
     },
 
     getColorBasedOnExperience: (experience) =>  {
-        // console.log('experience', experience)
+
         switch (true) {
             case (experience > 10 && experience < 20) :
                 return 'gruvbox-gray'
@@ -198,236 +210,247 @@ Playground = {
 
     addClickMove: (skill) => {
 
-        skill.element.addEventListener('mousedown', dragStart, {passive: true})
-        skill.element.addEventListener('mouseup', dragEnd, {passive: true})
-        skill.element.addEventListener('mousemove', drag, {passive: true})
+        skill.element.addEventListener('mousedown', Playground.dragStart, {passive: true})
+        skill.element.addEventListener('mouseup', Playground.dragEnd, {passive: true})
+        skill.element.addEventListener('mousemove', Playground.drag, {passive: true})
 
-        skill.element.addEventListener('touchstart', dragStart, {passive: true})
-        skill.element.addEventListener('touchend', dragEnd, {passive: true})
-        skill.element.addEventListener('touchmove', dragStart, {passive: true})
+        skill.element.addEventListener('touchstart', Playground.dragStart, {passive: true})
+        skill.element.addEventListener('touchend', Playground.dragEnd, {passive: true})
+        skill.element.addEventListener('touchmove', Playground.drag, {passive: true})
 
-        function dragStart(e) {
+    },
 
-            skill.element.style.zIndex = "2"
+    dragStart: (e) => {
 
-            if(!skill.elementShakeHint) {
-                skill.heldCounter = 0;
-                skill.heldInterval = setInterval(() => {
-                    skill.heldCounter += 1;
+        let skill = Playground.getSkillBasedOnName(e.target.id)
 
-                    if (skill.heldCounter === 1 && !skill.infoShowing) {
-                        addShakeHint(skill)
-                        clearInterval(skill.heldInterval);
-                    } else if(skill.heldCounter > 1) {
-                        removeShakeHint(skill)
-                    }
-                }, 1000);
-            }
+        skill.element.style.zIndex = "2"
 
-            if(skill.heldCounter && skill.heldCounter > 2) {
-                clearInterval(skill.heldCounter)
-            }
+        if(!skill.elementShakeHint) {
+            skill.heldCounter = 0;
+            skill.heldInterval = setInterval(() => {
+                skill.heldCounter += 1;
 
-            if (e.type === "touchstart") {
-                skill.initialX = e.touches[0].clientX - skill.xOffset;
-                skill.initialY = e.touches[0].clientY - skill.yOffset;
-            } else {
-                skill.initialX = e.clientX - skill.xOffset;
-                skill.initialY = e.clientY - skill.yOffset;
-            }
-
-            if (e.target === skill.element) {
-                skill.active = true;
-            } else {
-                skill.active = false;
-            }
+                if (skill.heldCounter === 1 && !skill.infoShowing) {
+                    Playground.addShakeHint(skill)
+                    clearInterval(skill.heldInterval);
+                } else if(skill.heldCounter > 1) {
+                    Playground.removeShakeHint(skill)
+                }
+            }, 1000);
         }
 
-        function dragEnd(e) {
-
-            skill.element.style.zIndex = "1"
-
-            if(skill.elementChild) {
-                clearTimeout(skill.elementMovementXTimeout)
-                clearTimeout(skill.elementMovementYTimeout)
-                skill.element.removeChild(skill.elementChild)
-
-                skill.element.classList.remove('text-gruvbox-black')
-                skill.element.classList.remove('bg-'+Playground.getColorBasedOnExperience(skill.experience))
-                skill.element.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience))
-
-                skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience)
-
-                delete skill.elementChild
-            }
-
-            removeShakeHint(skill)
-
-            skill.active = false
-            skill.infoShowing = false
-
-            Playground.positionElement(skill)
+        if(skill.heldCounter && skill.heldCounter > 2) {
+            clearInterval(skill.heldCounter)
         }
 
-        function drag(e) {
-            if (skill.active) {
+        if (e.type === "touchstart") {
+            skill.initialX = e.touches[0].clientX - skill.xOffset;
+            skill.initialY = e.touches[0].clientY - skill.yOffset;
+        } else {
+            skill.initialX = e.clientX - skill.xOffset;
+            skill.initialY = e.clientY - skill.yOffset;
+        }
 
-                // e.preventDefault();
+        if (e.target === skill.element) {
+            skill.active = true;
+        } else {
+            skill.active = false;
+        }
+    },
 
-                if(e.movementX > 12) {
-                    skill.elementMovementXRightExceeded = true
-                    skill.elementMovementXTimeout = setTimeout(function(){
-                        skill.elementMovementXRightExceeded = false
-                    }, 200)
-                }
+    dragEnd: (e) => {
 
-                if(e.movementX < -12) {
-                    skill.elementMovementXLeftExceeded = true
-                    skill.elementMovementXTimeout = setTimeout(function(){
-                        skill.elementMovementXLeftExceeded = false
-                    }, 200)
-                }
+        let skill = Playground.getSkillBasedOnName(e.target.id)
 
-                if(skill.elementMovementXLeftExceeded && skill.elementMovementXRightExceeded && !skill.infoShowing) {
+        skill.element.style.zIndex = "1"
 
-                    skill.infoShowing = true
+        if(skill.elementChild) {
+            clearTimeout(skill.elementMovementXTimeout)
+            clearTimeout(skill.elementMovementYTimeout)
+            skill.element.removeChild(skill.elementChild)
 
-                    removeShakeHint(skill)
+            skill.element.classList.remove('text-gruvbox-black')
+            skill.element.classList.remove('bg-'+Playground.getColorBasedOnExperience(skill.experience))
+            skill.element.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience))
 
-                    console.log('shake it like a poloriod picture')
+            skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience)
 
-                    if(!skill.elementChild)
-                        buildInfoCard(skill)
+            delete skill.elementChild
+        }
 
-                }
+        Playground.removeShakeHint(skill)
 
-                if (e.type === "touchmove") {
-                    skill.currentX = e.touches[0].clientX - skill.initialX;
-                    skill.currentY = e.touches[0].clientY - skill.initialY;
+        skill.active = false
+        skill.infoShowing = false
+        skill.initialTouch = false
+
+        Playground.resetSkillPosition(skill)
+
+    },
+
+    drag: (e) =>  {
+
+        let skill = Playground.getSkillBasedOnName(e.target.id)
+
+        if (skill && skill.active) {
+
+            if(e.type == 'touchmove') {
+                if(!skill.initialTouch) {
+                    skill.initialTouch = e.touches[0]
                 } else {
-                    skill.currentX = e.clientX - skill.initialX;
-                    skill.currentY = e.clientY - skill.initialY;
+                    e.movementX = skill.initialTouch.pageX - skill.previousTouch.pageX;
+                    e.movementY = skill.initialTouch.pageY - skill.previousTouch.pageY;
                 }
-
-                skill.xOffset = skill.currentX;
-                skill.yOffset = skill.currentY;
-
-                setTranslate(skill.currentX, skill.currentY, skill.element);
-            }
-        }
-
-        function buildInfoCard(skill) {
-
-            skill.element.classList.remove('text-'+Playground.getColorBasedOnExperience(skill.experience))
-            skill.element.classList.add('text-gruvbox-black')
-            skill.element.classList.add('bg-'+Playground.getColorBasedOnExperience(skill.experience))
-
-            skill.element.style.fontSize = '3.8em';
-
-            skill.elementChild =  document.createElement('div')
-
-            skill.elementChild.style.fontSize = '16px'
-            skill.elementChild.classList.add(
-                'flex',
-                'flex-col',
-                'bg-gruvbox-black',
-                'cursor-pointer',
-                'p-4'
-            );
-
-            buildExperienceDiv(skill)
-
-            skill.elementChildExcerpt =  document.createElement('div')
-            skill.elementChildExcerpt.classList.add(
-                'cursor-pointer',
-                'p-4',
-                'max-w-md',
-                'text-gruvbox-gray'
-            );
-            skill.elementChildExcerpt.innerText = skill.excerpt
-            skill.elementChild.appendChild(skill.elementChildExcerpt)
-
-        }
-
-        function buildExperienceDiv(skill) {
-
-            skill.element.appendChild(skill.elementChild)
-
-            skill.elementChildExperienceWrap =  document.createElement('div')
-            skill.elementChildExperienceWrap.classList.add(
-                'flex',
-                'flex-row',
-                'cursor-pointer',
-                'p-4'
-            );
-            skill.elementChild.appendChild(skill.elementChildExperienceWrap)
-
-            skill.elementChildExperienceWrapLabel = document.createElement('div')
-            skill.elementChildExperienceWrapLabel.innerHTML = 'Experience: &nbsp; &nbsp;'
-            skill.elementChildExperienceWrapLabel.classList.add(
-                'text-gruvbox-gray',
-                'mr-4'
-            );
-            skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabel)
-
-            skill.elementChildExperienceWrapLabelExperience = document.createElement('div')
-            skill.elementChildExperienceWrapLabelExperience.innerText = skill.experience
-            skill.elementChildExperienceWrapLabelExperience.classList.add(
-                'text-'+Playground.getColorBasedOnExperience(skill.experience)+'',
-            );
-            skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperience)
-
-            skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div')
-            skill.elementChildExperienceWrapLabelExperienceSlash.innerHTML = '&nbsp;/&nbsp;'
-            skill.elementChildExperienceWrapLabelExperienceSlash.classList.add(
-                'text-gruvbox-white',
-            );
-            skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash)
-
-
-            skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div')
-            skill.elementChildExperienceWrapLabelExperienceSlash.innerText = '100'
-            skill.elementChildExperienceWrapLabelExperienceSlash.classList.add(
-                'text-gruvbox-red',
-            );
-            skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash)
-
-        }
-
-        function addShakeHint(skill) {
-            skill.elementShakeHint =  document.createElement('div')
-            skill.elementShakeHint.classList.add(
-                'self-center',
-                'justify-self-center',
-                'cursor-pointer',
-                'text-sm',
-                'text-gruvbox-gray',
-                'max-w-md',
-                'text-center'
-            );
-            skill.elementShakeHint.innerHTML = '&Ll; shake me! &Gg;'
-            skill.element.appendChild(skill.elementShakeHint)
-        }
-
-        function removeShakeHint(skill) {
-
-            skill.heldCounter = 0
-
-            if(skill.heldInterval)
-                clearTimeout(skill.heldInterval)
-
-            if(skill.elementShakeHint){
-                skill.element.removeChild(skill.elementShakeHint)
-                delete skill.elementShakeHint
+                skill.previousTouch = e.touches[0]
             }
 
+
+            if(e.movementX && e.movementX > Playground.speedLimit) {
+                skill.elementMovementXRightExceeded = true
+                skill.elementMovementXTimeout = setTimeout(function(){
+                    skill.elementMovementXRightExceeded = false
+                }, 200)
+            }
+
+            if(e.movementY && e.movementX < -Playground.speedLimit) {
+                skill.elementMovementXLeftExceeded = true
+                skill.elementMovementXTimeout = setTimeout(function(){
+                    skill.elementMovementXLeftExceeded = false
+                }, 200)
+            }
+
+            if(skill.elementMovementXLeftExceeded && skill.elementMovementXRightExceeded && !skill.infoShowing) {
+
+                Playground.removeShakeHint(skill)
+                if(!skill.elementChild)
+                    Playground.buildInfoCard(skill)
+            }
+
+            if (e.type === "touchmove") {
+                skill.currentX = e.touches[0].clientX - skill.initialX;
+                skill.currentY = e.touches[0].clientY - skill.initialY;
+            } else {
+                skill.currentX = e.clientX - skill.initialX;
+                skill.currentY = e.clientY - skill.initialY;
+            }
+
+            Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
+        }
+    },
+
+    buildInfoCard: (skill) => {
+
+        skill.element.classList.remove('text-'+Playground.getColorBasedOnExperience(skill.experience))
+        skill.element.classList.add('text-gruvbox-black')
+        skill.element.classList.add('bg-'+Playground.getColorBasedOnExperience(skill.experience))
+
+        skill.element.style.fontSize = '3.8em';
+
+        skill.elementChild =  document.createElement('div')
+
+        skill.elementChild.style.fontSize = '16px'
+        skill.elementChild.classList.add(
+            'flex',
+            'flex-col',
+            'bg-gruvbox-black',
+            'cursor-pointer',
+            'p-4'
+        );
+
+        Playground.buildExperienceDiv(skill)
+
+        skill.elementChildExcerpt =  document.createElement('div')
+        skill.elementChildExcerpt.classList.add(
+            'cursor-pointer',
+            'p-4',
+            'max-w-md',
+            'text-gruvbox-gray'
+        );
+        skill.elementChildExcerpt.innerText = skill.excerpt
+        skill.elementChild.appendChild(skill.elementChildExcerpt)
+
+        skill.infoShowing = true
+
+    },
+
+    buildExperienceDiv: (skill) => {
+
+        skill.element.appendChild(skill.elementChild)
+
+        skill.elementChildExperienceWrap =  document.createElement('div')
+        skill.elementChildExperienceWrap.classList.add(
+            'flex',
+            'flex-row',
+            'cursor-pointer',
+            'p-4'
+        );
+        skill.elementChild.appendChild(skill.elementChildExperienceWrap)
+
+        skill.elementChildExperienceWrapLabel = document.createElement('div')
+        skill.elementChildExperienceWrapLabel.innerHTML = 'Experience: &nbsp; &nbsp;'
+        skill.elementChildExperienceWrapLabel.classList.add(
+            'text-gruvbox-gray',
+            'mr-4'
+        );
+        skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabel)
+
+        skill.elementChildExperienceWrapLabelExperience = document.createElement('div')
+        skill.elementChildExperienceWrapLabelExperience.innerText = skill.experience
+        skill.elementChildExperienceWrapLabelExperience.classList.add(
+            'text-'+Playground.getColorBasedOnExperience(skill.experience)+'',
+        );
+        skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperience)
+
+        skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div')
+        skill.elementChildExperienceWrapLabelExperienceSlash.innerHTML = '&nbsp;/&nbsp;'
+        skill.elementChildExperienceWrapLabelExperienceSlash.classList.add(
+            'text-gruvbox-white',
+        );
+        skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash)
+
+
+        skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div')
+        skill.elementChildExperienceWrapLabelExperienceSlash.innerText = '100'
+        skill.elementChildExperienceWrapLabelExperienceSlash.classList.add(
+            'text-gruvbox-red',
+        );
+        skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash)
+
+    },
+
+    addShakeHint: (skill) => {
+        skill.elementShakeHint =  document.createElement('div')
+        skill.elementShakeHint.classList.add(
+            'self-center',
+            'justify-self-center',
+            'cursor-pointer',
+            'text-sm',
+            'text-gruvbox-gray',
+            'max-w-md',
+            'text-center'
+        );
+        skill.elementShakeHint.innerHTML = '&Ll; shake me! &Gg;'
+        skill.element.appendChild(skill.elementShakeHint)
+    },
+
+     removeShakeHint: (skill) => {
+
+        skill.heldCounter = 0
+
+        if(skill.heldInterval)
+            clearTimeout(skill.heldInterval)
+
+        if(skill.elementShakeHint){
+            skill.element.removeChild(skill.elementShakeHint)
+            delete skill.elementShakeHint
         }
 
-        function setTranslate(xPos, yPos, el) {
-            el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
-        }
-    }
+    },
 
+    setTranslate: (xPos, yPos, el) => {
+        el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+    },
 
 }
 

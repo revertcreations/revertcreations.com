@@ -1,6 +1,6 @@
 <x-layout>
 
-    <input
+    {{-- <input
         type="hidden"
         class="
             text-gruvbox-light-red
@@ -40,7 +40,7 @@
             bg-gruvbox-black
             bg-gruvbox-white
             bg-hmt-green
-        ">
+        "> --}}
 
     <span>
         <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl"><input style="width:272px;" class="bg-gruvbox-black italic w-min" value="Web Development" /></i>
@@ -67,11 +67,11 @@
                 I've been hacking with for years.
             </p>
 
+            <div id="playground" class="flex-grow bg-gruvbox-black relative">
             {{-- <div class="flex-grow bg-red-600">
                 <canvas id="canvas"></canvas>
             </div> --}}
 
-            <div id="playground" class="flex-grow bg-gruvbox-black relative">
 
             </div>
             {{-- <div class="flex flew-row flex-wrap w-4/5 bg-gray-200 items-center justify-center">
