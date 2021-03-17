@@ -1,6 +1,6 @@
 <x-layout>
 
-    {{-- <input
+    <input
         type="hidden"
         class="
             text-gruvbox-light-red
@@ -19,6 +19,7 @@
             text-gruvbox-light-purple
             text-gruvbox-purple
             text-gruvbox-black
+            text-gruvbox-black-hidden
             text-gruvbox-white
             text-hmt-green
 
@@ -38,9 +39,10 @@
             bg-gruvbox-light-purple
             bg-gruvbox-purple
             bg-gruvbox-black
+            bg-gruvbox-black-hidden
             bg-gruvbox-white
             bg-hmt-green
-        "> --}}
+        ">
 
     <span>
         <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl"><input style="width:272px;" class="bg-gruvbox-black italic w-min" value="Web Development" /></i>

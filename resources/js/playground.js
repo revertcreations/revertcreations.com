@@ -108,8 +108,9 @@ Playground = {
 
     },
 
-    reset: () => {
+    reset: (hire) => {
 
+        hire = hire || false
         Playground.fontScale = Playground.fontScale+2
         Playground.placedSkillAttempts = 0
         Playground.placedSkills = []
@@ -125,8 +126,11 @@ Playground = {
             Playground.playground.removeChild(Playground.playground.firstChild)
         }
 
-        Playground.init(Playground.skills)
-
+        if(hire) {
+            Playground.buildForm()
+        } else {
+            Playground.init(Playground.skills)
+        }
     },
 
     resetSkillPosition: (skill) => {
@@ -170,39 +174,42 @@ Playground = {
             case (experience == 101) :
                 return 'gruvbox-black-hidden'
 
-            case (experience > 10 && experience < 20) :
-                return 'gruvbox-gray'
+            case (experience == 100) :
+                return 'gruvbox-white'
 
-            case (experience > 20 && experience < 30) :
-                return 'gruvbox-light-blue'
+            // case (experience > 10 && experience < 20) :
+            //     return 'gruvbox-gray'
 
-            case (experience > 30 && experience < 40) :
-                return 'gruvbox-blue'
+            // case (experience > 20 && experience < 30) :
+            //     return 'gruvbox-light-blue'
 
-            case (experience > 40 && experience < 50) :
-                return 'gruvbox-light-green'
+            // case (experience > 30 && experience < 40) :
+            //     return 'gruvbox-blue'
 
-            case (experience > 50 && experience < 60) :
-                return 'gruvbox-green'
+            // case (experience > 40 && experience < 50) :
+            //     return 'gruvbox-light-green'
 
-            case (experience > 60 && experience < 70) :
-                return 'gruvbox-light-yellow'
+            // case (experience > 50 && experience < 60) :
+            //     return 'gruvbox-green'
 
-            case (experience > 70 && experience < 80) :
-                return 'gruvbox-yellow'
+            // case (experience > 60 && experience < 70) :
+            //     return 'gruvbox-light-yellow'
 
-            case (experience > 80 && experience < 90) :
-                return 'gruvbox-light-orange'
+            // case (experience > 70 && experience < 80) :
+            //     return 'gruvbox-yellow'
 
-            case (experience >= 90 && experience < 95) :
-                return 'gruvbox-orange'
+            // case (experience > 80 && experience < 90) :
+            //     return 'gruvbox-light-orange'
 
-            case (experience >= 95 && experience < 100) :
-                return 'gruvbox-red'
+            // case (experience >= 90 && experience < 95) :
+            //     return 'gruvbox-orange'
+
+            // case (experience >= 95 && experience < 100) :
+            //     return 'gruvbox-red'
 
 
             default:
-                return 'gruvbox-white'
+                return 'gruvbox-green'
 
         }
     },
@@ -398,14 +405,14 @@ Playground = {
         }
 
         if(skill.name == 'hire me') {
-            if(e.movementY && e.movementY > Playground.speedLimit) {
+            if(e.movementY && e.movementY > (Playground.speedLimit-1)) {
                 skill.elementMovementUpExceeded = true
                 skill.elementMovementYTimeout = setTimeout(function(){
                     skill.elementMovementUpExceeded = false
                 }, 200)
             }
 
-            if(e.movementY && e.movementY < -Playground.speedLimit) {
+            if(e.movementY && e.movementY < (Playground.speedLimit-1)) {
                 skill.elementMovementYDownExceeded = true
                 skill.elementMovementYTimeout = setTimeout(function(){
                     skill.elementMovementYDownExceeded = false
@@ -413,7 +420,7 @@ Playground = {
             }
 
             if(skill.elementMovementYDownExceeded && skill.elementMovementUpExceeded && skill.infoShowing) {
-                window.location.href = '/'
+                Playground.reset(skill)
             }
         }
 
@@ -458,7 +465,7 @@ Playground = {
 
         skill.elementChildExperienceWrapLabelExperienceFull = document.createElement('div')
         skill.elementChildExperienceWrapLabelExperienceFull.innerText = '100'
-        skill.elementChildExperienceWrapLabelExperienceFull.classList.add('text-gruvbox-light-red');
+        skill.elementChildExperienceWrapLabelExperienceFull.classList.add('text-gruvbox-white');
 
     },
 
@@ -488,6 +495,52 @@ Playground = {
         skill.elementChild.appendChild(skill.elementChildExcerpt)
 
         skill.infoShowing = true
+
+    },
+
+    buildForm: () => {
+
+        let formWrap = document.createElement('div')
+        let hireMeForm = document.createElement('form')
+        let emailInput = document.createElement('input')
+        let nameInput = document.createElement('input')
+        let descriptionInput = document.createElement('textarea')
+
+        let emailLabel = document.createElement('label')
+        let nameLabel = document.createElement('label')
+        let descriptionLabel = document.createElement('label')
+
+        emailLabel.innerText = 'Email'
+        nameLabel.innerText = 'Name'
+        descriptionLabel.innerText = 'Description'
+
+        emailLabel.classList.add('text-gruvbox-green')
+        nameLabel.classList.add('text-gruvbox-green')
+        descriptionLabel.classList.add('text-gruvbox-green')
+
+        formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12',)
+
+        hireMeForm.classList.add('flex', 'flex-col', 'm-8')
+        hireMeForm.method = 'POST'
+        hireMeForm.action = '/hire-me'
+
+
+        emailInput.classList.add('p-4', 'm-4')
+        nameInput.classList.add('p-4', 'm-4')
+        descriptionInput.classList.add('p-4', 'm-4')
+        emailInput.name = 'email'
+        nameInput.name = 'name'
+        descriptionInput.name = 'description'
+
+
+        Playground.playground.appendChild(formWrap)
+        formWrap.appendChild(hireMeForm)
+        hireMeForm.appendChild(emailLabel)
+        hireMeForm.appendChild(emailInput)
+        hireMeForm.appendChild(nameLabel)
+        hireMeForm.appendChild(nameInput)
+        hireMeForm.appendChild(descriptionLabel)
+        hireMeForm.appendChild(descriptionInput)
 
     },
 

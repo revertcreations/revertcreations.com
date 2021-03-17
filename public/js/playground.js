@@ -87,7 +87,8 @@ Playground = {
       return true;
     }
   },
-  reset: function reset() {
+  reset: function reset(hire) {
+    hire = hire || false;
     Playground.fontScale = Playground.fontScale + 2;
     Playground.placedSkillAttempts = 0;
     Playground.placedSkills = [];
@@ -103,7 +104,11 @@ Playground = {
       Playground.playground.removeChild(Playground.playground.firstChild);
     }
 
-    Playground.init(Playground.skills);
+    if (hire) {
+      Playground.buildForm();
+    } else {
+      Playground.init(Playground.skills);
+    }
   },
   resetSkillPosition: function resetSkillPosition(skill) {
     for (position in Playground.placedSkills) {
@@ -135,38 +140,31 @@ Playground = {
       case experience == 101:
         return 'gruvbox-black-hidden';
 
-      case experience > 10 && experience < 20:
-        return 'gruvbox-gray';
-
-      case experience > 20 && experience < 30:
-        return 'gruvbox-light-blue';
-
-      case experience > 30 && experience < 40:
-        return 'gruvbox-blue';
-
-      case experience > 40 && experience < 50:
-        return 'gruvbox-light-green';
-
-      case experience > 50 && experience < 60:
-        return 'gruvbox-green';
-
-      case experience > 60 && experience < 70:
-        return 'gruvbox-light-yellow';
-
-      case experience > 70 && experience < 80:
-        return 'gruvbox-yellow';
-
-      case experience > 80 && experience < 90:
-        return 'gruvbox-light-orange';
-
-      case experience >= 90 && experience < 95:
-        return 'gruvbox-orange';
-
-      case experience >= 95 && experience < 100:
-        return 'gruvbox-red';
+      case experience == 100:
+        return 'gruvbox-white';
+      // case (experience > 10 && experience < 20) :
+      //     return 'gruvbox-gray'
+      // case (experience > 20 && experience < 30) :
+      //     return 'gruvbox-light-blue'
+      // case (experience > 30 && experience < 40) :
+      //     return 'gruvbox-blue'
+      // case (experience > 40 && experience < 50) :
+      //     return 'gruvbox-light-green'
+      // case (experience > 50 && experience < 60) :
+      //     return 'gruvbox-green'
+      // case (experience > 60 && experience < 70) :
+      //     return 'gruvbox-light-yellow'
+      // case (experience > 70 && experience < 80) :
+      //     return 'gruvbox-yellow'
+      // case (experience > 80 && experience < 90) :
+      //     return 'gruvbox-light-orange'
+      // case (experience >= 90 && experience < 95) :
+      //     return 'gruvbox-orange'
+      // case (experience >= 95 && experience < 100) :
+      //     return 'gruvbox-red'
 
       default:
-        return 'gruvbox-white';
+        return 'gruvbox-green';
     }
   },
   skillsOverlap: function skillsOverlap(rect1, rect2) {
@@ -335,14 +333,14 @@ Playground = {
     }
 
     if (skill.name == 'hire me') {
-      if (e.movementY && e.movementY > Playground.speedLimit) {
+      if (e.movementY && e.movementY > Playground.speedLimit - 1) {
         skill.elementMovementUpExceeded = true;
         skill.elementMovementYTimeout = setTimeout(function () {
           skill.elementMovementUpExceeded = false;
         }, 200);
       }
 
-      if (e.movementY && e.movementY < -Playground.speedLimit) {
+      if (e.movementY && e.movementY < Playground.speedLimit - 1) {
         skill.elementMovementYDownExceeded = true;
         skill.elementMovementYTimeout = setTimeout(function () {
           skill.elementMovementYDownExceeded = false;
@@ -350,7 +348,7 @@ Playground = {
       }
 
       if (skill.elementMovementYDownExceeded && skill.elementMovementUpExceeded && skill.infoShowing) {
-        window.location.href = '/';
+        Playground.reset(skill);
       }
     }
 
@@ -382,7 +380,7 @@ Playground = {
     skill.elementChildExperienceWrapLabelExperienceSlash.classList.add('text-gruvbox-white');
     skill.elementChildExperienceWrapLabelExperienceFull = document.createElement('div');
     skill.elementChildExperienceWrapLabelExperienceFull.innerText = '100';
-    skill.elementChildExperienceWrapLabelExperienceFull.classList.add('text-gruvbox-light-red');
+    skill.elementChildExperienceWrapLabelExperienceFull.classList.add('text-gruvbox-white');
   },
   displayInfoCard: function displayInfoCard(skill) {
     skill.element.style.fontSize = '3.8em';
@@ -404,6 +402,40 @@ Playground = {
 
     skill.elementChild.appendChild(skill.elementChildExcerpt);
     skill.infoShowing = true;
+  },
+  buildForm: function buildForm() {
+    var formWrap = document.createElement('div');
+    var hireMeForm = document.createElement('form');
+    var emailInput = document.createElement('input');
+    var nameInput = document.createElement('input');
+    var descriptionInput = document.createElement('textarea');
+    var emailLabel = document.createElement('label');
+    var nameLabel = document.createElement('label');
+    var descriptionLabel = document.createElement('label');
+    emailLabel.innerText = 'Email';
+    nameLabel.innerText = 'Name';
+    descriptionLabel.innerText = 'Description';
+    emailLabel.classList.add('text-gruvbox-green');
+    nameLabel.classList.add('text-gruvbox-green');
+    descriptionLabel.classList.add('text-gruvbox-green');
+    formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
+    hireMeForm.classList.add('flex', 'flex-col', 'm-8');
+    hireMeForm.method = 'POST';
+    hireMeForm.action = '/hire-me';
+    emailInput.classList.add('p-4', 'm-4');
+    nameInput.classList.add('p-4', 'm-4');
+    descriptionInput.classList.add('p-4', 'm-4');
+    emailInput.name = 'email';
+    nameInput.name = 'name';
+    descriptionInput.name = 'description';
+    Playground.playground.appendChild(formWrap);
+    formWrap.appendChild(hireMeForm);
+    hireMeForm.appendChild(emailLabel);
+    hireMeForm.appendChild(emailInput);
+    hireMeForm.appendChild(nameLabel);
+    hireMeForm.appendChild(nameInput);
+    hireMeForm.appendChild(descriptionLabel);
+    hireMeForm.appendChild(descriptionInput);
   },
   addShakeHint: function addShakeHint(skill) {
     skill.elementShakeHint = document.createElement('div');
