@@ -59,15 +59,7 @@
 
         <div class="flex flex-col md:flex-row flex-grow">
 
-            <p class="m-4 max-w-xs align-top  md:self-start self-center">
-                Over the past 7+ years, 5 of which spent building ticketing software with the great people at
-                <span class="bg-hmt-green underline font-bold text-xl"><a href="tickets.holdmyticket.com">HoldMyTicket</a></span>,
-                I've gained a lot of confidence in many technologies, languages, and software. These are the tools that
-                help me quickly build interactive, responsive, and secure web applications. Some I am just now learning, and others
-                I've been hacking with for years.
-            </p>
-
-            <div id="playground" class="flex-grow bg-gruvbox-black relative">
+            <div id="playground" class="flex-grow bg-gruvbox-black relative" style="touch-action: none">
             {{-- <div class="flex-grow bg-red-600">
                 <canvas id="canvas"></canvas>
             </div> --}}
