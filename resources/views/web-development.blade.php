@@ -46,33 +46,10 @@
         <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl"><input style="width:272px;" class="bg-gruvbox-black italic w-min" value="Web Development" /></i>
     </span>
 
-    {{-- <div
-        class="cursor-pointer text-2xl mt-3 bg-gruvbox-black text-gruvbox-green hover:text-gruvbox-purple"
-    >
-        <a
-            target="_blank"
-            href="https://github.com/revertcreations">
-            github
-        </a>
-    </div> --}}
     <div class="flex flex-col flex-1">
 
         <div class="flex flex-col md:flex-row flex-grow">
-
-            <div id="playground" class="flex-grow bg-gruvbox-black relative" style="touch-action: none">
-            {{-- <div class="flex-grow bg-red-600">
-                <canvas id="canvas"></canvas>
-            </div> --}}
-
-
-            </div>
-            {{-- <div class="flex flew-row flex-wrap w-4/5 bg-gray-200 items-center justify-center">
-                @foreach($skills as $skill => $points)
-                    <div class="">
-                        <i style="font-size: {{ (($points * 2) * 10) / 20 }}em;" class="bg-gruvbox-black text-gruvbox-green ">{{ $skill }}</i>
-                    </div>
-                @endforeach
-            </div> --}}
+            <div id="playground" class="flex-grow bg-gruvbox-black relative" style="touch-action: none; overflow: hidden;"></div>
         </div>
 
     </div>

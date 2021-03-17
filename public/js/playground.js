@@ -42,7 +42,7 @@ Playground = {
     skill.element.innerText = skill.name;
     skill.element.style.position = "absolute";
     skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience);
-    skill.element.classList.add('select-none', 'text-' + Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer');
+    skill.element.classList.add('select-none', 'text-' + Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer'); // skill.element.classList.add('border-2', 'border-'+Playground.getColorBasedOnExperience(skill.experience))
   },
   positionElement: function positionElement(skill) {
     while (!skill.isPositioned) {
@@ -114,10 +114,10 @@ Playground = {
         skill.initialX;
         skill.initialY;
         skill.xOffset = 0;
-        skill.yOffset = 0;
-        skill.element.style.top = skill.originalTop;
-        skill.element.style.left = skill.originalLeft;
-        skill.element.classList.remove('min-w-full');
+        skill.yOffset = 0; // skill.element.style.top = skill.originalTop
+        // skill.element.style.left = skill.originalLeft
+        // skill.element.classList.remove('min-w-full')
+
         Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
       }
     }
@@ -132,6 +132,9 @@ Playground = {
   },
   getColorBasedOnExperience: function getColorBasedOnExperience(experience) {
     switch (true) {
+      case experience == 101:
+        return 'gruvbox-black-hidden';
+
       case experience > 10 && experience < 20:
         return 'gruvbox-gray';
 
@@ -156,8 +159,11 @@ Playground = {
       case experience > 80 && experience < 90:
         return 'gruvbox-light-orange';
 
-      case experience >= 90 && experience < 100:
+      case experience >= 90 && experience < 95:
         return 'gruvbox-orange';
+
+      case experience >= 95 && experience < 100:
+        return 'gruvbox-red';
 
       default:
         return 'gruvbox-white';
@@ -173,25 +179,33 @@ Playground = {
   addClickMove: function addClickMove(skill) {
     skill.element.addEventListener('mousedown', Playground.dragStart, {
       passive: true
-    });
-    skill.element.addEventListener('mouseup', Playground.dragEnd, {
-      passive: true
-    });
-    skill.element.addEventListener('mousemove', Playground.drag, {
-      passive: true
-    });
+    }); // skill.element.addEventListener('mouseup', Playground.dragEnd, {passive: true})
+    // skill.element.addEventListener('mousemove', Playground.drag, {passive: true})
+
     skill.element.addEventListener('touchstart', Playground.dragStart, {
       passive: true
-    });
-    skill.element.addEventListener('touchend', Playground.dragEnd, {
-      passive: true
-    });
-    skill.element.addEventListener('touchmove', Playground.drag, {
-      passive: true
-    });
+    }); // skill.element.addEventListener('touchend', Playground.dragEnd, {passive: true})
+    // skill.element.addEventListener('touchmove', Playground.drag, {passive: true})
   },
   dragStart: function dragStart(e) {
     var skill = Playground.getSkillBasedOnName(e.target.id);
+
+    if (e.type == 'touchstart') {
+      skill.element.addEventListener('touchend', Playground.dragEnd, {
+        passive: true
+      });
+      skill.element.addEventListener('touchmove', Playground.drag, {
+        passive: true
+      });
+    } else {
+      skill.element.addEventListener('mouseup', Playground.dragEnd, {
+        passive: true
+      });
+      skill.element.addEventListener('mousemove', Playground.drag, {
+        passive: true
+      });
+    }
+
     skill.element.style.zIndex = "2";
 
     if (!skill.elementShakeHint) {
@@ -228,119 +242,168 @@ Playground = {
   },
   dragEnd: function dragEnd(e) {
     var skill = Playground.getSkillBasedOnName(e.target.id);
+    skill.element.removeEventListener('mouseup', Playground.dragEnd);
+    skill.element.removeEventListener('mousemove', Playground.drag);
     skill.element.style.zIndex = "1";
 
     if (skill.elementChild) {
       clearTimeout(skill.elementMovementXTimeout);
       clearTimeout(skill.elementMovementYTimeout);
-      skill.element.removeChild(skill.elementChild);
+      if (skill.elementChild.isConnected) skill.element.removeChild(skill.elementChild);
       skill.element.classList.remove('text-gruvbox-black');
-      skill.element.classList.remove('bg-' + Playground.getColorBasedOnExperience(skill.experience));
+      skill.element.classList.remove('bg-' + Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12', 'border-r-4', 'border-b-4', 'border-' + Playground.getColorBasedOnExperience(skill.experience));
       skill.element.classList.add('text-' + Playground.getColorBasedOnExperience(skill.experience));
       skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience);
       delete skill.elementChild;
     }
 
-    Playground.removeShakeHint(skill);
     skill.active = false;
     skill.infoShowing = false;
     skill.initialTouch = false;
+    Playground.removeShakeHint(skill);
     Playground.resetSkillPosition(skill);
   },
   drag: function drag(e) {
+    console.log('dragggingingg?');
     var skill = Playground.getSkillBasedOnName(e.target.id);
 
     if (skill && skill.active) {
-      if (e.type == 'touchmove') {
-        if (!skill.initialTouch) {
-          skill.initialTouch = e.touches[0];
-        } else {
-          e.movementX = skill.initialTouch.pageX - skill.previousTouch.pageX;
-          e.movementY = skill.initialTouch.pageY - skill.previousTouch.pageY;
-        }
+      skill.originalTop = skill.element.style.top;
+      skill.originalLeft = skill.element.style.left;
+      if (!skill.elementChild) Playground.buildInfoCard(skill);
+      Playground.handleShakeEvents(e, skill); // if(e.type == 'touchmove') {
+      //     if(!skill.initialTouch) {
+      //         skill.initialTouch = e.touches[0]
+      //     } else {
+      //         e.movementX = skill.initialTouch.pageX - skill.previousTouch.pageX;
+      //         e.movementY = skill.initialTouch.pageY - skill.previousTouch.pageY;
+      //     }
+      //     skill.previousTouch = e.touches[0]
+      // }
+      // if(e.movementX && e.movementX > Playground.speedLimit) {
+      //     skill.elementMovementXRightExceeded = true
+      //     skill.elementMovementXTimeout = setTimeout(function(){
+      //         skill.elementMovementXRightExceeded = false
+      //     }, 200)
+      // }
+      // if(e.movementX && e.movementX < -Playground.speedLimit) {
+      //     skill.elementMovementXLeftExceeded = true
+      //     skill.elementMovementXTimeout = setTimeout(function(){
+      //         skill.elementMovementXLeftExceeded = false
+      //     }, 200)
+      // }
+      // if(skill.elementMovementXLeftExceeded && skill.elementMovementXRightExceeded && !skill.infoShowing) {
+      //     Playground.displayInfoCard(skill)
+      //     Playground.removeShakeHint(skill)
+      // }
 
-        skill.previousTouch = e.touches[0];
+      if (e.type === "touchmove") {
+        skill.currentX = e.touches[0].clientX - skill.initialX;
+        skill.currentY = e.touches[0].clientY - skill.initialY;
+      } else {
+        skill.currentX = e.clientX - skill.initialX;
+        skill.currentY = e.clientY - skill.initialY;
       }
 
-      if (e.movementX && e.movementX > Playground.speedLimit) {
-        skill.elementMovementXRightExceeded = true;
-        skill.elementMovementXTimeout = setTimeout(function () {
-          skill.elementMovementXRightExceeded = false;
+      Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
+    }
+  },
+  handleShakeEvents: function handleShakeEvents(e, skill) {
+    if (e.type == 'touchmove') {
+      if (!skill.initialTouch) {
+        skill.initialTouch = e.touches[0];
+      } else {
+        e.movementX = skill.initialTouch.pageX - skill.previousTouch.pageX;
+        e.movementY = skill.initialTouch.pageY - skill.previousTouch.pageY;
+      }
+
+      skill.previousTouch = e.touches[0];
+    }
+
+    if (e.movementX && e.movementX > Playground.speedLimit) {
+      skill.elementMovementXRightExceeded = true;
+      skill.elementMovementXTimeout = setTimeout(function () {
+        skill.elementMovementXRightExceeded = false;
+      }, 200);
+    }
+
+    if (e.movementX && e.movementX < -Playground.speedLimit) {
+      skill.elementMovementXLeftExceeded = true;
+      skill.elementMovementXTimeout = setTimeout(function () {
+        skill.elementMovementXLeftExceeded = false;
+      }, 200);
+    }
+
+    if (skill.name == 'hire me') {
+      if (e.movementY && e.movementY > Playground.speedLimit) {
+        skill.elementMovementUpExceeded = true;
+        skill.elementMovementYTimeout = setTimeout(function () {
+          skill.elementMovementUpExceeded = false;
         }, 200);
       }
 
-      if (e.movementY && e.movementX < -Playground.speedLimit) {
-        skill.elementMovementXLeftExceeded = true;
-        skill.elementMovementXTimeout = setTimeout(function () {
-          skill.elementMovementXLeftExceeded = false;
+      if (e.movementY && e.movementY < -Playground.speedLimit) {
+        skill.elementMovementYDownExceeded = true;
+        skill.elementMovementYTimeout = setTimeout(function () {
+          skill.elementMovementYDownExceeded = false;
         }, 200);
       }
 
-      if (skill.elementMovementXLeftExceeded && skill.elementMovementXRightExceeded && !skill.infoShowing) {
-        // Playground.shakeActivated()
-        Playground.removeShakeHint(skill);
-        if (!skill.elementChild) Playground.buildInfoCard(skill);
-        skill.active = false;
-      } else if (!skill.infoShowing) {
-        if (e.type === "touchmove") {
-          skill.currentX = e.touches[0].clientX - skill.initialX;
-          skill.currentY = e.touches[0].clientY - skill.initialY;
-        } else {
-          skill.currentX = e.clientX - skill.initialX;
-          skill.currentY = e.clientY - skill.initialY;
-        }
-
-        Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
+      if (skill.elementMovementYDownExceeded && skill.elementMovementUpExceeded && skill.infoShowing) {
+        window.location.href = '/';
       }
+    }
+
+    if (skill.elementMovementXLeftExceeded && skill.elementMovementXRightExceeded && !skill.infoShowing) {
+      Playground.displayInfoCard(skill);
+      Playground.removeShakeHint(skill);
     }
   },
   buildInfoCard: function buildInfoCard(skill) {
-    skill.element.style.transform = 'unset';
-    skill.element.classList.add('text-gruvbox-black', 'min-w-full');
-    skill.originalTop = skill.element.style.top;
-    skill.originalLeft = skill.element.style.left;
-    skill.element.style.top = 0;
-    skill.element.style.left = 0;
-    skill.element.classList.remove('text-' + Playground.getColorBasedOnExperience(skill.experience));
-    skill.element.classList.add('bg-' + Playground.getColorBasedOnExperience(skill.experience));
-    skill.element.style.fontSize = '3.8em';
     skill.elementChild = document.createElement('div');
     skill.elementChild.style.fontSize = '16px';
     skill.elementChild.classList.add('flex', 'flex-col', 'bg-gruvbox-black', 'cursor-pointer', 'p-2');
     Playground.buildExperienceDiv(skill);
     skill.elementChildExcerpt = document.createElement('div');
-    skill.elementChildExcerpt.classList.add('cursor-pointer', 'p-2', 'text-gruvbox-gray');
+    skill.elementChildExcerpt.classList.add('m-2', 'align-top', 'md:self-start', 'self-center', 'text-gruvbox-white');
+    skill.elementChildExcerpt.innerHTML = skill.excerpt;
+  },
+  buildExperienceDiv: function buildExperienceDiv(skill) {
+    skill.elementChildExperienceWrap = document.createElement('div');
+    skill.elementChildExperienceWrap.classList.add('flex', 'flex-row', 'cursor-pointer', 'p-2');
+    skill.elementChildExperienceWrapLabel = document.createElement('div');
+    skill.elementChildExperienceWrapLabel.innerHTML = 'Experience: &nbsp; &nbsp;';
+    skill.elementChildExperienceWrapLabel.classList.add('text-gruvbox-gray', 'mr-4');
+    skill.elementChildExperienceWrapLabelExperience = document.createElement('div');
+    skill.elementChildExperienceWrapLabelExperience.innerText = skill.experience;
+    skill.elementChildExperienceWrapLabelExperience.classList.add('text-' + Playground.getColorBasedOnExperience(skill.experience) + '');
+    skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div');
+    skill.elementChildExperienceWrapLabelExperienceSlash.innerHTML = '&nbsp;/&nbsp;';
+    skill.elementChildExperienceWrapLabelExperienceSlash.classList.add('text-gruvbox-white');
+    skill.elementChildExperienceWrapLabelExperienceFull = document.createElement('div');
+    skill.elementChildExperienceWrapLabelExperienceFull.innerText = '100';
+    skill.elementChildExperienceWrapLabelExperienceFull.classList.add('text-gruvbox-light-red');
+  },
+  displayInfoCard: function displayInfoCard(skill) {
+    skill.element.style.fontSize = '3.8em';
+    skill.element.style.transform = 'unset';
+    skill.element.classList.remove('text-' + Playground.getColorBasedOnExperience(skill.experience));
+    skill.element.classList.remove('text-gruvbox-black');
+    skill.element.classList.add('bg-' + Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12', 'border-r-4', 'border-b-4', 'border-' + Playground.getColorBasedOnExperience(skill.experience)); // skill.element.classList.add('bg-gradient-to-r', 'from-gruvbox-light-blue', 'via-gruvbox-orange', 'to-gruvbox-red')
 
-    if (skill.name == 'README.md') {
-      skill.elementChildExcerpt.innerHTML = skill.excerpt;
-    } else {
-      skill.elementChildExcerpt.innerText = skill.excerpt;
+    skill.element.style.backgroundImage = 'linear-gradient(to right, rgba(0,0,0,0) ' + skill.experience + '%,rgba(0,0,0,0) ' + skill.experience + '%, #282828 ' + skill.experience + '%)';
+    skill.element.appendChild(skill.elementChild);
+
+    if (skill.name != 'README.md' && skill.name != 'hire me') {
+      skill.elementChild.appendChild(skill.elementChildExperienceWrap);
+      skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabel);
+      skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperience);
+      skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash);
+      skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceFull);
     }
 
     skill.elementChild.appendChild(skill.elementChildExcerpt);
     skill.infoShowing = true;
-  },
-  buildExperienceDiv: function buildExperienceDiv(skill) {
-    skill.element.appendChild(skill.elementChild);
-    skill.elementChildExperienceWrap = document.createElement('div');
-    skill.elementChildExperienceWrap.classList.add('flex', 'flex-row', 'cursor-pointer', 'p-2');
-    skill.elementChild.appendChild(skill.elementChildExperienceWrap);
-    skill.elementChildExperienceWrapLabel = document.createElement('div');
-    skill.elementChildExperienceWrapLabel.innerHTML = 'Experience: &nbsp; &nbsp;';
-    skill.elementChildExperienceWrapLabel.classList.add('text-gruvbox-gray', 'mr-4');
-    skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabel);
-    skill.elementChildExperienceWrapLabelExperience = document.createElement('div');
-    skill.elementChildExperienceWrapLabelExperience.innerText = skill.experience;
-    skill.elementChildExperienceWrapLabelExperience.classList.add('text-' + Playground.getColorBasedOnExperience(skill.experience) + '');
-    skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperience);
-    skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div');
-    skill.elementChildExperienceWrapLabelExperienceSlash.innerHTML = '&nbsp;/&nbsp;';
-    skill.elementChildExperienceWrapLabelExperienceSlash.classList.add('text-gruvbox-white');
-    skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash);
-    skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div');
-    skill.elementChildExperienceWrapLabelExperienceSlash.innerText = '100';
-    skill.elementChildExperienceWrapLabelExperienceSlash.classList.add('text-gruvbox-red');
-    skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash);
   },
   addShakeHint: function addShakeHint(skill) {
     skill.elementShakeHint = document.createElement('div');

@@ -8,7 +8,7 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                'gruvbox-light-red': '#cc241d',
+                'gruvbox-light-red': '#fb3934',
                 'gruvbox-red': '#cc241d',
                 'gruvbox-light-yellow': '#d79921',
                 'gruvbox-yellow': '#fabd2f',
@@ -24,6 +24,7 @@ module.exports = {
                 'gruvbox-light-purple': '#d3869b',
                 'gruvbox-purple': '#b16286',
                 'gruvbox-black': '#282828',
+                'gruvbox-black-hidden': '#32302f',
                 'gruvbox-white': '#fbf1c7',
                 'hmt-green': '#b9cc33'
             },
