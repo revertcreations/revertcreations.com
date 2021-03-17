@@ -28,6 +28,16 @@ module.exports = {
                 'gruvbox-white': '#fbf1c7',
                 'hmt-green': '#b9cc33'
             },
+            animation: {
+                'float': 'float var(--float-animation-time) linear infinite'
+            },
+            keyframes: {
+                float: {
+                    '0%': { transform: 'translate(0px,  0px)' },
+                    '50%':  { transform: 'translate(var(--float-fifty-percent-x), var(--float-fifty-percent-y))' },
+                    '100%':   { transform: 'translate(0px, -0px)' }
+                },
+            },
         }
     },
     variants: {

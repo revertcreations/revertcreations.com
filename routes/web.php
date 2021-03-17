@@ -6,6 +6,7 @@ use App\Http\Controllers\PublicPhotoshootController;
 use App\Http\Controllers\PhotoshootController;
 use App\Http\Controllers\SkillsController;
 use App\Models\Skill;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,11 +38,17 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/web-development', function () {
-
     $skills = Skill::all();
-
     return view('web-development', compact('skills'));
 })->name('web-development');
+
+Route::post('/web-development', function (Request $request) {
+    dd(request('name'));
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'Thanks for reaching out, I\'ll be in contact shortly!',
+    ]);
+})->name('hire-me');
 
 
 Route::get('/about', function () {
@@ -61,6 +68,7 @@ Route::get('/photography/photoshoot/{photoshoot}/{token?}', [PublicPhotoshootCon
 Route::get('/photography/photoshoot/{photoshoot}/{token}/edit', [PublicPhotoshootController::class, 'edit'])->name('public.photoshoot.edit');
 
 Route::post('/photography/photoshoot/{photoshoot}/{token}/accepts', [PublicPhotoshootController::class, 'accepts'])->name('public.photoshoot.accepts');
+
 
 
 

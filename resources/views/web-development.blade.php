@@ -1,5 +1,7 @@
 <x-layout>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <input
         type="hidden"
         class="
@@ -45,7 +47,7 @@
         ">
 
     <span>
-        <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl"><input style="width:272px;" class="bg-gruvbox-black italic w-min" value="Web Development" /></i>
+        <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl italic w-min">Web Development</i>
     </span>
 
     <div class="flex flex-col flex-1">

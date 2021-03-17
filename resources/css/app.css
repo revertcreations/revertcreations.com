@@ -3,6 +3,11 @@
 @tailwind utilities;
 @import "~flatpickr/dist/flatpickr.css";
 
+:root{
+    --float-animation-time: 5s;
+    --float-fifty-percent-y: 1em;
+    --float-fifty-percent-x: 0;
+}
 
 .logo-link.home {
     @apply text-black cursor-not-allowed;
