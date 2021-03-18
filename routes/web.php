@@ -42,13 +42,7 @@ Route::get('/web-development', function () {
     return view('web-development', compact('skills'));
 })->name('web-development');
 
-Route::post('/web-development', function (Request $request) {
-    dd(request('name'));
-    return response()->json([
-        'status' => 'ok',
-        'message' => 'Thanks for reaching out, I\'ll be in contact shortly!',
-    ]);
-})->name('hire-me');
+Route::post('/web-development', [ClientController::class, 'hire'])->name('hire-me');
 
 
 Route::get('/about', function () {

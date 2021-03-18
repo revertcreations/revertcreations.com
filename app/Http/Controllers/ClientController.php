@@ -39,7 +39,6 @@ class ClientController extends Controller
     public function store(Request $request)
     {
 
-
         $client = Client::create([
             'organization' => $request->organization,
             'first_name' => $request->first_name,
@@ -108,5 +107,21 @@ class ClientController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function hire(Request $request)
+    {
+        $client = Client::create([
+            'organization' => $request->organization,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone_number
+        ]);
+
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'Thanks for reaching out, I\'ll be in contact shortly!',
+        ]);
     }
 }

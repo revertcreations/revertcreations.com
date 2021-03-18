@@ -393,10 +393,10 @@ Playground = {
         skill.heldHireInterval = setInterval(function () {
           skill.heldCounter += 1;
 
-          if (skill.heldCounter === 3 && skill.infoShowing) {
+          if (skill.heldCounter === 1 && skill.infoShowing) {
             Playground.addHireHint(skill);
             clearInterval(skill.heldHireInterval);
-          } else if (skill.heldCounter > 3) {
+          } else if (skill.heldCounter > 1) {
             Playground.removeHireHint(skill);
           }
         }, 1000);
@@ -407,55 +407,71 @@ Playground = {
   },
   buildForm: function buildForm() {
     var formWrap = document.createElement('div');
-    var formTitle = document.createElement('h2');
+    formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
     var hireMeForm = document.createElement('form');
-    var formInfo = document.createElement('p');
-    var emailInput = document.createElement('input');
-    var phoneInput = document.createElement('input');
-    var nameInput = document.createElement('input');
-    var descriptionInput = document.createElement('textarea');
-    var submitButton = document.createElement('button');
-    var emailLabel = document.createElement('label');
-    var nameLabel = document.createElement('label');
-    var phoneLabel = document.createElement('label');
-    var descriptionLabel = document.createElement('label'); // hireMeForm.method = 'POST'
-    // hireMeForm.action = '/web-development'
-
     hireMeForm.id = 'hire_me_form';
+    hireMeForm.classList.add('flex', 'flex-col', 'm-8');
+    var formInfo = document.createElement('p');
+    formInfo.innerText = 'First of all, I can\'t believe you are even here right now, you must really need some web development work done. Fill out the form below with your contact info, and a brief overview of the project at hand, and I will get back to you asap!';
+    formInfo.classList.add('text-gruvbox-white', 'mb-4');
+    var submitButton = document.createElement('button');
     submitButton.type = 'button';
     submitButton.innerText = 'Submit';
-    formInfo.innerText = 'Need some web development work done? Fill out the form below with your contact info, and a brief overview of the project at hand, and I will get back to you asap!';
+    submitButton.classList.add('hover:bg-gruvbox-purple', 'bg-gruvbox-green', 'text-gruvbox-black', 'text-2xl', 'font-bold', 'p-4', 'mt-4', 'mb-4');
+    var formTitle = document.createElement('h2');
     formTitle.innerText = 'HIRE ME';
-    emailLabel.innerText = 'Email';
-    nameLabel.innerText = 'Name';
-    phoneLabel.innerText = 'Phone Number';
-    descriptionLabel.innerText = 'Description';
-    emailInput.name = 'email';
-    nameInput.name = 'name';
-    descriptionInput.name = 'description';
-    phoneInput.type = 'tel';
-    phoneInputpattern = "[0-9]{3}-[0-9]{3}-[0-9]{4}";
-    emailInput.type = 'email';
-    nameInput.type = 'text';
     formTitle.classList.add('text-gruvbox-green', 'text-4xl', 'mt-4', 'mb-4');
-    formInfo.classList.add('text-gruvbox-white', 'mb-4');
-    emailLabel.classList.add('text-gruvbox-white');
-    nameLabel.classList.add('text-gruvbox-white');
-    phoneLabel.classList.add('text-gruvbox-white');
-    descriptionLabel.classList.add('text-gruvbox-white');
-    submitButton.classList.add('bg-gruvbox-green', 'text-gruvbox-black', 'text-2xl', 'font-bold', 'p-4', 'mt-4', 'mb-4');
-    formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
-    hireMeForm.classList.add('flex', 'flex-col', 'm-8');
+    var emailInput = document.createElement('input');
+    emailInput.name = 'email';
+    emailInput.type = 'email';
     emailInput.classList.add('p-4', 'm-4');
-    nameInput.classList.add('p-4', 'm-4');
+    var emailLabel = document.createElement('label');
+    emailLabel.innerText = 'Email';
+    emailLabel.classList.add('text-gruvbox-white');
+    var organizationInput = document.createElement('input');
+    organizationInput.name = 'name';
+    organizationInput.type = 'text';
+    organizationInput.classList.add('p-4', 'm-4');
+    var organizationLabel = document.createElement('label');
+    organizationLabel.classList.add('text-gruvbox-white');
+    organizationLabel.innerText = 'Organization';
+    var firstNameInput = document.createElement('input');
+    firstNameInput.name = 'first_name';
+    firstNameInput.type = 'text';
+    firstNameInput.classList.add('p-4', 'm-4');
+    var firstNameLabel = document.createElement('label');
+    firstNameLabel.innerText = 'First Name';
+    firstNameLabel.classList.add('text-gruvbox-white');
+    var lastNameInput = document.createElement('input');
+    lastNameInput.name = 'last_name';
+    lastNameInput.type = 'text';
+    lastNameInput.classList.add('p-4', 'm-4');
+    var lastNameLabel = document.createElement('label');
+    lastNameLabel.innerText = 'Last Name';
+    lastNameLabel.classList.add('text-gruvbox-white');
+    var phoneInput = document.createElement('input');
+    phoneInput.type = 'tel';
     phoneInput.classList.add('p-4', 'm-4');
+    phoneInputpattern = "[0-9]{3}-[0-9]{3}-[0-9]{4}";
+    var phoneLabel = document.createElement('label');
+    phoneLabel.innerText = 'Phone Number';
+    phoneLabel.classList.add('text-gruvbox-white');
+    var descriptionInput = document.createElement('textarea');
+    descriptionInput.name = 'description';
     descriptionInput.classList.add('p-4', 'm-4');
+    var descriptionLabel = document.createElement('label');
+    descriptionLabel.innerText = 'Description';
+    descriptionLabel.classList.add('text-gruvbox-white');
     Playground.playground.appendChild(formWrap);
     formWrap.appendChild(hireMeForm);
     hireMeForm.appendChild(formTitle);
     hireMeForm.appendChild(formInfo);
-    hireMeForm.appendChild(nameLabel);
-    hireMeForm.appendChild(nameInput);
+    hireMeForm.appendChild(organizationLabel);
+    hireMeForm.appendChild(organizationInput);
+    hireMeForm.appendChild(firstNameLabel);
+    hireMeForm.appendChild(firstNameInput);
+    hireMeForm.appendChild(lastNameLabel);
+    hireMeForm.appendChild(lastNameInput);
     hireMeForm.appendChild(emailLabel);
     hireMeForm.appendChild(emailInput);
     hireMeForm.appendChild(phoneLabel);
@@ -483,7 +499,7 @@ Playground = {
         method: 'POST',
         credentials: "same-origin",
         body: JSON.stringify({
-          name: nameInput.value,
+          first_name: firstNameInput.value,
           phone: phoneInput.value,
           description: descriptionInput.value,
           email: emailInput.value

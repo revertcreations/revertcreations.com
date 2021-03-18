@@ -5,48 +5,22 @@
     <input
         type="hidden"
         class="
-            text-gruvbox-light-red
             text-gruvbox-red
-            text-gruvbox-light-yellow
-            text-gruvbox-yellow
-            text-gruvbox-light-orange
-            text-gruvbox-orange
-            text-gruvbox-light-blue
-            text-gruvbox-blue
-            text-gruvbox-light-aqua
-            text-gruvbox-aqua
-            text-gruvbox-gray
-            text-gruvbox-light-green
             text-gruvbox-green
-            text-gruvbox-light-purple
             text-gruvbox-purple
             text-gruvbox-black
-            text-gruvbox-black-hidden
             text-gruvbox-white
             text-hmt-green
 
-            bg-gruvbox-light-red
             bg-gruvbox-red
-            bg-gruvbox-light-yellow
-            bg-gruvbox-yellow
-            bg-gruvbox-light-orange
-            bg-gruvbox-orange
-            bg-gruvbox-light-blue
-            bg-gruvbox-blue
-            bg-gruvbox-light-aqua
-            bg-gruvbox-aqua
-            bg-gruvbox-gray
-            bg-gruvbox-light-green
             bg-gruvbox-green
-            bg-gruvbox-light-purple
             bg-gruvbox-purple
             bg-gruvbox-black
-            bg-gruvbox-black-hidden
             bg-gruvbox-white
             bg-hmt-green
         ">
 
-    <span>
+    <span class="relative" style="bottom: -1px;">
         <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl italic w-min">Web Development</i>
     </span>
 
