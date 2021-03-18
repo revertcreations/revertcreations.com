@@ -11,6 +11,7 @@
             text-gruvbox-black
             text-gruvbox-white
             text-hmt-green
+            text-gruvbox-orange
 
             bg-gruvbox-red
             bg-gruvbox-green

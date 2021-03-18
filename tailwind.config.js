@@ -29,14 +29,21 @@ module.exports = {
                 'hmt-green': '#b9cc33'
             },
             animation: {
-                'float': 'float var(--float-animation-time) linear infinite'
+                'float-text': 'float-text 1s linear forwards',
+                'float-bg': 'float-bg 1s linear forwards'
             },
             keyframes: {
-                float: {
-                    '0%': { transform: 'translate(0px,  0px)' },
-                    '50%':  { transform: 'translate(var(--float-fifty-percent-x), var(--float-fifty-percent-y))' },
-                    '100%':   { transform: 'translate(0px, -0px)' }
+                'float-text': {
+                    '0%': { 'text-shadow': '1px 1px 0px black' },
+                    '50%': { 'text-shadow': '4px 4px 3px black' },
+                    '100%':   { 'text-shadow': '5px 5px 7px black' },
                 },
+                'float-bg': {
+                    '0%': { 'box-shadow': '1px 1px 0px 1px black' },
+                    '50%': { 'box-shadow': '4px 4px 3px 4px black' },
+                    '100%':   { 'box-shadow': '5px 5px 10px 5px black' },
+                }
+
             },
         }
     },
@@ -45,6 +52,7 @@ module.exports = {
             backgroundColor: ['disabled'],
             textColor: ['disabled'],
             cursor: ['disabled'],
+            animation: ['hover'],
         },
     },
     plugins: [

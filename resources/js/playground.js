@@ -57,7 +57,7 @@ Playground = {
         skill.element.innerText = skill.name
         skill.element.style.position = "absolute"
         skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience)
-        skill.element.classList.add('select-none', 'text-'+Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer')
+        skill.element.classList.add('hover:animate-float-text', 'text-bold', 'text-center', 'select-none', 'text-'+Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer')
 
         // Playground.addRandomFloatEffect(skill)
         // skill.element.classList.add('border-2', 'border-'+Playground.getColorBasedOnExperience(skill.experience))
@@ -243,7 +243,6 @@ Playground = {
             }
 
             skill.element.style.zIndex = "2"
-            skill.element.classList.remove('animate-float')
 
             if(!skill.elementShakeHint)
                 Playground.addShakeHint(skill)
@@ -290,10 +289,11 @@ Playground = {
                 if(skill.elementChild.isConnected)
                     skill.element.removeChild(skill.elementChild)
 
-                skill.element.classList.remove('text-gruvbox-black')
-                skill.element.classList.remove('bg-'+Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12', 'border-r-4', 'border-b-4', 'border-'+Playground.getColorBasedOnExperience(skill.experience))
+                // skill.element.classList.remove('text-gruvbox-black')
+                skill.element.style.backgroundImage = 'unset'
+                skill.element.classList.remove('animate-float-bg', 'bg-'+Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12',)
 
-                skill.element.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience))
+                skill.element.classList.add('hover:animate-float-text', 'text-'+Playground.getColorBasedOnExperience(skill.experience))
 
                 skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience)
 
@@ -318,6 +318,9 @@ Playground = {
         let skill = Playground.getSkillBasedOnName(e.target.id)
 
         if (skill && skill.active) {
+
+            // if(skill.element.classList.contains('hover:animate-float-text'))
+            //     skill.element.classList.remove('hover:animate-float-text')
 
             skill.originalTop = skill.element.style.top
             skill.originalLeft = skill.element.style.left
@@ -373,14 +376,14 @@ Playground = {
 
         if(skill.name == 'HIRE ME') {
 
-            if(e.movementY && e.movementY > (Playground.speedLimit)) {
+            if(e.movementY && e.movementY > (Playground.speedLimit-4)) {
                 skill.elementMovementUpExceeded = true
                 skill.elementMovementYTimeout = setTimeout(function(){
                     skill.elementMovementUpExceeded = false
                 }, 200)
             }
 
-            if(e.movementY && e.movementY < (Playground.speedLimit)) {
+            if(e.movementY && e.movementY < (Playground.speedLimit-4)) {
                 skill.elementMovementDownExceeded = true
                 skill.elementMovementYTimeout = setTimeout(function(){
                     skill.elementMovementDownExceeded = false
@@ -425,7 +428,7 @@ Playground = {
         Playground.buildExperienceDiv(skill)
 
         skill.elementChildExcerpt =  document.createElement('div')
-        skill.elementChildExcerpt.classList.add('m-2', 'align-top', 'md:self-start', 'self-center', 'text-gruvbox-white');
+        skill.elementChildExcerpt.classList.add('m-2', 'text-left', 'align-top', 'md:self-start', 'self-center', 'text-gruvbox-white');
         skill.elementChildExcerpt.innerHTML = skill.excerpt
 
     },
@@ -458,15 +461,13 @@ Playground = {
         skill.element.style.fontSize = '3.8em'
         skill.element.style.transform = 'unset'
 
-        skill.element.classList.remove('text-'+Playground.getColorBasedOnExperience(skill.experience))
-        skill.element.classList.remove('text-gruvbox-black')
+        skill.element.classList.remove('hover:animate-float-text', 'text-'+Playground.getColorBasedOnExperience(skill.experience))
+        // skill.element.classList.remove('text-gruvbox-black')
 
-        skill.element.classList.add('bg-'+Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12', 'border-r-4', 'border-b-4', 'border-'+Playground.getColorBasedOnExperience(skill.experience))
-
-        // skill.element.classList.add('bg-gradient-to-r', 'from-gruvbox-light-blue', 'via-gruvbox-orange', 'to-gruvbox-red')
-        skill.element.style.backgroundImage = 'linear-gradient(to right, rgba(0,0,0,0) '+skill.experience+'%,rgba(0,0,0,0) '+skill.experience+'%, #282828 '+skill.experience+'%)';
-
+        skill.element.classList.add('animate-float-bg', 'bg-'+Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12',)
         skill.element.appendChild(skill.elementChild)
+
+        skill.element.style.backgroundImage = 'linear-gradient(to right, rgba(0,0,0,0) '+skill.experience+'%,rgba(0,0,0,0) '+skill.experience+'%, #282828 '+skill.experience+'%)';
 
         if(skill.name != 'README.md' && skill.name != 'HIRE ME') {
             skill.elementChild.appendChild(skill.elementChildExperienceWrap)
@@ -501,6 +502,7 @@ Playground = {
 
     buildForm: () => {
 
+        window.onresize = false
 
         let formWrap = document.createElement('div')
         formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12',)
@@ -510,7 +512,7 @@ Playground = {
         hireMeForm.classList.add('flex', 'flex-col', 'm-8')
 
         let formInfo = document.createElement('p')
-        formInfo.innerText = 'First of all, I can\'t believe you are even here right now, you must really need some web development work done. Fill out the form below with your contact info, and a brief overview of the project at hand, and I will get back to you asap!'
+        formInfo.innerText = 'First of all, I can\'t believe you are even here right now, you must really need some web development work done. Anyway, go ahead and fill out the form below with your contact info, and a brief overview of the project in mind, and I will get back to you asap!'
         formInfo.classList.add('text-gruvbox-white', 'mb-4')
 
         let submitButton = document.createElement('button')
@@ -528,14 +530,14 @@ Playground = {
         emailInput.classList.add('p-4', 'm-4')
         let emailLabel = document.createElement('label')
         emailLabel.innerText = 'Email'
-        emailLabel.classList.add('text-gruvbox-white')
+        emailLabel.classList.add('text-gruvbox-green')
 
         let organizationInput = document.createElement('input')
         organizationInput.name = 'name'
         organizationInput.type = 'text'
         organizationInput.classList.add('p-4', 'm-4')
         let organizationLabel = document.createElement('label')
-        organizationLabel.classList.add('text-gruvbox-white')
+        organizationLabel.classList.add('text-gruvbox-green')
         organizationLabel.innerText = 'Organization'
 
         let firstNameInput = document.createElement('input')
@@ -544,7 +546,7 @@ Playground = {
         firstNameInput.classList.add('p-4', 'm-4')
         let firstNameLabel = document.createElement('label')
         firstNameLabel.innerText = 'First Name'
-        firstNameLabel.classList.add('text-gruvbox-white')
+        firstNameLabel.classList.add('text-gruvbox-green')
 
         let lastNameInput = document.createElement('input')
         lastNameInput.name = 'last_name'
@@ -552,7 +554,7 @@ Playground = {
         lastNameInput.classList.add('p-4', 'm-4')
         let lastNameLabel = document.createElement('label')
         lastNameLabel.innerText = 'Last Name'
-        lastNameLabel.classList.add('text-gruvbox-white')
+        lastNameLabel.classList.add('text-gruvbox-green')
 
         let phoneInput = document.createElement('input')
         phoneInput.type = 'tel'
@@ -560,14 +562,14 @@ Playground = {
         phoneInputpattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         let phoneLabel = document.createElement('label')
         phoneLabel.innerText = 'Phone Number'
-        phoneLabel.classList.add('text-gruvbox-white')
+        phoneLabel.classList.add('text-gruvbox-green')
 
         let descriptionInput = document.createElement('textarea')
         descriptionInput.name = 'description'
         descriptionInput.classList.add('p-4', 'm-4')
         let descriptionLabel = document.createElement('label')
         descriptionLabel.innerText = 'Description'
-        descriptionLabel.classList.add('text-gruvbox-white')
+        descriptionLabel.classList.add('text-gruvbox-green')
 
         Playground.playground.appendChild(formWrap)
         formWrap.appendChild(hireMeForm)
@@ -588,8 +590,29 @@ Playground = {
         hireMeForm.appendChild(submitButton)
 
         submitButton.onclick =  function(event) {
+            submitButton.disabled = true
             event = event || window.event
             event.preventDefault();
+
+            if(firstNameLabel.classList.contains('text-gruvbox-red')) {
+                firstNameLabel.classList.remove('text-gruvbox-red')
+                firstNameLabel.classList.add('text-gruvbox-green')
+                firstNameLabel.innerText = 'First Name'
+            }
+            if(lastNameLabel.classList.contains('text-gruvbox-red')) {
+                lastNameLabel.classList.remove('text-gruvbox-red')
+                lastNameLabel.classList.add('text-gruvbox-green')
+                lastNameLabel.innerText = 'Last Name'
+            }
+            if(emailLabel.classList.contains('text-gruvbox-red')) {
+                emailLabel.classList.remove('text-gruvbox-red')
+                emailLabel.classList.add('text-gruvbox-green')
+                emailLabel.innerText = 'Last Name'
+            }
+            if(formInfo.classList.contains('text-gruvbox-yellow')){
+                formInfo.classList.remove('text-gruvbox-orange')
+                formInfo.classList.remove('text-gruvbox-green')
+            }
 
             let hireMeForm = document.getElementById('hire_me_form')
             console.log(hireMeForm[0])
@@ -610,6 +633,8 @@ Playground = {
                 credentials: "same-origin",
                 body: JSON.stringify({
                     first_name: firstNameInput.value,
+                    last_name: lastNameInput.value,
+                    organization: organizationInput.value,
                     phone: phoneInput.value,
                     description: descriptionInput.value,
                     email: emailInput.value
@@ -617,13 +642,38 @@ Playground = {
             })
             .then(response => response.json())
             .then((data) => {
-                if(data.status == 'ok')
-                    window.location.href = redirect;
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
 
+                if(data.errors) {
+                    if(data.errors['first_name']) {
+                        firstNameLabel.classList.remove('text-gruvbox-green')
+                        firstNameLabel.innerText = 'First Name *required'
+                        firstNameLabel.classList.add('text-gruvbox-red')
+                    }
+                    if(data.errors['last_name']) {
+                        lastNameLabel.classList.remove('text-gruvbox-green')
+                        lastNameLabel.innerText = 'Last Name *required'
+                        lastNameLabel.classList.add('text-gruvbox-red')
+                    }
+                    if(data.errors['email'] && data.errors['email'][0] !== 'The email has already been taken.') {
+                        emailLabel.classList.remove('text-gruvbox-green')
+                        emailLabel.innerText = 'Last Name *required'
+                        emailLabel.classList.add('text-gruvbox-red')
+                    }
+                    if (data.errors['email'] && data.errors['email'][0] == 'The email has already been taken.') {
+                        formInfo.classList.remove('text-gruvbox-green')
+                        formInfo.classList.add('text-gruvbox-orange')
+                        formInfo.innerText = 'Oh, '+(firstNameInput.value.length > 0 ? firstNameInput.value+',' : ',')+' it looks like you have already contacted me. I will get to reviewing it right away!'
+                    }
+                    submitButton.removeAttribute('disabled')
+                }
+                if(data.status == 'ok') {
+                    formWrap.removeChild(hireMeForm)
+                    formInfo.innerText = data.message
+                }
+            })
+            .catch((errors) => {
+                // console.log(errors)
+            })
         }
 
     },
@@ -635,7 +685,7 @@ Playground = {
             'justify-self-center',
             'cursor-pointer',
             'text-sm',
-            'text-gruvbox-gray',
+            'text-gruvbox-white',
             'max-w-md',
             'text-center'
         );

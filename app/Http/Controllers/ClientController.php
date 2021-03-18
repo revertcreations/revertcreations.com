@@ -111,13 +111,15 @@ class ClientController extends Controller
 
     public function hire(Request $request)
     {
-        $client = Client::create([
-            'organization' => $request->organization,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone_number
-        ]);
+        $client = Client::create($request->validate([
+            'organization' => 'nullable|string',
+            'website' => 'nullable|url',
+            'phone' => 'nullable|numeric',
+            'email' => 'required|email|unique:clients,email',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'description' => 'nullable|string'
+        ]));
 
         return response()->json([
             'status' => 'ok',
