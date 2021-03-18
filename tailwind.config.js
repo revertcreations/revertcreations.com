@@ -36,8 +36,8 @@ module.exports = {
             keyframes: {
                 'float-text': {
                     '0%': { 'text-shadow': '1px 1px 0px black' },
-                    '50%': { 'text-shadow': '4px 4px 3px black' },
-                    '100%':   { 'text-shadow': '5px 5px 7px black' },
+                    '50%': { 'text-shadow': '4px 4px 5px black' },
+                    '100%':   { 'text-shadow': '5px 5px 9px black' },
                 },
                 'float-bg': {
                     '0%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-0), #fbf1c7 var(--experience-percent-0))', 'box-shadow': '1px 1px 0px 1px black' },
@@ -90,7 +90,7 @@ module.exports = {
                     '47%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-47), #fbf1c7 var(--experience-percent-47))' },
                     '48%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-48), #fbf1c7 var(--experience-percent-48))' },
                     '49%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-49), #fbf1c7 var(--experience-percent-49))' },
-                    '50%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-50), #fbf1c7 var(--experience-percent-50))', 'box-shadow': '4px 4px 3px 4px black' },
+                    '50%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-50), #fbf1c7 var(--experience-percent-50))', 'box-shadow': '4px 4px 8px 4px black' },
                     '51%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-51), #fbf1c7 var(--experience-percent-51))' },
                     '52%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-52), #fbf1c7 var(--experience-percent-52))' },
                     '53%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-53), #fbf1c7 var(--experience-percent-53))' },
@@ -140,7 +140,7 @@ module.exports = {
                     '97%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-97), #fbf1c7 var(--experience-percent-97))' },
                     '98%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-98), #fbf1c7 var(--experience-percent-98))' },
                     '99%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-99), #fbf1c7 var(--experience-percent-99))' },
-                    '100%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-100), #fbf1c7 var(--experience-percent-100))', 'box-shadow': '5px 5px 7px 5px black' },
+                    '100%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-100), #fbf1c7 var(--experience-percent-100))', 'box-shadow': '5px 5px 20px 5px black' },
 
                 },
                 'experience': {

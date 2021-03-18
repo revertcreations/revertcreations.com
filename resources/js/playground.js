@@ -204,7 +204,7 @@ Playground = {
             case (experience == 102) :
                 if(type == 'hex')
                     return '#cc241d'
-                return 'gruvbox-red'
+                return 'gruvbox-black-hidden'
 
             case (experience == 100) :
                 if(type == 'hex')
@@ -316,7 +316,7 @@ Playground = {
             skill.infoShowing = false
             skill.initialTouch = false
 
-            if(skill.name == 'HIRE ME')
+            if(skill.name == 'hire me')
                 Playground.removeHireHint(skill)
 
             Playground.removeShakeHint(skill)
@@ -386,7 +386,7 @@ Playground = {
             }, 200)
         }
 
-        if(skill.name == 'HIRE ME') {
+        if(skill.name == 'hire me') {
 
             if(e.movementY && e.movementY > (Playground.speedLimit-4)) {
                 skill.elementMovementUpExceeded = true
@@ -406,6 +406,30 @@ Playground = {
                 e.stopPropagation()
                 Playground.dragEnd(e)
                 Playground.reset('hire')
+                return true;
+            }
+        }
+
+        if(skill.name == 'GitHub') {
+
+            if(e.movementY && e.movementY > (Playground.speedLimit-4)) {
+                skill.elementMovementUpExceeded = true
+                skill.elementMovementYTimeout = setTimeout(function(){
+                    skill.elementMovementUpExceeded = false
+                }, 200)
+            }
+
+            if(e.movementY && e.movementY < (Playground.speedLimit-4)) {
+                skill.elementMovementDownExceeded = true
+                skill.elementMovementYTimeout = setTimeout(function(){
+                    skill.elementMovementDownExceeded = false
+                }, 200)
+            }
+
+            if(skill.elementMovementDownExceeded && skill.elementMovementUpExceeded && skill.infoShowing) {
+                e.stopPropagation()
+                Playground.dragEnd(e)
+                window.open('https://github.com/revertcreations')
                 return true;
             }
         }
@@ -489,7 +513,7 @@ Playground = {
 
         // skill.element.style.backgroundImage = 'linear-gradient(to right, #b8bb26 '+skill.experience+'%, #b8bb26 '+skill.experience+'%, rgba(0,0,0,0) '+skill.experience+'%)';
 
-        if(skill.name != 'README.md' && skill.name != 'HIRE ME') {
+        if(skill.name != 'README.md' && skill.name != 'hire me') {
             skill.elementChild.appendChild(skill.elementChildExperienceWrap)
             skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabel)
             skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperience)
@@ -499,7 +523,7 @@ Playground = {
 
         skill.elementChild.appendChild(skill.elementChildExcerpt)
 
-        if(skill.name == 'HIRE ME') {
+        if(skill.name == 'hire me') {
 
             if(!skill.elementHireHint) {
                 skill.heldCounter = 0;
@@ -541,7 +565,7 @@ Playground = {
         submitButton.classList.add('hover:bg-gruvbox-purple', 'bg-gruvbox-green', 'text-gruvbox-black', 'text-2xl', 'font-bold', 'p-4', 'mt-4', 'mb-4')
 
         let formTitle = document.createElement('h2')
-        formTitle.innerText = 'HIRE ME'
+        formTitle.innerText = 'hire me'
         formTitle.classList.add('text-gruvbox-green', 'text-4xl', 'mt-4', 'mb-4')
 
         let emailInput = document.createElement('input')
@@ -724,7 +748,7 @@ Playground = {
             'bg-gruvbox-black',
             'm-auto'
         );
-        skill.elementHireHint.innerHTML = '&uuarr; HIRE ME! &ddarr;'
+        skill.elementHireHint.innerHTML = '&uuarr; hire me! &ddarr;'
         skill.element.appendChild(skill.elementHireHint)
     },
 

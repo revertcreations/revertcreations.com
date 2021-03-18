@@ -9,6 +9,7 @@
             text-gruvbox-green
             text-gruvbox-purple
             text-gruvbox-black
+            text-gruvbox-black-hidden
             text-gruvbox-white
             text-hmt-green
             text-gruvbox-orange
@@ -28,7 +29,7 @@
     <div class="flex flex-col flex-1">
 
         <div class="flex flex-col md:flex-row flex-grow">
-            <div id="playground" class="flex-grow bg-gruvbox-black relative" style="touch-action: none; overflow: hidden;"></div>
+            <div id="playground" class="flex-grow bg-gruvbox-black relative"></div>
         </div>
 
     </div>
