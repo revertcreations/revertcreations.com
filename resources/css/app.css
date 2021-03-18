@@ -4,9 +4,7 @@
 @import "~flatpickr/dist/flatpickr.css";
 
 :root{
-    --float-animation-time: 5s;
-    --float-fifty-percent-y: 1em;
-    --float-fifty-percent-x: 0;
+    --experience-color: #b8bb26;
 }
 
 .logo-link.home {

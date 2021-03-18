@@ -53,8 +53,11 @@ Playground = {
 
     styleElement: (skill) => {
 
+        skill.nameSpan = document.createElement('span')
+        skill.nameSpan.classList.add('pointer-events-none')
+        skill.nameSpan.innerText = skill.name
+        skill.element.appendChild(skill.nameSpan)
         skill.element.id = skill.name
-        skill.element.innerText = skill.name
         skill.element.style.position = "absolute"
         skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience)
         skill.element.classList.add('hover:animate-float-text', 'text-bold', 'text-center', 'select-none', 'text-'+Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer')
@@ -190,19 +193,27 @@ Playground = {
         return (experience/ Playground.fontScale)+'em';
     },
 
-    getColorBasedOnExperience: (experience) =>  {
+    getColorBasedOnExperience: (experience, type) =>  {
 
         switch (true) {
             case (experience == 101) :
+                if(type == 'hex')
+                    return '#b16286'
                 return 'gruvbox-purple'
 
             case (experience == 102) :
+                if(type == 'hex')
+                    return '#cc241d'
                 return 'gruvbox-red'
 
             case (experience == 100) :
+                if(type == 'hex')
+                    return '#fbf1c7'
                 return 'gruvbox-white'
 
             default:
+                if(type == 'hex')
+                    return '#b8bb26'
                 return 'gruvbox-green'
 
         }
@@ -290,6 +301,7 @@ Playground = {
                     skill.element.removeChild(skill.elementChild)
 
                 // skill.element.classList.remove('text-gruvbox-black')
+                skill.nameSpan.classList.remove('text-gruvbox-black')
                 skill.element.style.backgroundImage = 'unset'
                 skill.element.classList.remove('animate-float-bg', 'bg-'+Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12',)
 
@@ -423,7 +435,7 @@ Playground = {
         skill.elementChild =  document.createElement('div')
 
         skill.elementChild.style.fontSize = '16px'
-        skill.elementChild.classList.add('flex','flex-col','bg-gruvbox-black','cursor-pointer','p-2');
+        skill.elementChild.classList.add('flex','flex-col','bg-gruvbox-black','cursor-pointer','p-2', 'shadow-inner');
 
         Playground.buildExperienceDiv(skill)
 
@@ -464,10 +476,18 @@ Playground = {
         skill.element.classList.remove('hover:animate-float-text', 'text-'+Playground.getColorBasedOnExperience(skill.experience))
         // skill.element.classList.remove('text-gruvbox-black')
 
-        skill.element.classList.add('animate-float-bg', 'bg-'+Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12',)
+        for (let index = 0; index < 101; index++)
+            skill.element.style.setProperty('--experience-percent-'+index, (skill.experience > index ? index+'%' : skill.experience+'%'));
+
+        // console.log("Playground.getColorBasedOnExperience(experience, 'hex'): ", Playground.getColorBasedOnExperience(experience, 'hex'))
+        skill.element.style.setProperty('--experience-color', Playground.getColorBasedOnExperience(skill.experience, 'hex'))
+        skill.nameSpan.classList.add('text-gruvbox-black')
+        skill.element.classList.add('animate-float-bg', 'lg:w-5/12', 'md:w-7/12', 'w-11/12')
         skill.element.appendChild(skill.elementChild)
 
-        skill.element.style.backgroundImage = 'linear-gradient(to right, rgba(0,0,0,0) '+skill.experience+'%,rgba(0,0,0,0) '+skill.experience+'%, #282828 '+skill.experience+'%)';
+        // skill.nameSpan.classList.add('bg-'+Playground.getColorBasedOnExperience(skill.experience))
+
+        // skill.element.style.backgroundImage = 'linear-gradient(to right, #b8bb26 '+skill.experience+'%, #b8bb26 '+skill.experience+'%, rgba(0,0,0,0) '+skill.experience+'%)';
 
         if(skill.name != 'README.md' && skill.name != 'HIRE ME') {
             skill.elementChild.appendChild(skill.elementChildExperienceWrap)
