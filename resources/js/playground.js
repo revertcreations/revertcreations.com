@@ -470,7 +470,7 @@ Playground = {
 
     displayInfoCard: (skill) => {
 
-        skill.element.style.fontSize = '3.8em'
+        skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(100)
         skill.element.style.transform = 'unset'
 
         skill.element.classList.remove('hover:animate-float-text', 'text-'+Playground.getColorBasedOnExperience(skill.experience))
