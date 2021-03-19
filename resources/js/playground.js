@@ -29,7 +29,6 @@ Playground = {
             Playground.skills[skill].xOffset = 0;
             Playground.skills[skill].yOffset = 0;
 
-
             Playground.styleElement(Playground.skills[skill])
             Playground.playground.appendChild(Playground.skills[skill].element)
 
