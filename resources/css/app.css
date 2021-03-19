@@ -3,6 +3,12 @@
 @tailwind utilities;
 @import "~flatpickr/dist/flatpickr.css";
 
+@layer utilities {
+    .w-1000 {
+        width: 1000px;
+    }
+}
+
 :root{
     --experience-color: #b8bb26;
 }
