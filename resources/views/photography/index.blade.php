@@ -4,7 +4,7 @@
         <i class="mt-1 bg-black text-white text-4xl">Portfolio</i>
     </span>
 
-    <div class="flex flex-col>
+    <div class="flex flex-col">
 
         <div class="flex flex-row">
             @foreach ($portfolio as $index => $image)
