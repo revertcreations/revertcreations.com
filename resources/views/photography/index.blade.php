@@ -6,19 +6,6 @@
 
     <div class="flex flex-col">
 
-        <div class="flex flex-row">
-            @foreach ($portfolio as $index => $image)
-            <div class="m-2 cursor-pointer">
-                <img
-                    id="{{ $image->id }}"
-                    onclick="changeImage(event)"
-                    class="w-28"
-                    data-src="https://res.cloudinary.com/treverhillis/image/upload/w_1000,c_scale,q_auto:best/{{ $image->public_id }}.{{ $image->extension }}"
-                    src="https://res.cloudinary.com/treverhillis/image/upload/w_400,c_scale,q_auto:low/{{ $image->public_id }}.{{ $image->extension }}"
-                    />
-            </div>
-            @endforeach
-        </div>
 
         @foreach ($portfolio as $index => $image)
         <div
@@ -29,7 +16,22 @@
                 src="https://res.cloudinary.com/treverhillis/image/upload/w_1000,c_scale,q_auto:best/{{ $image->public_id }}.{{ $image->extension }}"
                 alt="" />
         </div>
-        @endforeach
+	@endforeach
+
+	<div class="flex flex-row flex-wrap justify-center">
+            @foreach ($portfolio as $index => $image)
+            <div class="m-2 cursor-pointer">
+                <img
+                    id="{{ $image->id }}"
+                    onclick="changeImage(event)"
+                    class="w-28"
+                    src="https://res.cloudinary.com/treverhillis/image/upload/w_400,c_scale,q_auto:low/{{ $image->public_id }}.{{ $image->extension }}"
+                    />
+            </div>
+            @endforeach
+        </div>
+
+
     </div>
 
     <div class="fixed bottom-0 right-0">
