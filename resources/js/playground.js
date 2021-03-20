@@ -548,7 +548,7 @@ Playground = {
         window.onresize = false
 
         let formWrap = document.createElement('div')
-        formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12', 'overflow-y-scroll')
+        formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12')
 
         let hireMeForm = document.createElement('form')
         hireMeForm.id = 'hire_me_form'
