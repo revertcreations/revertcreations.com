@@ -29,7 +29,7 @@
     <div class="flex flex-col flex-1">
 
         <div class="flex flex-col md:flex-row flex-grow">
-            <div id="playground" class="flex-grow bg-gruvbox-black relative"></div>
+            <div id="playground" class="flex-grow bg-gruvbox-black relative touch-action-none"></div>
         </div>
 
     </div>

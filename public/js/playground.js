@@ -500,6 +500,7 @@ Playground = {
     var descriptionLabel = document.createElement('label');
     descriptionLabel.innerText = 'Description';
     descriptionLabel.classList.add('text-gruvbox-green');
+    Playground.playground.classList.remove('touch-action-none');
     Playground.playground.appendChild(formWrap);
     formWrap.appendChild(hireMeForm);
     hireMeForm.appendChild(formTitle);

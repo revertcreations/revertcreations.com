@@ -7,7 +7,7 @@
     <div class="flex flex-col">
 
 
-        @foreach ($portfolio as $index => $image)
+    {{-- @foreach ($portfolio as $index => $image)
         <div
             id="large_photo_{{ $image->id }}"
             class="mx-auto my-8 m-w-1000 {{ $index == 0 ? 'active' : 'hidden' }}"
@@ -16,21 +16,20 @@
                 src="https://res.cloudinary.com/treverhillis/image/upload/w_1000,c_scale,q_auto:best/{{ $image->public_id }}.{{ $image->extension }}"
                 alt="" />
         </div>
-	@endforeach
+	@endforeach --}}
 
-	<div class="flex flex-row flex-wrap justify-center">
+	    <div class="flex flex-row flex-wrap justify-center my-10">
             @foreach ($portfolio as $index => $image)
             <div class="m-2 cursor-pointer">
                 <img
                     id="{{ $image->id }}"
                     onclick="changeImage(event)"
-                    class="w-28"
+                    class=""
                     src="https://res.cloudinary.com/treverhillis/image/upload/w_400,c_scale,q_auto:low/{{ $image->public_id }}.{{ $image->extension }}"
                     />
             </div>
             @endforeach
         </div>
-
 
     </div>
 

@@ -7,6 +7,9 @@
     .w-1000 {
         width: 1000px;
     }
+    .touch-action-none {
+        touch-action: none;
+    }
 }
 
 :root{
