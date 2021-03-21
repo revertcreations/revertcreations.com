@@ -11,7 +11,7 @@ use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
 
 
-Route::domain('admin.revertcreations.com')->group(function () {
+Route::domain('admin.revertcreations.test')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard')->middleware('auth');
@@ -26,7 +26,7 @@ Route::domain('admin.revertcreations.com')->group(function () {
     Route::resource('skills', SkillsController::class)->middleware('auth');
 });
 
-Route::domain('revertcreations.com')->group(function () {
+Route::domain('revertcreations.test')->group(function () {
 
     Route::get('/', function () {
         return view('home');

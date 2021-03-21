@@ -330,9 +330,6 @@ Playground = {
 
         if (skill && skill.active) {
 
-            // if(skill.element.classList.contains('hover:animate-float-text'))
-            //     skill.element.classList.remove('hover:animate-float-text')
-
             skill.originalTop = skill.element.style.top
             skill.originalLeft = skill.element.style.left
 
@@ -340,8 +337,6 @@ Playground = {
                 Playground.buildInfoCard(skill)
 
            let isForm = Playground.handleShakeEvents(e, skill)
-
-
 
             if (e.type === "touchmove") {
                 skill.currentX = e.touches[0].clientX - skill.initialX;
@@ -368,8 +363,6 @@ Playground = {
             }
             skill.previousTouch = e.touches[0]
         }
-
-
 
         if(e.movementX && e.movementX > Playground.speedLimit) {
             skill.elementMovementRightExceeded = true
@@ -405,7 +398,7 @@ Playground = {
                 e.stopPropagation()
                 Playground.dragEnd(e)
                 Playground.reset('hire')
-                return true;
+                return false;
             }
         }
 
@@ -429,7 +422,7 @@ Playground = {
                 e.stopPropagation()
                 Playground.dragEnd(e)
                 window.open('https://github.com/revertcreations')
-                return true;
+                return false;
             }
         }
 
@@ -439,7 +432,7 @@ Playground = {
                 e.stopPropagation()
                 Playground.dragEnd(e)
                 Playground.reset('manual')
-                return true
+                return false
             }
 
             // console.log('e.movementX: ', e.movementX)
