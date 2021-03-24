@@ -14,6 +14,7 @@
 
 :root{
     --experience-color: #b8bb26;
+    --translate-origin: 0px;
 }
 
 .logo-link.home {

@@ -31,9 +31,14 @@ module.exports = {
             animation: {
                 'float-text': 'float-text .2s linear .1s forwards',
                 'float-bg': 'float-bg 1s linear .1s forwards',
-                'experience': 'experience 2s linear .1s forwards'
+                'experience': 'experience 2s linear .1s forwards',
+                'translate': 'translate 1s linear .1s forwards',
             },
             keyframes: {
+                'translate': {
+                    '0%': { 'transform': 'translate3d(var(--translate-origin), 0px, 0)' },
+                    '100%': { 'transform': 'translate3d(var(--translate-x), 0px, 0)' }
+                },
                 'float-text': {
                     '0%': { 'text-shadow': '1px 1px 0px black' },
                     '50%': { 'text-shadow': '4px 4px 5px black' },
