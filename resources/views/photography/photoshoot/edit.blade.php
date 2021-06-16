@@ -245,7 +245,7 @@
             <div class="flex flex-col">
 
                 <label for="street_address">
-                    Street | P.0. Box
+                    Street | P.O. Box
                     @error('street_address')
                     <span class="bg-red-600 text-black text-center font-bold">{{ $message }}</span>
                     @enderror
@@ -336,7 +336,7 @@
                 <p class="m-3"><span id="email_bound" class="font-bold bg-yellow-400">{{ old('email') ?: $photoshoot->contract->client->email }}</span></p>
                 <p class="m-3"><span id="street_address_bound" class="font-bold bg-yellow-400">{{ (old('street_address') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->street_address : '')) }}</span></p>
                 <p class="m-3"><span id="street_address_bound" class="font-bold bg-yellow-400">{{ (old('street_address_2') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->street_address_2 : '')) }}</span></p>
-                <p class="m-3"><span id="city_bound" class="font-bold bg-yellow-400">{{ (old('city') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->city : '')) }}</span>, <span id="state_code_bound" class="font-bold bg-yellow-400">{{ (old('state_code') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->state_code : '')) }}</span></p>
+                <p class="m-3"><span id="city_bound" class="font-bold bg-yellow-400">{{ (old('city') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->city.',' : '')) }}</span> <span id="state_code_bound" class="font-bold bg-yellow-400">{{ (old('state_code') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->state_code : '')) }}</span></p>
                 <p class="m-3"><span id="postal_code_bound" class="font-bold bg-yellow-400">{{ (old('postal_code') ?: ($photoshoot->client->addresses()->first() ? $photoshoot->client->addresses()->first()->postal_code : '')) }}</span></p>
             </p>
 

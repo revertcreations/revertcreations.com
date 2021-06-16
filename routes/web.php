@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PhotographyPortfolioImageController;
 use App\Http\Controllers\PublicPhotoshootController;
+use App\Http\Controllers\PhotographyContractController;
 use App\Http\Controllers\PhotoshootController;
 use App\Http\Controllers\SkillsController;
 use App\Models\PhotographyPortfolioImage;
@@ -19,6 +20,8 @@ Route::domain('admin.revertcreations.test')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'login'])->name('admin.login');
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
     Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('admin.authenticate');
+
+    Route::post('contract/{contract}/email', [PhotographyContractController::class, 'email'])->middleware('auth')->name('admin.contract.email');
 
     Route::resource('photoshoot', PhotoshootController::class)->middleware('auth');
     Route::resource('portfolio', PhotographyPortfolioImageController::class)->middleware('auth');

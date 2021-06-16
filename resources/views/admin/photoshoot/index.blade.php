@@ -47,7 +47,7 @@
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ $photoshoot->description }}</div>
+                                            <div class="text-sm text-gray-900">{{ (strlen($photoshoot->description) > 50 ? substr($photoshoot->description, 0, 50).'...' : $photoshoot->description) }}</div>
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap">
@@ -59,6 +59,16 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a target="_blank" href="{{ route('public.photoshoot.edit', ['photoshoot' => $photoshoot->id, 'token' => base64_encode($photoshoot->public_token)]) }}" class="text-indigo-600 hover:text-indigo-900">Preview</a>
                                         </td>
+
+                                        @if($photoshoot->contract->status == 'client_pending')
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <a target="_blank" href="{{ route('admin.contract.email', ['contract' => $photoshoot->id]) }}" onclick="event.preventDefault(); document.getElementById('submit-form').submit();" class="text-indigo-600 hover:text-indigo-900">Email</a>
+                                        </td>
+
+                                        <form id="submit-form" action="{{ route('admin.contract.email', ['contract' => $photoshoot->contract->id]) }}" method="POST" class="hidden">
+                                            @csrf
+                                        </form>
+                                        @endif
 
                                     </tr>
                                     @empty

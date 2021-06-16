@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PhotographyContract as MailPhotographyContract;
 use App\Models\PhotographyContract;
 use App\Models\Photoshoot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class PhotographyContractController extends Controller
 {
@@ -82,6 +84,14 @@ class PhotographyContractController extends Controller
     public function destroy(PhotographyContract $contract)
     {
         //
+    }
+
+    public function email(PhotographyContract $contract)
+    {
+        // return new MailPhotographyContract($contract);
+        Mail::to($contract->client->email)->send(new MailPhotographyContract($contract));
+
+        return back();
     }
 
 }
