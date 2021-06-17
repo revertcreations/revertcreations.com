@@ -11,7 +11,7 @@
 
         <p class="m-5">
             Looks like we got some business to go over, how very exciting!
-            Below you will see my photoshoot for the upcoming photoshoot that we have discussed. Feel free to edit any of the details below. Once you are happy
+            Below you will see my proposal for the upcoming photoshoot that we have discussed. Feel free to edit any of the details below. Once you are happy
             with the terms on your side, check the agreement checkbox below, and click the "I Agree" button. I'll be notified, and review all changes, if any. Once we both agree,
             I'll send you an email a copy of the finalized agreement, along with pre-shoot invoices, if any.
         </p>
