@@ -60,6 +60,7 @@ Route::domain('revertcreations.test')->group(function () {
     Route::get('/photography/photoshoot/{photoshoot}/{token?}', [PublicPhotoshootController::class, 'show'])->name('public.photoshoot.show');
     Route::get('/photography/photoshoot/{photoshoot}/{token}/edit', [PublicPhotoshootController::class, 'edit'])->name('public.photoshoot.edit');
     Route::post('/photography/photoshoot/{photoshoot}/{token}/accepts', [PublicPhotoshootController::class, 'accepts'])->name('public.photoshoot.accepts');
+    Route::post('/photography/photoshoot/{photoshoot}/{token}/download', [PublicPhotoshootController::class, 'download'])->name('public.photoshoot.download');
 
 });
 

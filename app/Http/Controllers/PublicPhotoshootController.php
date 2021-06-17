@@ -92,7 +92,6 @@ class PublicPhotoshootController extends Controller
 
             $photoshoot->update([
                 'photography_contract_id' => $client_contract->id,
-                'public_token' => Hash::make($photoshoot->id.config('hashing.public_token_salt').$request->title),
                 'title' => $validated['title'],
                 'description' => $validated['description']
             ]);
@@ -102,8 +101,7 @@ class PublicPhotoshootController extends Controller
             $photoshoot->contract->update(['status' => 'client_approved']);
 
             $photoshoot->update([
-                'status' => 'active',
-                'public_token' => Hash::make($photoshoot->id.config('hashing.public_token_salt').$request->title)
+                'status' => 'approved'
             ]);
         }
 
@@ -120,6 +118,18 @@ class PublicPhotoshootController extends Controller
         }
 
         return redirect()->route('public.photoshoot.success', ['photoshoot' => $photoshoot->id]);
+    }
+
+    public function download(PhotographyContract $contract)
+    {
+        //PDF file is stored under project/public/download/info.pdf
+        $file= public_path(). "/download/info.pdf";
+
+        $headers = array(
+                'Content-Type: application/pdf',
+                );
+
+        return Response::download($file, 'filename.pdf', $headers);
     }
 
     protected function validatedClient($validated=[])
