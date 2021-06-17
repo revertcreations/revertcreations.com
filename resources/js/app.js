@@ -90,9 +90,10 @@ window.flatpickr = flatpickr;
                 if(el.target.id == 'delivered_images_count' || el.target.id == 'price_per_image') {
                     var price_per_image = document.getElementById('price_per_image')
                     var delivered_images_count = document.getElementById('delivered_images_count')
-                    var billing_total_ammount = isNaN(parseInt(price_per_image.value) * parseInt(delivered_images_count.value)) ? "0.00" : parseInt(price_per_image.value) * parseInt(delivered_images_count.value)
-                    document.getElementById('total_billing_amount_bound_1').innerText = billing_total_ammount
-                    document.getElementById('total_billing_amount_bound_2').innerText = billing_total_ammount
+                    var billing_total_amount = isNaN(parseFloat(price_per_image.value) * parseFloat(delivered_images_count.value)) ? 0 : parseFloat(price_per_image.value) * parseFloat(delivered_images_count.value)
+                    console.log('billing_total_amount: ', billing_total_amount)
+                    document.getElementById('total_billing_amount_bound_1').innerText = billing_total_amount.toFixed(2)
+                    document.getElementById('total_billing_amount_bound_2').innerText = billing_total_amount.toFixed(2)
                 }
             }, 400)
         });

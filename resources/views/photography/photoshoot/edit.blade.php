@@ -6,7 +6,11 @@
         <i class="mt-1 bg-black text-white text-4xl">Photoshoot</i>
 
         <p class="m-5">
-            Hi there <span class=" underline font-bold text-lg">{{ $photoshoot->client->first_name }}</span>! Looks like we got some business to go over, how very exciting!
+            Hi there <span class=" underline font-bold text-lg">{{ $photoshoot->client->first_name }}</span>!
+        </p>
+
+        <p class="m-5">
+            Looks like we got some business to go over, how very exciting!
             Below you will see my photoshoot for the upcoming photoshoot that we have discussed. Feel free to edit any of the details below. Once you are happy
             with the terms on your side, check the agreement checkbox below, and click the "I Agree" button. I'll be notified, and review all changes, if any. Once we both agree,
             I'll send you an email a copy of the finalized agreement, along with pre-shoot invoices, if any.
@@ -118,7 +122,7 @@
                         x-bind-contract
                         name="price_per_image"
                         id="price_per_image"
-                        class="inline @error('price_per_image') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl"
+                        class="inline @error('price_per_image') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl bg-transparent"
                         type="number"
                         min="1"
                         step="any"
@@ -138,14 +142,14 @@
                         x-bind-contract
                         name="delivered_images_count"
                         id="delivered_images_count"
-                        class="inline @error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl" type="number" min="1" value="{{ old('delivered_images_count') ?: $photoshoot->contract->delivered_images_count }}">
+                        class="inline @error('delivered_images_count') border-2 border-red-600 @else border-none @enderror mt-1 font-bold text-4xl bg-transparent" type="number" min="1" value="{{ old('delivered_images_count') ?: $photoshoot->contract->delivered_images_count }}">
                 </div>
 
                 <div class="justify-end">
                     <label>Total Billing Amount <small>(pre taxes)</small></label>
                     <div>
                         <span class="inline">$</span>
-                        <div id="total_billing_amount_bound_1" class="inline border-none mt-1 font-bold text-4xl" type="text">{{ $photoshoot->contract->price_per_image * $photoshoot->contract->delivered_images_count }}</div>
+                        <div id="total_billing_amount_bound_1" class="inline border-none mt-1 font-bold text-4xl bg-transparent">{{ ( (old('price_per_image') ?: $photoshoot->contract->price_per_image) * (old('delivered_images_count') ?: $photoshoot->contract->delivered_images_count) ) }}</div>
                     </div>
                 </div>
             </div>

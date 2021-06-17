@@ -12,7 +12,7 @@ class PublicPhotoshootContractAcceptsRequest extends FormRequest
         return [
             'title' => 'required|string',
             'description' => 'required|string',
-            'price_per_image' => 'required|numeric|min:15',
+            'price_per_image' => 'required|numeric|min:1',
             'delivered_images_count' => 'required|numeric|min:1',
             'arrival_at' => 'required|date',
             'event_starts' => 'required|date',

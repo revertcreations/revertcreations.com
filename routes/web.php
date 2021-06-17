@@ -11,8 +11,9 @@ use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
 
+$domain = preg_replace("(^https?://)", "", env('APP_URL') );
 
-Route::domain('admin.revertcreations.test')->group(function () {
+Route::domain('admin.'.$domain)->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard')->middleware('auth');
@@ -29,7 +30,7 @@ Route::domain('admin.revertcreations.test')->group(function () {
     Route::resource('skills', SkillsController::class)->middleware('auth');
 });
 
-Route::domain('revertcreations.test')->group(function () {
+Route::domain($domain)->group(function () {
 
     Route::get('/', function () {
         return view('home');
