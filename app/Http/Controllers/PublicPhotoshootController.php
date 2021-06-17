@@ -70,21 +70,21 @@ class PublicPhotoshootController extends Controller
 
         $validated = $request->validated();
 
-        $create = false;
+        $client_updated = false;
         foreach($photoshoot->contract->getAttributes() as $key => $value)
             if($request[$key] && $request[$key] != $value)
-                $create = true;
+                $client_updated = true;
 
-        if ($create) {
+        if ($client_updated) {
             $client_contract = PhotographyContract::create([
                 'client_id' => $photoshoot->client->id,
                 'photoshoot_id' => $photoshoot->id,
-                'status' => 'client_approved',
+                'status' => 'admin_pending',
                 'delivered_images_count' => $validated['delivered_images_count'],
                 'price_per_image' => $validated['price_per_image'],
-                'title' => $validated['title'],
-                'description' => $validated['description']
-
+                'event_starts' => $validated['event_starts'],
+                'event_ends' => $validated['event_ends'],
+                'arrival_at' => $validated['arrival_at'],
             ]);
 
             // update the previous contract
@@ -92,7 +92,9 @@ class PublicPhotoshootController extends Controller
 
             $photoshoot->update([
                 'photography_contract_id' => $client_contract->id,
-                'public_token' => Hash::make($photoshoot->id.config('hashing.public_token_salt').$request->title)
+                'public_token' => Hash::make($photoshoot->id.config('hashing.public_token_salt').$request->title),
+                'title' => $validated['title'],
+                'description' => $validated['description']
             ]);
 
         } else {
@@ -100,6 +102,7 @@ class PublicPhotoshootController extends Controller
             $photoshoot->contract->update(['status' => 'client_approved']);
 
             $photoshoot->update([
+                'status' => 'active',
                 'public_token' => Hash::make($photoshoot->id.config('hashing.public_token_salt').$request->title)
             ]);
         }
