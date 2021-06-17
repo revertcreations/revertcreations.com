@@ -11,7 +11,7 @@ use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
 
-$domain = preg_replace("(^https?://)", "", env('APP_URL'));
+$domain = preg_replace("(^https?://)", "", config('app.url'));
 
 Route::domain('admin.'.$domain)->group(function () {
     Route::get('/', function () {
