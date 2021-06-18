@@ -62,19 +62,24 @@
 
                                         @if($photoshoot->contract->status == 'client_pending')
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a target="_blank" href="{{ route('admin.contract.email', ['contract' => $photoshoot->id]) }}" onclick="event.preventDefault(); document.getElementById('submit-form').submit();" class="text-indigo-600 hover:text-indigo-900">Email</a>
+                                            <a target="_blank" href="{{ route('admin.contract.email', ['contract' => $photoshoot->id]) }}" onclick="event.preventDefault(); document.getElementById('submit-form-{{ $photoshoot->id }}').submit();" class="text-indigo-600 hover:text-indigo-900">Email</a>
                                         </td>
 
-                                        <form id="submit-form" action="{{ route('admin.contract.email', ['contract' => $photoshoot->contract->id]) }}" method="POST" class="hidden">
+                                        <form id="submit-form-{{ $photoshoot->id }}" action="{{ route('admin.contract.email', ['contract' => $photoshoot->contract->id]) }}" method="POST" class="hidden">
                                             @csrf
                                         </form>
                                         @elseif($photoshoot->status == 'approved')
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a target="_blank" href="{{ route('photoshoot.edit', ['photoshoot' => $photoshoot->id]) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                         </td>
-                                        {{-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a target="_blank" href="{{ route('admin.contract.email', ['contract' => $photoshoot->id]) }}" class="text-indigo-600 hover:text-indigo-900">Email</a>
-                                        </td> --}}
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <a target="_blank" href="{{ route('admin.photoshoot.email', ['photoshoot' => $photoshoot->id]) }}" onclick="event.preventDefault(); document.getElementById('submit-form-{{ $photoshoot->id }}').submit();" class="text-indigo-600 hover:text-indigo-900">Email</a>
+                                        </td>
+
+                                        <form id="submit-form-{{ $photoshoot->id }}" action="{{ route('admin.photoshoot.email', ['photoshoot' => $photoshoot->id]) }}" method="POST" class="hidden">
+                                            @csrf
+                                        </form>
                                         @endif
 
                                     </tr>

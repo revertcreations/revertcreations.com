@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Mail\PhotoshootImages;
 use App\Models\PhotographyContract;
 use App\Models\Photoshoot;
 use App\Models\Address;
 use App\Models\PhotographyContractAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class PhotoshootController extends Controller
 {
@@ -131,9 +133,13 @@ class PhotoshootController extends Controller
         //
     }
 
-    public function upload(Request $request)
+    public function email(Photoshoot $photoshoot)
     {
 
+        // return new PhotoshootImages($photoshoot);
+        Mail::to($photoshoot->client->email)->send(new PhotoshootImages($photoshoot));
+
+        return back();
     }
 
 }

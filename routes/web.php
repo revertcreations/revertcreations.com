@@ -27,6 +27,7 @@ Route::domain('admin.'.$domain)->group(function () {
 
     Route::resource('photoshoot', PhotoshootController::class)->middleware('auth');
     Route::resource('photoshoot/{photoshoot}/images', PhotoshootImageController::class)->middleware('auth');
+    Route::post('photoshoot/{photoshoot}/email', [PhotoshootController::class, 'email'])->middleware('auth')->name('admin.photoshoot.email');
     Route::resource('portfolio', PhotographyPortfolioImageController::class)->middleware('auth');
     Route::resource('client', ClientController::class)->middleware('auth');
     Route::resource('skills', SkillsController::class)->middleware('auth');
