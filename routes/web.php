@@ -6,6 +6,7 @@ use App\Http\Controllers\PhotographyPortfolioImageController;
 use App\Http\Controllers\PublicPhotoshootController;
 use App\Http\Controllers\PhotographyContractController;
 use App\Http\Controllers\PhotoshootController;
+use App\Http\Controllers\PhotoshootImageController;
 use App\Http\Controllers\SkillsController;
 use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
@@ -25,6 +26,7 @@ Route::domain('admin.'.$domain)->group(function () {
     Route::post('contract/{contract}/email', [PhotographyContractController::class, 'email'])->middleware('auth')->name('admin.contract.email');
 
     Route::resource('photoshoot', PhotoshootController::class)->middleware('auth');
+    Route::resource('photoshoot/{photoshoot}/images', PhotoshootImageController::class)->middleware('auth');
     Route::resource('portfolio', PhotographyPortfolioImageController::class)->middleware('auth');
     Route::resource('client', ClientController::class)->middleware('auth');
     Route::resource('skills', SkillsController::class)->middleware('auth');

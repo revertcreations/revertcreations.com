@@ -68,6 +68,13 @@
                                         <form id="submit-form" action="{{ route('admin.contract.email', ['contract' => $photoshoot->contract->id]) }}" method="POST" class="hidden">
                                             @csrf
                                         </form>
+                                        @elseif($photoshoot->status == 'approved')
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <a target="_blank" href="{{ route('photoshoot.edit', ['photoshoot' => $photoshoot->id]) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                        </td>
+                                        {{-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <a target="_blank" href="{{ route('admin.contract.email', ['contract' => $photoshoot->id]) }}" class="text-indigo-600 hover:text-indigo-900">Email</a>
+                                        </td> --}}
                                         @endif
 
                                     </tr>

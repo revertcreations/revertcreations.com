@@ -1,59 +1,122 @@
 <x-layout>
 
-    <form action="{{route('public.photoshoot.download', ['photoshoot' => $photoshoot->id])}}">
+    <form action="{{route('public.photoshoot.download', ['photoshoot' => $photoshoot->id, 'token' => $photoshoot->public_token])}}">
         @csrf
-        <i class="mt-1 bg-black text-white text-4xl">Photoshoot</i>
+        <i class="mt-1 bg-black text-white text-4xl">{{ $photoshoot->title }}</i>
 
         <p class="m-5">
-            Hi there <span class=" underline font-bold text-lg">{{ $photoshoot->client->first_name }}</span>! Looks like we got some business to go over, how very exciting!
-            Below you will see my photoshoot for the upcoming photoshoot that we have discussed. Feel free to edit any of the details below. Once you are happy
-            with the terms on your side, check the agreement checkbox below, and click the "I Agree" button. I'll be notified, and review all changes, if any. Once we both agree,
-            I'll send you an email a copy of the finalized agreement, along with pre-shoot invoices, if any.
+            Welcome back <span class=" underline font-bold text-lg">{{ $photoshoot->client->first_name }}</span>!
         </p>
 
+        {{-- <p class="m-5">
+            I had a great time on our shoot! Below are un-edited images to review. Double-click to select the images you wish
+            to choose. You have <b>{{ $photoshoot->contract->delivered_images_count }}</b> to select for usage. Once you have
+            chosen your images, click approve images on the bottom right.
+        </p> --}}
+
+        <p class="m-5">
+            I had a great time on our shoot! Below are all un-edited images to use. Feel free to reach out for any touch-up's,
+            or photoshop requests.
+        </p>
 
         <br>
 
-        <i class="mt-1 bg-black text-white text-3xl">Details</i>
 
-        <div class="m-5 justify-around flex flex-col md:flex-row">
-
-            <div class="flex flex-col mx-1">
-
-                <label for="title">Photoshoot Name</label>
-                <div>
-                    <input name="title" class="w-full border-none mt-1 font-bold text-2xl" type="text" value="{{ $photoshoot->title }}" disabled>
-                </div>
-
-                <label for="description">Brief Description</label>
-                <div>
-                    <textarea disabled data-autoresize name="description" class="w-full border-none mt-1 font-bold text-2xl" rows="6" cols="50" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ $photoshoot->description }}</textarea>
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                    <label for="arrival_at" class="block text-sm font-medium text-gray-700">
-                        Start Date / Time
-                    </label>
-                    <input disabled x-bind-contract type="text" name="arrival_at" id="arrival_at" class="w-full border-none mt-1 font-bold text-2xl" value="{{ $photoshoot->contract->event_starts }}">
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                    <label for="event_starts" class="block text-sm font-medium text-gray-700">
-                        Start Date / Time
-                    </label>
-                    <input disabled x-bind-contract type="text" name="event_starts" id="event_starts" class="w-full border-none mt-1 font-bold text-2xl" value="{{ $photoshoot->contract->event_starts }}">
-                </div>
-
-                <div class="col-span-6 sm:col-span-3">
-                    <label for="event_ends" class="block text-sm font-medium text-gray-700">
-                        End Date / Time
-                    </label>
-                    <input disabled x-bind-contract type="text" name="event_ends" id="event_ends" class="w-full border-none mt-1 font-bold text-2xl" value="{{ $photoshoot->contract->event_ends }}">
-                </div>
-
-                <button type="submit">Download Contract</button>
-            </div>
+        <div id="close_button" class="hidden fixed top-10 right-10 text-5xl bg-black text-white hover:text-red-500 cursor-pointer" onclick="closeImage()">
+            <span>X</span>
         </div>
+
+        <div class="flex flex-col">
+
+            <div id="thumbnail_wrap" class="flex flex-row flex-wrap justify-center my-10">
+                @foreach ($photoshoot->images as $index => $image)
+                <div class="m-2 cursor-pointer">
+                    <a target="_blank" href="https://res.cloudinary.com/treverhillis/image/upload/{{ $image->public_id }}.{{ $image->extension }}">
+                        <img
+                            id="{{ $image->id }}"
+                            class=""
+                            data-src="https://res.cloudinary.com/treverhillis/image/upload/{{ $image->public_id }}.{{ $image->extension }}"
+                            src="https://res.cloudinary.com/treverhillis/image/upload/w_400,c_scale,q_auto:low/{{ $image->public_id }}.{{ $image->extension }}"
+                            />
+                    </a>
+                </div>
+                @endforeach
+            </div>
+
+        </div>
+
+        <div class="fixed bottom-0 right-0">
+            <h2 class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:text-black hover:bg-white"><a href="{{ route('public.photoshoot.create') }}">approve images</a></h2>
+        </div>
+
+
+    <script>
+
+
+        function openImage(e)
+        {
+
+            document.getElementById('thumbnail_wrap').style.display = 'none'
+
+            let body = document.body
+            body.style.backgroundImage = 'url('+e.target.dataset.src+')'
+            body.style.backgroundSize = 'contain'
+            body.style.backgroundRepeat = 'no-repeat'
+            body.style.backgroundPosition = 'center center'
+            body.style.zIndex = 2
+
+            document.getElementById('close_button').style.display = 'block'
+
+            slideOut(document.getElementById('main_header'), 'right')
+            slideOut(document.getElementById('page_title'), 'left')
+            slideOut(document.getElementById('home_title'), 'right')
+
+            // current_large_photo.classList.add('none')
+            // current_large_photo.classList.remove('active')
+
+        }
+
+        function closeImage() {
+
+            document.getElementById('close_button').style.display = 'none'
+            document.body.style.backgroundImage = 'unset'
+
+            let thumbnail_wrap = document.getElementById('thumbnail_wrap')
+            thumbnail_wrap.style.display = 'flex'
+
+            slideBack(document.getElementById('main_header'), 'right')
+            slideBack(document.getElementById('page_title'), 'left')
+            slideBack(document.getElementById('home_title'), 'right')
+        }
+
+        function slideOut(el, direction) {
+
+            let xPos = window.innerWidth + el.offsetWidth + "px"
+
+            if(el.classList.contains('animate-translate'))
+                el.classList.remove('animate-translate')
+
+            el.style.setProperty('--translate-x', (direction == 'left' ? '-' : '')+xPos)
+            el.style.setProperty('--translate-origin', '0px')
+            el.classList.add('animate-translate')
+        }
+
+        function slideBack(el, direction) {
+
+            // let xPos = window.innerWidth + el.offsetWidth + "px"
+
+            if(el.classList.contains('animate-translate'))
+                el.classList.remove('animate-translate')
+
+            // el.style.setProperty('--translate-x', '0px')
+            // el.style.setProperty('--translate-origin', (direction == 'left' ? '-' : '')+xPos)
+            // el.classList.remove('animate-translate')
+            // el.classList.add('animate-translate')
+
+        }
+
+    </script>
+
     </form>
 
 </x-layout>

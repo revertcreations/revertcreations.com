@@ -123,13 +123,13 @@ class PublicPhotoshootController extends Controller
     public function download(PhotographyContract $contract)
     {
         //PDF file is stored under project/public/download/info.pdf
-        $file= public_path(). "/download/info.pdf";
+        // $file= public_path(). "/download/info.pdf";
 
-        $headers = array(
-                'Content-Type: application/pdf',
-                );
+        // $headers = array(
+        //         'Content-Type: application/pdf',
+        //         );
 
-        return Response::download($file, 'filename.pdf', $headers);
+        // return Response::download($file, 'filename.pdf', $headers);
     }
 
     protected function validatedClient($validated=[])

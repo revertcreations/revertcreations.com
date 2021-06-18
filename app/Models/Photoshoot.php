@@ -20,4 +20,9 @@ class Photoshoot extends Model
     {
         return $this->belongsTo(PhotographyContract::class, 'photography_contract_id', 'id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(PhotoshootImage::class);
+    }
 }

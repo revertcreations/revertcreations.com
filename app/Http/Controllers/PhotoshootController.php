@@ -103,9 +103,9 @@ class PhotoshootController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Photoshoot $photoshoot)
     {
-        //
+        return view('admin.photoshoot.edit', compact('photoshoot'));
     }
 
     /**
@@ -129,6 +129,11 @@ class PhotoshootController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function upload(Request $request)
+    {
+
     }
 
 }
