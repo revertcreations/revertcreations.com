@@ -39,3 +39,18 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+
+#photographer_wrap {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.square-film {
+    background: url('https://res.cloudinary.com/treverhillis/image/upload/v1625022773/assets/_MG_3942_rjkx1x.jpg');
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 375px;
+    width: 375px;
+}

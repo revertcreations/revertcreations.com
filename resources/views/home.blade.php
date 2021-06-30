@@ -25,13 +25,75 @@
 
     </div>
 
-    <div id="photographer_info" class="m-3 hidden w-80 h-80 p-3">
-        Over the past decade I have professionally photographed conferences, weddings, live performances, portraits, and products. However, a vast majority of my photography
-        has been for my personal enjoyment. I haven't shared many of these images over the past 10 years, and I hope to display some of them here ->
-        <span class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:text-black hover:bg-white"><a class= href="{{route('public.photoshoot.create')}}">archive</a></span>.
-        If you are in need of a photographer, and like what you see here, feel free to
-        <span class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:text-black hover:bg-white"><a class= href="{{route('public.photoshoot.create')}}">book me</a></span>.
+    <div id="photographer_wrap" class="hidden">
+
+        <div id="photographer_archive" class="m-3 p-6 square-film" width="400px" height="400px">
+            <p class="bg-black">A vast majority of my photography has been for my personal enjoyment. In my early ages I used this as an escape from my own reality, and a tool of observation into others' realities.
+            I haven't shared many of these images over the past 10 years, and I hope to finally display, and perhaps examine some of them in my</p>
+            <span class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:underline"><a href="{{route('public.photoshoot.create')}}">archive</a></span>.
+        </div>
+
+        <div id="photographer_book" class="m-3 p-6 square-film" width="400px" height="400px">
+            <p class="bg-black">Over the past decade I have professionally photographed conferences, weddings, live performances, portraits, and products.
+            If you are in need of a photographer, and like what you see here, feel free to</p>
+            <span class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:underline"><a href="{{route('public.photoshoot.create')}}">book me</a></span>.
+        </div>
+
+        <div id="photographer_portfolio" class="m-3 p-6 square-film" width="400px" height="400px">
+            <span class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:underline"><a href="{{route('photography')}}">portfolio</a></span>.
+        </div>
+
     </div>
+
+    <div id="developer_wrap" class="hidden">
+
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        <input
+            type="hidden"
+            class="
+                text-gruvbox-red
+                text-gruvbox-green
+                text-gruvbox-purple
+                text-gruvbox-black
+                text-gruvbox-black-hidden
+                text-gruvbox-white
+                text-hmt-green
+                text-gruvbox-orange
+
+                bg-gruvbox-red
+                bg-gruvbox-green
+                bg-gruvbox-purple
+                bg-gruvbox-black
+                bg-gruvbox-white
+                bg-hmt-green
+            ">
+
+        {{-- <span class="relative" style="bottom: -1px;">
+            <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl italic w-min">Web Development</i>
+        </span> --}}
+
+        <div class="flex flex-col flex-1">
+
+            <div class="flex flex-col md:flex-row flex-grow">
+                <div id="playground" class="flex-grow bg-gruvbox-black relative touch-action-none"></div>
+            </div>
+
+        </div>
+
+
+        <script src="{{ asset('js/playground.js') }}"></script>
+
+        <script>
+
+            const data = JSON.parse('@json($skills)');
+
+            Playground.init(data)
+
+        </script>
+
+    </div>
+
 
 
 </x-layout>

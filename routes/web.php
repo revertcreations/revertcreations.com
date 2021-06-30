@@ -36,7 +36,8 @@ Route::domain('admin.'.$domain)->group(function () {
 Route::domain($domain)->group(function () {
 
     Route::get('/', function () {
-        return view('home');
+        $skills = Skill::all();
+        return view('home', compact('skills'));
     })->name('home');
 
     Route::get('/web-development', function () {

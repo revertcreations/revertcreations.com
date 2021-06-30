@@ -36,43 +36,44 @@ window.flatpickr = flatpickr__WEBPACK_IMPORTED_MODULE_0__.default;
 
   if (photographer) {
     photographer.addEventListener('click', function (el) {
-      clearTimeout(photographer_timeout);
-      var photographer_info = document.getElementById('photographer_info');
-      var photographer_timeout = setTimeout(function () {
-        if (photographer_info.style.display != 'block') {
-          console.log('awwwww yes');
-          photographer_info.style.display = 'block';
-          document.body.style.backgroundSize = "cover";
-          document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')";
-        } else {
-          console.log('awwwww no');
-          photographer_info.style.display = "none";
-          document.body.style.backgroundSize = "cover";
-          document.body.style.backgroundImage = "unset";
-        }
-      }, 100, el);
-    });
-  } // if(web_dev) {
-  //     photographer.addEventListener('click', el => {
-  //         clearTimeout(photographer_timeout)
-  //         let photographer_info = document.getElementById('photographer_info')
-  //         let photographer_timeout = setTimeout(() => {
-  //             // console.log('photographer_info.style.display: ', photographer_info.style.display)
-  //             if(photographer_info.style.display != 'block') {
-  //                 console.log('awwwww yes')
-  //                 photographer_info.style.display = 'block'
-  //                 document.body.style.backgroundSize = "cover"
-  //                 document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')"
-  //             } else {
-  //                 console.log('awwwww no')
-  //                 photographer_info.style.display = "none"
-  //                 document.body.style.backgroundSize = "cover"
-  //                 document.body.style.backgroundImage = "unset"
-  //             }
-  //         }, 100, el)
-  //     })
-  // }
+      var photographer_wrap = document.getElementById('photographer_wrap');
+      var home_title = document.getElementById('home_title');
 
+      if (photographer_wrap.style.display != 'flex') {
+        console.log('awwwww yes', el);
+        photographer_wrap.style.display = 'flex';
+        document.body.style.color = 'white';
+        home_title.style.color = 'white';
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')";
+      } else {
+        photographer_wrap.style.display = "none";
+        document.body.style.backgroundImage = "unset";
+        home_title.style.color = "black";
+        document.body.style.color = "black";
+      }
+    });
+  }
+
+  if (web_dev) {
+    web_dev.addEventListener('click', function (el) {
+      document.body.style.backgroundImage = 'unset';
+      document.body.style.backgroundColor = 'rgba(40, 40, 40)';
+      var developer_wrap = document.getElementById('developer_wrap');
+      document.body.style.color = '#b8bb26';
+      document.getElementById('home_title').style.color = 'white';
+
+      if (developer_wrap.style.display != 'block') {
+        console.log('awwwww yes', el);
+        developer_wrap.style.display = 'block';
+      } else {
+        console.log('awwwww no');
+        developer_wrap.style.display = "none";
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundImage = "unset";
+      }
+    });
+  }
 
   if (document.getElementById('event_starts')) var event_starts = window.flatpickr(document.getElementById('event_starts'), {
     enableTime: true,
