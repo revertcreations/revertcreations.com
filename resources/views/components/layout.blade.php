@@ -13,14 +13,14 @@
 
     <div id="app" class="flex flex-col h-full">
 
-        <header id="main_header">
+        {{-- <header id="main_header">
             <nav>
                 <ul class="flex justify-between">
                     <li class="m-5"><a href="{{ route('web-development') }}"><span id="computer_icon">&#128421;</span> web development</a></li>
                     <li class="m-5"><a href="{{ route('photography') }}"><span id="camera_icon">&#128247;</span> photography</a></li>
                 </ul>
             </nav>
-        </header>
+        </header> --}}
 
 
         <div id="content" class="flex flex-col h-full">

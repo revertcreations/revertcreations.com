@@ -17,6 +17,9 @@ mix.js('resources/js/app.js', 'public/js', [
     .js('resources/js/playground.js', 'public/js',[
 
     ])
+    .js('resources/js/home.js', 'public/js',[
+
+    ])
     .postCss('resources/css/app.css', 'public/css', [
         require('tailwindcss'),
     ]);

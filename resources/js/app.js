@@ -28,56 +28,57 @@ window.flatpickr = flatpickr;
             }, 600, el);
         })
 
-    if(photographer) {
-        photographer.addEventListener('click', el => {
+    // if(photographer) {
+    //     photographer.addEventListener('click', el => {
 
-            let photographer_wrap = document.getElementById('photographer_wrap')
-            let home_title = document.getElementById('home_title')
+    //         let photographer_wrap = document.getElementById('photographer_wrap')
+    //         let home_title = document.getElementById('home_title')
 
-            if(photographer_wrap.style.display != 'flex') {
-                console.log('awwwww yes', el)
+    //         if(photographer_wrap.style.display != 'flex') {
 
-                photographer_wrap.style.display = 'flex'
+    //             photographer_wrap.style.display = 'flex'
 
-                document.body.style.color = 'white'
-                home_title.style.color = 'white'
+    //             document.body.style.color = 'white'
+    //             home_title.style.color = 'white'
 
-                document.body.style.backgroundSize = "cover"
-                document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')"
-            } else {
-                photographer_wrap.style.display = "none"
-                document.body.style.backgroundImage = "unset"
-                home_title.style.color = "black"
-                document.body.style.color = "black"
-            }
-        })
+    //             document.body.style.backgroundSize = "cover"
+    //             document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')"
+    //         } else {
+    //             photographer_wrap.style.display = "none"
+    //             document.body.style.backgroundImage = "unset"
+    //             home_title.style.color = "black"
+    //             document.body.style.color = "black"
+    //         }
+    //     })
+    // }
 
-    }
+    // if(web_dev) {
+    //     web_dev.addEventListener('click', el => {
 
-    if(web_dev) {
-        web_dev.addEventListener('click', el => {
+    //         if(!Playground.initialized)
+    //             Playground.init(data)
+    //         else
+    //             Playground.reset()
 
-            document.body.style.backgroundImage = 'unset'
-            document.body.style.backgroundColor = 'rgba(40, 40, 40)'
+    //         let home_title = document.getElementById('home_title')
+    //         let developer_wrap = document.getElementById('developer_wrap')
 
-            let developer_wrap = document.getElementById('developer_wrap')
+    //         document.body.style.backgroundImage = 'unset'
+    //         document.body.style.backgroundColor = 'rgba(40, 40, 40)'
+    //         document.body.style.color = '#b8bb26'
 
-            document.body.style.color = '#b8bb26'
-            document.getElementById('home_title').style.color = 'white'
+    //         home_title.style.color = '#b16286'
 
-            if(developer_wrap.style.display != 'block') {
-                console.log('awwwww yes', el)
-
-                developer_wrap.style.display = 'block'
-            } else {
-                console.log('awwwww no')
-                developer_wrap.style.display = "none"
-                document.body.style.backgroundSize = "cover"
-                document.body.style.backgroundImage = "unset"
-            }
-        })
-
-    }
+    //         if(developer_wrap.style.display != 'block') {
+    //             developer_wrap.style.display = 'block'
+    //         } else {
+    //             console.log('awwwww no')
+    //             developer_wrap.style.display = "none"
+    //             document.body.style.backgroundSize = "cover"
+    //             document.body.style.backgroundImage = "unset"
+    //         }
+    //     })
+    // }
 
     if(document.getElementById('event_starts'))
         var event_starts = window.flatpickr(document.getElementById('event_starts'),

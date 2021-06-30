@@ -4,6 +4,7 @@ var __webpack_exports__ = {};
   !*** ./resources/js/playground.js ***!
   \************************************/
 Playground = {
+  initialized: false,
   playground: document.getElementById('playground'),
   skills: [],
   needsReset: false,
@@ -12,6 +13,7 @@ Playground = {
   placedSkillAttempts: 0,
   speedLimit: 12,
   init: function init(data) {
+    Playground.initialized = true;
     Playground.skills = data;
 
     while (Playground.playground.firstChild) {
@@ -70,6 +72,8 @@ Playground = {
         return false;
       }
 
+      console.log('playground.offsetWidth: ', Playground.playground.offsetWidth);
+      console.log('playground.offsetHeight: ', Playground.playground.offsetHeight);
       var width = skill.element.offsetWidth;
       var height = skill.element.offsetHeight;
       var textXBound = Math.random() * (playground.offsetWidth - width - width / 2) + width / 2;

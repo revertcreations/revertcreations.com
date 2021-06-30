@@ -1,4 +1,5 @@
 Playground = {
+    initialized: false,
     playground: document.getElementById('playground'),
     skills: [],
     needsReset: false,
@@ -8,6 +9,8 @@ Playground = {
     speedLimit: 12,
 
     init: (data) => {
+
+        Playground.initialized = true
 
         Playground.skills = data
 
@@ -87,6 +90,9 @@ Playground = {
                 Playground.needsReset = true
                 return false;
             }
+
+            console.log('playground.offsetWidth: ', Playground.playground.offsetWidth)
+            console.log('playground.offsetHeight: ', Playground.playground.offsetHeight)
 
             let width = skill.element.offsetWidth
             let height = skill.element.offsetHeight

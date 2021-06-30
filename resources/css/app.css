@@ -18,7 +18,7 @@
 }
 
 .logo-link.home {
-    @apply text-black cursor-not-allowed;
+    @apply cursor-not-allowed;
 }
 
 .logo-link.web-development {
