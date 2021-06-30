@@ -2,8 +2,11 @@ import flatpickr from 'flatpickr';
 window.flatpickr = flatpickr;
 
 (function(){
+    let app = document.getElementById('app')
     let camera_icon = document.getElementById('camera_icon')
     let computer_icon = document.getElementById('computer_icon')
+    let photographer = document.getElementById('photographer')
+    let web_dev = document.getElementById('web_dev')
 
     if(camera_icon)
         camera_icon.addEventListener('mouseover', el => {
@@ -25,6 +28,51 @@ window.flatpickr = flatpickr;
             }, 600, el);
         })
 
+    if(photographer) {
+        photographer.addEventListener('click', el => {
+
+            clearTimeout(photographer_timeout)
+
+            let photographer_info = document.getElementById('photographer_info')
+
+            let photographer_timeout = setTimeout(() => {
+
+                if(photographer_info.style.display != 'block') {
+                    console.log('awwwww yes')
+                    photographer_info.style.display = 'block'
+                    document.body.style.backgroundSize = "cover"
+                    document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')"
+                } else {
+                    console.log('awwwww no')
+                    photographer_info.style.display = "none"
+                    document.body.style.backgroundSize = "cover"
+                    document.body.style.backgroundImage = "unset"
+                }
+            }, 100, el)
+
+        })
+    }
+
+    // if(web_dev) {
+    //     photographer.addEventListener('click', el => {
+    //         clearTimeout(photographer_timeout)
+    //         let photographer_info = document.getElementById('photographer_info')
+    //         let photographer_timeout = setTimeout(() => {
+    //             // console.log('photographer_info.style.display: ', photographer_info.style.display)
+    //             if(photographer_info.style.display != 'block') {
+    //                 console.log('awwwww yes')
+    //                 photographer_info.style.display = 'block'
+    //                 document.body.style.backgroundSize = "cover"
+    //                 document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')"
+    //             } else {
+    //                 console.log('awwwww no')
+    //                 photographer_info.style.display = "none"
+    //                 document.body.style.backgroundSize = "cover"
+    //                 document.body.style.backgroundImage = "unset"
+    //             }
+    //         }, 100, el)
+    //     })
+    // }
 
     if(document.getElementById('event_starts'))
         var event_starts = window.flatpickr(document.getElementById('event_starts'),
