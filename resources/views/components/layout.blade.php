@@ -27,7 +27,7 @@
 
             <h1
                 id="home_title"
-                class="self-end text-6xl mt-3 mb-3 logo-link {{ (Route::is('web-development') || Route::is('web-development.*') ? 'web-development' : (Route::is('home') ? 'home' : 'photography')) }}">
+                class="self-end text-8xl mt-3 mb-3 logo-link {{ (Route::is('web-development') || Route::is('web-development.*') ? 'web-development' : (Route::is('home') ? 'home' : 'photography')) }}">
                     <a href="{{ route('home')}}">REVERT CREATIONS</a>
             </h1>
 

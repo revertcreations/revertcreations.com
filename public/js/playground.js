@@ -12,6 +12,8 @@ Playground = {
   placedSkills: [],
   placedSkillAttempts: 0,
   speedLimit: 12,
+  homepage_tag_html: false,
+  skill_active: false,
   init: function init(data) {
     Playground.initialized = true;
     Playground.skills = data;
@@ -70,10 +72,10 @@ Playground = {
         Playground.fontScale = Playground.fontScale + 2;
         Playground.needsReset = true;
         return false;
-      }
+      } // console.log('playground.offsetWidth: ', Playground.playground.offsetWidth)
+      // console.log('playground.offsetHeight: ', Playground.playground.offsetHeight)
 
-      console.log('playground.offsetWidth: ', Playground.playground.offsetWidth);
-      console.log('playground.offsetHeight: ', Playground.playground.offsetHeight);
+
       var width = skill.element.offsetWidth;
       var height = skill.element.offsetHeight;
       var textXBound = Math.random() * (playground.offsetWidth - width - width / 2) + width / 2;
@@ -196,6 +198,7 @@ Playground = {
   },
   dragStart: function dragStart(e) {
     var skill = Playground.getSkillBasedOnName(e.target.id);
+    e.target.classList.add('cursor-move');
 
     if (skill && skill.element) {
       if (e.type == 'touchstart') {
@@ -214,8 +217,8 @@ Playground = {
         });
       }
 
-      skill.element.style.zIndex = "2";
-      if (!skill.elementShakeHint) Playground.addShakeHint(skill);
+      skill.element.style.zIndex = "11";
+      if (!skill.elementHint) Playground.addHint(skill);
 
       if (skill.heldCounter && skill.heldCounter > 2) {
         clearInterval(skill.heldCounter);
@@ -230,9 +233,9 @@ Playground = {
       }
 
       if (e.target === skill.element) {
-        skill.active = true;
+        skill.drag_active = true;
       } else {
-        skill.active = false;
+        skill.drag_active = false;
       }
     }
   },
@@ -240,6 +243,7 @@ Playground = {
     var skill = Playground.getSkillBasedOnName(e.target.id);
 
     if (skill && skill.element) {
+      e.target.classList.remove('cursor-move');
       skill.element.removeEventListener('mouseup', Playground.dragEnd);
       skill.element.removeEventListener('mousemove', Playground.drag);
       skill.element.style.zIndex = "1";
@@ -261,22 +265,22 @@ Playground = {
         delete skill.elementChild;
       }
 
-      skill.active = false;
+      if (Playground.skill_active) skill.drag_active = false;
       skill.infoShowing = false;
       skill.initialTouch = false;
       if (skill.name == 'hire me') Playground.removeHireHint(skill);
-      Playground.removeShakeHint(skill);
+      Playground.removeHint(skill);
       Playground.resetSkillPosition(skill);
     }
   },
   drag: function drag(e) {
     var skill = Playground.getSkillBasedOnName(e.target.id);
 
-    if (skill && skill.active) {
+    if (skill && skill.drag_active) {
       skill.originalTop = skill.element.style.top;
       skill.originalLeft = skill.element.style.left;
       if (!skill.elementChild) Playground.buildInfoCard(skill);
-      var isForm = Playground.handleShakeEvents(e, skill);
+      var isForm = Playground.droppableEvents(e, skill);
 
       if (e.type === "touchmove") {
         skill.currentX = e.touches[0].clientX - skill.initialX;
@@ -287,6 +291,25 @@ Playground = {
       }
 
       if (!isForm) Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
+    }
+  },
+  droppableEvents: function droppableEvents(e, skill) {
+    // console.log('e.position', e.target.getBoundingClientRect())
+    // console.log('homepage_tag position', homepage_tag.getBoundingClientRect())
+    if (Playground.skillsOverlap(e.target.getBoundingClientRect(), homepage_tag.getBoundingClientRect())) {
+      console.log('HELLLL YAAAA');
+      homepage_tag.innerHTML = skill.name;
+    } else {
+      Playground.skill_active = skill;
+      homepage_tag.innerHTML = "Drop Here";
+    } // if(Playground.skillsOverlap())
+
+
+    if (skill.droppedInArea) {
+      e.stopPropagation();
+      Playground.dragEnd(e);
+      Playground.reset('hire');
+      return false;
     }
   },
   handleShakeEvents: function handleShakeEvents(e, skill) {
@@ -374,7 +397,7 @@ Playground = {
 
 
       Playground.displayInfoCard(skill);
-      Playground.removeShakeHint(skill);
+      Playground.removeHint(skill);
     }
   },
   buildInfoCard: function buildInfoCard(skill) {
@@ -448,6 +471,7 @@ Playground = {
   },
   buildForm: function buildForm() {
     window.onresize = false;
+    var form = {};
     var formWrap = document.createElement('div');
     formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
     var hireMeForm = document.createElement('form');
@@ -613,11 +637,15 @@ Playground = {
       });
     };
   },
-  addShakeHint: function addShakeHint(skill) {
-    skill.elementShakeHint = document.createElement('div');
-    skill.elementShakeHint.classList.add('self-center', 'justify-self-center', 'cursor-pointer', 'text-sm', 'text-gruvbox-white', 'max-w-md', 'text-center');
-    skill.elementShakeHint.innerHTML = '&llarr; shake me! &rrarr;';
-    skill.element.appendChild(skill.elementShakeHint);
+  addHint: function addHint(skill) {
+    homepage_tag.classList.add('border-dashed', 'border-4');
+    Playground.homepage_tag_html = homepage_tag.innerHTML;
+    homepage_tag.innerHTML = 'Drop Here';
+    skill.elementHint = document.createElement('div');
+    skill.elementHint.classList.add('self-center', 'justify-self-center', 'cursor-pointer', 'text-sm', 'text-gruvbox-white', 'max-w-md', 'text-center'); // skill.elementHint.innerHTML = '&llarr; drag and drop &rrarr;'
+
+    skill.elementHint.innerHTML = 'drag and drop';
+    skill.element.appendChild(skill.elementHint);
   },
   addHireHint: function addHireHint(skill) {
     skill.elementHireHint = document.createElement('div');
@@ -625,13 +653,15 @@ Playground = {
     skill.elementHireHint.innerHTML = '&uuarr; hire me! &ddarr;';
     skill.element.appendChild(skill.elementHireHint);
   },
-  removeShakeHint: function removeShakeHint(skill) {
+  removeHint: function removeHint(skill) {
     skill.heldCounter = 0;
+    homepage_tag.classList.remove('border-dashed', 'border-4');
+    homepage_tag.innerHTML = Playground.homepage_tag_html;
     if (skill.heldInterval) clearTimeout(skill.heldInterval);
 
-    if (skill.elementShakeHint) {
-      skill.element.removeChild(skill.elementShakeHint);
-      delete skill.elementShakeHint;
+    if (skill.elementHint) {
+      skill.element.removeChild(skill.elementHint);
+      delete skill.elementHint;
     }
   },
   removeHireHint: function removeHireHint(skill) {

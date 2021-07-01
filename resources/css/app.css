@@ -54,3 +54,7 @@
     height: 375px;
     width: 375px;
 }
+
+#homepage_tag {
+    min-width: 300px;
+}

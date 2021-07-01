@@ -7,6 +7,8 @@ Playground = {
     placedSkills: [],
     placedSkillAttempts: 0,
     speedLimit: 12,
+    homepage_tag_html: false,
+    skill_active: false,
 
     init: (data) => {
 
@@ -91,8 +93,8 @@ Playground = {
                 return false;
             }
 
-            console.log('playground.offsetWidth: ', Playground.playground.offsetWidth)
-            console.log('playground.offsetHeight: ', Playground.playground.offsetHeight)
+            // console.log('playground.offsetWidth: ', Playground.playground.offsetWidth)
+            // console.log('playground.offsetHeight: ', Playground.playground.offsetHeight)
 
             let width = skill.element.offsetWidth
             let height = skill.element.offsetHeight
@@ -248,6 +250,8 @@ Playground = {
 
         let skill = Playground.getSkillBasedOnName(e.target.id)
 
+        e.target.classList.add('cursor-move')
+
         if(skill && skill.element) {
 
             if(e.type == 'touchstart') {
@@ -258,10 +262,10 @@ Playground = {
                 skill.element.addEventListener('mousemove', Playground.drag, {passive: true})
             }
 
-            skill.element.style.zIndex = "2"
+            skill.element.style.zIndex = "11"
 
-            if(!skill.elementShakeHint)
-                Playground.addShakeHint(skill)
+            if(!skill.elementHint)
+                Playground.addHint(skill)
 
             if(skill.heldCounter && skill.heldCounter > 2) {
                 clearInterval(skill.heldCounter)
@@ -276,9 +280,9 @@ Playground = {
             }
 
             if (e.target === skill.element) {
-                skill.active = true;
+                skill.drag_active = true;
             } else {
-                skill.active = false;
+                skill.drag_active = false;
             }
         }
     },
@@ -288,6 +292,7 @@ Playground = {
         let skill = Playground.getSkillBasedOnName(e.target.id)
 
         if(skill && skill.element) {
+            e.target.classList.remove('cursor-move')
             skill.element.removeEventListener('mouseup', Playground.dragEnd)
             skill.element.removeEventListener('mousemove', Playground.drag)
 
@@ -317,14 +322,17 @@ Playground = {
                 delete skill.elementChild
             }
 
-            skill.active = false
+            if(Playground.skill_active)
+
+
+            skill.drag_active = false
             skill.infoShowing = false
             skill.initialTouch = false
 
             if(skill.name == 'hire me')
                 Playground.removeHireHint(skill)
 
-            Playground.removeShakeHint(skill)
+            Playground.removeHint(skill)
             Playground.resetSkillPosition(skill)
         }
 
@@ -334,7 +342,7 @@ Playground = {
 
         let skill = Playground.getSkillBasedOnName(e.target.id)
 
-        if (skill && skill.active) {
+        if (skill && skill.drag_active) {
 
             skill.originalTop = skill.element.style.top
             skill.originalLeft = skill.element.style.left
@@ -342,7 +350,7 @@ Playground = {
             if(!skill.elementChild)
                 Playground.buildInfoCard(skill)
 
-           let isForm = Playground.handleShakeEvents(e, skill)
+           let isForm = Playground.droppableEvents(e, skill)
 
             if (e.type === "touchmove") {
                 skill.currentX = e.touches[0].clientX - skill.initialX;
@@ -355,6 +363,31 @@ Playground = {
             if(!isForm)
                 Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
 
+        }
+    },
+
+    droppableEvents: (e, skill) => {
+
+        // console.log('e.position', e.target.getBoundingClientRect())
+        // console.log('homepage_tag position', homepage_tag.getBoundingClientRect())
+
+        if(Playground.skillsOverlap(e.target.getBoundingClientRect(), homepage_tag.getBoundingClientRect())){
+            console.log('HELLLL YAAAA')
+            homepage_tag.innerHTML = skill.name
+        } else {
+            Playground.skill_active = skill
+            homepage_tag.innerHTML = "Drop Here"
+        }
+
+
+
+        // if(Playground.skillsOverlap())
+        if(skill.droppedInArea) {
+
+            e.stopPropagation()
+            Playground.dragEnd(e)
+            Playground.reset('hire')
+            return false;
         }
     },
 
@@ -447,7 +480,7 @@ Playground = {
             // console.log('-Playground.speedLimit: ', -Playground.speedLimit)
 
             Playground.displayInfoCard(skill)
-            Playground.removeShakeHint(skill)
+            Playground.removeHint(skill)
         }
 
     },
@@ -545,6 +578,8 @@ Playground = {
     buildForm: () => {
 
         window.onresize = false
+
+        let form = {}
 
         let formWrap = document.createElement('div')
         formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12')
@@ -722,9 +757,12 @@ Playground = {
 
     },
 
-    addShakeHint: (skill) => {
-        skill.elementShakeHint =  document.createElement('div')
-        skill.elementShakeHint.classList.add(
+    addHint: (skill) => {
+        homepage_tag.classList.add('border-dashed', 'border-4')
+        Playground.homepage_tag_html = homepage_tag.innerHTML
+        homepage_tag.innerHTML = 'Drop Here'
+        skill.elementHint =  document.createElement('div')
+        skill.elementHint.classList.add(
             'self-center',
             'justify-self-center',
             'cursor-pointer',
@@ -733,8 +771,9 @@ Playground = {
             'max-w-md',
             'text-center'
         );
-        skill.elementShakeHint.innerHTML = '&llarr; shake me! &rrarr;'
-        skill.element.appendChild(skill.elementShakeHint)
+        // skill.elementHint.innerHTML = '&llarr; drag and drop &rrarr;'
+        skill.elementHint.innerHTML = 'drag and drop'
+        skill.element.appendChild(skill.elementHint)
     },
 
     addHireHint: (skill) => {
@@ -752,16 +791,19 @@ Playground = {
         skill.element.appendChild(skill.elementHireHint)
     },
 
-     removeShakeHint: (skill) => {
+     removeHint: (skill) => {
 
         skill.heldCounter = 0
+
+        homepage_tag.classList.remove('border-dashed', 'border-4')
+        homepage_tag.innerHTML = Playground.homepage_tag_html
 
         if(skill.heldInterval)
             clearTimeout(skill.heldInterval)
 
-        if(skill.elementShakeHint){
-            skill.element.removeChild(skill.elementShakeHint)
-            delete skill.elementShakeHint
+        if(skill.elementHint){
+            skill.element.removeChild(skill.elementHint)
+            delete skill.elementHint
         }
 
     },

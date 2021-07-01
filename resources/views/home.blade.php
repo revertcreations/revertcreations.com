@@ -1,7 +1,7 @@
 <x-layout>
 
-    <span>
-        <i id="homepage_tag" class="mt-1 text-6xl">Hi there!</i>
+    <span class="z-10">
+        <div id="homepage_tag" class="mt-1 text-6xl inline-block box-content"><i>Hi there!</i></div>
     </span>
 
     <div id="homepage_greeting" class="flex flex-col self-center items-start flex-wrap text-2xl mt-4 w-4/5">
@@ -91,6 +91,8 @@
         <script>
 
             const data = JSON.parse('@json($skills)');
+
+            const portfolio = JSON.parse('@json($portfolio)');
 
             // Playground.init(data)
 

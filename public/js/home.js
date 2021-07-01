@@ -23,8 +23,8 @@ function resetDeveloperWrap() {
 
 function resetHomePage() {
   document.body.style.backgroundImage = "unset";
-  document.body.classList.remove('bg-gruvbox-white', 'text-gruvbox-black');
-  home_title.classList.remove('text-gruvbox-black', 'text-white');
+  document.body.classList.remove('bg-gruvbox-black-hidden', 'text-gruvbox-black');
+  home_title.classList.remove('text-gruvbox-yellow', 'text-white');
   home_title.style.backgroundColor = "unset";
   homepage_tag.classList.remove('bg-black', 'text-white', 'text-gruvbox-green', 'bg-gruvbox-black'); // homepage_tag.style.color = "black"
   // homepage_tag.style.backgroundColor = "white"
@@ -39,7 +39,7 @@ if (photographer) {
 
     if (photographer_wrap.style.display != 'flex') {
       homepage_greeting.style.display = 'none';
-      homepage_tag.innerHTML = 'Photographer <span class="text-red-600 cursor-pointer hover:text-red-400">&times;</span>';
+      homepage_tag.innerHTML = 'Photographer <span class="text-gruvbox-red cursor-pointer hover:text-red-400">&times;</span>';
       homepage_tag.lastChild.addEventListener('click', function () {
         resetPhotographerWrap();
       });
@@ -50,8 +50,10 @@ if (photographer) {
       home_title.style.backgroundColor = 'black'; // el.target.style.color = 'black'
       // el.target.style.backgroundColor = 'white'
 
+      var random_image = ~~(Math.random() * portfolio.length);
+      console.log('random_image', random_image);
       document.body.style.backgroundSize = "cover";
-      document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')";
+      document.body.style.backgroundImage = "url('" + portfolio[random_image].secure_path + "')";
     } else {
       resetPhotographerWrap();
     }
@@ -63,7 +65,7 @@ if (web_dev) {
     if (developer_wrap.style.display != 'block') {
       developer_wrap.style.display = 'block';
       homepage_greeting.style.display = 'none';
-      homepage_tag.innerHTML = 'Developer <span class="text-red-600 cursor-pointer hover:text-red-400">&times;</span>';
+      homepage_tag.innerHTML = 'Developer <span class="text-gruvbox-red cursor-pointer hover:text-red-400">&times;</span>';
       homepage_tag.lastChild.addEventListener('click', function () {
         resetDeveloperWrap();
       });
@@ -77,9 +79,9 @@ if (web_dev) {
     if (!Playground.initialized) Playground.init(data);else Playground.reset();
     if (photographer_wrap.style.display == 'flex') resetPhotographerWrap();
     document.body.style.backgroundImage = 'unset';
-    document.body.classList.add('bg-gruvbox-white'); // document.body.style.color = '#83a598'
+    document.body.classList.add('bg-gruvbox-black-hidden'); // document.body.style.color = '#83a598'
 
-    home_title.classList.add('text-gruvbox-black');
+    home_title.classList.add('text-gruvbox-yellow');
   });
 }
 /******/ })()

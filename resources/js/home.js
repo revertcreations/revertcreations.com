@@ -19,9 +19,9 @@ function resetDeveloperWrap(){
 function resetHomePage() {
 
     document.body.style.backgroundImage = "unset"
-    document.body.classList.remove('bg-gruvbox-white', 'text-gruvbox-black')
+    document.body.classList.remove('bg-gruvbox-black-hidden', 'text-gruvbox-black')
 
-    home_title.classList.remove('text-gruvbox-black', 'text-white')
+    home_title.classList.remove('text-gruvbox-yellow', 'text-white')
     home_title.style.backgroundColor = "unset"
 
     homepage_tag.classList.remove('bg-black', 'text-white', 'text-gruvbox-green', 'bg-gruvbox-black')
@@ -46,7 +46,7 @@ if(photographer) {
 
             homepage_greeting.style.display = 'none'
 
-            homepage_tag.innerHTML = 'Photographer <span class="text-red-600 cursor-pointer hover:text-red-400">&times;</span>'
+            homepage_tag.innerHTML = 'Photographer <span class="text-gruvbox-red cursor-pointer hover:text-red-400">&times;</span>'
             homepage_tag.lastChild.addEventListener('click', () => {
                 resetPhotographerWrap()
             })
@@ -60,8 +60,11 @@ if(photographer) {
             // el.target.style.color = 'black'
             // el.target.style.backgroundColor = 'white'
 
+            let random_image = ~~(Math.random() * (portfolio.length))
+            console.log('random_image', random_image)
+
             document.body.style.backgroundSize = "cover"
-            document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')"
+            document.body.style.backgroundImage = "url('"+portfolio[random_image].secure_path+"')"
         } else {
             resetPhotographerWrap()
         }
@@ -77,7 +80,7 @@ if(web_dev) {
 
             homepage_greeting.style.display = 'none'
 
-            homepage_tag.innerHTML = 'Developer <span class="text-red-600 cursor-pointer hover:text-red-400">&times;</span>'
+            homepage_tag.innerHTML = 'Developer <span class="text-gruvbox-red cursor-pointer hover:text-red-400">&times;</span>'
             homepage_tag.lastChild.addEventListener('click', () => {
                 resetDeveloperWrap()
             })
@@ -98,10 +101,10 @@ if(web_dev) {
             resetPhotographerWrap()
 
         document.body.style.backgroundImage = 'unset'
-        document.body.classList.add('bg-gruvbox-white')
+        document.body.classList.add('bg-gruvbox-black-hidden')
         // document.body.style.color = '#83a598'
 
-        home_title.classList.add('text-gruvbox-black')
+        home_title.classList.add('text-gruvbox-yellow')
 
     })
 }
