@@ -2,11 +2,11 @@ import flatpickr from 'flatpickr';
 window.flatpickr = flatpickr;
 
 (function(){
-    let app = document.getElementById('app')
+    // let app = document.getElementById('app')
     let camera_icon = document.getElementById('camera_icon')
     let computer_icon = document.getElementById('computer_icon')
-    let photographer = document.getElementById('photographer')
-    let web_dev = document.getElementById('web_dev')
+    // let photographer = document.getElementById('photographer')
+    // let web_dev = document.getElementById('web_dev')
 
     if(camera_icon)
         camera_icon.addEventListener('mouseover', el => {
@@ -28,57 +28,7 @@ window.flatpickr = flatpickr;
             }, 600, el);
         })
 
-    // if(photographer) {
-    //     photographer.addEventListener('click', el => {
 
-    //         let photographer_wrap = document.getElementById('photographer_wrap')
-    //         let home_title = document.getElementById('home_title')
-
-    //         if(photographer_wrap.style.display != 'flex') {
-
-    //             photographer_wrap.style.display = 'flex'
-
-    //             document.body.style.color = 'white'
-    //             home_title.style.color = 'white'
-
-    //             document.body.style.backgroundSize = "cover"
-    //             document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')"
-    //         } else {
-    //             photographer_wrap.style.display = "none"
-    //             document.body.style.backgroundImage = "unset"
-    //             home_title.style.color = "black"
-    //             document.body.style.color = "black"
-    //         }
-    //     })
-    // }
-
-    // if(web_dev) {
-    //     web_dev.addEventListener('click', el => {
-
-    //         if(!Playground.initialized)
-    //             Playground.init(data)
-    //         else
-    //             Playground.reset()
-
-    //         let home_title = document.getElementById('home_title')
-    //         let developer_wrap = document.getElementById('developer_wrap')
-
-    //         document.body.style.backgroundImage = 'unset'
-    //         document.body.style.backgroundColor = 'rgba(40, 40, 40)'
-    //         document.body.style.color = '#b8bb26'
-
-    //         home_title.style.color = '#b16286'
-
-    //         if(developer_wrap.style.display != 'block') {
-    //             developer_wrap.style.display = 'block'
-    //         } else {
-    //             console.log('awwwww no')
-    //             developer_wrap.style.display = "none"
-    //             document.body.style.backgroundSize = "cover"
-    //             document.body.style.backgroundImage = "unset"
-    //         }
-    //     })
-    // }
 
     if(document.getElementById('event_starts'))
         var event_starts = window.flatpickr(document.getElementById('event_starts'),
@@ -139,13 +89,13 @@ window.flatpickr = flatpickr;
             console.log('el: ', el.target.value)
             clearTimeout(bound_interval)
             var bound_interval = setTimeout(function(){
-                console.log('in time out el: ', el.target.value)
+                // console.log('in time out el: ', el.target.value)
                 document.getElementById(el.target.id+'_bound').innerText = el.target.value
                 if(el.target.id == 'delivered_images_count' || el.target.id == 'price_per_image') {
                     var price_per_image = document.getElementById('price_per_image')
                     var delivered_images_count = document.getElementById('delivered_images_count')
                     var billing_total_amount = isNaN(parseFloat(price_per_image.value) * parseFloat(delivered_images_count.value)) ? 0 : parseFloat(price_per_image.value) * parseFloat(delivered_images_count.value)
-                    console.log('billing_total_amount: ', billing_total_amount)
+                    // console.log('billing_total_amount: ', billing_total_amount)
                     document.getElementById('total_billing_amount_bound_1').innerText = billing_total_amount.toFixed(2)
                     document.getElementById('total_billing_amount_bound_2').innerText = billing_total_amount.toFixed(2)
                 }

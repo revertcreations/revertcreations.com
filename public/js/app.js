@@ -14,11 +14,11 @@ __webpack_require__.r(__webpack_exports__);
 window.flatpickr = flatpickr__WEBPACK_IMPORTED_MODULE_0__.default;
 
 (function () {
-  var app = document.getElementById('app');
+  // let app = document.getElementById('app')
   var camera_icon = document.getElementById('camera_icon');
-  var computer_icon = document.getElementById('computer_icon');
-  var photographer = document.getElementById('photographer');
-  var web_dev = document.getElementById('web_dev');
+  var computer_icon = document.getElementById('computer_icon'); // let photographer = document.getElementById('photographer')
+  // let web_dev = document.getElementById('web_dev')
+
   if (camera_icon) camera_icon.addEventListener('mouseover', function (el) {
     clearTimeout(camera_icon_flash);
     el.target.innerHTML = '&#128248;';
@@ -32,47 +32,7 @@ window.flatpickr = flatpickr__WEBPACK_IMPORTED_MODULE_0__.default;
     var computer_icon_flash = setTimeout(function () {
       el.target.innerHTML = '&#128421;';
     }, 600, el);
-  }); // if(photographer) {
-  //     photographer.addEventListener('click', el => {
-  //         let photographer_wrap = document.getElementById('photographer_wrap')
-  //         let home_title = document.getElementById('home_title')
-  //         if(photographer_wrap.style.display != 'flex') {
-  //             photographer_wrap.style.display = 'flex'
-  //             document.body.style.color = 'white'
-  //             home_title.style.color = 'white'
-  //             document.body.style.backgroundSize = "cover"
-  //             document.body.style.backgroundImage = "url('https://res.cloudinary.com/treverhillis/image/upload/photographyPortfolio/jnpoc31vqs12monmrcjk.jpg')"
-  //         } else {
-  //             photographer_wrap.style.display = "none"
-  //             document.body.style.backgroundImage = "unset"
-  //             home_title.style.color = "black"
-  //             document.body.style.color = "black"
-  //         }
-  //     })
-  // }
-  // if(web_dev) {
-  //     web_dev.addEventListener('click', el => {
-  //         if(!Playground.initialized)
-  //             Playground.init(data)
-  //         else
-  //             Playground.reset()
-  //         let home_title = document.getElementById('home_title')
-  //         let developer_wrap = document.getElementById('developer_wrap')
-  //         document.body.style.backgroundImage = 'unset'
-  //         document.body.style.backgroundColor = 'rgba(40, 40, 40)'
-  //         document.body.style.color = '#b8bb26'
-  //         home_title.style.color = '#b16286'
-  //         if(developer_wrap.style.display != 'block') {
-  //             developer_wrap.style.display = 'block'
-  //         } else {
-  //             console.log('awwwww no')
-  //             developer_wrap.style.display = "none"
-  //             document.body.style.backgroundSize = "cover"
-  //             document.body.style.backgroundImage = "unset"
-  //         }
-  //     })
-  // }
-
+  });
   if (document.getElementById('event_starts')) var event_starts = window.flatpickr(document.getElementById('event_starts'), {
     enableTime: true,
     dateFormat: "Y-m-d H:i",
@@ -113,14 +73,14 @@ window.flatpickr = flatpickr__WEBPACK_IMPORTED_MODULE_0__.default;
       console.log('el: ', el.target.value);
       clearTimeout(bound_interval);
       var bound_interval = setTimeout(function () {
-        console.log('in time out el: ', el.target.value);
+        // console.log('in time out el: ', el.target.value)
         document.getElementById(el.target.id + '_bound').innerText = el.target.value;
 
         if (el.target.id == 'delivered_images_count' || el.target.id == 'price_per_image') {
           var price_per_image = document.getElementById('price_per_image');
           var delivered_images_count = document.getElementById('delivered_images_count');
-          var billing_total_amount = isNaN(parseFloat(price_per_image.value) * parseFloat(delivered_images_count.value)) ? 0 : parseFloat(price_per_image.value) * parseFloat(delivered_images_count.value);
-          console.log('billing_total_amount: ', billing_total_amount);
+          var billing_total_amount = isNaN(parseFloat(price_per_image.value) * parseFloat(delivered_images_count.value)) ? 0 : parseFloat(price_per_image.value) * parseFloat(delivered_images_count.value); // console.log('billing_total_amount: ', billing_total_amount)
+
           document.getElementById('total_billing_amount_bound_1').innerText = billing_total_amount.toFixed(2);
           document.getElementById('total_billing_amount_bound_2').innerText = billing_total_amount.toFixed(2);
         }
@@ -2789,8 +2749,9 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -2809,10 +2770,38 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = __webpack_modules__;
 /******/ 	
-/******/ 	// the startup function
-/******/ 	// It's empty as some runtime module handles the default behavior
-/******/ 	__webpack_require__.x = x => {};
 /************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					result = fn();
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
@@ -2859,15 +2848,12 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// Promise = chunk loading, 0 = chunk loaded
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"/js/app": 0
+/******/ 			"/js/app": 0,
+/******/ 			"css/app": 0
 /******/ 		};
 /******/ 		
-/******/ 		var deferredModules = [
-/******/ 			["./resources/js/app.js"],
-/******/ 			["./resources/css/app.css"]
-/******/ 		];
 /******/ 		// no chunk on demand loading
 /******/ 		
 /******/ 		// no prefetching
@@ -2878,75 +2864,44 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		
 /******/ 		// no HMR manifest
 /******/ 		
-/******/ 		var checkDeferredModules = x => {};
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
 /******/ 		
 /******/ 		// install a JSONP callback for chunk loading
 /******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime, executeModules] = data;
+/******/ 			var [chunkIds, moreModules, runtime] = data;
 /******/ 			// add "moreModules" to the modules object,
 /******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0, resolves = [];
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					resolves.push(installedChunks[chunkId][0]);
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
+/******/ 			var moduleId, chunkId, i = 0;
 /******/ 			for(moduleId in moreModules) {
 /******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
 /******/ 					__webpack_require__.m[moduleId] = moreModules[moduleId];
 /******/ 				}
 /******/ 			}
-/******/ 			if(runtime) runtime(__webpack_require__);
+/******/ 			if(runtime) var result = runtime(__webpack_require__);
 /******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			while(resolves.length) {
-/******/ 				resolves.shift()();
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
 /******/ 			}
-/******/ 		
-/******/ 			// add entry modules from loaded chunk to deferred list
-/******/ 			if(executeModules) deferredModules.push.apply(deferredModules, executeModules);
-/******/ 		
-/******/ 			// run deferred modules when all chunks ready
-/******/ 			return checkDeferredModules();
+/******/ 			return __webpack_require__.O(result);
 /******/ 		}
 /******/ 		
 /******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 		
-/******/ 		function checkDeferredModulesImpl() {
-/******/ 			var result;
-/******/ 			for(var i = 0; i < deferredModules.length; i++) {
-/******/ 				var deferredModule = deferredModules[i];
-/******/ 				var fulfilled = true;
-/******/ 				for(var j = 1; j < deferredModule.length; j++) {
-/******/ 					var depId = deferredModule[j];
-/******/ 					if(installedChunks[depId] !== 0) fulfilled = false;
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferredModules.splice(i--, 1);
-/******/ 					result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
-/******/ 				}
-/******/ 			}
-/******/ 			if(deferredModules.length === 0) {
-/******/ 				__webpack_require__.x();
-/******/ 				__webpack_require__.x = x => {};
-/******/ 			}
-/******/ 			return result;
-/******/ 		}
-/******/ 		var startup = __webpack_require__.x;
-/******/ 		__webpack_require__.x = () => {
-/******/ 			// reset startup function so it can be called again when more startup code is added
-/******/ 			__webpack_require__.x = startup || (x => {});
-/******/ 			return (checkDeferredModules = checkDeferredModulesImpl)();
-/******/ 		};
 /******/ 	})();
 /******/ 	
 /************************************************************************/
 /******/ 	
-/******/ 	// run startup
-/******/ 	var __webpack_exports__ = __webpack_require__.x();
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
 ;

@@ -1,7 +1,7 @@
 <x-layout>
 
     <span class="z-10">
-        <div id="homepage_tag" class="mt-1 text-6xl inline-block box-content"><i>Hi there!</i></div>
+        <div id="homepage_tag" class="mt-1 text-6xl inline-block italic box-content">Hi there!</div>
     </span>
 
     <div id="homepage_greeting" class="flex flex-col self-center items-start flex-wrap text-2xl mt-4 w-4/5">
@@ -64,6 +64,7 @@
                 text-gruvbox-white
                 text-hmt-green
                 text-gruvbox-orange
+                text-gruvbox-black-hidden
 
                 bg-gruvbox-red
                 bg-gruvbox-green
@@ -85,18 +86,14 @@
 
         </div>
 
-        <script src="{{ asset('js/home.js') }}"></script>
-        <script src="{{ asset('js/playground.js') }}"></script>
 
         <script>
-
             const data = JSON.parse('@json($skills)');
-
             const portfolio = JSON.parse('@json($portfolio)');
-
             // Playground.init(data)
-
         </script>
+        <script src="{{ asset('js/home.js') }}"></script>
+        <script src="{{ asset('js/playground.js') }}"></script>
 
     </div>
 

@@ -55,6 +55,15 @@
     width: 375px;
 }
 
-#homepage_tag {
-    min-width: 300px;
+.inset-text {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
 }
+
+/* #homepage_tag {
+    min-width: 300px;
+} */

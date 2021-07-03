@@ -261,8 +261,7 @@ Playground = {
         skill.element.style.backgroundImage = 'unset';
         skill.element.classList.remove('animate-float-bg', 'bg-' + Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
         skill.element.classList.add('hover:animate-float-text', 'text-' + Playground.getColorBasedOnExperience(skill.experience));
-        skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience);
-        delete skill.elementChild;
+        skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience); // delete skill.elementChild
       }
 
       if (Playground.skill_active) skill.drag_active = false;
@@ -271,6 +270,17 @@ Playground = {
       if (skill.name == 'hire me') Playground.removeHireHint(skill);
       Playground.removeHint(skill);
       Playground.resetSkillPosition(skill);
+      console.log('before check DRAG END', skill.at_target);
+
+      if (skill.at_target) {
+        homepage_tag.classList.add('text-gruvbox-white');
+        homepage_tag.innerHTML = skill.name;
+        Playground.displayInfoCard(skill);
+        console.log('should set the innerHTML to skill.name');
+      } else {
+        homepage_tag.classList.remove('text-gruvbox-white', 'bg-gruvbox-green');
+        homepage_tag.innerHTML = Playground.homepage_tag_html; // resetHomepageDeveloperTag()
+      }
     }
   },
   drag: function drag(e) {
@@ -280,7 +290,7 @@ Playground = {
       skill.originalTop = skill.element.style.top;
       skill.originalLeft = skill.element.style.left;
       if (!skill.elementChild) Playground.buildInfoCard(skill);
-      var isForm = Playground.droppableEvents(e, skill);
+      var isForm = Playground.draggingEvents(e, skill);
 
       if (e.type === "touchmove") {
         skill.currentX = e.touches[0].clientX - skill.initialX;
@@ -293,24 +303,72 @@ Playground = {
       if (!isForm) Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
     }
   },
-  droppableEvents: function droppableEvents(e, skill) {
+  draggingEvents: function draggingEvents(e, skill) {
     // console.log('e.position', e.target.getBoundingClientRect())
     // console.log('homepage_tag position', homepage_tag.getBoundingClientRect())
     if (Playground.skillsOverlap(e.target.getBoundingClientRect(), homepage_tag.getBoundingClientRect())) {
-      console.log('HELLLL YAAAA');
-      homepage_tag.innerHTML = skill.name;
+      console.log('drop it like its hot');
+      skill.at_target = true;
+
+      if (homepage_tag.classList.contains('bg-gruvbox-red')) {
+        homepage_tag.classList.remove('text-gruvbox-black-hidden');
+        homepage_tag.classList.add('text-gruvbox-green');
+      }
     } else {
       Playground.skill_active = skill;
-      homepage_tag.innerHTML = "Drop Here";
-    } // if(Playground.skillsOverlap())
+      skill.at_target = false;
 
+      if (homepage_tag.classList.contains('text-gruvbox-green')) {
+        homepage_tag.classList.remove('text-gruvbox-green', 'bg-gruvbox-hidden-black');
+        homepage_tag.classList.add('bg-gruvbox-red', 'text-gruvbox-black-hidden');
+      }
+    } // if(skill.droppedInArea) {
+    //     e.stopPropagation()
+    //     Playground.dragEnd(e)
+    //     // Playground.reset('hire')
+    //     return false;
+    // }
 
-    if (skill.droppedInArea) {
-      e.stopPropagation();
-      Playground.dragEnd(e);
-      Playground.reset('hire');
-      return false;
+  },
+  addHint: function addHint(skill) {
+    homepage_tag.classList.remove('text-gruvbox-green', 'bg-gruvbox-black');
+    homepage_tag.classList.add('text-gruvbox-black-hidden', 'bg-gruvbox-red');
+    Playground.homepage_tag_html = homepage_tag.innerHTML;
+    homepage_tag.innerHTML = skill.name;
+    skill.elementHint = document.createElement('div');
+    skill.elementHint.classList.add('self-center', 'justify-self-center', 'cursor-pointer', 'text-sm', 'text-gruvbox-white', 'max-w-md', 'text-center'); // skill.elementHint.innerHTML = '&llarr; drag and drop &rrarr;'
+
+    skill.elementHint.innerHTML = 'drag and drop';
+    skill.element.appendChild(skill.elementHint);
+  },
+  addHireHint: function addHireHint(skill) {
+    skill.elementHireHint = document.createElement('div');
+    skill.elementHireHint.classList.add('self-center', 'justify-self-center', 'text-sm', 'text-gruvbox-white', 'text-center', 'bg-gruvbox-black', 'm-auto');
+    skill.elementHireHint.innerHTML = '&uuarr; hire me! &ddarr;';
+    skill.element.appendChild(skill.elementHireHint);
+  },
+  removeHint: function removeHint(skill) {
+    homepage_tag.classList.remove('text-gruvbox-black-hidden', 'bg-gruvbox-red');
+    homepage_tag.classList.add('text-gruvbox-green', 'bg-gruvbox-black');
+    skill.heldCounter = 0;
+    if (skill.heldInterval) clearTimeout(skill.heldInterval);
+
+    if (skill.elementHint) {
+      skill.element.removeChild(skill.elementHint);
+      delete skill.elementHint;
     }
+  },
+  removeHireHint: function removeHireHint(skill) {
+    skill.heldCounter = 0;
+    if (skill.heldHireInterval) clearTimeout(skill.heldHireInterval);
+
+    if (skill.elementHireHint) {
+      skill.element.removeChild(skill.elementHireHint);
+      delete skill.elementHireHint;
+    }
+  },
+  setTranslate: function setTranslate(xPos, yPos, el) {
+    el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
   },
   handleShakeEvents: function handleShakeEvents(e, skill) {
     if (e.type == 'touchmove') {
@@ -426,8 +484,12 @@ Playground = {
     skill.elementChildExperienceWrapLabelExperienceFull.classList.add('text-gruvbox-white');
   },
   displayInfoCard: function displayInfoCard(skill) {
-    skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(100);
-    skill.element.style.transform = 'unset';
+    console.log('skuill', skill);
+    skill.element.style.top = '10%';
+    skill.element.style.left = '50%';
+    skill.element.style.transform = 'translate(-50%, 0)';
+    skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(100); // skill.element.style.transform = 'unset'
+
     skill.element.classList.remove('hover:animate-float-text', 'text-' + Playground.getColorBasedOnExperience(skill.experience)); // skill.element.classList.remove('text-gruvbox-black')
 
     for (var index = 0; index < 101; index++) {
@@ -636,45 +698,6 @@ Playground = {
       })["catch"](function (errors) {// console.log(errors)
       });
     };
-  },
-  addHint: function addHint(skill) {
-    homepage_tag.classList.add('border-dashed', 'border-4');
-    Playground.homepage_tag_html = homepage_tag.innerHTML;
-    homepage_tag.innerHTML = 'Drop Here';
-    skill.elementHint = document.createElement('div');
-    skill.elementHint.classList.add('self-center', 'justify-self-center', 'cursor-pointer', 'text-sm', 'text-gruvbox-white', 'max-w-md', 'text-center'); // skill.elementHint.innerHTML = '&llarr; drag and drop &rrarr;'
-
-    skill.elementHint.innerHTML = 'drag and drop';
-    skill.element.appendChild(skill.elementHint);
-  },
-  addHireHint: function addHireHint(skill) {
-    skill.elementHireHint = document.createElement('div');
-    skill.elementHireHint.classList.add('self-center', 'justify-self-center', 'text-sm', 'text-gruvbox-white', 'text-center', 'bg-gruvbox-black', 'm-auto');
-    skill.elementHireHint.innerHTML = '&uuarr; hire me! &ddarr;';
-    skill.element.appendChild(skill.elementHireHint);
-  },
-  removeHint: function removeHint(skill) {
-    skill.heldCounter = 0;
-    homepage_tag.classList.remove('border-dashed', 'border-4');
-    homepage_tag.innerHTML = Playground.homepage_tag_html;
-    if (skill.heldInterval) clearTimeout(skill.heldInterval);
-
-    if (skill.elementHint) {
-      skill.element.removeChild(skill.elementHint);
-      delete skill.elementHint;
-    }
-  },
-  removeHireHint: function removeHireHint(skill) {
-    skill.heldCounter = 0;
-    if (skill.heldHireInterval) clearTimeout(skill.heldHireInterval);
-
-    if (skill.elementHireHint) {
-      skill.element.removeChild(skill.elementHireHint);
-      delete skill.elementHireHint;
-    }
-  },
-  setTranslate: function setTranslate(xPos, yPos, el) {
-    el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
   }
 };
 /******/ })()

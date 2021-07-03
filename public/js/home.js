@@ -21,6 +21,13 @@ function resetDeveloperWrap() {
   developer_wrap.style.display = "none";
 }
 
+function resetHomepageDeveloperTag() {
+  homepage_tag.innerHTML = 'Developer <span class="text-gruvbox-red cursor-pointer hover:text-red-400">&times;</span>';
+  homepage_tag.lastChild.addEventListener('click', function () {
+    resetDeveloperWrap();
+  });
+}
+
 function resetHomePage() {
   document.body.style.backgroundImage = "unset";
   document.body.classList.remove('bg-gruvbox-black-hidden', 'text-gruvbox-black');
