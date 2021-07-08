@@ -64,6 +64,7 @@
     background-clip: text;
 }
 
-/* #homepage_tag {
-    min-width: 300px;
-} */
+#homepage_tag {
+    /* box-sizing: border-box; */
+    /* border: 2px solid transparent; */
+}

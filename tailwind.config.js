@@ -6,6 +6,9 @@ module.exports = {
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
+        boxShadow: {
+            inner: 'inset 0 4px 8px 0 rgba(0, 0, 0, 1)',
+        },
         extend: {
             colors: {
                 'gruvbox-light-red': '#fb3934',

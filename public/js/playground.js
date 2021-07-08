@@ -3,6 +3,7 @@ var __webpack_exports__ = {};
 /*!************************************!*\
   !*** ./resources/js/playground.js ***!
   \************************************/
+var homepageTag = document.getElementById('homepage_tag');
 Playground = {
   initialized: false,
   playground: document.getElementById('playground'),
@@ -12,8 +13,7 @@ Playground = {
   placedSkills: [],
   placedSkillAttempts: 0,
   speedLimit: 12,
-  homepage_tag_html: false,
-  skill_active: false,
+  homepageTagHtml: false,
   init: function init(data) {
     Playground.initialized = true;
     Playground.skills = data;
@@ -55,8 +55,32 @@ Playground = {
     skill.element.id = skill.name;
     skill.element.style.position = "absolute";
     skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience);
-    skill.element.classList.add('hover:animate-float-text', 'text-bold', 'text-center', 'select-none', 'text-' + Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer'); // Playground.addRandomFloatEffect(skill)
-    // skill.element.classList.add('border-2', 'border-'+Playground.getColorBasedOnExperience(skill.experience))
+    skill.element.classList.add('hover:animate-float-text', 'text-bold', 'text-center', 'select-none', 'text-' + Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer');
+    Playground.addRandomFloatEffect(skill); // skill.element.classList.add('border-2', 'border-'+Playground.getColorBasedOnExperience(skill.experience))
+  },
+  disableSkills: function disableSkills() {
+    Playground.skills.forEach(function (skill) {
+      skill.element.classList.remove('text-' + Playground.getColorBasedOnExperience(skill.experience), 'hover:animate-float-text', 'cursor-pointer');
+      skill.element.classList.add('text-gruvbox-black-hidden');
+      skill.element.removeEventListener('mousedown', Playground.dragStart, {
+        passive: true
+      });
+      skill.element.removeEventListener('touchstart', Playground.dragStart, {
+        passive: true
+      });
+    });
+  },
+  enableSkills: function enableSkills() {
+    Playground.skills.forEach(function (skill) {
+      skill.element.classList.add('text-' + Playground.getColorBasedOnExperience(skill.experience), 'hover:animate-float-text', 'cursor-pointer');
+      skill.element.classList.remove('text-gruvbox-black-hidden');
+      skill.element.addEventListener('mousedown', Playground.dragStart, {
+        passive: true
+      });
+      skill.element.addEventListener('touchstart', Playground.dragStart, {
+        passive: true
+      });
+    });
   },
   addRandomFloatEffect: function addRandomFloatEffect(skill) {
     var animationTime = Math.random() * (15 - 2) + 2 + 's';
@@ -103,8 +127,10 @@ Playground = {
           'name': skill.element.innerText,
           'cords': cords
         });
-        skill.element.style.top = textYBound + 'px';
-        skill.element.style.left = textXBound + 'px';
+        skill.originalTop = textYBound + 'px';
+        skill.originalLeft = textXBound + 'px';
+        skill.element.style.top = skill.originalTop;
+        skill.element.style.left = skill.originalLeft;
         skill.isPositioned = true;
       }
 
@@ -124,7 +150,7 @@ Playground = {
         Playground.skills[skill].element.removeEventListener('mousedown', Playground.dragStart);
         Playground.skills[skill].element.removeEventListener('touchstart', Playground.dragStart);
         Playground.skills[skill].element.removeEventListener('mouseup', Playground.dragEnd);
-        Playground.skills[skill].element.removeEventListener('mousemove', Playground.drag);
+        Playground.skills[skill].element.removeEventListener('mousemove', Playground.dragElement);
         Playground.playground.removeChild(Playground.skills[skill].element);
         delete Playground.skills[skill].element;
       }
@@ -170,7 +196,7 @@ Playground = {
 
       case experience == 102:
         if (type == 'hex') return '#cc241d';
-        return 'gruvbox-black-hidden';
+        return 'gruvbox-red';
 
       case experience == 100:
         if (type == 'hex') return '#fbf1c7';
@@ -197,8 +223,13 @@ Playground = {
     });
   },
   dragStart: function dragStart(e) {
-    var skill = Playground.getSkillBasedOnName(e.target.id);
-    e.target.classList.add('cursor-move');
+    var skill = Playground.getSkillBasedOnName(e.target.id); // this could have a slick animation here...
+
+    homepageTag.innerHTML = skill.name;
+    homepageTag.classList.remove('text-gruvbox-green'); // homepageTag.classList.add('text-gruvbox-black-hidden', 'bg-gruvbox-black')
+    // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-black-hidden')
+
+    homepageTag.classList.add('shadow-inner', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-black-hidden');
 
     if (skill && skill.element) {
       if (e.type == 'touchstart') {
@@ -217,8 +248,10 @@ Playground = {
         });
       }
 
-      skill.element.style.zIndex = "11";
-      if (!skill.elementHint) Playground.addHint(skill);
+      console.log('how often do we start?');
+      skill.element.style.zIndex = '11';
+      skill.element.classList.remove('cursor-pointer');
+      skill.element.classList.add('cursor-move');
 
       if (skill.heldCounter && skill.heldCounter > 2) {
         clearInterval(skill.heldCounter);
@@ -233,9 +266,9 @@ Playground = {
       }
 
       if (e.target === skill.element) {
-        skill.drag_active = true;
+        skill.dragActive = true;
       } else {
-        skill.drag_active = false;
+        skill.dragActive = false;
       }
     }
   },
@@ -243,52 +276,48 @@ Playground = {
     var skill = Playground.getSkillBasedOnName(e.target.id);
 
     if (skill && skill.element) {
-      e.target.classList.remove('cursor-move');
+      skill.element.classList.remove('cursor-move');
       skill.element.removeEventListener('mouseup', Playground.dragEnd);
-      skill.element.removeEventListener('mousemove', Playground.drag);
-      skill.element.style.zIndex = "1";
+      skill.element.removeEventListener('mousemove', Playground.dragElement);
+      skill.element.style.zIndex = '1';
+      skill.dragActive = false;
+      skill.infoShowing = false; // skill.initialTouch = false // used for shake events...
 
-      if (skill.elementChild) {
-        clearTimeout(skill.elementMovementXTimeout);
-        clearTimeout(skill.elementMovementYTimeout);
-        skill.elementMovementDownExceeded = false;
-        skill.elementMovementUpExceeded = false;
-        skill.elementMovementLeftExceeded = false;
-        skill.elementMovementRightExceeded = false;
-        if (skill.elementChild.isConnected) skill.element.removeChild(skill.elementChild); // skill.element.classList.remove('text-gruvbox-black')
-
-        skill.nameSpan.classList.remove('text-gruvbox-black');
-        skill.element.style.backgroundImage = 'unset';
-        skill.element.classList.remove('animate-float-bg', 'bg-' + Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
-        skill.element.classList.add('hover:animate-float-text', 'text-' + Playground.getColorBasedOnExperience(skill.experience));
-        skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience); // delete skill.elementChild
-      }
-
-      if (Playground.skill_active) skill.drag_active = false;
-      skill.infoShowing = false;
-      skill.initialTouch = false;
       if (skill.name == 'hire me') Playground.removeHireHint(skill);
       Playground.removeHint(skill);
       Playground.resetSkillPosition(skill);
-      console.log('before check DRAG END', skill.at_target);
+      console.log('before check DRAG END', skill.atTarget);
 
-      if (skill.at_target) {
-        homepage_tag.classList.add('text-gruvbox-white');
-        homepage_tag.innerHTML = skill.name;
-        Playground.displayInfoCard(skill);
-        console.log('should set the innerHTML to skill.name');
+      if (skill.atTarget) {
+        homepageTag.classList.add('text-gruvbox-green');
+
+        if (skill.name == 'hire me') {
+          Playground.reset('hire');
+        } else {
+          Playground.displayInfoCard(skill);
+        }
+
+        skill.atTarget = false;
       } else {
-        homepage_tag.classList.remove('text-gruvbox-white', 'bg-gruvbox-green');
-        homepage_tag.innerHTML = Playground.homepage_tag_html; // resetHomepageDeveloperTag()
+        // homepageTag.innerHTML = Playground.homepageTagHtml
+        resetHomepageDeveloperTag();
       }
+
+      homepageTag.classList.remove('text-gruvbox-black-hidden', 'border-gruvbox-black-hidden', 'shadow-inner');
     }
+
+    rafId = null;
+  },
+  dragElement: function dragElement(e) {
+    if (rafId) return;
+    rafId = window.requestAnimationFrame(function () {
+      return Playground.drag(e);
+    });
   },
   drag: function drag(e) {
     var skill = Playground.getSkillBasedOnName(e.target.id);
 
-    if (skill && skill.drag_active) {
-      skill.originalTop = skill.element.style.top;
-      skill.originalLeft = skill.element.style.left;
+    if (skill && skill.dragActive) {
       if (!skill.elementChild) Playground.buildInfoCard(skill);
       var isForm = Playground.draggingEvents(e, skill);
 
@@ -305,22 +334,24 @@ Playground = {
   },
   draggingEvents: function draggingEvents(e, skill) {
     // console.log('e.position', e.target.getBoundingClientRect())
-    // console.log('homepage_tag position', homepage_tag.getBoundingClientRect())
-    if (Playground.skillsOverlap(e.target.getBoundingClientRect(), homepage_tag.getBoundingClientRect())) {
+    // console.log('homepageTag position', homepageTag.getBoundingClientRect())
+    if (Playground.skillsOverlap(e.target.getBoundingClientRect(), homepageTag.getBoundingClientRect())) {
       console.log('drop it like its hot');
-      skill.at_target = true;
+      skill.atTarget = true;
 
-      if (homepage_tag.classList.contains('bg-gruvbox-red')) {
-        homepage_tag.classList.remove('text-gruvbox-black-hidden');
-        homepage_tag.classList.add('text-gruvbox-green');
+      if (homepageTag.classList.contains('text-gruvbox-black-hidden')) {
+        homepageTag.classList.remove('text-gruvbox-black-hidden', 'shadow-inner', 'border-gruvbox-black-hidden');
+        homepageTag.classList.add('text-gruvbox-green');
       }
     } else {
-      Playground.skill_active = skill;
-      skill.at_target = false;
+      Playground.skillActive = skill;
+      skill.atTarget = false; // This will run after a dragged skill entered the drop area, then left
 
-      if (homepage_tag.classList.contains('text-gruvbox-green')) {
-        homepage_tag.classList.remove('text-gruvbox-green', 'bg-gruvbox-hidden-black');
-        homepage_tag.classList.add('bg-gruvbox-red', 'text-gruvbox-black-hidden');
+      if (homepageTag.classList.contains('text-gruvbox-green')) {
+        console.log('do this once...');
+        homepageTag.classList.remove('text-gruvbox-green'); // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-black-hidden')
+
+        homepageTag.classList.add('text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-black-hidden', 'shadow-inner');
       }
     } // if(skill.droppedInArea) {
     //     e.stopPropagation()
@@ -331,10 +362,6 @@ Playground = {
 
   },
   addHint: function addHint(skill) {
-    homepage_tag.classList.remove('text-gruvbox-green', 'bg-gruvbox-black');
-    homepage_tag.classList.add('text-gruvbox-black-hidden', 'bg-gruvbox-red');
-    Playground.homepage_tag_html = homepage_tag.innerHTML;
-    homepage_tag.innerHTML = skill.name;
     skill.elementHint = document.createElement('div');
     skill.elementHint.classList.add('self-center', 'justify-self-center', 'cursor-pointer', 'text-sm', 'text-gruvbox-white', 'max-w-md', 'text-center'); // skill.elementHint.innerHTML = '&llarr; drag and drop &rrarr;'
 
@@ -348,8 +375,8 @@ Playground = {
     skill.element.appendChild(skill.elementHireHint);
   },
   removeHint: function removeHint(skill) {
-    homepage_tag.classList.remove('text-gruvbox-black-hidden', 'bg-gruvbox-red');
-    homepage_tag.classList.add('text-gruvbox-green', 'bg-gruvbox-black');
+    homepageTag.classList.remove('text-gruvbox-black-hidden', 'bg-gruvbox-black');
+    homepageTag.classList.add('text-gruvbox-green', 'bg-gruvbox-black');
     skill.heldCounter = 0;
     if (skill.heldInterval) clearTimeout(skill.heldInterval);
 
@@ -461,11 +488,34 @@ Playground = {
   buildInfoCard: function buildInfoCard(skill) {
     skill.elementChild = document.createElement('div');
     skill.elementChild.style.fontSize = '16px';
-    skill.elementChild.classList.add('flex', 'flex-col', 'bg-gruvbox-black', 'cursor-pointer', 'p-2', 'shadow-inner');
+    skill.elementChild.classList.add('flex', 'flex-col', 'bg-gruvbox-black', 'p-2');
+    Playground.buildInfoCardCloseElement(skill);
     Playground.buildExperienceDiv(skill);
     skill.elementChildExcerpt = document.createElement('div');
     skill.elementChildExcerpt.classList.add('m-2', 'text-left', 'align-top', 'md:self-start', 'self-center', 'text-gruvbox-white');
     skill.elementChildExcerpt.innerHTML = skill.excerpt;
+  },
+  buildInfoCardCloseElement: function buildInfoCardCloseElement(skill) {
+    skill.closeInfoCard = document.createElement('div');
+    skill.closeInfoCard.classList.add('absolute', '-top-20', 'z-20', 'right-0', 'cursor-pointer', 'text-6xl');
+    skill.closeInfoCard.innerHTML = "<span onclick='Playground.closeInfoCard(" + "\"" + skill.name + "\"" + ")' class='text-gruvbox-red hover:text-red-400'>&times;</span>";
+  },
+  closeInfoCard: function closeInfoCard(skill_name) {
+    var skill = Playground.getSkillBasedOnName(skill_name);
+    skill.element.removeChild(skill.elementChild);
+    skill.element.removeChild(skill.closeInfoCard);
+    skill.element.style.top = skill.originalTop;
+    skill.element.style.left = skill.originalLeft;
+    skill.element.style.zIndex = '1';
+    skill.element.style.transform = 'unset';
+    skill.element.style.backgroundImage = 'unset';
+    skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience);
+    skill.element.classList.remove('animate-float-bg', 'bg-' + Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
+    skill.element.classList.add('hover:animate-float-text', 'text-' + Playground.getColorBasedOnExperience(skill.experience));
+    skill.nameSpan.classList.remove('text-gruvbox-black');
+    resetHomepageDeveloperTag();
+    Playground.removeHint(skill);
+    Playground.enableSkills();
   },
   buildExperienceDiv: function buildExperienceDiv(skill) {
     skill.elementChildExperienceWrap = document.createElement('div');
@@ -483,14 +533,25 @@ Playground = {
     skill.elementChildExperienceWrapLabelExperienceFull.innerText = '100';
     skill.elementChildExperienceWrapLabelExperienceFull.classList.add('text-gruvbox-white');
   },
+  removeAllClickListeners: function removeAllClickListeners() {
+    Playground.skills.forEach(function (skill) {
+      skill.element.removeEventListener('mousedown', Playground.dragStart, {
+        passive: true
+      });
+      skill.element.removeEventListener('touchstart', Playground.dragStart, {
+        passive: true
+      });
+    });
+  },
   displayInfoCard: function displayInfoCard(skill) {
-    console.log('skuill', skill);
+    Playground.removeAllClickListeners();
+    Playground.disableSkills();
     skill.element.style.top = '10%';
     skill.element.style.left = '50%';
     skill.element.style.transform = 'translate(-50%, 0)';
-    skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(100); // skill.element.style.transform = 'unset'
-
-    skill.element.classList.remove('hover:animate-float-text', 'text-' + Playground.getColorBasedOnExperience(skill.experience)); // skill.element.classList.remove('text-gruvbox-black')
+    skill.element.style.zIndex = '12';
+    skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(100);
+    skill.element.classList.remove('hover:animate-float-text', 'text-' + Playground.getColorBasedOnExperience(skill.experience));
 
     for (var index = 0; index < 101; index++) {
       skill.element.style.setProperty('--experience-percent-' + index, skill.experience > index ? index + '%' : skill.experience + '%');
@@ -500,8 +561,8 @@ Playground = {
     skill.element.style.setProperty('--experience-color', Playground.getColorBasedOnExperience(skill.experience, 'hex'));
     skill.nameSpan.classList.add('text-gruvbox-black');
     skill.element.classList.add('animate-float-bg', 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
-    skill.element.appendChild(skill.elementChild); // skill.nameSpan.classList.add('bg-'+Playground.getColorBasedOnExperience(skill.experience))
-    // skill.element.style.backgroundImage = 'linear-gradient(to right, #b8bb26 '+skill.experience+'%, #b8bb26 '+skill.experience+'%, rgba(0,0,0,0) '+skill.experience+'%)';
+    skill.element.appendChild(skill.elementChild);
+    skill.element.appendChild(skill.closeInfoCard);
 
     if (skill.name != 'README.md' && skill.name != 'hire me') {
       skill.elementChild.appendChild(skill.elementChildExperienceWrap);
@@ -511,23 +572,20 @@ Playground = {
       skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceFull);
     }
 
-    skill.elementChild.appendChild(skill.elementChildExcerpt);
-
-    if (skill.name == 'hire me') {
-      if (!skill.elementHireHint) {
-        skill.heldCounter = 0;
-        skill.heldHireInterval = setInterval(function () {
-          skill.heldCounter += 1;
-
-          if (skill.heldCounter === 1 && skill.infoShowing) {
-            Playground.addHireHint(skill);
-            clearInterval(skill.heldHireInterval);
-          } else if (skill.heldCounter > 1) {
-            Playground.removeHireHint(skill);
-          }
-        }, 1000);
-      }
-    }
+    skill.elementChild.appendChild(skill.elementChildExcerpt); // if(skill.name == 'hire me') {
+    //     if(!skill.elementHireHint) {
+    //         skill.heldCounter = 0;
+    //         skill.heldHireInterval = setInterval(() => {
+    //             skill.heldCounter += 1;
+    //             if (skill.heldCounter === 1 && skill.infoShowing) {
+    //                 Playground.addHireHint(skill)
+    //                 clearInterval(skill.heldHireInterval);
+    //             } else if(skill.heldCounter > 1) {
+    //                 Playground.removeHireHint(skill)
+    //             }
+    //         }, 1000);
+    //     }
+    // }
 
     skill.infoShowing = true;
   },
@@ -540,7 +598,7 @@ Playground = {
     hireMeForm.id = 'hire_me_form';
     hireMeForm.classList.add('flex', 'flex-col', 'm-8');
     var formInfo = document.createElement('p');
-    formInfo.innerText = 'First of all, I can\'t believe you are even here right now, you must really need some web development work done. Anyway, go ahead and fill out the form below with your contact info, and a brief overview of the project in mind, and I will get back to you asap!';
+    formInfo.innerText = 'First of all, thanks for stopping by! I\'m very excited to hear what projects you are working on. Anyway, go ahead and fill out the form below with your contact info, and a brief overview of the project in mind, and I will get back to you asap!';
     formInfo.classList.add('text-gruvbox-white', 'mb-4');
     var submitButton = document.createElement('button');
     submitButton.type = 'button';
@@ -612,6 +670,7 @@ Playground = {
     submitButton.onclick = function (event) {
       submitButton.disabled = true;
       event = event || window.event;
+      console.log('preventDEFAULT now');
       event.preventDefault();
 
       if (firstNameLabel.classList.contains('text-gruvbox-red')) {

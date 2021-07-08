@@ -1,7 +1,7 @@
 <x-layout>
 
     <span class="z-10">
-        <div id="homepage_tag" class="mt-1 text-6xl inline-block italic box-content">Hi there!</div>
+        <div id="homepage_tag" class="mt-1 text-6xl inline-block italic box-content border-4 border-transparent border-dashed">Hi there!</div>
     </span>
 
     <div id="homepage_greeting" class="flex flex-col self-center items-start flex-wrap text-2xl mt-4 w-4/5">
@@ -20,7 +20,8 @@
         </p>
 
         <p class="m-3">
-            in the Albuquerque, NM area.
+            in the Albuquerque, NM area. Click on either above to check out more about my work in either field. This site doesn't have your
+            typical navigation, and exploration is encrouaged!
         </p>
 
         <p class="m-3">
@@ -67,6 +68,8 @@
                 text-gruvbox-black-hidden
 
                 bg-gruvbox-red
+                bg-gruvbox-light-blue
+                bg-gruvbox-blue
                 bg-gruvbox-green
                 bg-gruvbox-purple
                 bg-gruvbox-black
@@ -81,7 +84,7 @@
         <div class="flex flex-col flex-1 h-full w-full">
 
             <div class="flex flex-col md:flex-row flex-grow">
-                <div id="playground" class="flex-grow bg-gruvbox-black relative touch-action-none"></div>
+                <div id="playground" class="flex-grow bg-gruvbox-black-hidden relative touch-action-none"></div>
             </div>
 
         </div>
