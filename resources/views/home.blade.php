@@ -31,11 +31,11 @@
 
     <div id="photographer_wrap" class="hidden mt-10">
 
-        <div id="photographer_archive" class="m-3 p-6 square-film" width="400px" height="400px">
+        {{-- <div id="photographer_archive" class="m-3 p-6 square-film" width="400px" height="400px">
             <p class="font-bold">A vast majority of my photography has been for my personal enjoyment. In my early ages I used this as an escape from my own reality, and a tool of observation into others' realities.
             I haven't shared many of these images over the past 10 years, and I hope to finally display, and perhaps examine some of them in my</p>
             <span class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:underline"><a href="{{route('public.photoshoot.create')}}">archive</a></span>.
-        </div>
+        </div> --}}
 
         <div id="photographer_book" class="m-3 p-6 square-film" width="400px" height="400px">
             <p class="font-bold">Over the past decade I have professionally photographed conferences, weddings, live performances, portraits, and products.
