@@ -48,8 +48,10 @@ Playground = {
 
         var doit;
         window.onresize = function(){
-            clearTimeout(doit);
-            doit = setTimeout(Playground.reset('resize'), 1000);
+            if(Playground.playground.offsetParent) {
+                clearTimeout(doit);
+                doit = setTimeout(Playground.reset('resize'), 1000);
+            }
         };
 
     },

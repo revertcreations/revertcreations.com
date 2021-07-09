@@ -1,10 +1,10 @@
 <x-layout>
 
     <span class="z-10">
-        <div id="homepage_tag" class="mt-1 text-6xl inline-block italic box-content border-4 border-transparent border-dashed">Hi there!</div>
+        <div id="homepage_tag" class="mt-1 text-4xl sm:text-6xl inline-block italic box-content border-4 border-transparent border-dashed">Hi there!</div>
     </span>
 
-    <div id="homepage_greeting" class="flex flex-col self-center items-start flex-wrap text-2xl mt-4 w-4/5">
+    <div id="homepage_greeting" class="flex flex-col self-center items-start flex-wrap text-2xl mt-4 w-100 sm:w-4/5">
 
 
         <p class="m-3">
