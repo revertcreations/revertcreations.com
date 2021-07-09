@@ -53,7 +53,7 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <input
+        {{-- <input
             type="hidden"
             class="
                 text-gruvbox-red
@@ -74,7 +74,7 @@
                 bg-gruvbox-black
                 bg-gruvbox-white
                 bg-hmt-green
-            ">
+            "> --}}
 
         {{-- <span class="relative" style="bottom: -1px;">
             <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl italic w-min">Web Development</i>

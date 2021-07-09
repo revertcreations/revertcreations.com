@@ -277,13 +277,14 @@ Playground = {
     },
 
     dragStart: (e) => {
+        console.log('this: ', this)
 
         let skill = Playground.getSkillBasedOnName(e.target.id)
 
         homepageTag.innerHTML = skill.name
 
         homepageTag.classList.remove('text-gruvbox-green')
-        homepageTag.classList.add('shadow-inner', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green')
+        homepageTag.classList.add('shadow-inner', 'text-gruvbox-gray', 'border-dashed', 'border-gruvbox-green')
 
         if(skill && skill.element) {
 
@@ -354,7 +355,7 @@ Playground = {
                 resetHomepageDeveloperTag()
             }
 
-            homepageTag.classList.remove('text-gruvbox-black-hidden', 'border-gruvbox-green', 'shadow-inner')
+            homepageTag.classList.remove('text-gruvbox-gray', 'border-gruvbox-green', 'shadow-inner')
         }
 
         rafId = null
@@ -368,11 +369,11 @@ Playground = {
 
     drag: (e) =>  {
 
+        e.preventDefault()
+
         let skill = Playground.getSkillBasedOnName(e.target.id)
 
         if (skill && skill.dragActive) {
-
-            e.preventDefault()
 
             if(!skill.elementChild)
                 Playground.buildInfoCard(skill)
@@ -397,8 +398,8 @@ Playground = {
 
         if(Playground.skillsOverlap(e.target.getBoundingClientRect(), homepageTag.getBoundingClientRect())){
             skill.atTarget = true
-            if(homepageTag.classList.contains('text-gruvbox-black-hidden')) {
-                homepageTag.classList.remove('text-gruvbox-black-hidden', 'shadow-inner', 'border-gruvbox-green')
+            if(homepageTag.classList.contains('text-gruvbox-gray')) {
+                homepageTag.classList.remove('text-gruvbox-gray', 'shadow-inner', 'border-gruvbox-green')
                 homepageTag.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience))
             }
         } else {
@@ -410,8 +411,8 @@ Playground = {
             if(homepageTag.classList.contains('text-'+Playground.getColorBasedOnExperience(skill.experience))) {
                 // console.log('do this once...')
                 homepageTag.classList.remove('text-'+Playground.getColorBasedOnExperience(skill.experience))
-                // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green')
-                homepageTag.classList.add('text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green', 'shadow-inner')
+                // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-gray', 'border-dashed', 'border-gruvbox-green')
+                homepageTag.classList.add('text-gruvbox-gray', 'border-dashed', 'border-gruvbox-green', 'shadow-inner')
             }
         }
 
@@ -449,7 +450,7 @@ Playground = {
 
      removeHint: (skill) => {
 
-        homepageTag.classList.remove('text-gruvbox-black-hidden', 'bg-gruvbox-black')
+        homepageTag.classList.remove('text-gruvbox-gray', 'bg-gruvbox-black')
         homepageTag.classList.add('text-gruvbox-green', 'bg-gruvbox-black')
 
         skill.heldCounter = 0
@@ -479,7 +480,7 @@ Playground = {
     },
 
     setTranslate: (xPos, yPos, el) => {
-        el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+        el.style.transform = "translate(" + xPos + "px, " + yPos + "px)";
     },
 
     handleShakeEvents: (e, skill) => {
@@ -566,7 +567,7 @@ Playground = {
             }
 
             Playground.displayInfoCard(skill)
-            Playground.removeHint(skill)
+            // Playground.removeHint(skill)
         }
 
     },
