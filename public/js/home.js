@@ -22,6 +22,7 @@ function resetDeveloperWrap() {
 }
 
 window.resetHomepageDeveloperTag = function () {
+  homepageTag.classList.remove('text-gruvbox-red', 'text-gruvbox-white', 'text-gruvbox-purple');
   homepageTag.innerHTML = 'Developer <span class="text-gruvbox-red cursor-pointer hover:text-red-400">&times;</span>';
   homepageTag.lastChild.addEventListener('click', function () {
     resetDeveloperWrap();

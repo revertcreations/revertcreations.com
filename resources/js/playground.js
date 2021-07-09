@@ -63,10 +63,13 @@ Playground = {
         skill.element.appendChild(skill.nameSpan)
         skill.element.id = skill.name
         skill.element.style.position = "absolute"
+        // skill.element.style.textShadow = '0 0 20px #282828'
+        skill.element.style.color = Playground.getColorBasedOnExperience(skill.experience, 'hex')
         skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience)
-        skill.element.classList.add('hover:animate-float-text', 'text-bold', 'text-center', 'select-none', 'text-'+Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer')
+        skill.element.style.setProperty('--experience-color', Playground.getColorBasedOnExperience(skill.experience, 'hex'))
+        skill.element.classList.add('hover:animate-float-text', 'text-bold', 'text-center', 'select-none', 'cursor-pointer')
 
-        Playground.addRandomFloatEffect(skill)
+        // Playground.addRandomFloatEffect(skill)
         // skill.element.classList.add('border-2', 'border-'+Playground.getColorBasedOnExperience(skill.experience))
 
     },
@@ -74,7 +77,10 @@ Playground = {
     disableSkills: () => {
         Playground.skills.forEach((skill) => {
             skill.element.classList.remove('text-'+Playground.getColorBasedOnExperience(skill.experience), 'hover:animate-float-text', 'cursor-pointer')
-            skill.element.classList.add('text-gruvbox-black-hidden')
+            skill.element.classList.add('text-gruvbox-black')
+
+            if(skill.name != Playground.skillActive.name)
+                skill.element.classList.add('animate-blur-text')
 
             skill.element.removeEventListener('mousedown', Playground.dragStart, {passive: true})
             skill.element.removeEventListener('touchstart', Playground.dragStart, {passive: true})
@@ -83,8 +89,12 @@ Playground = {
 
     enableSkills: () => {
         Playground.skills.forEach((skill) => {
-            skill.element.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience), 'hover:animate-float-text', 'cursor-pointer')
-            skill.element.classList.remove('text-gruvbox-black-hidden')
+            skill.element.classList.remove('text-gruvbox-black', 'animate-blur-text')
+            skill.element.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience), 'hover:animate-float-text', 'cursor-pointer', 'animate-sharpen-text')
+
+            setTimeout(() =>{
+                skill.element.classList.remove('animate-sharpen-text')
+            }, 900)
 
             skill.element.addEventListener('mousedown', Playground.dragStart, {passive: true})
             skill.element.addEventListener('touchstart', Playground.dragStart, {passive: true})
@@ -190,6 +200,7 @@ Playground = {
         if(hire == 'hire') {
             Playground.buildForm()
         } else {
+            resetHomepageDeveloperTag()
             Playground.init(Playground.skills)
         }
     },
@@ -278,8 +289,8 @@ Playground = {
 
         homepageTag.classList.remove('text-gruvbox-green')
         // homepageTag.classList.add('text-gruvbox-black-hidden', 'bg-gruvbox-black')
-        // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-black-hidden')
-        homepageTag.classList.add('shadow-inner', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-black-hidden')
+        // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green')
+        homepageTag.classList.add('shadow-inner', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green')
 
         if(skill && skill.element) {
 
@@ -344,7 +355,8 @@ Playground = {
 
                 if(skill.name == 'hire me') {
                     Playground.reset('hire')
-
+                } else if(skill.name == 'reset();'){
+                    Playground.reset()
                 } else {
                     Playground.displayInfoCard(skill)
                 }
@@ -355,7 +367,7 @@ Playground = {
                 resetHomepageDeveloperTag()
             }
 
-            homepageTag.classList.remove('text-gruvbox-black-hidden', 'border-gruvbox-black-hidden', 'shadow-inner')
+            homepageTag.classList.remove('text-gruvbox-black-hidden', 'border-gruvbox-green', 'shadow-inner')
         }
 
         rafId = null
@@ -401,8 +413,8 @@ Playground = {
             console.log('drop it like its hot')
             skill.atTarget = true
             if(homepageTag.classList.contains('text-gruvbox-black-hidden')) {
-                homepageTag.classList.remove('text-gruvbox-black-hidden', 'shadow-inner', 'border-gruvbox-black-hidden')
-                homepageTag.classList.add('text-gruvbox-green')
+                homepageTag.classList.remove('text-gruvbox-black-hidden', 'shadow-inner', 'border-gruvbox-green')
+                homepageTag.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience))
             }
         } else {
 
@@ -410,11 +422,11 @@ Playground = {
             skill.atTarget = false
 
             // This will run after a dragged skill entered the drop area, then left
-            if(homepageTag.classList.contains('text-gruvbox-green')) {
+            if(homepageTag.classList.contains('text-'+Playground.getColorBasedOnExperience(skill.experience))) {
                 console.log('do this once...')
-                homepageTag.classList.remove('text-gruvbox-green')
-                // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-black-hidden')
-                homepageTag.classList.add('text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-black-hidden', 'shadow-inner')
+                homepageTag.classList.remove('text-'+Playground.getColorBasedOnExperience(skill.experience))
+                // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green')
+                homepageTag.classList.add('text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green', 'shadow-inner')
             }
         }
 
@@ -683,7 +695,7 @@ Playground = {
             skill.element.style.setProperty('--experience-percent-'+index, (skill.experience > index ? index+'%' : skill.experience+'%'));
 
         // console.log("Playground.getColorBasedOnExperience(experience, 'hex'): ", Playground.getColorBasedOnExperience(experience, 'hex'))
-        skill.element.style.setProperty('--experience-color', Playground.getColorBasedOnExperience(skill.experience, 'hex'))
+        // skill.element.style.setProperty('--experience-color', Playground.getColorBasedOnExperience(skill.experience, 'hex'))
         skill.nameSpan.classList.add('text-gruvbox-black')
         skill.element.classList.add('animate-float-bg', 'lg:w-5/12', 'md:w-7/12', 'w-11/12')
         skill.element.appendChild(skill.elementChild)
@@ -724,7 +736,9 @@ Playground = {
 
         window.onresize = false
 
-        let form = {}
+        let closeForm = document.createElement('div')
+        closeForm.classList.add('cursor-pointer', 'text-6xl', 'text-right')
+        closeForm.innerHTML = "<span onclick='Playground.reset()' class='text-gruvbox-red hover:text-red-400'>&times;</span>"
 
         let formWrap = document.createElement('div')
         formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12')
@@ -796,8 +810,9 @@ Playground = {
         Playground.playground.classList.remove('touch-action-none')
 
         Playground.playground.appendChild(formWrap)
+        formWrap.appendChild(closeForm)
         formWrap.appendChild(hireMeForm)
-        hireMeForm.appendChild(formTitle)
+        // hireMeForm.appendChild(formTitle)
         hireMeForm.appendChild(formInfo)
         hireMeForm.appendChild(organizationLabel)
         hireMeForm.appendChild(organizationInput)
@@ -887,13 +902,18 @@ Playground = {
                     if (data.errors['email'] && data.errors['email'][0] == 'The email has already been taken.') {
                         formInfo.classList.remove('text-gruvbox-green')
                         formInfo.classList.add('text-gruvbox-orange')
-                        formInfo.innerText = 'Oh, '+(firstNameInput.value.length > 0 ? firstNameInput.value+',' : ',')+' it looks like you have already contacted me. I will get to reviewing it right away!'
+                        formInfo.innerHTML = '<span class="text-gruvbox-yellow">Oh, '+(firstNameInput.value.length > 0 ? firstNameInput.value+',' : ',')+' it looks like you have already contacted me. I will get to reviewing it right away!</span>'
                     }
                     submitButton.removeAttribute('disabled')
                 }
                 if(data.status == 'ok') {
                     formWrap.removeChild(hireMeForm)
+
+                    let formInfo = document.createElement('p')
                     formInfo.innerText = data.message
+                    formInfo.classList.add('text-gruvbox-white', 'mb-4')
+
+                    formWrap.appendChild(formInfo)
                 }
             })
             .catch((errors) => {

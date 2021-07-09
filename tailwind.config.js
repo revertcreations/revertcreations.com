@@ -32,6 +32,8 @@ module.exports = {
                 'hmt-green': '#b9cc33'
             },
             animation: {
+                'sharpen-text': 'sharpen-text 0.8s linear 1 forwards',
+                'blur-text': 'blur-text 1s linear 0s 1 forwards',
                 'float-text': 'float-text .2s linear .1s forwards',
                 'float-bg': 'float-bg 1s linear .1s forwards',
                 'experience': 'experience 2s linear .1s forwards',
@@ -42,10 +44,19 @@ module.exports = {
                     '0%': { 'transform': 'translate3d(var(--translate-origin), 0px, 0)' },
                     '100%': { 'transform': 'translate3d(var(--translate-x), 0px, 0)' }
                 },
+                'blur-text': {
+                    '0%': { 'text-shadow': '0 0 0px #282828;', 'color': 'var(--experience-color)'},
+                    '100%': { 'text-shadow': '0 0 20px #282828;', 'color': 'transparent'}
+                },
+                'sharpen-text': {
+                    '0%': { 'text-shadow': '0 0 20px #282828;', 'color': 'transparent'},
+                    '99%': { 'text-shadow': '0 0 0px #282828', 'color': 'var(--experience-color)'},
+                    '100%': { 'text-shadow': 'unset', 'color': 'var(--experience-color)'}
+                },
                 'float-text': {
-                    '0%': { 'text-shadow': '1px 1px 0px black' },
-                    '50%': { 'text-shadow': '4px 4px 5px black' },
-                    '100%':   { 'text-shadow': '5px 5px 9px black' },
+                    '0%': { 'text-shadow': '1px 1px 0px black', 'color': 'var(--experience-color)' },
+                    '50%': { 'text-shadow': '4px 4px 5px black', 'color': 'var(--experience-color)' },
+                    '100%':   { 'text-shadow': '5px 5px 9px black', 'color': 'var(--experience-color)' },
                 },
                 'float-bg': {
                     '0%': { 'background-image': 'linear-gradient(to right, var(--experience-color) 0%, var(--experience-color) var(--experience-percent-0), #fbf1c7 var(--experience-percent-0))', 'box-shadow': '1px 1px 0px 1px black' },
