@@ -20,6 +20,7 @@ window.resetHomepageDeveloperTag = () => {
     homepageTag.classList.remove('text-gruvbox-red', 'text-gruvbox-white', 'text-gruvbox-purple')
     homepageTag.innerHTML = 'Developer <span class="text-gruvbox-red cursor-pointer hover:text-red-400">&times;</span>'
     homepageTag.lastChild.addEventListener('click', () => {
+        Playground.initialized = false;
         resetDeveloperWrap()
     })
 }
@@ -33,8 +34,6 @@ function resetHomePage() {
     homeTitle.style.backgroundColor = "unset"
 
     homepageTag.classList.remove('bg-black', 'text-white', 'text-gruvbox-green', 'bg-gruvbox-black')
-    // homepageTag.style.color = "black"
-    // homepageTag.style.backgroundColor = "white"
 
     homepageGreeting.style.display = 'block'
 
@@ -62,14 +61,10 @@ if(photographer) {
 
             photographerWrap.style.display = 'flex'
 
-            // document.body.style.color = 'white'
             homeTitle.classList.add('text-white')
             homeTitle.style.backgroundColor = 'black'
-            // el.target.style.color = 'black'
-            // el.target.style.backgroundColor = 'white'
 
             let random_image = ~~(Math.random() * (portfolio.length))
-            console.log('random_image', random_image)
 
             document.body.style.backgroundSize = "cover"
             document.body.style.backgroundImage = "url('"+portfolio[random_image].secure_path+"')"

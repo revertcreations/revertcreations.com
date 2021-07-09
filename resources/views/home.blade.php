@@ -13,15 +13,14 @@
 
         <p class="m-3">
             {{-- <small class="absolute left-4">(click me) -> </small> --}}
-            <span><i id="web_dev" class="mt-1 text-6xl bg-gruvbox-black text-gruvbox-green cursor-pointer hover:underline">developer</i></span>
+            <span><i id="web_dev" class="mt-1 mb-1 text-6xl bg-gruvbox-black text-gruvbox-green cursor-pointer hover:underline">developer</i></span>
             <span class="large">&amp;</span>
-            <span><i id="photographer" class="mt-1 text-6xl bg-black text-white cursor-pointer hover:underline">photographer</i></span>
+            <span><i id="photographer" class="mt-1 mb-1 text-6xl bg-black text-white cursor-pointer hover:underline">photographer</i></span>
 
         </p>
 
         <p class="m-3">
-            in the Albuquerque, NM area. Click on either above to check out more about my work in either field. This site doesn't have your
-            typical navigation, and exploration is encrouaged!
+            in the Albuquerque, NM area.
         </p>
 
         <p class="m-3">

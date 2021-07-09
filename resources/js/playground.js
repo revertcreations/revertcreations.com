@@ -16,9 +16,8 @@ Playground = {
 
         Playground.skills = data
 
-        while(Playground.playground.firstChild) {
+        while(Playground.playground.firstChild)
             Playground.playground.removeChild(Playground.playground.firstChild)
-        }
 
         for (skill in Playground.skills) {
 
@@ -50,7 +49,7 @@ Playground = {
         var doit;
         window.onresize = function(){
             clearTimeout(doit);
-            doit = setTimeout(Playground.reset('resize'), 500);
+            doit = setTimeout(Playground.reset('resize'), 1000);
         };
 
     },
@@ -63,14 +62,10 @@ Playground = {
         skill.element.appendChild(skill.nameSpan)
         skill.element.id = skill.name
         skill.element.style.position = "absolute"
-        // skill.element.style.textShadow = '0 0 20px #282828'
         skill.element.style.color = Playground.getColorBasedOnExperience(skill.experience, 'hex')
         skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience)
         skill.element.style.setProperty('--experience-color', Playground.getColorBasedOnExperience(skill.experience, 'hex'))
         skill.element.classList.add('hover:animate-float-text', 'text-bold', 'text-center', 'select-none', 'cursor-pointer')
-
-        // Playground.addRandomFloatEffect(skill)
-        // skill.element.classList.add('border-2', 'border-'+Playground.getColorBasedOnExperience(skill.experience))
 
     },
 
@@ -82,22 +77,24 @@ Playground = {
             if(skill.name != Playground.skillActive.name)
                 skill.element.classList.add('animate-blur-text')
 
-            skill.element.removeEventListener('mousedown', Playground.dragStart, {passive: true})
-            skill.element.removeEventListener('touchstart', Playground.dragStart, {passive: true})
+            skill.element.removeEventListener('mousedown', Playground.dragStart, false)
+            skill.element.removeEventListener('touchstart', Playground.dragStart, false)
         })
     },
 
     enableSkills: () => {
         Playground.skills.forEach((skill) => {
-            skill.element.classList.remove('text-gruvbox-black', 'animate-blur-text')
-            skill.element.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience), 'hover:animate-float-text', 'cursor-pointer', 'animate-sharpen-text')
 
             setTimeout(() =>{
                 skill.element.classList.remove('animate-sharpen-text')
-            }, 900)
+                skill.element.classList.add('hover:animate-float-text')
+            }, 800)
 
-            skill.element.addEventListener('mousedown', Playground.dragStart, {passive: true})
-            skill.element.addEventListener('touchstart', Playground.dragStart, {passive: true})
+            skill.element.classList.remove('text-gruvbox-black', 'animate-blur-text')
+            skill.element.classList.add('text-'+Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer', 'animate-sharpen-text')
+
+            skill.element.addEventListener('mousedown', Playground.dragStart, false)
+            skill.element.addEventListener('touchstart', Playground.dragStart, false)
         })
     },
 
@@ -117,14 +114,11 @@ Playground = {
 
         while(!skill.isPositioned) {
 
-            if(Playground.placedSkillAttempts > 100){
+            if(Playground.placedSkillAttempts > 100) {
                 Playground.fontScale = Playground.fontScale+2
                 Playground.needsReset = true
                 return false;
             }
-
-            // console.log('playground.offsetWidth: ', Playground.playground.offsetWidth)
-            // console.log('playground.offsetHeight: ', Playground.playground.offsetHeight)
 
             let width = skill.element.offsetWidth
             let height = skill.element.offsetHeight
@@ -199,7 +193,7 @@ Playground = {
 
         if(hire == 'hire') {
             Playground.buildForm()
-        } else {
+        } else if(Playground.initialized) {
             resetHomepageDeveloperTag()
             Playground.init(Playground.skills)
         }
@@ -275,8 +269,8 @@ Playground = {
 
     addClickListener: (skill) => {
 
-        skill.element.addEventListener('mousedown', Playground.dragStart, {passive: true})
-        skill.element.addEventListener('touchstart', Playground.dragStart, {passive: true})
+        skill.element.addEventListener('mousedown', Playground.dragStart, false)
+        skill.element.addEventListener('touchstart', Playground.dragStart, false)
 
     },
 
@@ -284,25 +278,20 @@ Playground = {
 
         let skill = Playground.getSkillBasedOnName(e.target.id)
 
-        // this could have a slick animation here...
         homepageTag.innerHTML = skill.name
 
         homepageTag.classList.remove('text-gruvbox-green')
-        // homepageTag.classList.add('text-gruvbox-black-hidden', 'bg-gruvbox-black')
-        // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green')
         homepageTag.classList.add('shadow-inner', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green')
 
         if(skill && skill.element) {
 
             if(e.type == 'touchstart') {
-                skill.element.addEventListener('touchend', Playground.dragEnd, {passive: true})
-                skill.element.addEventListener('touchmove', Playground.drag, {passive: true})
-            } else {
-                skill.element.addEventListener('mouseup', Playground.dragEnd, {passive: true})
-                skill.element.addEventListener('mousemove', Playground.drag, {passive: true})
+                skill.element.addEventListener('touchend', Playground.dragEnd, false)
+                skill.element.addEventListener('touchmove', Playground.drag, false)
+            } else if(e.type == 'mousedown') {
+                skill.element.addEventListener('mouseup', Playground.dragEnd, false)
+                skill.element.addEventListener('mousemove', Playground.drag, false)
             }
-
-            // console.log('how often do we start?')
 
             skill.element.style.zIndex = '11'
             skill.element.classList.remove('cursor-pointer')
@@ -340,15 +329,12 @@ Playground = {
             skill.element.style.zIndex = '1'
             skill.dragActive = false
             skill.infoShowing = false
-            // skill.initialTouch = false // used for shake events...
 
             if(skill.name == 'hire me')
                 Playground.removeHireHint(skill)
 
             Playground.removeHint(skill)
             Playground.resetSkillPosition(skill)
-
-            // console.log('before check DRAG END', skill.atTarget)
 
             if(skill.atTarget) {
                 homepageTag.classList.add('text-gruvbox-green')
@@ -363,7 +349,6 @@ Playground = {
 
                 skill.atTarget = false
             } else {
-                // homepageTag.innerHTML = Playground.homepageTagHtml
                 resetHomepageDeveloperTag()
             }
 
@@ -384,6 +369,8 @@ Playground = {
         let skill = Playground.getSkillBasedOnName(e.target.id)
 
         if (skill && skill.dragActive) {
+
+            e.preventDefault()
 
             if(!skill.elementChild)
                 Playground.buildInfoCard(skill)
@@ -406,11 +393,7 @@ Playground = {
 
     draggingEvents: (e, skill) => {
 
-        // console.log('e.position', e.target.getBoundingClientRect())
-        // console.log('homepageTag position', homepageTag.getBoundingClientRect())
-
         if(Playground.skillsOverlap(e.target.getBoundingClientRect(), homepageTag.getBoundingClientRect())){
-            // console.log('drop it like its hot')
             skill.atTarget = true
             if(homepageTag.classList.contains('text-gruvbox-black-hidden')) {
                 homepageTag.classList.remove('text-gruvbox-black-hidden', 'shadow-inner', 'border-gruvbox-green')
@@ -430,13 +413,6 @@ Playground = {
             }
         }
 
-        // if(skill.droppedInArea) {
-
-        //     e.stopPropagation()
-        //     Playground.dragEnd(e)
-        //     // Playground.reset('hire')
-        //     return false;
-        // }
     },
 
     addHint: (skill) => {
@@ -450,7 +426,6 @@ Playground = {
             'max-w-md',
             'text-center'
         );
-        // skill.elementHint.innerHTML = '&llarr; drag and drop &rrarr;'
         skill.elementHint.innerHTML = 'drag and drop'
         skill.element.appendChild(skill.elementHint)
     },
@@ -588,11 +563,6 @@ Playground = {
                 return false
             }
 
-            // console.log('e.movementX: ', e.movementX)
-            // console.log('e.movementY: ', e.movementY)
-            // console.log('Playground.speedLimit: ', Playground.speedLimit)
-            // console.log('-Playground.speedLimit: ', -Playground.speedLimit)
-
             Playground.displayInfoCard(skill)
             Playground.removeHint(skill)
         }
@@ -672,8 +642,8 @@ Playground = {
 
     removeAllClickListeners: () => {
         Playground.skills.forEach((skill) => {
-            skill.element.removeEventListener('mousedown', Playground.dragStart, {passive: true})
-            skill.element.removeEventListener('touchstart', Playground.dragStart, {passive: true})
+            skill.element.removeEventListener('mousedown', Playground.dragStart, false)
+            skill.element.removeEventListener('touchstart', Playground.dragStart, false)
         })
     },
 
@@ -694,8 +664,6 @@ Playground = {
         for (let index = 0; index < 101; index++)
             skill.element.style.setProperty('--experience-percent-'+index, (skill.experience > index ? index+'%' : skill.experience+'%'));
 
-        // console.log("Playground.getColorBasedOnExperience(experience, 'hex'): ", Playground.getColorBasedOnExperience(experience, 'hex'))
-        // skill.element.style.setProperty('--experience-color', Playground.getColorBasedOnExperience(skill.experience, 'hex'))
         skill.nameSpan.classList.add('text-gruvbox-black')
         skill.element.classList.add('animate-float-bg', 'lg:w-5/12', 'md:w-7/12', 'w-11/12')
         skill.element.appendChild(skill.elementChild)
@@ -710,23 +678,6 @@ Playground = {
         }
 
         skill.elementChild.appendChild(skill.elementChildExcerpt)
-
-        // if(skill.name == 'hire me') {
-
-        //     if(!skill.elementHireHint) {
-        //         skill.heldCounter = 0;
-        //         skill.heldHireInterval = setInterval(() => {
-        //             skill.heldCounter += 1;
-
-        //             if (skill.heldCounter === 1 && skill.infoShowing) {
-        //                 Playground.addHireHint(skill)
-        //                 clearInterval(skill.heldHireInterval);
-        //             } else if(skill.heldCounter > 1) {
-        //                 Playground.removeHireHint(skill)
-        //             }
-        //         }, 1000);
-        //     }
-        // }
 
         skill.infoShowing = true
 
@@ -748,7 +699,7 @@ Playground = {
         hireMeForm.classList.add('flex', 'flex-col', 'm-8')
 
         let formInfo = document.createElement('p')
-        formInfo.innerText = 'First of all, thanks for stopping by! I\'m very excited to hear what projects you are working on. Anyway, go ahead and fill out the form below with your contact info, and a brief overview of the project in mind, and I will get back to you asap!'
+        formInfo.innerText = 'First of all, I\'m very excited to hear that you are interested in working with me! I love hearing new project ideas, so go ahead and fill out the form below with your contact info, and a brief overview of the project in mind, and I will get back to you asap!'
         formInfo.classList.add('text-gruvbox-white', 'mb-4')
 
         let submitButton = document.createElement('button')
@@ -812,7 +763,7 @@ Playground = {
         Playground.playground.appendChild(formWrap)
         formWrap.appendChild(closeForm)
         formWrap.appendChild(hireMeForm)
-        // hireMeForm.appendChild(formTitle)
+
         hireMeForm.appendChild(formInfo)
         hireMeForm.appendChild(organizationLabel)
         hireMeForm.appendChild(organizationInput)
@@ -831,7 +782,7 @@ Playground = {
         submitButton.onclick =  function(event) {
             submitButton.disabled = true
             event = event || window.event
-            // console.log('preventDEFAULT now')
+
             event.preventDefault();
 
             if(firstNameLabel.classList.contains('text-gruvbox-red')) {
@@ -917,7 +868,11 @@ Playground = {
                 }
             })
             .catch((errors) => {
-                // console.log(errors)
+                let formInfo = document.createElement('p')
+                formInfo.innerText = errors.message
+                formInfo.classList.add('text-gruvbox-red', 'mb-4')
+
+                formWrap.appendChild(formInfo)
             })
         }
 

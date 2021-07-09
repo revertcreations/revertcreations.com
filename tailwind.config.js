@@ -32,8 +32,8 @@ module.exports = {
                 'hmt-green': '#b9cc33'
             },
             animation: {
-                'sharpen-text': 'sharpen-text 0.8s linear 1 forwards',
-                'blur-text': 'blur-text 1s linear 0s 1 forwards',
+                'sharpen-text': 'sharpen-text 0.2s linear 1 forwards',
+                'blur-text': 'blur-text 0.4s linear 0s 1 forwards',
                 'float-text': 'float-text .2s linear .1s forwards',
                 'float-bg': 'float-bg 1s linear .1s forwards',
                 'experience': 'experience 2s linear .1s forwards',
@@ -45,12 +45,12 @@ module.exports = {
                     '100%': { 'transform': 'translate3d(var(--translate-x), 0px, 0)' }
                 },
                 'blur-text': {
-                    '0%': { 'text-shadow': '0 0 0px #282828;', 'color': 'var(--experience-color)'},
-                    '100%': { 'text-shadow': '0 0 20px #282828;', 'color': 'transparent'}
+                    '0%': { 'text-shadow': '0 0 0px var(--experience-color)'},
+                    '100%': { 'text-shadow': '0 0 20px var(--experience-color)', 'color': 'transparent'}
                 },
                 'sharpen-text': {
-                    '0%': { 'text-shadow': '0 0 20px #282828;', 'color': 'transparent'},
-                    '99%': { 'text-shadow': '0 0 0px #282828', 'color': 'var(--experience-color)'},
+                    '0%': { 'text-shadow': '0 0 20px var(--experience-color)', 'color': 'transparent'},
+                    '99%': { 'text-shadow': '0 0 0px var(--experience-color)', 'color': 'var(--experience-color)'},
                     '100%': { 'text-shadow': 'unset', 'color': 'var(--experience-color)'}
                 },
                 'float-text': {
