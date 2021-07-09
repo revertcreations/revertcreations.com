@@ -576,7 +576,7 @@ Playground = {
         skill.elementChild =  document.createElement('div')
 
         skill.elementChild.style.fontSize = '16px'
-        skill.elementChild.classList.add('flex','flex-col','bg-gruvbox-black','p-2');
+        skill.elementChild.classList.add('flex','flex-col','bg-gruvbox-black','p-2', 'h-80', 'md:h-auto', 'overflow-y-auto', 'overflow-x-hidden');
 
         Playground.buildInfoCardCloseElement(skill)
         Playground.buildExperienceDiv(skill)
