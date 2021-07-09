@@ -302,7 +302,7 @@ Playground = {
                 skill.element.addEventListener('mousemove', Playground.drag, {passive: true})
             }
 
-            console.log('how often do we start?')
+            // console.log('how often do we start?')
 
             skill.element.style.zIndex = '11'
             skill.element.classList.remove('cursor-pointer')
@@ -348,7 +348,7 @@ Playground = {
             Playground.removeHint(skill)
             Playground.resetSkillPosition(skill)
 
-            console.log('before check DRAG END', skill.atTarget)
+            // console.log('before check DRAG END', skill.atTarget)
 
             if(skill.atTarget) {
                 homepageTag.classList.add('text-gruvbox-green')
@@ -410,7 +410,7 @@ Playground = {
         // console.log('homepageTag position', homepageTag.getBoundingClientRect())
 
         if(Playground.skillsOverlap(e.target.getBoundingClientRect(), homepageTag.getBoundingClientRect())){
-            console.log('drop it like its hot')
+            // console.log('drop it like its hot')
             skill.atTarget = true
             if(homepageTag.classList.contains('text-gruvbox-black-hidden')) {
                 homepageTag.classList.remove('text-gruvbox-black-hidden', 'shadow-inner', 'border-gruvbox-green')
@@ -423,7 +423,7 @@ Playground = {
 
             // This will run after a dragged skill entered the drop area, then left
             if(homepageTag.classList.contains('text-'+Playground.getColorBasedOnExperience(skill.experience))) {
-                console.log('do this once...')
+                // console.log('do this once...')
                 homepageTag.classList.remove('text-'+Playground.getColorBasedOnExperience(skill.experience))
                 // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green')
                 homepageTag.classList.add('text-gruvbox-black-hidden', 'border-dashed', 'border-gruvbox-green', 'shadow-inner')
@@ -831,7 +831,7 @@ Playground = {
         submitButton.onclick =  function(event) {
             submitButton.disabled = true
             event = event || window.event
-            console.log('preventDEFAULT now')
+            // console.log('preventDEFAULT now')
             event.preventDefault();
 
             if(firstNameLabel.classList.contains('text-gruvbox-red')) {
@@ -855,9 +855,9 @@ Playground = {
             }
 
             let hireMeForm = document.getElementById('hire_me_form')
-            console.log(hireMeForm[0])
+            // console.log(hireMeForm[0])
             let data = new FormData(hireMeForm)
-            console.log(data)
+            // console.log(data)
 
             let csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             let url = '/web-development';
