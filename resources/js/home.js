@@ -1,11 +1,10 @@
-const homeTitle = document.getElementById('home_title')
-const photographer = document.getElementById('photographer')
-const photographerWrap = document.getElementById('photographer_wrap')
-const videographerWrap = document.getElementById('videographer_wrap')
-
-const homepageTag = document.getElementById('homepage_tag')
-
 (function() {
+  const homeTitle = document.getElementById('home_title')
+  const photographer = document.getElementById('photographer')
+  const photographerWrap = document.getElementById('photographer_wrap')
+  const videographerWrap = document.getElementById('videographer_wrap')
+
+  const homepageTag = document.getElementById('homepage_tag')
   setRandomPhoto();
 })();
 
