@@ -1,5 +1,5 @@
 const homepageTag = document.getElementById('homepage_tag')
-Playground = {
+var Playground = {
     initialized: false,
     playground: document.getElementById('playground'),
     skills: [],

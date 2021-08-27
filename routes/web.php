@@ -36,22 +36,22 @@ Route::domain('admin.'.$domain)->group(function () {
 Route::domain($domain)->group(function () {
 
     Route::get('/', function () {
-        $skills = Skill::all();
+        // $skills = Skill::all();
         $portfolio = PhotographyPortfolioImage::all();
-        return view('home', compact('skills', 'portfolio'));
+        return view('home', compact('portfolio'));
     })->name('home');
 
-    Route::get('/web-development', function () {
-        $skills = Skill::all();
-        return view('web-development', compact('skills'));
-    })->name('web-development');
+    // Route::get('/web-development', function () {
+    //     $skills = Skill::all();
+    //     return view('web-development', compact('skills'));
+    // })->name('web-development');
 
-    Route::post('/web-development', [ClientController::class, 'hire'])->name('hire-me');
+    // Route::post('/web-development', [ClientController::class, 'hire'])->name('hire-me');
 
 
-    Route::get('/about', function () {
-        return view('about');
-    })->name('about');
+    // Route::get('/about', function () {
+    //     return view('about');
+    // })->name('about');
 
 
     Route::get('/photography', function(){
