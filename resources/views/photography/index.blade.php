@@ -42,72 +42,57 @@
         <h2 class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:text-black hover:bg-white"><a href="{{ route('public.photoshoot.create') }}">book me</a></h2>
     </div>
 
+    <script type="text/javascript">
+        const homeTitle = document.getElementById('home_title')
 
-<script>
+        function openImage(e) {
 
+            document.getElementById('thumbnail_wrap').style.display = 'none'
 
-    function openImage(e)
-    {
+            let body = document.body
+            body.style.backgroundImage = 'url('+e.target.dataset.src+')'
+            body.style.backgroundSize = 'contain'
+            body.style.backgroundRepeat = 'no-repeat'
+            body.style.backgroundPosition = 'center center'
+            body.style.zIndex = 2
 
-        document.getElementById('thumbnail_wrap').style.display = 'none'
+            document.getElementById('close_button').style.display = 'block'
 
-        let body = document.body
-        body.style.backgroundImage = 'url('+e.target.dataset.src+')'
-        body.style.backgroundSize = 'contain'
-        body.style.backgroundRepeat = 'no-repeat'
-        body.style.backgroundPosition = 'center center'
-        body.style.zIndex = 2
+            slideOut(document.getElementById('page_title'), 'left')
+            slideOut(document.getElementById('home_title'), 'right')
 
-        document.getElementById('close_button').style.display = 'block'
+        }
 
-        slideOut(document.getElementById('main_header'), 'right')
-        slideOut(document.getElementById('page_title'), 'left')
-        slideOut(document.getElementById('home_title'), 'right')
+        function closeImage() {
 
-        // current_large_photo.classList.add('none')
-        // current_large_photo.classList.remove('active')
+            document.getElementById('close_button').style.display = 'none'
+            document.body.style.backgroundImage = 'unset'
 
-    }
+            let thumbnail_wrap = document.getElementById('thumbnail_wrap')
+            thumbnail_wrap.style.display = 'flex'
 
-    function closeImage() {
+            slideBack(document.getElementById('page_title'), 'left')
+            slideBack(document.getElementById('home_title'), 'right')
+        }
 
-        document.getElementById('close_button').style.display = 'none'
-        document.body.style.backgroundImage = 'unset'
+        function slideOut(el, direction) {
+            let xPos = window.innerWidth + el.offsetWidth + "px"
 
-        let thumbnail_wrap = document.getElementById('thumbnail_wrap')
-        thumbnail_wrap.style.display = 'flex'
+            if(el.classList.contains('animate-translate'))
+                el.classList.remove('animate-translate')
 
-        slideBack(document.getElementById('main_header'), 'right')
-        slideBack(document.getElementById('page_title'), 'left')
-        slideBack(document.getElementById('home_title'), 'right')
-    }
+            el.style.setProperty('--translate-x', (direction == 'left' ? '-' : '')+xPos)
+            el.style.setProperty('--translate-origin', '0px')
+            el.classList.add('animate-translate')
+        }
 
-    function slideOut(el, direction) {
+        function slideBack(el, direction) {
 
-        let xPos = window.innerWidth + el.offsetWidth + "px"
+            if(el.classList.contains('animate-translate'))
+                el.classList.remove('animate-translate')
 
-        if(el.classList.contains('animate-translate'))
-            el.classList.remove('animate-translate')
+        }
 
-        el.style.setProperty('--translate-x', (direction == 'left' ? '-' : '')+xPos)
-        el.style.setProperty('--translate-origin', '0px')
-        el.classList.add('animate-translate')
-    }
-
-    function slideBack(el, direction) {
-
-        // let xPos = window.innerWidth + el.offsetWidth + "px"
-
-        if(el.classList.contains('animate-translate'))
-            el.classList.remove('animate-translate')
-
-        // el.style.setProperty('--translate-x', '0px')
-        // el.style.setProperty('--translate-origin', (direction == 'left' ? '-' : '')+xPos)
-        // el.classList.remove('animate-translate')
-        // el.classList.add('animate-translate')
-
-    }
-
-</script>
+    </script>
 
 </x-layout>

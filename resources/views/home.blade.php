@@ -14,7 +14,7 @@
         </div> --}}
 
         <div id="photographer_book" class="m-3 p-6 square-film" width="400px" height="400px">
-            <p class="font-bold">Hey there! My name is Trever Hillis, and over the past decade I have professionally photographed conferences, weddings, live performances, events, portraits, and products.
+            <p class="font-bold">Hey there! My name is Trever Hillis, and over the past decade I have professionally photographed conferences, sports, weddings, live performances, events, portraits, and products.
             If you are in need of a photographer, and like what you see here, feel free to</p>
             <span class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:underline"><a href="{{route('public.photoshoot.create')}}">book me</a></span>.
         </div>
