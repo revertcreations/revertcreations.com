@@ -23,9 +23,14 @@
             <span class="cursor-pointer self-end text-4xl mt-3 bg-black text-white hover:underline"><a href="{{route('photography')}}">portfolio</a></span>.
         </div>
 
+
     </div>
 
-    <div id="videographer_wrap" class="hidden h-full w-full"></div>
+    <div id="videographer_wrap" class="h-full w-full">
+        <div class="m-auto text-center w-1/2 mt-32">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/SOg1GK4xLJw" title="Espanola Lowriders" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
 
     <script>
         const portfolio = JSON.parse('@json($portfolio)');
