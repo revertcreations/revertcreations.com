@@ -19,9 +19,9 @@
     </div>
 
     <div class="fixed bottom-8  flex mx-6 text-revert-black">
+
         <div id="design_skill" class="relative flex-1 mx-4">
             <h2 name="design" class="skill cursor-pointer text-5xl mb-8">Design</h2>
-            {{-- <img id="design_skill_svg" class="absolute -top-0.5 left-2" width="80" src="{{ asset('svgs/design.svg') }}" alt=""> --}}
             <iframe
                 id="design_skill_svg"
                 class="absolute -top-14 -left-10"
@@ -33,9 +33,9 @@
 
             </p>
         </div>
+
         <div class="relative flex-1 mx-4">
             <h2 class="relative skill cursor-pointer text-5xl mb-8">Code</h2>
-            {{-- <img id="code_skill_svg" class="absolute -top-0.5 left-1" width="50" src="{{ asset('svgs/code.svg') }}" alt=""> --}}
             <iframe
                 id="code_skill_svg"
                 class="absolute -top-2 left-14"
@@ -57,12 +57,12 @@
                 now only lie in my imagination.
             </p>
         </div>
-        <div class="flex-1 mx-4 relative">
+
+        <div class="relative flex-1 mx-4">
             <h2 id="photo_skill" class="skill relative cursor-pointer text-5xl mb-8">Photo</h2>
-            {{-- <img id="photo_skill_svg" class="absolute -top-0.5 right-2" width="50" src="{{ asset('svgs/photo.svg') }}" alt=""> --}}
             <iframe
                 id="photo_skill_svg"
-                class="absolute top-1 left-12"
+                class="absolute"
                 src="{{ asset('svgs/polaroidAnimation.html') }}"
                 frameborder="0">
             </iframe>
@@ -74,6 +74,7 @@
                 current under development. Keep an look out here for a subdomain link coming soon...
             </p>
         </div>
+
     </div>
 
     {{-- <div class="mb-20 h-20"></div> --}}

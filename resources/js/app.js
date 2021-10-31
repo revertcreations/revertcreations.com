@@ -29,6 +29,7 @@
             case 'photo':
                 var iframe = document.getElementsByTagName("iframe")[2].contentWindow;
                 iframe.exportRoot.photo.play()
+                document.getElementById('photo_skill_svg').style.zIndex = 10
                 break;
         }
         // let blurb = e.target.nextElementSibling;

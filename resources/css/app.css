@@ -29,14 +29,17 @@ p {
     position: absolute;
 } */
 
-#photo_skill_svg {
-    z-index: -1;
-}
+
 #design_skill_svg {
     z-index: -1;
 }
 #code_skill_svg {
     z-index: -1;
+}
+#photo_skill_svg {
+    z-index: -1;
+    left: 52px;
+    top: 0px;
 }
 
 

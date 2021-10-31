@@ -15,7 +15,7 @@
     <div id="app" class="flex flex-col max-w-3xl mx-auto h-full bg-white">
 
         <header id="main_header">
-            <div id="logo" class="relative h-80">
+            <div id="logo" class="relative h-72">
                 <img class="absolute right-2" width="300" src="{{ asset('svgs/large_red_square.svg') }}" alt="">
                 <a class="absolute w-10/12 z-10 right-0 top-2" href="{{ route('home')}}"><img class="" src="{{ asset('svgs/logoBW.svg') }}"></a>
             </div>
