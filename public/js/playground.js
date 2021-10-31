@@ -1,1 +1,742 @@
-({785:function(){var e=this,t=document.getElementById("homepage_tag"),n={initialized:!1,playground:document.getElementById("playground"),skills:[],needsReset:!1,fontScale:25,placedSkills:[],placedSkillAttempts:0,speedLimit:12,homepageTagHtml:!1,init:function(e){for(n.initialized=!0,n.skills=e;n.playground.firstChild;)n.playground.removeChild(n.playground.firstChild);for(skill in n.skills){if(n.needsReset=!1,n.skills[skill].element=document.createElement("div"),n.skills[skill].active=!1,n.skills[skill].isPositioned=!1,n.skills[skill].currentX,n.skills[skill].currentY,n.skills[skill].initialX,n.skills[skill].initialY,n.skills[skill].xOffset=0,n.skills[skill].yOffset=0,n.styleElement(n.skills[skill]),n.playground.appendChild(n.skills[skill].element),!n.positionElement(n.skills[skill]))break;n.addClickListener(n.skills[skill])}var t;n.needsReset&&n.reset("exceeded"),window.onresize=function(){n.playground.offsetParent&&(clearTimeout(t),t=setTimeout(n.reset("resize"),1e3))}},styleElement:function(e){e.nameSpan=document.createElement("span"),e.nameSpan.classList.add("pointer-events-none"),e.nameSpan.innerText=e.name,e.element.appendChild(e.nameSpan),e.element.id=e.name,e.element.style.position="absolute",e.element.style.color=n.getColorBasedOnExperience(e.experience,"hex"),e.element.style.fontSize=n.getFontSizeBasedOnExperience(e.experience),e.element.style.setProperty("--experience-color",n.getColorBasedOnExperience(e.experience,"hex")),e.element.classList.add("hover:animate-float-text","text-bold","text-center","select-none","cursor-pointer")},disableSkills:function(){n.skills.forEach((function(e){e.element.classList.remove("text-"+n.getColorBasedOnExperience(e.experience),"hover:animate-float-text","cursor-pointer"),e.element.classList.add("text-gruvbox-black"),e.name!=n.skillActive.name&&e.element.classList.add("animate-blur-text"),e.element.removeEventListener("mousedown",n.dragStart,!1),e.element.removeEventListener("touchstart",n.dragStart,!1)}))},enableSkills:function(){n.skills.forEach((function(e){setTimeout((function(){e.element.classList.remove("animate-sharpen-text"),e.element.classList.add("hover:animate-float-text")}),800),e.element.classList.remove("text-gruvbox-black","animate-blur-text"),e.element.classList.add("text-"+n.getColorBasedOnExperience(e.experience),"cursor-pointer","animate-sharpen-text"),e.element.addEventListener("mousedown",n.dragStart,!1),e.element.addEventListener("touchstart",n.dragStart,!1)}))},addRandomFloatEffect:function(e){var t=13*Math.random()+2+"s",n=20*Math.random()-10+"px",l=20*Math.random()-10+"px";e.element.style.setProperty("--float-animation-time",t),e.element.style.setProperty("--float-fifty-percent-y",n),e.element.style.setProperty("--float-fifty-percent-x",l)},positionElement:function(e){for(;!e.isPositioned;){if(n.placedSkillAttempts>100)return n.fontScale=n.fontScale+2,n.needsReset=!0,!1;var t=e.element.offsetWidth,l=e.element.offsetHeight,i=Math.random()*(playground.offsetWidth-t-t/2)+t/2,r=Math.random()*(playground.offsetHeight-l-l/2)+l/2,a={width:t,height:l,x:i,y:r},s=!1;for(position in n.placedSkills)if(n.skillsOverlap(a,n.placedSkills[position].cords)){n.placedSkillAttempts++,s=!0;break}if(!s)return e.isPositioned||(n.placedSkills.push({name:e.element.innerText,cords:a}),e.originalTop=r+"px",e.originalLeft=i+"px",e.element.style.top=e.originalTop,e.element.style.left=e.originalLeft,e.isPositioned=!0),!0}},reset:function(e){for(skill in e=e||!1,n.placedSkillAttempts=0,n.placedSkills=[],"exceeded"!=e&&(n.fontScale=25),n.skills)n.skills[skill].active=!1,n.skills[skill].element&&(n.skills[skill].element.removeEventListener("mousedown",n.dragStart),n.skills[skill].element.removeEventListener("touchstart",n.dragStart),n.skills[skill].element.removeEventListener("mouseup",n.dragEnd),n.skills[skill].element.removeEventListener("mousemove",n.dragElement),n.playground.removeChild(n.skills[skill].element),delete n.skills[skill].element);for(;n.playground.firstChild;)n.playground.removeChild(n.playground.firstChild);"hire"==e?n.buildForm():n.initialized&&(resetHomepageDeveloperTag(),n.init(n.skills))},resetSkillPosition:function(e){for(position in n.placedSkills)n.placedSkills[position].name==e.name&&(window.exampleSkill=e,e.currentX=0,e.currentY=0,e.initialX,e.initialY,e.xOffset=0,e.yOffset=0,n.setTranslate(e.currentX,e.currentY,e.element))},getSkillBasedOnName:function(e){for(skill in n.skills)if(n.skills[skill].name==e)return n.skills[skill]},getFontSizeBasedOnExperience:function(e){return e/n.fontScale+"em"},getColorBasedOnExperience:function(e,t){switch(!0){case 101==e:return"hex"==t?"#b16286":"gruvbox-purple";case 102==e:return"hex"==t?"#cc241d":"gruvbox-red";case 100==e:return"hex"==t?"#fbf1c7":"gruvbox-white";default:return"hex"==t?"#b8bb26":"gruvbox-green"}},skillsOverlap:function(e,t){return e.x<t.x+t.width&&e.x+e.width>t.x&&e.y<t.y+t.height&&e.y+e.height>t.y},addClickListener:function(e){e.element.addEventListener("mousedown",n.dragStart,!1),e.element.addEventListener("touchstart",n.dragStart,!1)},dragStart:function(l){console.log("this: ",e);var i=n.getSkillBasedOnName(l.target.id);t.innerHTML=i.name,t.classList.remove("text-gruvbox-green"),t.classList.add("shadow-inner","text-gruvbox-gray","border-dashed","border-gruvbox-green"),i&&i.element&&("touchstart"==l.type?(i.element.addEventListener("touchend",n.dragEnd,!1),i.element.addEventListener("touchmove",n.drag,!1)):"mousedown"==l.type&&(i.element.addEventListener("mouseup",n.dragEnd,!1),i.element.addEventListener("mousemove",n.drag,!1)),i.element.style.zIndex="11",i.element.classList.remove("cursor-pointer"),i.element.classList.add("cursor-move"),i.heldCounter&&i.heldCounter>2&&clearInterval(i.heldCounter),"touchstart"===l.type?(i.initialX=l.touches[0].clientX-i.xOffset,i.initialY=l.touches[0].clientY-i.yOffset):(i.initialX=l.clientX-i.xOffset,i.initialY=l.clientY-i.yOffset),l.target===i.element?i.dragActive=!0:i.dragActive=!1)},dragEnd:function(e){var l=n.getSkillBasedOnName(e.target.id);l&&l.element&&(l.element.classList.remove("cursor-move"),l.element.removeEventListener("mouseup",n.dragEnd),l.element.removeEventListener("mousemove",n.dragElement),l.element.style.zIndex="1",l.dragActive=!1,l.infoShowing=!1,"hire me"==l.name&&n.removeHireHint(l),n.removeHint(l),n.resetSkillPosition(l),l.atTarget?(t.classList.add("text-gruvbox-green"),"hire me"==l.name?n.reset("hire"):"reset();"==l.name?n.reset():n.displayInfoCard(l),l.atTarget=!1):resetHomepageDeveloperTag(),t.classList.remove("text-gruvbox-gray","border-gruvbox-green","shadow-inner")),rafId=null},dragElement:function(e){rafId||(rafId=window.requestAnimationFrame((function(){return n.drag(e)})))},drag:function(e){e.preventDefault();var t=n.getSkillBasedOnName(e.target.id);if(t&&t.dragActive){t.elementChild||n.buildInfoCard(t);var l=n.draggingEvents(e,t);"touchmove"===e.type?(t.currentX=e.touches[0].clientX-t.initialX,t.currentY=e.touches[0].clientY-t.initialY):(t.currentX=e.clientX-t.initialX,t.currentY=e.clientY-t.initialY),l||n.setTranslate(t.currentX,t.currentY,t.element)}},draggingEvents:function(e,l){n.skillsOverlap(e.target.getBoundingClientRect(),t.getBoundingClientRect())?(l.atTarget=!0,t.classList.contains("text-gruvbox-gray")&&(t.classList.remove("text-gruvbox-gray","shadow-inner","border-gruvbox-green"),t.classList.add("text-"+n.getColorBasedOnExperience(l.experience)))):(n.skillActive=l,l.atTarget=!1,t.classList.contains("text-"+n.getColorBasedOnExperience(l.experience))&&(t.classList.remove("text-"+n.getColorBasedOnExperience(l.experience)),t.classList.add("text-gruvbox-gray","border-dashed","border-gruvbox-green","shadow-inner")))},addHint:function(e){e.elementHint=document.createElement("div"),e.elementHint.classList.add("self-center","justify-self-center","cursor-pointer","text-sm","text-gruvbox-white","max-w-md","text-center"),e.elementHint.innerHTML="drag and drop",e.element.appendChild(e.elementHint)},addHireHint:function(e){e.elementHireHint=document.createElement("div"),e.elementHireHint.classList.add("self-center","justify-self-center","text-sm","text-gruvbox-white","text-center","bg-gruvbox-black","m-auto"),e.elementHireHint.innerHTML="&uuarr; hire me! &ddarr;",e.element.appendChild(e.elementHireHint)},removeHint:function(e){t.classList.remove("text-gruvbox-gray","bg-gruvbox-black"),t.classList.add("text-gruvbox-green","bg-gruvbox-black"),e.heldCounter=0,e.heldInterval&&clearTimeout(e.heldInterval),e.elementHint&&(e.element.removeChild(e.elementHint),delete e.elementHint)},removeHireHint:function(e){e.heldCounter=0,e.heldHireInterval&&clearTimeout(e.heldHireInterval),e.elementHireHint&&(e.element.removeChild(e.elementHireHint),delete e.elementHireHint)},setTranslate:function(e,t,n){n.style.transform="translate("+e+"px, "+t+"px)"},handleShakeEvents:function(e,t){if("touchmove"==e.type&&(t.initialTouch?(e.movementX=t.initialTouch.pageX-t.previousTouch.pageX,e.movementY=t.initialTouch.pageY-t.previousTouch.pageY):t.initialTouch=e.touches[0],t.previousTouch=e.touches[0]),e.movementX&&e.movementX>n.speedLimit&&(t.elementMovementRightExceeded=!0,t.elementMovementXTimeout=setTimeout((function(){t.elementMovementRightExceeded=!1}),200)),e.movementX&&e.movementX<-n.speedLimit&&(t.elementMovementLeftExceeded=!0,t.elementMovementXTimeout=setTimeout((function(){t.elementMovementLeftExceeded=!1}),200)),"hire me"==t.name&&(e.movementY&&e.movementY>n.speedLimit-4&&(t.elementMovementUpExceeded=!0,t.elementMovementYTimeout=setTimeout((function(){t.elementMovementUpExceeded=!1}),200)),e.movementY&&e.movementY<n.speedLimit-4&&(t.elementMovementDownExceeded=!0,t.elementMovementYTimeout=setTimeout((function(){t.elementMovementDownExceeded=!1}),200)),t.elementMovementDownExceeded&&t.elementMovementUpExceeded&&t.infoShowing))return e.stopPropagation(),n.dragEnd(e),n.reset("hire"),!1;if("GitHub"==t.name&&(e.movementY&&e.movementY>n.speedLimit-4&&(t.elementMovementUpExceeded=!0,t.elementMovementYTimeout=setTimeout((function(){t.elementMovementUpExceeded=!1}),200)),e.movementY&&e.movementY<n.speedLimit-4&&(t.elementMovementDownExceeded=!0,t.elementMovementYTimeout=setTimeout((function(){t.elementMovementDownExceeded=!1}),200)),t.elementMovementDownExceeded&&t.elementMovementUpExceeded&&t.infoShowing))return e.stopPropagation(),n.dragEnd(e),window.open("https://github.com/revertcreations"),!1;if(t.elementMovementLeftExceeded&&t.elementMovementRightExceeded&&!t.infoShowing){if("reset();"==t.name)return e.stopPropagation(),n.dragEnd(e),n.reset("manual"),!1;n.displayInfoCard(t)}},buildInfoCard:function(e){e.elementChild=document.createElement("div"),e.elementChild.style.fontSize="16px",e.elementChild.classList.add("flex","flex-col","bg-gruvbox-black","p-2","h-80","md:h-auto","overflow-y-auto","overflow-x-hidden"),n.buildInfoCardCloseElement(e),n.buildExperienceDiv(e),e.elementChildExcerpt=document.createElement("div"),e.elementChildExcerpt.classList.add("m-2","text-left","align-top","md:self-start","self-center","text-gruvbox-white"),e.elementChildExcerpt.innerHTML=e.excerpt},buildInfoCardCloseElement:function(e){e.closeInfoCard=document.createElement("div"),e.closeInfoCard.classList.add("absolute","-top-20","z-20","right-0","cursor-pointer","text-6xl"),e.closeInfoCard.innerHTML="<span onclick='Playground.closeInfoCard(\""+e.name+"\")' class='text-gruvbox-red hover:text-red-400'>&times;</span>"},closeInfoCard:function(e){var t=n.getSkillBasedOnName(e);t.element.removeChild(t.elementChild),t.element.removeChild(t.closeInfoCard),t.element.style.top=t.originalTop,t.element.style.left=t.originalLeft,t.element.style.zIndex="1",t.element.style.transform="unset",t.element.style.backgroundImage="unset",t.element.style.fontSize=n.getFontSizeBasedOnExperience(t.experience),t.element.classList.remove("animate-float-bg","bg-"+n.getColorBasedOnExperience(t.experience),"lg:w-5/12","md:w-7/12","w-11/12"),t.element.classList.add("hover:animate-float-text","text-"+n.getColorBasedOnExperience(t.experience)),t.nameSpan.classList.remove("text-gruvbox-black"),resetHomepageDeveloperTag(),n.removeHint(t),n.enableSkills()},buildExperienceDiv:function(e){e.elementChildExperienceWrap=document.createElement("div"),e.elementChildExperienceWrap.classList.add("flex","flex-row","cursor-pointer","p-2"),e.elementChildExperienceWrapLabel=document.createElement("div"),e.elementChildExperienceWrapLabel.innerHTML="Experience: &nbsp; &nbsp;",e.elementChildExperienceWrapLabel.classList.add("text-gruvbox-gray","mr-4"),e.elementChildExperienceWrapLabelExperience=document.createElement("div"),e.elementChildExperienceWrapLabelExperience.innerText=e.experience,e.elementChildExperienceWrapLabelExperience.classList.add("text-"+n.getColorBasedOnExperience(e.experience)),e.elementChildExperienceWrapLabelExperienceSlash=document.createElement("div"),e.elementChildExperienceWrapLabelExperienceSlash.innerHTML="&nbsp;/&nbsp;",e.elementChildExperienceWrapLabelExperienceSlash.classList.add("text-gruvbox-white"),e.elementChildExperienceWrapLabelExperienceFull=document.createElement("div"),e.elementChildExperienceWrapLabelExperienceFull.innerText="100",e.elementChildExperienceWrapLabelExperienceFull.classList.add("text-gruvbox-white")},removeAllClickListeners:function(){n.skills.forEach((function(e){e.element.removeEventListener("mousedown",n.dragStart,!1),e.element.removeEventListener("touchstart",n.dragStart,!1)}))},displayInfoCard:function(e){n.removeAllClickListeners(),n.disableSkills(),e.element.style.top="10%",e.element.style.left="50%",e.element.style.transform="translate(-50%, 0)",e.element.style.zIndex="12",e.element.style.fontSize=n.getFontSizeBasedOnExperience(100),e.element.classList.remove("hover:animate-float-text","text-"+n.getColorBasedOnExperience(e.experience));for(var t=0;t<101;t++)e.element.style.setProperty("--experience-percent-"+t,e.experience>t?t+"%":e.experience+"%");e.nameSpan.classList.add("text-gruvbox-black"),e.element.classList.add("animate-float-bg","lg:w-5/12","md:w-7/12","w-11/12"),e.element.appendChild(e.elementChild),e.element.appendChild(e.closeInfoCard),"README.md"!=e.name&&"hire me"!=e.name&&(e.elementChild.appendChild(e.elementChildExperienceWrap),e.elementChildExperienceWrap.appendChild(e.elementChildExperienceWrapLabel),e.elementChildExperienceWrap.appendChild(e.elementChildExperienceWrapLabelExperience),e.elementChildExperienceWrap.appendChild(e.elementChildExperienceWrapLabelExperienceSlash),e.elementChildExperienceWrap.appendChild(e.elementChildExperienceWrapLabelExperienceFull)),e.elementChild.appendChild(e.elementChildExcerpt),e.infoShowing=!0},buildForm:function(){window.onresize=!1;var e=document.createElement("div");e.classList.add("cursor-pointer","text-6xl","text-right"),e.innerHTML="<span onclick='Playground.reset()' class='text-gruvbox-red hover:text-red-400'>&times;</span>";var t=document.createElement("div");t.classList.add("m-auto","lg:w-5/12","md:w-7/12","w-11/12");var l=document.createElement("form");l.id="hire_me_form",l.classList.add("flex","flex-col","m-8");var i=document.createElement("p");i.innerText="First of all, I'm very excited to hear that you are interested in working with me! I love hearing new project ideas, so go ahead and fill out the form below with your contact info, and a brief overview of the project in mind, and I will get back to you asap!",i.classList.add("text-gruvbox-white","mb-4");var r=document.createElement("button");r.type="button",r.innerText="Submit",r.classList.add("hover:bg-gruvbox-purple","bg-gruvbox-green","text-gruvbox-black","text-2xl","font-bold","p-4","mt-4","mb-4");var a=document.createElement("h2");a.innerText="hire me",a.classList.add("text-gruvbox-green","text-4xl","mt-4","mb-4");var s=document.createElement("input");s.name="email",s.type="email",s.classList.add("p-4","m-4");var o=document.createElement("label");o.innerText="Email",o.classList.add("text-gruvbox-green");var d=document.createElement("input");d.name="name",d.type="text",d.classList.add("p-4","m-4");var m=document.createElement("label");m.classList.add("text-gruvbox-green"),m.innerText="Organization";var c=document.createElement("input");c.name="first_name",c.type="text",c.classList.add("p-4","m-4");var p=document.createElement("label");p.innerText="First Name",p.classList.add("text-gruvbox-green");var u=document.createElement("input");u.name="last_name",u.type="text",u.classList.add("p-4","m-4");var x=document.createElement("label");x.innerText="Last Name",x.classList.add("text-gruvbox-green");var v=document.createElement("input");v.type="tel",v.classList.add("p-4","m-4"),phoneInputpattern="[0-9]{3}-[0-9]{3}-[0-9]{4}";var g=document.createElement("label");g.innerText="Phone Number",g.classList.add("text-gruvbox-green");var h=document.createElement("textarea");h.name="description",h.classList.add("p-4","m-4");var f=document.createElement("label");f.innerText="Description",f.classList.add("text-gruvbox-green"),n.playground.classList.remove("touch-action-none"),n.playground.appendChild(t),t.appendChild(e),t.appendChild(l),l.appendChild(i),l.appendChild(m),l.appendChild(d),l.appendChild(p),l.appendChild(c),l.appendChild(x),l.appendChild(u),l.appendChild(o),l.appendChild(s),l.appendChild(g),l.appendChild(v),l.appendChild(f),l.appendChild(h),l.appendChild(r),r.onclick=function(e){r.disabled=!0,(e=e||window.event).preventDefault(),p.classList.contains("text-gruvbox-red")&&(p.classList.remove("text-gruvbox-red"),p.classList.add("text-gruvbox-green"),p.innerText="First Name"),x.classList.contains("text-gruvbox-red")&&(x.classList.remove("text-gruvbox-red"),x.classList.add("text-gruvbox-green"),x.innerText="Last Name"),o.classList.contains("text-gruvbox-red")&&(o.classList.remove("text-gruvbox-red"),o.classList.add("text-gruvbox-green"),o.innerText="Last Name"),i.classList.contains("text-gruvbox-yellow")&&(i.classList.remove("text-gruvbox-orange"),i.classList.remove("text-gruvbox-green"));var n=document.getElementById("hire_me_form"),l=(new FormData(n),document.querySelector('meta[name="csrf-token"]').getAttribute("content"));fetch("/web-development",{headers:{"Content-Type":"application/json",Accept:"application/json, text-plain, */*","X-Requested-With":"XMLHttpRequest","X-CSRF-TOKEN":l},method:"POST",credentials:"same-origin",body:JSON.stringify({first_name:c.value,last_name:u.value,organization:d.value,phone:v.value,description:h.value,email:s.value})}).then((function(e){return e.json()})).then((function(e){if(e.errors&&(e.errors.first_name&&(p.classList.remove("text-gruvbox-green"),p.innerText="First Name *required",p.classList.add("text-gruvbox-red")),e.errors.last_name&&(x.classList.remove("text-gruvbox-green"),x.innerText="Last Name *required",x.classList.add("text-gruvbox-red")),e.errors.email&&"The email has already been taken."!==e.errors.email[0]&&(o.classList.remove("text-gruvbox-green"),o.innerText="Last Name *required",o.classList.add("text-gruvbox-red")),e.errors.email&&"The email has already been taken."==e.errors.email[0]&&(i.classList.remove("text-gruvbox-green"),i.classList.add("text-gruvbox-orange"),i.innerHTML='<span class="text-gruvbox-yellow">Oh, '+(c.value.length>0?c.value+",":",")+" it looks like you have already contacted me. I will get to reviewing it right away!</span>"),r.removeAttribute("disabled")),"ok"==e.status){t.removeChild(n);var l=document.createElement("p");l.innerText=e.message,l.classList.add("text-gruvbox-white","mb-4"),t.appendChild(l)}})).catch((function(e){var n=document.createElement("p");n.innerText=e.message,n.classList.add("text-gruvbox-red","mb-4"),t.appendChild(n)}))}}}}})[785]();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./resources/js/playground.js":
+/*!************************************!*\
+  !*** ./resources/js/playground.js ***!
+  \************************************/
+/***/ (function() {
+
+var _this = this;
+
+var homepageTag = document.getElementById('homepage_tag');
+var Playground = {
+  initialized: false,
+  playground: document.getElementById('playground'),
+  skills: [],
+  needsReset: false,
+  fontScale: 25,
+  placedSkills: [],
+  placedSkillAttempts: 0,
+  speedLimit: 12,
+  homepageTagHtml: false,
+  init: function init(data) {
+    Playground.initialized = true;
+    Playground.skills = data;
+
+    while (Playground.playground.firstChild) {
+      Playground.playground.removeChild(Playground.playground.firstChild);
+    }
+
+    for (skill in Playground.skills) {
+      Playground.needsReset = false;
+      Playground.skills[skill].element = document.createElement('div');
+      Playground.skills[skill].active = false;
+      Playground.skills[skill].isPositioned = false;
+      Playground.skills[skill].currentX;
+      Playground.skills[skill].currentY;
+      Playground.skills[skill].initialX;
+      Playground.skills[skill].initialY;
+      Playground.skills[skill].xOffset = 0;
+      Playground.skills[skill].yOffset = 0;
+      Playground.styleElement(Playground.skills[skill]);
+      Playground.playground.appendChild(Playground.skills[skill].element);
+      if (!Playground.positionElement(Playground.skills[skill])) break;
+      Playground.addClickListener(Playground.skills[skill]);
+    }
+
+    if (Playground.needsReset) Playground.reset('exceeded');
+    var doit;
+
+    window.onresize = function () {
+      if (Playground.playground.offsetParent) {
+        clearTimeout(doit);
+        doit = setTimeout(Playground.reset('resize'), 1000);
+      }
+    };
+  },
+  styleElement: function styleElement(skill) {
+    skill.nameSpan = document.createElement('span');
+    skill.nameSpan.classList.add('pointer-events-none');
+    skill.nameSpan.innerText = skill.name;
+    skill.element.appendChild(skill.nameSpan);
+    skill.element.id = skill.name;
+    skill.element.style.position = "absolute";
+    skill.element.style.color = Playground.getColorBasedOnExperience(skill.experience, 'hex');
+    skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience);
+    skill.element.style.setProperty('--experience-color', Playground.getColorBasedOnExperience(skill.experience, 'hex'));
+    skill.element.classList.add('hover:animate-float-text', 'text-bold', 'text-center', 'select-none', 'cursor-pointer');
+  },
+  disableSkills: function disableSkills() {
+    Playground.skills.forEach(function (skill) {
+      skill.element.classList.remove('text-' + Playground.getColorBasedOnExperience(skill.experience), 'hover:animate-float-text', 'cursor-pointer');
+      skill.element.classList.add('text-gruvbox-black');
+      if (skill.name != Playground.skillActive.name) skill.element.classList.add('animate-blur-text');
+      skill.element.removeEventListener('mousedown', Playground.dragStart, false);
+      skill.element.removeEventListener('touchstart', Playground.dragStart, false);
+    });
+  },
+  enableSkills: function enableSkills() {
+    Playground.skills.forEach(function (skill) {
+      setTimeout(function () {
+        skill.element.classList.remove('animate-sharpen-text');
+        skill.element.classList.add('hover:animate-float-text');
+      }, 800);
+      skill.element.classList.remove('text-gruvbox-black', 'animate-blur-text');
+      skill.element.classList.add('text-' + Playground.getColorBasedOnExperience(skill.experience), 'cursor-pointer', 'animate-sharpen-text');
+      skill.element.addEventListener('mousedown', Playground.dragStart, false);
+      skill.element.addEventListener('touchstart', Playground.dragStart, false);
+    });
+  },
+  addRandomFloatEffect: function addRandomFloatEffect(skill) {
+    var animationTime = Math.random() * (15 - 2) + 2 + 's';
+    var x = Math.random() * (10 - -10) + -10 + 'px';
+    var y = Math.random() * (10 - -10) + -10 + 'px';
+    skill.element.style.setProperty('--float-animation-time', animationTime);
+    skill.element.style.setProperty('--float-fifty-percent-y', x);
+    skill.element.style.setProperty('--float-fifty-percent-x', y);
+  },
+  positionElement: function positionElement(skill) {
+    while (!skill.isPositioned) {
+      if (Playground.placedSkillAttempts > 100) {
+        Playground.fontScale = Playground.fontScale + 2;
+        Playground.needsReset = true;
+        return false;
+      }
+
+      var width = skill.element.offsetWidth;
+      var height = skill.element.offsetHeight;
+      var textXBound = Math.random() * (playground.offsetWidth - width - width / 2) + width / 2;
+      var textYBound = Math.random() * (playground.offsetHeight - height - height / 2) + height / 2;
+      var cords = {
+        'width': width,
+        'height': height,
+        'x': textXBound,
+        'y': textYBound
+      };
+      var overlaps = false;
+
+      for (position in Playground.placedSkills) {
+        if (Playground.skillsOverlap(cords, Playground.placedSkills[position].cords)) {
+          Playground.placedSkillAttempts++;
+          overlaps = true;
+          break;
+        }
+      }
+
+      if (overlaps) continue;
+
+      if (!skill.isPositioned) {
+        Playground.placedSkills.push({
+          'name': skill.element.innerText,
+          'cords': cords
+        });
+        skill.originalTop = textYBound + 'px';
+        skill.originalLeft = textXBound + 'px';
+        skill.element.style.top = skill.originalTop;
+        skill.element.style.left = skill.originalLeft;
+        skill.isPositioned = true;
+      }
+
+      return true;
+    }
+  },
+  reset: function reset(hire) {
+    hire = hire || false;
+    Playground.placedSkillAttempts = 0;
+    Playground.placedSkills = [];
+    if (hire != 'exceeded') Playground.fontScale = 25;
+
+    for (skill in Playground.skills) {
+      Playground.skills[skill].active = false;
+
+      if (Playground.skills[skill].element) {
+        Playground.skills[skill].element.removeEventListener('mousedown', Playground.dragStart);
+        Playground.skills[skill].element.removeEventListener('touchstart', Playground.dragStart);
+        Playground.skills[skill].element.removeEventListener('mouseup', Playground.dragEnd);
+        Playground.skills[skill].element.removeEventListener('mousemove', Playground.dragElement);
+        Playground.playground.removeChild(Playground.skills[skill].element);
+        delete Playground.skills[skill].element;
+      }
+    }
+
+    while (Playground.playground.firstChild) {
+      Playground.playground.removeChild(Playground.playground.firstChild);
+    }
+
+    if (hire == 'hire') {
+      Playground.buildForm();
+    } else if (Playground.initialized) {
+      resetHomepageDeveloperTag();
+      Playground.init(Playground.skills);
+    }
+  },
+  resetSkillPosition: function resetSkillPosition(skill) {
+    for (position in Playground.placedSkills) {
+      if (Playground.placedSkills[position].name == skill.name) {
+        window.exampleSkill = skill;
+        skill.currentX = 0;
+        skill.currentY = 0;
+        skill.initialX;
+        skill.initialY;
+        skill.xOffset = 0;
+        skill.yOffset = 0;
+        Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
+      }
+    }
+  },
+  getSkillBasedOnName: function getSkillBasedOnName(name) {
+    for (skill in Playground.skills) {
+      if (Playground.skills[skill].name == name) return Playground.skills[skill];
+    }
+  },
+  getFontSizeBasedOnExperience: function getFontSizeBasedOnExperience(experience) {
+    return experience / Playground.fontScale + 'em';
+  },
+  getColorBasedOnExperience: function getColorBasedOnExperience(experience, type) {
+    switch (true) {
+      case experience == 101:
+        if (type == 'hex') return '#b16286';
+        return 'gruvbox-purple';
+
+      case experience == 102:
+        if (type == 'hex') return '#cc241d';
+        return 'gruvbox-red';
+
+      case experience == 100:
+        if (type == 'hex') return '#fbf1c7';
+        return 'gruvbox-white';
+
+      default:
+        if (type == 'hex') return '#b8bb26';
+        return 'gruvbox-green';
+    }
+  },
+  skillsOverlap: function skillsOverlap(rect1, rect2) {
+    if (rect1.x < rect2.x + rect2.width && rect1.x + rect1.width > rect2.x && rect1.y < rect2.y + rect2.height && rect1.y + rect1.height > rect2.y) {
+      return true;
+    }
+
+    return false;
+  },
+  addClickListener: function addClickListener(skill) {
+    skill.element.addEventListener('mousedown', Playground.dragStart, false);
+    skill.element.addEventListener('touchstart', Playground.dragStart, false);
+  },
+  dragStart: function dragStart(e) {
+    console.log('this: ', _this);
+    var skill = Playground.getSkillBasedOnName(e.target.id);
+    homepageTag.innerHTML = skill.name;
+    homepageTag.classList.remove('text-gruvbox-green');
+    homepageTag.classList.add('shadow-inner', 'text-gruvbox-gray', 'border-dashed', 'border-gruvbox-green');
+
+    if (skill && skill.element) {
+      if (e.type == 'touchstart') {
+        skill.element.addEventListener('touchend', Playground.dragEnd, false);
+        skill.element.addEventListener('touchmove', Playground.drag, false);
+      } else if (e.type == 'mousedown') {
+        skill.element.addEventListener('mouseup', Playground.dragEnd, false);
+        skill.element.addEventListener('mousemove', Playground.drag, false);
+      }
+
+      skill.element.style.zIndex = '11';
+      skill.element.classList.remove('cursor-pointer');
+      skill.element.classList.add('cursor-move');
+
+      if (skill.heldCounter && skill.heldCounter > 2) {
+        clearInterval(skill.heldCounter);
+      }
+
+      if (e.type === "touchstart") {
+        skill.initialX = e.touches[0].clientX - skill.xOffset;
+        skill.initialY = e.touches[0].clientY - skill.yOffset;
+      } else {
+        skill.initialX = e.clientX - skill.xOffset;
+        skill.initialY = e.clientY - skill.yOffset;
+      }
+
+      if (e.target === skill.element) {
+        skill.dragActive = true;
+      } else {
+        skill.dragActive = false;
+      }
+    }
+  },
+  dragEnd: function dragEnd(e) {
+    var skill = Playground.getSkillBasedOnName(e.target.id);
+
+    if (skill && skill.element) {
+      skill.element.classList.remove('cursor-move');
+      skill.element.removeEventListener('mouseup', Playground.dragEnd);
+      skill.element.removeEventListener('mousemove', Playground.dragElement);
+      skill.element.style.zIndex = '1';
+      skill.dragActive = false;
+      skill.infoShowing = false;
+      if (skill.name == 'hire me') Playground.removeHireHint(skill);
+      Playground.removeHint(skill);
+      Playground.resetSkillPosition(skill);
+
+      if (skill.atTarget) {
+        homepageTag.classList.add('text-gruvbox-green');
+
+        if (skill.name == 'hire me') {
+          Playground.reset('hire');
+        } else if (skill.name == 'reset();') {
+          Playground.reset();
+        } else {
+          Playground.displayInfoCard(skill);
+        }
+
+        skill.atTarget = false;
+      } else {
+        resetHomepageDeveloperTag();
+      }
+
+      homepageTag.classList.remove('text-gruvbox-gray', 'border-gruvbox-green', 'shadow-inner');
+    }
+
+    rafId = null;
+  },
+  dragElement: function dragElement(e) {
+    if (rafId) return;
+    rafId = window.requestAnimationFrame(function () {
+      return Playground.drag(e);
+    });
+  },
+  drag: function drag(e) {
+    e.preventDefault();
+    var skill = Playground.getSkillBasedOnName(e.target.id);
+
+    if (skill && skill.dragActive) {
+      if (!skill.elementChild) Playground.buildInfoCard(skill);
+      var isForm = Playground.draggingEvents(e, skill);
+
+      if (e.type === "touchmove") {
+        skill.currentX = e.touches[0].clientX - skill.initialX;
+        skill.currentY = e.touches[0].clientY - skill.initialY;
+      } else {
+        skill.currentX = e.clientX - skill.initialX;
+        skill.currentY = e.clientY - skill.initialY;
+      }
+
+      if (!isForm) Playground.setTranslate(skill.currentX, skill.currentY, skill.element);
+    }
+  },
+  draggingEvents: function draggingEvents(e, skill) {
+    if (Playground.skillsOverlap(e.target.getBoundingClientRect(), homepageTag.getBoundingClientRect())) {
+      skill.atTarget = true;
+
+      if (homepageTag.classList.contains('text-gruvbox-gray')) {
+        homepageTag.classList.remove('text-gruvbox-gray', 'shadow-inner', 'border-gruvbox-green');
+        homepageTag.classList.add('text-' + Playground.getColorBasedOnExperience(skill.experience));
+      }
+    } else {
+      Playground.skillActive = skill;
+      skill.atTarget = false; // This will run after a dragged skill entered the drop area, then left
+
+      if (homepageTag.classList.contains('text-' + Playground.getColorBasedOnExperience(skill.experience))) {
+        // console.log('do this once...')
+        homepageTag.classList.remove('text-' + Playground.getColorBasedOnExperience(skill.experience)); // homepageTag.classList.add('bg-gruvbox-black', 'text-gruvbox-gray', 'border-dashed', 'border-gruvbox-green')
+
+        homepageTag.classList.add('text-gruvbox-gray', 'border-dashed', 'border-gruvbox-green', 'shadow-inner');
+      }
+    }
+  },
+  addHint: function addHint(skill) {
+    skill.elementHint = document.createElement('div');
+    skill.elementHint.classList.add('self-center', 'justify-self-center', 'cursor-pointer', 'text-sm', 'text-gruvbox-white', 'max-w-md', 'text-center');
+    skill.elementHint.innerHTML = 'drag and drop';
+    skill.element.appendChild(skill.elementHint);
+  },
+  addHireHint: function addHireHint(skill) {
+    skill.elementHireHint = document.createElement('div');
+    skill.elementHireHint.classList.add('self-center', 'justify-self-center', 'text-sm', 'text-gruvbox-white', 'text-center', 'bg-gruvbox-black', 'm-auto');
+    skill.elementHireHint.innerHTML = '&uuarr; hire me! &ddarr;';
+    skill.element.appendChild(skill.elementHireHint);
+  },
+  removeHint: function removeHint(skill) {
+    homepageTag.classList.remove('text-gruvbox-gray', 'bg-gruvbox-black');
+    homepageTag.classList.add('text-gruvbox-green', 'bg-gruvbox-black');
+    skill.heldCounter = 0;
+    if (skill.heldInterval) clearTimeout(skill.heldInterval);
+
+    if (skill.elementHint) {
+      skill.element.removeChild(skill.elementHint);
+      delete skill.elementHint;
+    }
+  },
+  removeHireHint: function removeHireHint(skill) {
+    skill.heldCounter = 0;
+    if (skill.heldHireInterval) clearTimeout(skill.heldHireInterval);
+
+    if (skill.elementHireHint) {
+      skill.element.removeChild(skill.elementHireHint);
+      delete skill.elementHireHint;
+    }
+  },
+  setTranslate: function setTranslate(xPos, yPos, el) {
+    el.style.transform = "translate(" + xPos + "px, " + yPos + "px)";
+  },
+  handleShakeEvents: function handleShakeEvents(e, skill) {
+    if (e.type == 'touchmove') {
+      if (!skill.initialTouch) {
+        skill.initialTouch = e.touches[0];
+      } else {
+        e.movementX = skill.initialTouch.pageX - skill.previousTouch.pageX;
+        e.movementY = skill.initialTouch.pageY - skill.previousTouch.pageY;
+      }
+
+      skill.previousTouch = e.touches[0];
+    }
+
+    if (e.movementX && e.movementX > Playground.speedLimit) {
+      skill.elementMovementRightExceeded = true;
+      skill.elementMovementXTimeout = setTimeout(function () {
+        skill.elementMovementRightExceeded = false;
+      }, 200);
+    }
+
+    if (e.movementX && e.movementX < -Playground.speedLimit) {
+      skill.elementMovementLeftExceeded = true;
+      skill.elementMovementXTimeout = setTimeout(function () {
+        skill.elementMovementLeftExceeded = false;
+      }, 200);
+    }
+
+    if (skill.name == 'hire me') {
+      if (e.movementY && e.movementY > Playground.speedLimit - 4) {
+        skill.elementMovementUpExceeded = true;
+        skill.elementMovementYTimeout = setTimeout(function () {
+          skill.elementMovementUpExceeded = false;
+        }, 200);
+      }
+
+      if (e.movementY && e.movementY < Playground.speedLimit - 4) {
+        skill.elementMovementDownExceeded = true;
+        skill.elementMovementYTimeout = setTimeout(function () {
+          skill.elementMovementDownExceeded = false;
+        }, 200);
+      }
+
+      if (skill.elementMovementDownExceeded && skill.elementMovementUpExceeded && skill.infoShowing) {
+        e.stopPropagation();
+        Playground.dragEnd(e);
+        Playground.reset('hire');
+        return false;
+      }
+    }
+
+    if (skill.name == 'GitHub') {
+      if (e.movementY && e.movementY > Playground.speedLimit - 4) {
+        skill.elementMovementUpExceeded = true;
+        skill.elementMovementYTimeout = setTimeout(function () {
+          skill.elementMovementUpExceeded = false;
+        }, 200);
+      }
+
+      if (e.movementY && e.movementY < Playground.speedLimit - 4) {
+        skill.elementMovementDownExceeded = true;
+        skill.elementMovementYTimeout = setTimeout(function () {
+          skill.elementMovementDownExceeded = false;
+        }, 200);
+      }
+
+      if (skill.elementMovementDownExceeded && skill.elementMovementUpExceeded && skill.infoShowing) {
+        e.stopPropagation();
+        Playground.dragEnd(e);
+        window.open('https://github.com/revertcreations');
+        return false;
+      }
+    }
+
+    if (skill.elementMovementLeftExceeded && skill.elementMovementRightExceeded && !skill.infoShowing) {
+      if (skill.name == 'reset();') {
+        e.stopPropagation();
+        Playground.dragEnd(e);
+        Playground.reset('manual');
+        return false;
+      }
+
+      Playground.displayInfoCard(skill); // Playground.removeHint(skill)
+    }
+  },
+  buildInfoCard: function buildInfoCard(skill) {
+    skill.elementChild = document.createElement('div');
+    skill.elementChild.style.fontSize = '16px';
+    skill.elementChild.classList.add('flex', 'flex-col', 'bg-gruvbox-black', 'p-2', 'h-80', 'md:h-auto', 'overflow-y-auto', 'overflow-x-hidden');
+    Playground.buildInfoCardCloseElement(skill);
+    Playground.buildExperienceDiv(skill);
+    skill.elementChildExcerpt = document.createElement('div');
+    skill.elementChildExcerpt.classList.add('m-2', 'text-left', 'align-top', 'md:self-start', 'self-center', 'text-gruvbox-white');
+    skill.elementChildExcerpt.innerHTML = skill.excerpt;
+  },
+  buildInfoCardCloseElement: function buildInfoCardCloseElement(skill) {
+    skill.closeInfoCard = document.createElement('div');
+    skill.closeInfoCard.classList.add('absolute', '-top-20', 'z-20', 'right-0', 'cursor-pointer', 'text-6xl');
+    skill.closeInfoCard.innerHTML = "<span onclick='Playground.closeInfoCard(" + "\"" + skill.name + "\"" + ")' class='text-gruvbox-red hover:text-red-400'>&times;</span>";
+  },
+  closeInfoCard: function closeInfoCard(skill_name) {
+    var skill = Playground.getSkillBasedOnName(skill_name);
+    skill.element.removeChild(skill.elementChild);
+    skill.element.removeChild(skill.closeInfoCard);
+    skill.element.style.top = skill.originalTop;
+    skill.element.style.left = skill.originalLeft;
+    skill.element.style.zIndex = '1';
+    skill.element.style.transform = 'unset';
+    skill.element.style.backgroundImage = 'unset';
+    skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(skill.experience);
+    skill.element.classList.remove('animate-float-bg', 'bg-' + Playground.getColorBasedOnExperience(skill.experience), 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
+    skill.element.classList.add('hover:animate-float-text', 'text-' + Playground.getColorBasedOnExperience(skill.experience));
+    skill.nameSpan.classList.remove('text-gruvbox-black');
+    resetHomepageDeveloperTag();
+    Playground.removeHint(skill);
+    Playground.enableSkills();
+  },
+  buildExperienceDiv: function buildExperienceDiv(skill) {
+    skill.elementChildExperienceWrap = document.createElement('div');
+    skill.elementChildExperienceWrap.classList.add('flex', 'flex-row', 'cursor-pointer', 'p-2');
+    skill.elementChildExperienceWrapLabel = document.createElement('div');
+    skill.elementChildExperienceWrapLabel.innerHTML = 'Experience: &nbsp; &nbsp;';
+    skill.elementChildExperienceWrapLabel.classList.add('text-gruvbox-gray', 'mr-4');
+    skill.elementChildExperienceWrapLabelExperience = document.createElement('div');
+    skill.elementChildExperienceWrapLabelExperience.innerText = skill.experience;
+    skill.elementChildExperienceWrapLabelExperience.classList.add('text-' + Playground.getColorBasedOnExperience(skill.experience) + '');
+    skill.elementChildExperienceWrapLabelExperienceSlash = document.createElement('div');
+    skill.elementChildExperienceWrapLabelExperienceSlash.innerHTML = '&nbsp;/&nbsp;';
+    skill.elementChildExperienceWrapLabelExperienceSlash.classList.add('text-gruvbox-white');
+    skill.elementChildExperienceWrapLabelExperienceFull = document.createElement('div');
+    skill.elementChildExperienceWrapLabelExperienceFull.innerText = '100';
+    skill.elementChildExperienceWrapLabelExperienceFull.classList.add('text-gruvbox-white');
+  },
+  removeAllClickListeners: function removeAllClickListeners() {
+    Playground.skills.forEach(function (skill) {
+      skill.element.removeEventListener('mousedown', Playground.dragStart, false);
+      skill.element.removeEventListener('touchstart', Playground.dragStart, false);
+    });
+  },
+  displayInfoCard: function displayInfoCard(skill) {
+    Playground.removeAllClickListeners();
+    Playground.disableSkills();
+    skill.element.style.top = '10%';
+    skill.element.style.left = '50%';
+    skill.element.style.transform = 'translate(-50%, 0)';
+    skill.element.style.zIndex = '12';
+    skill.element.style.fontSize = Playground.getFontSizeBasedOnExperience(100);
+    skill.element.classList.remove('hover:animate-float-text', 'text-' + Playground.getColorBasedOnExperience(skill.experience));
+
+    for (var index = 0; index < 101; index++) {
+      skill.element.style.setProperty('--experience-percent-' + index, skill.experience > index ? index + '%' : skill.experience + '%');
+    }
+
+    skill.nameSpan.classList.add('text-gruvbox-black');
+    skill.element.classList.add('animate-float-bg', 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
+    skill.element.appendChild(skill.elementChild);
+    skill.element.appendChild(skill.closeInfoCard);
+
+    if (skill.name != 'README.md' && skill.name != 'hire me') {
+      skill.elementChild.appendChild(skill.elementChildExperienceWrap);
+      skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabel);
+      skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperience);
+      skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceSlash);
+      skill.elementChildExperienceWrap.appendChild(skill.elementChildExperienceWrapLabelExperienceFull);
+    }
+
+    skill.elementChild.appendChild(skill.elementChildExcerpt);
+    skill.infoShowing = true;
+  },
+  buildForm: function buildForm() {
+    window.onresize = false;
+    var closeForm = document.createElement('div');
+    closeForm.classList.add('cursor-pointer', 'text-6xl', 'text-right');
+    closeForm.innerHTML = "<span onclick='Playground.reset()' class='text-gruvbox-red hover:text-red-400'>&times;</span>";
+    var formWrap = document.createElement('div');
+    formWrap.classList.add('m-auto', 'lg:w-5/12', 'md:w-7/12', 'w-11/12');
+    var hireMeForm = document.createElement('form');
+    hireMeForm.id = 'hire_me_form';
+    hireMeForm.classList.add('flex', 'flex-col', 'm-8');
+    var formInfo = document.createElement('p');
+    formInfo.innerText = 'First of all, I\'m very excited to hear that you are interested in working with me! I love hearing new project ideas, so go ahead and fill out the form below with your contact info, and a brief overview of the project in mind, and I will get back to you asap!';
+    formInfo.classList.add('text-gruvbox-white', 'mb-4');
+    var submitButton = document.createElement('button');
+    submitButton.type = 'button';
+    submitButton.innerText = 'Submit';
+    submitButton.classList.add('hover:bg-gruvbox-purple', 'bg-gruvbox-green', 'text-gruvbox-black', 'text-2xl', 'font-bold', 'p-4', 'mt-4', 'mb-4');
+    var formTitle = document.createElement('h2');
+    formTitle.innerText = 'hire me';
+    formTitle.classList.add('text-gruvbox-green', 'text-4xl', 'mt-4', 'mb-4');
+    var emailInput = document.createElement('input');
+    emailInput.name = 'email';
+    emailInput.type = 'email';
+    emailInput.classList.add('p-4', 'm-4');
+    var emailLabel = document.createElement('label');
+    emailLabel.innerText = 'Email';
+    emailLabel.classList.add('text-gruvbox-green');
+    var organizationInput = document.createElement('input');
+    organizationInput.name = 'name';
+    organizationInput.type = 'text';
+    organizationInput.classList.add('p-4', 'm-4');
+    var organizationLabel = document.createElement('label');
+    organizationLabel.classList.add('text-gruvbox-green');
+    organizationLabel.innerText = 'Organization';
+    var firstNameInput = document.createElement('input');
+    firstNameInput.name = 'first_name';
+    firstNameInput.type = 'text';
+    firstNameInput.classList.add('p-4', 'm-4');
+    var firstNameLabel = document.createElement('label');
+    firstNameLabel.innerText = 'First Name';
+    firstNameLabel.classList.add('text-gruvbox-green');
+    var lastNameInput = document.createElement('input');
+    lastNameInput.name = 'last_name';
+    lastNameInput.type = 'text';
+    lastNameInput.classList.add('p-4', 'm-4');
+    var lastNameLabel = document.createElement('label');
+    lastNameLabel.innerText = 'Last Name';
+    lastNameLabel.classList.add('text-gruvbox-green');
+    var phoneInput = document.createElement('input');
+    phoneInput.type = 'tel';
+    phoneInput.classList.add('p-4', 'm-4');
+    phoneInputpattern = "[0-9]{3}-[0-9]{3}-[0-9]{4}";
+    var phoneLabel = document.createElement('label');
+    phoneLabel.innerText = 'Phone Number';
+    phoneLabel.classList.add('text-gruvbox-green');
+    var descriptionInput = document.createElement('textarea');
+    descriptionInput.name = 'description';
+    descriptionInput.classList.add('p-4', 'm-4');
+    var descriptionLabel = document.createElement('label');
+    descriptionLabel.innerText = 'Description';
+    descriptionLabel.classList.add('text-gruvbox-green');
+    Playground.playground.classList.remove('touch-action-none');
+    Playground.playground.appendChild(formWrap);
+    formWrap.appendChild(closeForm);
+    formWrap.appendChild(hireMeForm);
+    hireMeForm.appendChild(formInfo);
+    hireMeForm.appendChild(organizationLabel);
+    hireMeForm.appendChild(organizationInput);
+    hireMeForm.appendChild(firstNameLabel);
+    hireMeForm.appendChild(firstNameInput);
+    hireMeForm.appendChild(lastNameLabel);
+    hireMeForm.appendChild(lastNameInput);
+    hireMeForm.appendChild(emailLabel);
+    hireMeForm.appendChild(emailInput);
+    hireMeForm.appendChild(phoneLabel);
+    hireMeForm.appendChild(phoneInput);
+    hireMeForm.appendChild(descriptionLabel);
+    hireMeForm.appendChild(descriptionInput);
+    hireMeForm.appendChild(submitButton);
+
+    submitButton.onclick = function (event) {
+      submitButton.disabled = true;
+      event = event || window.event;
+      event.preventDefault();
+
+      if (firstNameLabel.classList.contains('text-gruvbox-red')) {
+        firstNameLabel.classList.remove('text-gruvbox-red');
+        firstNameLabel.classList.add('text-gruvbox-green');
+        firstNameLabel.innerText = 'First Name';
+      }
+
+      if (lastNameLabel.classList.contains('text-gruvbox-red')) {
+        lastNameLabel.classList.remove('text-gruvbox-red');
+        lastNameLabel.classList.add('text-gruvbox-green');
+        lastNameLabel.innerText = 'Last Name';
+      }
+
+      if (emailLabel.classList.contains('text-gruvbox-red')) {
+        emailLabel.classList.remove('text-gruvbox-red');
+        emailLabel.classList.add('text-gruvbox-green');
+        emailLabel.innerText = 'Last Name';
+      }
+
+      if (formInfo.classList.contains('text-gruvbox-yellow')) {
+        formInfo.classList.remove('text-gruvbox-orange');
+        formInfo.classList.remove('text-gruvbox-green');
+      }
+
+      var hireMeForm = document.getElementById('hire_me_form'); // console.log(hireMeForm[0])
+
+      var data = new FormData(hireMeForm); // console.log(data)
+
+      var csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      var url = '/web-development';
+      fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json, text-plain, */*",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": csrf_token
+        },
+        method: 'POST',
+        credentials: "same-origin",
+        body: JSON.stringify({
+          first_name: firstNameInput.value,
+          last_name: lastNameInput.value,
+          organization: organizationInput.value,
+          phone: phoneInput.value,
+          description: descriptionInput.value,
+          email: emailInput.value
+        })
+      }).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        if (data.errors) {
+          if (data.errors['first_name']) {
+            firstNameLabel.classList.remove('text-gruvbox-green');
+            firstNameLabel.innerText = 'First Name *required';
+            firstNameLabel.classList.add('text-gruvbox-red');
+          }
+
+          if (data.errors['last_name']) {
+            lastNameLabel.classList.remove('text-gruvbox-green');
+            lastNameLabel.innerText = 'Last Name *required';
+            lastNameLabel.classList.add('text-gruvbox-red');
+          }
+
+          if (data.errors['email'] && data.errors['email'][0] !== 'The email has already been taken.') {
+            emailLabel.classList.remove('text-gruvbox-green');
+            emailLabel.innerText = 'Last Name *required';
+            emailLabel.classList.add('text-gruvbox-red');
+          }
+
+          if (data.errors['email'] && data.errors['email'][0] == 'The email has already been taken.') {
+            formInfo.classList.remove('text-gruvbox-green');
+            formInfo.classList.add('text-gruvbox-orange');
+            formInfo.innerHTML = '<span class="text-gruvbox-yellow">Oh, ' + (firstNameInput.value.length > 0 ? firstNameInput.value + ',' : ',') + ' it looks like you have already contacted me. I will get to reviewing it right away!</span>';
+          }
+
+          submitButton.removeAttribute('disabled');
+        }
+
+        if (data.status == 'ok') {
+          formWrap.removeChild(hireMeForm);
+
+          var _formInfo = document.createElement('p');
+
+          _formInfo.innerText = data.message;
+
+          _formInfo.classList.add('text-gruvbox-white', 'mb-4');
+
+          formWrap.appendChild(_formInfo);
+        }
+      })["catch"](function (errors) {
+        var formInfo = document.createElement('p');
+        formInfo.innerText = errors.message;
+        formInfo.classList.add('text-gruvbox-red', 'mb-4');
+        formWrap.appendChild(formInfo);
+      });
+    };
+  }
+};
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./resources/js/playground.js"]();
+/******/ 	
+/******/ })()
+;

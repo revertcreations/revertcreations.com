@@ -1,0 +1,16 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="90px" height="95px" viewBox="0 0 90 95">
+<defs>
+<g id="designTriangle_0_Layer0_0_FILL">
+<path fill="#F0D43A" stroke="none" d="
+M 86.1 75
+L 86.65 75 86.1 74.05 55.4 20.9 43.35 0 0 75 55.4 75 86.1 75 Z"/>
+</g>
+</defs>
+
+<g id="designTriangle" transform="matrix( 1, 0, 0, 1, 4.3,0.1) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#designTriangle_0_Layer0_0_FILL"/>
+</g>
+</g>
+</svg>

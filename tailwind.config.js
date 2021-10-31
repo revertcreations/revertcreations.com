@@ -11,6 +11,8 @@ module.exports = {
         },
         extend: {
             colors: {
+                'revert-black': '#2a2727',
+                'revert-gray': '#c1bfbe',
                 'gruvbox-light-red': '#fb3934',
                 'gruvbox-red': '#cc241d',
                 'gruvbox-light-yellow': '#d79921',

@@ -1,1 +1,15 @@
-!function(){var e;document.getElementById("home_title"),document.getElementById("photographer"),document.getElementById("photographer_wrap"),document.getElementById("videographer_wrap"),document.getElementById("homepage_tag"),e=~~(Math.random()*portfolio.length),document.body.style.backgroundSize="cover",document.body.style.backgroundImage="url('"+portfolio[e].secure_path+"')"}();
+/******/ (() => { // webpackBootstrap
+var __webpack_exports__ = {};
+/*!******************************!*\
+  !*** ./resources/js/home.js ***!
+  \******************************/
+// (function() {
+//  console.log('ran')
+// })();
+// /* Photos */
+// function select(e) {
+//     let description = e.target
+//     console.log('description: ', description)
+// }
+/******/ })()
+;

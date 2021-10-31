@@ -12,6 +12,34 @@
     }
 }
 
+h1, h2, h3 {
+    font-family: bely,sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+p {
+    font-family: pt-sans, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* #photoSkill::before {
+    content: url("/svgs/photo.svg");
+    position: absolute;
+} */
+
+#photo_skill_svg {
+    z-index: -1;
+}
+#design_skill_svg {
+    z-index: -1;
+}
+#code_skill_svg {
+    z-index: -1;
+}
+
+
 :root{
     --experience-color: #b8bb26;
     --translate-origin: 0px;
@@ -28,7 +56,6 @@
 .logo-link.photography {
     @apply bg-black text-white hover:text-black hover:bg-white;
 }
-
 
 #playground::-webkit-scrollbar {
     display: none;

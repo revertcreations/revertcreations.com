@@ -6,36 +6,39 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>REVERT CREATIONS</title>
 
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="https://use.typekit.net/pem2qrs.css">
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
 </head>
 <body class="h-full overflow-x-hidden">
 
-    <div id="app" class="flex flex-col h-full">
+    <div id="app" class="flex flex-col max-w-3xl mx-auto h-full bg-white">
 
-        {{-- <header id="main_header">
-            <nav>
-                <ul class="flex justify-between">
-                    <li class="m-5"><a href="{{ route('web-development') }}"><span id="computer_icon">&#128421;</span> web development</a></li>
-                    <li class="m-5"><a href="{{ route('photography') }}"><span id="camera_icon">&#128247;</span> photography</a></li>
-                </ul>
-            </nav>
-        </header> --}}
+        <header id="main_header">
+            <div id="logo" class="relative h-80">
+                <img class="absolute right-2" width="300" src="{{ asset('svgs/large_red_square.svg') }}" alt="">
+                <a class="absolute w-10/12 z-10 right-0 top-2" href="{{ route('home')}}"><img class="" src="{{ asset('svgs/logoBW.svg') }}"></a>
+            </div>
+        </header>
 
 
-        <div id="content" class="flex flex-col h-full">
-
-            <h1
-                id="home_title"
-                class="self-end text-6xl sm:text-8xl mt-3 mb-3 logo-link photography">
-                    <a href="{{ route('home')}}">REVERT CREATIONS</a>
-            </h1>
+        <div id="content" class="">
 
             {{ $slot }}
 
         </div>
+
+        <footer class="fixed w-full">
+            <div class="relative">
+                <img class="absolute left-2" width="150" src="{{ asset('svgs/small_red_square.svg') }}" alt="">
+                <a class="text-2xl absolute left-0 -bottom-36 bg-revert-black text-white" href="mailto:trever@revertcreations.com">
+                    <b>trever@revertcreations.com</b>
+                </a>
+            </div>
+        </footer>
+
     </div>
 
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

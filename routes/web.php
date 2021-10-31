@@ -37,8 +37,8 @@ Route::domain($domain)->group(function () {
 
     Route::get('/', function () {
         // $skills = Skill::all();
-        $portfolio = PhotographyPortfolioImage::all();
-        return view('home', compact('portfolio'));
+        // $portfolio = PhotographyPortfolioImage::all();
+        return view('home');
     })->name('home');
 
     // Route::get('/web-development', function () {
