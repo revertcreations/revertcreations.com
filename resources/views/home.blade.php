@@ -38,7 +38,7 @@
             <h2 class="relative skill cursor-pointer text-5xl mb-8">Code</h2>
             <iframe
                 id="code_skill_svg"
-                class="absolute -top-2 left-14"
+                class="absolute"
                 src="{{ asset('svgs/codeAnimation.html') }}"
                 frameborder="0">
             </iframe>
