@@ -32,6 +32,8 @@ p {
 
 #design_skill_svg {
     z-index: -1;
+    right: -56px;
+    bottom: -7px;
 }
 #code_skill_svg {
     z-index: -1;

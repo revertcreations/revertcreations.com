@@ -24,7 +24,7 @@
             <h2 name="design" class="skill cursor-pointer text-5xl mb-8">Design</h2>
             <iframe
                 id="design_skill_svg"
-                class="absolute -top-14 -left-10"
+                class="absolute"
                 src="{{ asset('svgs/designAnimation.html') }}"
                 frameborder="0">
             </iframe>
