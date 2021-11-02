@@ -12,11 +12,11 @@
 </head>
 <body class="h-full overflow-x-hidden">
 
-    <div id="app" class="flex flex-col max-w-3xl mx-auto h-full bg-white">
+    <div id="app" class="flex flex-col md:max-w-3xl mx-auto h-full bg-white">
 
         <header id="main_header">
-            <div id="logo" class="relative h-72">
-                <img class="absolute right-2" width="300" src="{{ asset('svgs/large_red_square.svg') }}" alt="">
+            <div id="logo" class="relative h-40 md:h-72">
+                <img class="absolute right-2 w-large-square-half md:w-large-square-full" src="{{ asset('svgs/large_red_square.svg') }}" alt="">
                 <a class="absolute w-10/12 z-10 right-0 top-2" href="{{ route('home')}}"><img class="" src="{{ asset('svgs/logoBW.svg') }}"></a>
             </div>
         </header>
@@ -30,8 +30,8 @@
 
         <footer class="fixed w-full">
             <div class="relative">
-                <img class="absolute left-2" width="150" src="{{ asset('svgs/small_red_square.svg') }}" alt="">
-                <a class="text-2xl absolute left-0 -bottom-36 bg-revert-black text-white" href="mailto:trever@revertcreations.com">
+                <img class="absolute left-2 w-small-square-half md:w-small-square-full" src="{{ asset('svgs/small_red_square.svg') }}" alt="">
+                <a class="md:text-2xl absolute left-0 top-11 md:top-28 bg-revert-black text-white" href="mailto:trever@revertcreations.com">
                     <b>trever@revertcreations.com</b>
                 </a>
             </div>

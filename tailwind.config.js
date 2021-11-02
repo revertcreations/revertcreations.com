@@ -10,6 +10,12 @@ module.exports = {
             inner: 'inset 0 4px 8px 0 rgba(0, 0, 0, 1)',
         },
         extend: {
+            spacing: {
+                'small-square-full': '150px',
+                'small-square-half': '75px',
+                'large-square-full': '300px',
+                'large-square-half': '150px'
+            },
             colors: {
                 'revert-black': '#2a2727',
                 'revert-gray': '#c1bfbe',
