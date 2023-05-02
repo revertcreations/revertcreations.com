@@ -11,9 +11,11 @@
                 I'm a <span id="designerHighlight">designer</span>,
                 <span id="developerHighlight">developer</span>, and
                 <span id="photographerHighlight">photographer</span>.
-                I type on keyboards, click mice, and release shutters with
-                the ambition of producing simple, beautiful, and rich
-                experiences for others to enjoy.
+                As a multi-disciplinary creative, I blend design, development, and photography
+                to craft immersive experiences that capture attention and inspire wonder. 
+                Whether I'm typing on a keyboard, clicking a mouse, or releasing a shutter, my
+                ultimate goal is to create simple, yet stunning visuals that leave a lasting
+                impact on viewers.Let's work together to bring your vision to life.
             </p>
         </div>
     </div>
