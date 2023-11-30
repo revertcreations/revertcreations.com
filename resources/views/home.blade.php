@@ -15,7 +15,7 @@
                 to craft immersive experiences that capture attention and inspire wonder. 
                 Whether I'm typing on a keyboard, clicking a mouse, or releasing a shutter, my
                 ultimate goal is to create simple, yet stunning visuals that leave a lasting
-                impact on viewers.Let's work together to bring your vision to life.
+                impact on viewers. Let's work together to bring your vision to life.
             </p>
         </div>
     </div>
