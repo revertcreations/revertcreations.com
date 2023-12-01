@@ -2,22 +2,20 @@
     const app = document.getElementById('app')
     const skills = document.getElementsByClassName('skill')
 
-
-
     for (let i = 0; i < skills.length; i++) {
         const skill = skills[i];
-        skill.addEventListener('mouseover', skillTargeted)
-        skill.addEventListener('touchstart', skillTargeted)
+        skill.addEventListener('mouseover', disiplineTargeted)
+        skill.addEventListener('touchstart', disiplineTargeted)
     }
 
-    function skillTargeted(e) {
+    function disiplineTargeted(e) {
         let title = e.target
         // console.log('e.target', e.target)
         // window.title = e.target
-        let target_skill = e.target.innerText.toLowerCase()
+        let target_disipline = e.target.innerText.toLowerCase()
 
 
-        switch (target_skill) {
+        switch (target_disipline) {
             case 'design':
                 var iframe = document.getElementsByTagName("iframe")[0].contentWindow;
                 iframe.exportRoot.triangle.play();

@@ -1,10 +1,10 @@
 module.exports = {
-    purge: [
+    content: [
         './resources/**/*.blade.php',
         './resources/**/*.js',
         './resources/**/*.vue',
     ],
-    darkMode: false, // or 'media' or 'class'
+    darkMode: 'media', // or 'media' or 'class'
     theme: {
         boxShadow: {
             inner: 'inset 0 4px 8px 0 rgba(0, 0, 0, 1)',
@@ -19,6 +19,9 @@ module.exports = {
             colors: {
                 'revert-black': '#2a2727',
                 'revert-gray': '#c1bfbe',
+                'revert-yellow': '#f0d43a',
+                'revert-green': '#c1e718',
+                'revert-blue': '#22b2da',
                 'gruvbox-light-red': '#fb3934',
                 'gruvbox-red': '#cc241d',
                 'gruvbox-light-yellow': '#d79921',
