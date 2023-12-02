@@ -13,7 +13,7 @@ module.exports = {
             spacing: {
                 'small-square-full': '150px',
                 'small-square-half': '75px',
-                'large-square-full': '300px',
+                'large-square-full': '250px',
                 'large-square-half': '150px'
             },
             colors: {

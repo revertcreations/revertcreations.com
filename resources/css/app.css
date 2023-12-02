@@ -1,4 +1,25 @@
 @tailwind base;
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--revert-gray) var(--revert-gray);
+  }
+  
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 15px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: var(--revert-gray);
+    border-radius: 5px;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--revert-gray);
+    border-radius: 14px;
+    border: 3px solid var(--revert-gray);
+  }
 @tailwind components;
 @tailwind utilities;
 @import "~flatpickr/dist/flatpickr.css";
@@ -30,7 +51,7 @@ p {
 } */
 
 
-#design_skill_svg {
+/* #design_skill_svg {
     z-index: -1;
     right: -56px;
     bottom: -7px;
@@ -44,7 +65,7 @@ p {
     z-index: -1;
     left: 53px;
     top: 0px;
-}
+} */
 
 
 :root{
