@@ -10,6 +10,10 @@ module.exports = {
             inner: 'inset 0 4px 8px 0 rgba(0, 0, 0, 1)',
         },
         extend: {
+            fontSize: {
+                'text-7xl': '5rem',
+                'text-8xl': '6rem',
+            },
             spacing: {
                 'small-square-full': '150px',
                 'small-square-half': '75px',
@@ -40,7 +44,8 @@ module.exports = {
                 'gruvbox-black': '#282828',
                 'gruvbox-black-hidden': '#32302f',
                 'gruvbox-white': '#fbf1c7',
-                'hmt-green': '#b9cc33'
+                'hmt-green': '#b9cc33',
+                'motorsportreg-red': '#f13a44',
             },
             animation: {
                 'sharpen-text': 'sharpen-text 0.2s linear 1 forwards',

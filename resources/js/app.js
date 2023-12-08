@@ -4,8 +4,8 @@
 
     for (let i = 0; i < skills.length; i++) {
         const skill = skills[i];
-        skill.addEventListener('mouseover', disiplineTargeted)
-        skill.addEventListener('touchstart', disiplineTargeted)
+        skill.addEventListener('mouseover', disiplineTargeted, { passive: true })
+        skill.addEventListener('touchstart', disiplineTargeted, { passive: true })
     }
 
     function disiplineTargeted(e) {
