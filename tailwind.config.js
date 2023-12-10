@@ -8,6 +8,7 @@ module.exports = {
     theme: {
         boxShadow: {
             inner: 'inset 0 4px 8px 0 rgba(0, 0, 0, 1)',
+            outer: '0 4px 8px 0 rgba(0, 0, 0, 1)',
         },
         extend: {
             fontSize: {

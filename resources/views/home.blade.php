@@ -24,15 +24,15 @@
                     id="designer">designer</span>
                 and <span class="text-3xl font-bold text-gruvbox-green"
                     id="developer">developer</span> who strives
-                to create web applications that users treasure.
+                to create web applications that users <span id="eh">treasure</span>.
             </p>
             <p class="m-3 text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal"
                 id="secondary">
                 I'm constanstly coming up with startup ideas, tinkering with interfaces, and fiddling with designs. I hope
-                this creative platform can be a source of motivation for myself to bring those ideas to life and
-                share with the rest of the internet. Hope you find some
-                <span class="text-gruvbox-black"
-                    id="hint">hidden</span> gems.
+                this platform can be a source of motivation for myself to bring those creative ideas to life and
+                share them with the rest of the internet. Hope you find some
+                <span class="text-black shadow-inner"
+                    id="hint">hidden</span> gems laying around.
             </p>
         </div>
     </div>

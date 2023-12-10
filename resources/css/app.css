@@ -34,13 +34,15 @@
 }
 
 h1, h2, h3 {
-    font-family: bely,sans-serif;
+    font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
     font-weight: 700;
     font-style: normal;
 }
 
 p {
-    font-family: droid-sans-mono, monospace;
+    font-family: SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", 
+    "Courier New", monospace;
 }
 
 /* #photoSkill::before {

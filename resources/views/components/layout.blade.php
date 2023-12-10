@@ -8,12 +8,14 @@
         content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible"
         content="ie=edge">
+    <meta name="theme-color" content="#317EFB"/>    
     <title>REVERT CREATIONS</title>
 
-    <link href="https://use.typekit.net/pem2qrs.css"
-        rel="stylesheet">
     <link href="{{ mix('css/app.css') }}"
-        rel="stylesheet">
+        rel="preload"
+        type="text/css"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet';">
 
     @if (app()->environment() == 'production')
         <!-- Google tag (gtag.js) -->
@@ -42,10 +44,12 @@
             id="main_header">
             <div class="bg-gruvbox-blue"
                 id="logo">
-                {{-- <img class="w-large-square-half md:w-large-square-full" src="{{ asset('svgs/large_red_square.svg') }}" alt=""> --}}
                 <a class="right-0 top-2 z-10 w-10/12"
-                    href="{{ route('home') }}"><img class=""
-                        src="{{ asset('svgs/logoBW.svg') }}"></a>
+                    href="{{ route('home') }}">
+                    <img class="w-full"
+                        src="{{ asset('svgs/logoBW.svg') }}"
+                        alt="Revert Creations">
+                </a>
             </div>
 
             {{-- <div class="">
@@ -65,45 +69,17 @@
 
         </div>
 
-        <div class="flex flex-nowrap bg-gruvbox-orange text-revert-black">
+        <div id="footer" class="flex flex-nowrap bg-gruvbox-orange text-revert-black">
 
             <div class="relative grow p-4 bg-gruvbox-yellow"
                 id="">
                 <h2 class="skill inline cursor-pointer text-3xl md:text-5xl"
                     name="design">blog</h2>
-                <iframe class="absolute -top-10 left-10 hidden"
-                    id="design_skill_svg"
-                    src="{{ asset('svgs/designAnimation.html') }}"
-                    frameborder="0">
-                </iframe>
             </div>
 
             <div class="relative grow p-4 bg-gruvbox-blue">
                 <h2 class="skill cursor-pointer text-3xl md:text-5xl">contact</h2>
-                <iframe class="absolute right-0 top-0 hidden"
-                    id="code_skill_svg"
-                    src="{{ asset('svgs/codeAnimation.html') }}"
-                    frameborder="0"
-                    width="44"
-                    height="76">
-                </iframe>
             </div>
-{{-- 
-            <div class="relative grow p-4 bg-gruvbox-yellow">
-                <h2 class="skill cursor-pointer text-3xl md:text-5xl"
-                    id="photo_skill">
-                    <a href="{{ route('photography') }}">Photograph</a>
-                </h2>
-                <iframe class="absolute top-0 hidden"
-                    id="photo_skill_svg"
-                    src="{{ asset('svgs/polaroidAnimation.html') }}"
-                    frameborder="0"
-                    width="66"
-                    height="79">
-                </iframe>
-            </div>
-        </div> --}}
-
     </div>
 
     <script src="{{ mix('js/app.js') }}"></script>
