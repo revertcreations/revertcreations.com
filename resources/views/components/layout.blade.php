@@ -8,7 +8,7 @@
         content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible"
         content="ie=edge">
-    <meta name="theme-color" content="#317EFB"/>    
+    <meta name="theme-color" content="#317EFB"/>
     <title>REVERT CREATIONS</title>
 
     <link href="{{ mix('css/app.css') }}"
@@ -33,6 +33,7 @@
         </script>
     @endif
 
+    <script src="/js/home.js" type="module" defer></script>
 </head>
 
 <body class="h-full bg-gruvbox-black-hidden overflow-hidden">
@@ -82,7 +83,6 @@
             </div>
     </div>
 
-    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 
 </html>

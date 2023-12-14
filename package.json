@@ -17,7 +17,6 @@
     },
     "dependencies": {
         "@tailwindcss/forms": "^0.5.7",
-        "chokidar": "^3.5.3",
-        "flatpickr": "^4.6.9"
+        "chokidar": "^3.5.3"
     }
 }

@@ -12,14 +12,10 @@ const chokidar = require('chokidar');
  |
  */
 
-
-mix.js('resources/js/*.js', 'public/js', [
-        require('flatpickr'),
-    ])
+mix.js('resources/js/home.js', 'js')
     .postCss('resources/css/app.css', 'public/css', [
         require('tailwindcss'),
     ]);
-
 
 mix.options({
     hmrOptions: {

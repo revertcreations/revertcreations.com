@@ -4,17 +4,17 @@
     scrollbar-width: thin;
     scrollbar-color: var(--revert-gray) var(--revert-gray);
   }
-  
+
   /* Chrome, Edge, and Safari */
   *::-webkit-scrollbar {
     width: 15px;
   }
-  
+
   *::-webkit-scrollbar-track {
     background: var(--revert-gray);
     border-radius: 5px;
   }
-  
+
   *::-webkit-scrollbar-thumb {
     background-color: var(--revert-gray);
     border-radius: 14px;
@@ -22,7 +22,6 @@
   }
 @tailwind components;
 @tailwind utilities;
-@import "~flatpickr/dist/flatpickr.css";
 
 @layer utilities {
     .w-1000 {
@@ -33,7 +32,7 @@
     }
 }
 
-h1, h2, h3 {
+h1, h2, h3, .text-8xl {
     font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
     font-weight: 700;
     font-style: normal;
@@ -41,7 +40,7 @@ h1, h2, h3 {
 
 p {
     font-family: SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", 
+    Consolas, "Liberation Mono",
     "Courier New", monospace;
 }
 
