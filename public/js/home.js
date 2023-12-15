@@ -48,6 +48,7 @@ var _success2 = /*#__PURE__*/new WeakMap();
 var _unlock = /*#__PURE__*/new WeakMap();
 var _unlock2 = /*#__PURE__*/new WeakMap();
 var _textColors = /*#__PURE__*/new WeakMap();
+var _intervals = /*#__PURE__*/new WeakMap();
 var NameElement = /*#__PURE__*/function (_HTMLElement) {
   _inherits(NameElement, _HTMLElement);
   var _super = _createSuper(NameElement);
@@ -78,6 +79,20 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
     _classPrivateFieldInitSpec(_assertThisInitialized(_this), _textColors, {
       writable: true,
       value: void 0
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _intervals, {
+      writable: true,
+      value: void 0
+    });
+    _defineProperty(_assertThisInitialized(_this), "loadAnimation", function (span, index) {
+      _this.nameLetterClicked({
+        target: span
+      }, true);
+      var count = span.getAttribute('data-loading-count');
+      if (count == 20) {
+        clearInterval(_classPrivateFieldGet(_assertThisInitialized(_this), _intervals)[index]);
+      }
+      span.setAttribute('data-loading-count', ++count);
     });
     _defineProperty(_assertThisInitialized(_this), "nameLetterClicked", function (e) {
       var _target$classList;
@@ -135,12 +150,12 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
             _classPrivateFieldGet(_assertThisInitialized(_this), _unlock2).play();
           }
           // TODO: add method to create loading state
-          // nameCursorLoading()
+          // this.nameCursorLoading()
           // TODO: add window event trigger to change content
           window.dispatchEvent(new Event("unlock", {
             type: unlockType
           }));
-          // disapearingParagraphs(selected)
+          // this.disapearingParagraphs(selected)
         }
       }
     });
@@ -151,6 +166,7 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
     _classPrivateFieldSet(_assertThisInitialized(_this), _unlock, new Audio('/audio/unlock.wav'));
     _classPrivateFieldSet(_assertThisInitialized(_this), _unlock2, new Audio('/audio/unlock2.wav'));
     _classPrivateFieldSet(_assertThisInitialized(_this), _textColors, ['text-gruvbox-light-yellow', 'text-gruvbox-yellow', 'text-gruvbox-orange', 'text-gruvbox-purple', 'text-gruvbox-blue', 'text-gruvbox-aqua', 'text-gruvbox-gray', 'text-gruvbox-green', 'text-gruvbox-red']);
+    _classPrivateFieldSet(_assertThisInitialized(_this), _intervals, []);
     return _this;
   }
   _createClass(NameElement, [{
@@ -162,17 +178,96 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
     key: "render",
     value: function render() {
       var _this2 = this;
-      this.dataset.name.split('').forEach(function (letter) {
+      this.dataset.name.split('').forEach(function (letter, i) {
         var span = document.createElement('span');
         span.classList.add('cursor-pointer', 'select-none', 'text-8xl');
         span.innerText = letter;
         span.setAttribute('data-click-count', 0);
+        span.setAttribute('data-loading-count', 0);
         span.addEventListener('click', _this2.nameLetterClicked, {
           passive: true
         });
         _this2.appendChild(span);
-        //setInterval(this.nameLetterClicked, 110, { target: span }, true);
+        _classPrivateFieldGet(_this2, _intervals)[i] = setInterval(_this2.loadAnimation, 50, span, i);
       });
+    }
+  }, {
+    key: "disapearingParagraphs",
+    value: function disapearingParagraphs(selected) {
+      if (!selected) return;
+      var lead = document.getElementById('lead');
+      var paragraphs = lead.childNodes;
+      var newParagraphs = [];
+      var newParagraph;
+      paragraphs.forEach(function (paragraph, i) {
+        newParagraph = null;
+        if (paragraph.nodeType === 1 && (!paragraph.classList || paragraph.classList && !paragraph.classList.contains('hidden'))) {
+          newParagraph = document.createElement('p');
+          paragraph.classList.forEach(function (className) {
+            newParagraph.classList.add(className);
+          });
+          newParagraph.id = 'exploding-paragraph-' + i;
+          paragraph.childNodes.forEach(function (words) {
+            var text = words.textContent;
+            var letters = text.split('');
+            letters.forEach(function (letter) {
+              var span = document.createElement('span');
+              if (words.classList) {
+                words.classList.forEach(function (className) {
+                  span.classList.add(className);
+                });
+              }
+              span.innerText = letter;
+              if (letter != '\n') {
+                newParagraph.appendChild(span);
+              }
+            });
+          });
+        }
+        if (newParagraph) newParagraphs.push(newParagraph);
+      });
+      document.getElementById('default').classList.add('hidden');
+      document.getElementById('secondary').classList.add('hidden');
+      newParagraphs.forEach(function (newParagraph) {
+        lead.appendChild(newParagraph);
+      });
+      var disapearingParagraphs = document.querySelectorAll('#lead p');
+      disapearingParagraphs.forEach(function (paragraph) {
+        if (!paragraph.classList.contains('hidden')) {
+          paragraph.classList.add('overflow-hidden');
+          var letters = paragraph.querySelectorAll('span');
+          letters.forEach(function (letter) {
+            setTimeout(function () {
+              if (selected == 'green' && letter.classList.contains('text-gruvbox-green') || selected == 'purple' && letter.classList.contains('text-gruvbox-purple')) {
+                letter.style.fontSize = '3rem';
+              } else {
+                setTimeout(function () {
+                  //remove letter from dom
+                  paragraph.removeChild(letter);
+                }, 2000);
+                letter.style.opacity = 0;
+                letter.style.transition = "opacity ".concat(Math.random() * (2 - 1), "s ease-in-out");
+              }
+              document.getElementsByTagName('body')[0].classList.remove('cursor-wait');
+            }, 100);
+          });
+        }
+      });
+    }
+  }, {
+    key: "nameCursorLoading",
+    value: function nameCursorLoading() {
+      var myNameLetters = document.querySelectorAll('#name span');
+      myNameLetters.forEach(function (letter) {
+        letter.classList.remove('cursor-copy');
+        letter.classList.add('cursor-wait');
+        setTimeout(function () {
+          letter.classList.remove('cursor-wait');
+          letter.classList.add('cursor-pointer');
+        }, 3000);
+      });
+      var body = document.getElementsByTagName('body')[0];
+      body.classList.add('cursor-wait');
     }
   }]);
   return NameElement;
@@ -471,96 +566,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_PuzzleElement_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/PuzzleElement.js */ "./resources/js/components/PuzzleElement.js");
 
 
-window.addEventListener("DOMContentLoaded", function () {
-  console.log('ahh yea');
-  var mainHeader = document.getElementById('main_header');
-  var lead = document.getElementById('lead');
-  var footer = document.getElementById('footer');
-  var myNameLetters = document.querySelectorAll('#name span');
-  var hint = document.getElementById('hint');
-  var eh = document.getElementById('eh');
-  var state = 'default';
-  if (hint) {
-    var disiplineTargeted = function disiplineTargeted(e) {
-      var title = e.target;
-      var target_disipline = e.target.innerText.toLowerCase();
-      console.log('target_disipline', target_disipline);
-    };
-    var nameCursorLoading = function nameCursorLoading() {
-      console.log('nameCursorLoading');
-      myNameLetters.forEach(function (letter) {
-        letter.classList.remove('cursor-copy');
-        letter.classList.add('cursor-wait');
-        setTimeout(function () {
-          letter.classList.remove('cursor-wait');
-          letter.classList.add('cursor-pointer');
-        }, 3000);
-      });
-      var body = document.getElementsByTagName('body')[0];
-      body.classList.add('cursor-wait');
-    };
-    var disapearingParagraphs = function disapearingParagraphs(selected) {
-      if (!selected) return;
-      var paragraphs = lead.childNodes;
-      var newParagraphs = [];
-      var newParagraph;
-      paragraphs.forEach(function (paragraph, i) {
-        newParagraph = null;
-        if (paragraph.nodeType === 1 && (!paragraph.classList || paragraph.classList && !paragraph.classList.contains('hidden'))) {
-          newParagraph = document.createElement('p');
-          paragraph.classList.forEach(function (className) {
-            newParagraph.classList.add(className);
-          });
-          newParagraph.id = 'exploding-paragraph-' + i;
-          paragraph.childNodes.forEach(function (words) {
-            var text = words.textContent;
-            var letters = text.split('');
-            letters.forEach(function (letter) {
-              var span = document.createElement('span');
-              if (words.classList) {
-                words.classList.forEach(function (className) {
-                  span.classList.add(className);
-                });
-              }
-              span.innerText = letter;
-              if (letter != '\n') {
-                newParagraph.appendChild(span);
-              }
-            });
-          });
-        }
-        if (newParagraph) newParagraphs.push(newParagraph);
-      });
-      document.getElementById('default').classList.add('hidden');
-      document.getElementById('secondary').classList.add('hidden');
-      newParagraphs.forEach(function (newParagraph) {
-        lead.appendChild(newParagraph);
-      });
-      var disapearingParagraphs = document.querySelectorAll('#lead p');
-      disapearingParagraphs.forEach(function (paragraph, i) {
-        if (!paragraph.classList.contains('hidden')) {
-          paragraph.classList.add('overflow-hidden');
-          var letters = paragraph.querySelectorAll('span');
-          letters.forEach(function (letter, i) {
-            setTimeout(function () {
-              if (selected == 'green' && letter.classList.contains('text-gruvbox-green') || selected == 'purple' && letter.classList.contains('text-gruvbox-purple')) {
-                letter.style.fontSize = '3rem';
-              } else {
-                setTimeout(function () {
-                  //remove letter from dom
-                  paragraph.removeChild(letter);
-                }, 2000);
-                letter.style.opacity = 0;
-                letter.style.transition = "opacity ".concat(Math.random() * (2 - 1), "s ease-in-out");
-              }
-              document.getElementsByTagName('body')[0].classList.remove('cursor-wait');
-            }, 100);
-          });
-        }
-      });
-    };
-  }
-});
+
+//window.addEventListener("DOMContentLoaded", () => {});
 
 /***/ }),
 
