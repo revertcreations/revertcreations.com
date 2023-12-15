@@ -216,7 +216,12 @@ function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _
 function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
 function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
 var _interval = /*#__PURE__*/new WeakMap();
+var _time = /*#__PURE__*/new WeakMap();
 var _hintCount = /*#__PURE__*/new WeakMap();
+var _level = /*#__PURE__*/new WeakMap();
+var _held = /*#__PURE__*/new WeakMap();
+var _rngX = /*#__PURE__*/new WeakMap();
+var _rngY = /*#__PURE__*/new WeakMap();
 var PuzzleElement = /*#__PURE__*/function (_HTMLElement) {
   _inherits(PuzzleElement, _HTMLElement);
   var _super = _createSuper(PuzzleElement);
@@ -228,7 +233,27 @@ var PuzzleElement = /*#__PURE__*/function (_HTMLElement) {
       writable: true,
       value: void 0
     });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _time, {
+      writable: true,
+      value: void 0
+    });
     _classPrivateFieldInitSpec(_assertThisInitialized(_this), _hintCount, {
+      writable: true,
+      value: void 0
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _level, {
+      writable: true,
+      value: void 0
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _held, {
+      writable: true,
+      value: void 0
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _rngX, {
+      writable: true,
+      value: void 0
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _rngY, {
       writable: true,
       value: void 0
     });
@@ -254,9 +279,168 @@ var PuzzleElement = /*#__PURE__*/function (_HTMLElement) {
       _classPrivateFieldSet(_assertThisInitialized(_this), _interval, setInterval(_this.glimmerHint, 10000));
       _classPrivateFieldSet(_assertThisInitialized(_this), _hintCount, (_this$hintCount = _classPrivateFieldGet(_assertThisInitialized(_this), _hintCount), _this$hintCount2 = _this$hintCount++, _this$hintCount)), _this$hintCount2;
     });
+    _defineProperty(_assertThisInitialized(_this), "loadEventListeners", function () {
+      _this.addEventListener('mousedown', _this.mDown);
+      _this.addEventListener('mouseup', _this.mUp);
+      _this.addEventListener('dragstart', _this.dStart);
+      _this.addEventListener('dragend', _this.dEnd);
+      _this.addEventListener('drag', _this.d);
+    });
+    _defineProperty(_assertThisInitialized(_this), "removeEventListeners", function () {
+      clearInterval(_classPrivateFieldGet(_assertThisInitialized(_this), _interval));
+      _this.removeEventListener('mousedown', _this.mDown);
+      _this.removeEventListener('mouseup', _this.mUp);
+      _this.removeEventListener('dragstart', _this.dStart);
+      _this.removeEventListener('dragend', _this.dEnd);
+      _this.removeEventListener('drag', _this.d);
+      var gem = '💎';
+    });
+    _defineProperty(_assertThisInitialized(_this), "mDown", function (e) {
+      var target = e.target;
+      target.setAttribute('draggable', true);
+      target.classList.add('shadow-outer', 'text-gruvbox-gray');
+    });
+    _defineProperty(_assertThisInitialized(_this), "mUp", function (e) {
+      var target = e.target;
+      target.classList.remove('text-gruvbox-gray', 'shadow-outer', 'cursor-grabbing');
+      target.classList.add('cursor-pointer');
+    });
+    _defineProperty(_assertThisInitialized(_this), "dStart", function (e) {
+      var mainHeader = document.getElementById('main_header');
+      var footer = document.getElementById('footer');
+      var body = document.querySelector('body');
+      clearInterval(_classPrivateFieldGet(_assertThisInitialized(_this), _interval));
+      var target = e.target;
+      target.textContent = "\xA0\xA0\xA0\xA0\xA0\xA0";
+      var mainHeaderHeight = mainHeader.offsetHeight;
+      var footerHeight = footer.offsetHeight;
+      var padding = 15;
+      _classPrivateFieldSet(_assertThisInitialized(_this), _level, _classPrivateFieldGet(_assertThisInitialized(_this), _level) === 0 ? 1 : 2);
+      var maxHeight = window.innerHeight - footerHeight - padding;
+      var minHeight = mainHeaderHeight + padding;
+      _classPrivateFieldSet(_assertThisInitialized(_this), _rngX, Math.random() * (window.innerWidth - padding - padding) + padding);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _rngY, Math.random() * (maxHeight - minHeight) + minHeight);
+      var key = document.createElement('div');
+      key.innerHTML = '💡';
+      key.classList.add('absolute', 'z-50', 'text-5xl');
+      key.id = 'key';
+      body.appendChild(key);
+      target.classList.remove('cursor-pointer', 'shadow-outer');
+      target.classList.add('cursor-grabbing');
+    });
+    _defineProperty(_assertThisInitialized(_this), "dEnd", function (e) {
+      setTimeout(function () {
+        _this.glimmerHint();
+      }, 1500);
+      var target = e.target;
+      var body = document.querySelector('body');
+      _classPrivateFieldSet(_assertThisInitialized(_this), _level, 0);
+      target.textContent = _this.dataset.content;
+      target.classList.remove('text-gruvbox-gray', 'shadow-outer', 'cursor-grabbing');
+      target.classList.add('cursor-pointer');
+      target.setAttribute('draggable', false);
+      body.removeChild(document.getElementById('key'));
+    });
+    _defineProperty(_assertThisInitialized(_this), "d", function (e) {
+      var target = e.target;
+      var key = document.getElementById('key');
+      var eh = document.getElementById('eh');
+      var mouseX = e.clientX;
+      var mouseY = e.clientY;
+      key.style.left = "".concat(mouseX - 20, "px");
+      key.style.top = "".concat(mouseY - 40, "px");
+      var ehPosition = eh.getBoundingClientRect();
+      var deltaX = _classPrivateFieldGet(_assertThisInitialized(_this), _rngX) - mouseX;
+      var deltaY = _classPrivateFieldGet(_assertThisInitialized(_this), _rngY) - mouseY;
+      if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) === 2) {
+        deltaX = ehPosition.x + ehPosition.width / 2 - mouseX;
+        deltaY = ehPosition.y + ehPosition.height / 2 - mouseY;
+      }
+      var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      var theta = Math.atan2(deltaY, deltaX);
+      var angle = theta / Math.PI * 180 + (theta > 0 ? 0 : 360);
+
+      // the added 225 degrees is to account for the emoji being already rotated
+      var rotate = 0;
+      if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) === 2 && _classPrivateFieldGet(_assertThisInitialized(_this), _held) === null) {
+        rotate = angle + 225;
+      }
+      key.style.transform = "rotate(".concat(rotate, "deg)");
+      if (mouseX > _classPrivateFieldGet(_assertThisInitialized(_this), _rngX) && mouseX < _classPrivateFieldGet(_assertThisInitialized(_this), _rngX) + ehPosition.width && mouseY > _classPrivateFieldGet(_assertThisInitialized(_this), _rngY) && mouseY < _classPrivateFieldGet(_assertThisInitialized(_this), _rngY) + ehPosition.height) {
+        target.classList.remove('cursor-grabbing');
+        target.classList.add('cursor-progress');
+        key.style.textShadow = "0 0 10px #cc241d, 0 0 18px #cc241d, 0 0 20px #cc241d";
+        if (_classPrivateFieldGet(_assertThisInitialized(_this), _held) === null) {
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, new Date());
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, _classPrivateFieldGet(_assertThisInitialized(_this), _held).setSeconds(_classPrivateFieldGet(_assertThisInitialized(_this), _held).getSeconds() + 2));
+        } else if (_classPrivateFieldGet(_assertThisInitialized(_this), _held) < new Date().getTime()) {
+          _classPrivateFieldSet(_assertThisInitialized(_this), _level, 2);
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
+          _classPrivateFieldSet(_assertThisInitialized(_this), _rngX, ehPosition.x - mouseX);
+          _classPrivateFieldSet(_assertThisInitialized(_this), _rngY, ehPosition.y - mouseY);
+          key.innerHTML = '🔑';
+          key.style.textShadow = "none";
+          key.style.color = "#000000";
+        }
+      } else if (distance <= 400 && _classPrivateFieldGet(_assertThisInitialized(_this), _level) === 1) {
+        _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
+        var spread = distance < 100 ? 0.5 : 0.1;
+        if (distance < 25) {
+          key.style.textShadow = "0 0 ".concat(distance / spread, "px #fe8019, 0 0 ").concat(distance / spread, "px #fe8019, 0 0 ").concat(distance / spread, "px #EDD205");
+          key.style.color = "#fe8019";
+        } else {
+          key.style.textShadow = "0 0 ".concat(distance / spread, "px #FFE205, 0 0 ").concat(distance / spread, "px #FFE205, 0 0 ").concat(distance / spread, "px #EDD205");
+          key.style.color = "#FFE205";
+        }
+      } else if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) !== 2) {
+        _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
+        key.style.textShadow = "none";
+        key.style.color = "#000000";
+        eh.classList.remove('text-gruvbox-yellow');
+        eh.classList.add('text-gruvbox-gray');
+      }
+      if (target.classList.contains('cursor-progress')) {
+        target.classList.remove('cursor-progress');
+        target.classList.add('cursor-grabbing');
+      }
+      if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) === 2 && mouseX > ehPosition.x && mouseX < ehPosition.x + ehPosition.width && mouseY > ehPosition.y && mouseY < ehPosition.y + ehPosition.height) {
+        eh.classList.remove('text-gruvbox-gray');
+        eh.classList.add('text-gruvbox-yellow');
+        if (_classPrivateFieldGet(_assertThisInitialized(_this), _held) === null) {
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, new Date());
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, _classPrivateFieldGet(_assertThisInitialized(_this), _held).setSeconds(_classPrivateFieldGet(_assertThisInitialized(_this), _held).getSeconds() + 2));
+        } else if (_classPrivateFieldGet(_assertThisInitialized(_this), _held) < new Date().getTime()) {
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
+          key.innerHTML = '🔓';
+          _classPrivateFieldSet(_assertThisInitialized(_this), _level, 3);
+          var detail = {
+            'hintCount': _classPrivateFieldGet(_assertThisInitialized(_this), _hintCount),
+            'time': (new Date() - _classPrivateFieldGet(_assertThisInitialized(_this), _time)) / 1000
+          };
+          window.dispatchEvent(new CustomEvent('won', {
+            detail: detail
+          }));
+          _this.removeEventListeners();
+        } else if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) < 3) {
+          key.innerHTML = '🔐';
+        }
+      } else {
+        if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) == 2) {
+          key.innerHTML = '🔑';
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
+        }
+        eh.classList.remove('text-gruvbox-yellow');
+        eh.classList.add('text-gruvbox-gray');
+      }
+    });
     _this.dataset.content;
     _classPrivateFieldSet(_assertThisInitialized(_this), _interval, null);
+    _classPrivateFieldSet(_assertThisInitialized(_this), _time, new Date());
     _classPrivateFieldSet(_assertThisInitialized(_this), _hintCount, 0);
+    _classPrivateFieldSet(_assertThisInitialized(_this), _level, 0);
+    _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
+    _classPrivateFieldSet(_assertThisInitialized(_this), _rngX, null);
+    _classPrivateFieldSet(_assertThisInitialized(_this), _rngY, null);
     return _this;
   }
   _createClass(PuzzleElement, [{
@@ -264,6 +448,7 @@ var PuzzleElement = /*#__PURE__*/function (_HTMLElement) {
     value: function connectedCallback() {
       var _this2 = this;
       this.innerText = this.dataset.content;
+      this.loadEventListeners();
       setTimeout(function () {
         _this2.glimmerHint();
       }, 500);
@@ -374,143 +559,6 @@ window.addEventListener("DOMContentLoaded", function () {
         }
       });
     };
-    hint.addEventListener('mousedown', function (e) {
-      // console.log('mousedown')
-      e.target.setAttribute('draggable', true);
-      e.target.classList.remove('shadow-inner');
-      e.target.classList.add('shadow-outer', 'text-gruvbox-gray');
-    }, {
-      passive: true
-    });
-    hint.addEventListener('mouseup', function (e) {
-      // console.log('mouseup')
-      var target = e.target;
-      target.setAttribute('draggable', false);
-      target.classList.remove('shadow-outer', 'text-gruvbox-gray');
-      target.classList.add('shadow-inner', 'text-black');
-    });
-    hint.addEventListener('dragstart', function (e) {
-      // console.log('dragstart')
-      e.target.textContent = "\xA0\xA0\xA0\xA0\xA0\xA0";
-      // get the current mouse position
-      var x = e.clientX;
-      var y = e.clientY;
-      var ehWidth = eh.offsetWidth;
-      var ehHeight = eh.offsetHeight;
-      var ehX = eh.offsetLeft + ehWidth / 2;
-      var ehY = eh.offsetTop + ehHeight / 2;
-      var mainHeaderHeight = mainHeader.offsetHeight;
-      var footerHeight = footer.offsetHeight;
-      var padding = 15;
-      state = state === 'default' ? 'secondary' : 'tertiary';
-
-      // math.random() * (max - min) + min
-      var maxHeight = window.innerHeight - footerHeight - padding;
-      var minHeight = mainHeaderHeight + padding;
-      if (state == 'secondary') {
-        window.rngX = Math.random() * (window.innerWidth - padding - padding) + padding;
-        window.rngY = Math.random() * (maxHeight - minHeight) + minHeight;
-      } else {
-        window.rngX = ehX - x;
-        window.rngY = ehY - y;
-      }
-
-      // console.log('rngX', window.rngX)
-      // console.log('rngY', window.rngY)
-
-      // create a new svg element at the mouse position
-      var key = document.createElement('div');
-      key.innerHTML = '🗝️';
-      key.innerHTML = '🧭';
-      key.innnerHTML = '🔑';
-      key.innerHTML = '💡';
-      key.classList.add('absolute', 'z-50', 'text-5xl');
-      key.id = 'key';
-      document.getElementsByTagName('body')[0].appendChild(key);
-      e.target.classList.remove('cursor-pointer', 'shadow-outer');
-      e.target.classList.add('cursor-grabbing');
-    }, {
-      passive: true
-    });
-    hint.addEventListener('drag', function (e) {
-      var key = document.getElementById('key');
-      var x = e.clientX;
-      var y = e.clientY;
-      key.style.top = "".concat(y - 40, "px");
-      key.style.left = "".concat(x - 20, "px");
-      var deltaX = window.rngX - x;
-      var deltaY = window.rngY - y;
-      var ehWidth = eh.offsetWidth;
-      var ehHeight = eh.offsetHeight;
-      var ehX = eh.offsetLeft + ehWidth / 2;
-      var ehY = eh.offsetHeight + ehHeight / 2;
-      if (state == 'tertiary') {
-        deltaX = ehX - x;
-        deltaY = ehY - y;
-      }
-      var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      var theta = Math.atan2(deltaY, deltaX);
-      var angle = theta / Math.PI * 180 + (theta > 0 ? 0 : 360);
-
-      // the added 45 is to account for the emoji being rotated 45 away from north by default
-      var rotate = state == 'tertiary' ? angle + 225 : 0;
-      console.log('rotate', rotate);
-      key.style.transform = "rotate(".concat(rotate, "deg)");
-      if (x > window.rngX && x < window.rngX + ehWidth && y > window.rngY && y < window.rngY + ehHeight) {
-        console.log('found it');
-        if (window.held === undefined) {
-          window.held = new Date();
-          window.held = window.held.setSeconds(window.held.getSeconds() + 2);
-        }
-        e.target.classList.remove('cursor-grabbing');
-        e.target.classList.add('cursor-progress');
-        key.style.textShadow = "0 0 10px #cc241d, 0 0 18px #cc241d, 0 0 20px #cc241d";
-        if (window.held < new Date().getTime()) {
-          state = 'tertiary';
-          key.innerHTML = '🔑';
-          key.style.textShadow = "none";
-          key.style.color = "#000000";
-        }
-      } else if (distance <= 400 && state == 'secondary') {
-        window.held = undefined;
-        var spread = distance < 100 ? 0.5 : 0.1;
-        if (distance < 25) {
-          key.style.textShadow = "0 0 ".concat(distance / spread, "px #fe8019, 0 0 ").concat(distance / spread, "px #fe8019, 0 0 ").concat(distance / spread, "px #EDD205");
-          key.style.color = "#fe8019";
-        } else {
-          key.style.textShadow = "0 0 ".concat(distance / spread, "px #FFE205, 0 0 ").concat(distance / spread, "px #FFE205, 0 0 ").concat(distance / spread, "px #EDD205");
-          key.style.color = "#FFE205";
-        }
-      } else {
-        window.held = undefined;
-        key.style.textShadow = "none";
-        key.style.color = "#000000";
-        eh.classList.remove('text-gruvbox-yellow');
-        eh.classList.add('text-gruvbox-gray');
-      }
-      e.target.classList.remove('cursor-progress');
-      e.target.classList.add('cursor-grabbing');
-      if (state == 'tertiary' && x > ehX && x < ehX + ehWidth && y > ehY && y < ehY + ehHeight) {
-        console.log('in eh');
-        eh.classList.remove('text-gruvbox-gray');
-        eh.classList.add('text-gruvbox-yellow');
-      } else {
-        eh.classList.remove('text-gruvbox-yellow');
-        eh.classList.add('text-gruvbox-gray');
-      }
-    }, {
-      passive: true
-    });
-    hint.addEventListener('dragend', function (e) {
-      var target = e.target;
-      console.log('dragend');
-      target.textContent = 'hidden';
-      target.classList.remove('text-gruvbox-gray', 'shadow-outer', 'cursor-grabbing');
-      target.classList.add('text-black', 'shadow-inner', 'cursor-pointer');
-      document.getElementsByTagName('body')[0].removeChild(document.getElementById('key'));
-    }, {
-      passive: true
-    });
   }
 });
 
