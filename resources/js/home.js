@@ -1,4 +1,8 @@
 import { NameElement } from './components/NameElement.js';
-import { PuzzleElement } from './components/PuzzleElement.js';
+import { HintElement } from './components/HintElement.js';
+import { TreasureElement } from './components/TreasureElement.js';
+import { ContentElement } from './components/ContentElement.js';
 
-//window.addEventListener("DOMContentLoaded", () => {});
+document.addEventListener("visibilitychange", () => {
+    console.log(document.visibilityState);
+});

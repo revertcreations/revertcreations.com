@@ -1953,7 +1953,7 @@ h1, h2, h3, .text-8xl {
     font-style: normal;
 }
 
-p {
+p, content-element {
     font-family: SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono",
     "Courier New", monospace;

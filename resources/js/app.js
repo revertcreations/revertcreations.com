@@ -1,5 +1,4 @@
 (function(){
-    const app = document.getElementById('app')
     const skills = document.getElementsByClassName('skill')
 
     for (let i = 0; i < skills.length; i++) {
@@ -9,9 +8,6 @@
     }
 
     function disiplineTargeted(e) {
-        let title = e.target
-        // console.log('e.target', e.target)
-        // window.title = e.target
         let target_disipline = e.target.innerText.toLowerCase()
 
 

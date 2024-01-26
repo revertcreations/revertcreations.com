@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PhotographyPortfolioImageController;
 use App\Http\Controllers\PublicPhotoshootController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\PhotographyContractController;
 use App\Http\Controllers\PhotoshootController;
 use App\Http\Controllers\PhotoshootImageController;
 use App\Http\Controllers\SkillsController;
+use App\Http\Controllers\PuzzleSessionController;
 use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
@@ -35,11 +37,7 @@ Route::domain('admin.'.$domain)->group(function () {
 
 Route::domain($domain)->group(function () {
 
-    Route::get('/', function () {
-        // $skills = Skill::all();
-        // $portfolio = PhotographyPortfolioImage::all();
-        return view('home');
-    })->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::get('/web-development', function () {
         $skills = Skill::all();
@@ -48,11 +46,9 @@ Route::domain($domain)->group(function () {
 
     Route::post('/web-development', [ClientController::class, 'hire'])->name('hire-me');
 
-
     Route::get('/about', function () {
         return view('about');
     })->name('about');
-
 
     Route::get('/photography', function(){
         $portfolio = PhotographyPortfolioImage::all();
@@ -68,8 +64,10 @@ Route::domain($domain)->group(function () {
     Route::post('/photography/photoshoot/{photoshoot}/{token}/accepts', [PublicPhotoshootController::class, 'accepts'])->name('public.photoshoot.accepts');
     Route::post('/photography/photoshoot/{photoshoot}/{token}/download', [PublicPhotoshootController::class, 'download'])->name('public.photoshoot.download');
 
-});
+    Route::get('/puzzle/{puzzle}/check', [PuzzleSessionController::class, 'check'])->name('puzzle-check');
+    Route::post('/puzzle/{puzzle}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
 
+});
 
 
 // Route::resource('Invoices', [InvoicesController::class]);
