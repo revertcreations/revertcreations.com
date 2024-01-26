@@ -37,7 +37,9 @@
         </div>
 
         <div class="relative flex-1 mx-4">
-            <h2 class="relative skill cursor-pointer text-3xl md:text-5xl mb-8">Code</h2>
+	    <a href="https://github.com/revertcreations" target="_blank">
+		<h2 class="relative skill cursor-pointer text-3xl md:text-5xl mb-8">Code</h2>
+	    </a>
             <iframe
                 id="code_skill_svg"
                 class="absolute"
@@ -60,14 +62,16 @@
             </p>
         </div>
 
-        <div class="relative flex-1 mx-4">
-            <h2 id="photo_skill" class="skill relative cursor-pointer text-3xl md:text-5xl mb-8">Photo</h2>
+	<div class="relative flex-1 mx-4">
+	    <a href="{{ route('photography') }}">
+            	<h2 id="photo_skill" class="skill relative cursor-pointer text-3xl md:text-5xl mb-8">Photo</h2>
+	    </a>
             <iframe
                 id="photo_skill_svg"
                 class="absolute"
                 src="{{ asset('svgs/polaroidAnimation.html') }}"
                 frameborder="0">
-            </iframe>
+	    </iframe>
             <p class="hidden">
                 With over 15 years of photographic experience, I still get butterflies
                 unveiling newly developed rolls of film. I mainly shoot medium format
@@ -78,8 +82,6 @@
         </div>
 
     </div>
-
-    {{-- <div class="mb-20 h-20"></div> --}}
 
     <script src="{{ asset('js/home.js') }}"></script>
 
