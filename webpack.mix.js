@@ -12,14 +12,10 @@ const chokidar = require('chokidar');
  |
  */
 
-
-mix.js('resources/js/app.js', 'public/js', [
-        require('flatpickr'),
-    ])
+mix.js('resources/js/app.js', 'js')
     .postCss('resources/css/app.css', 'public/css', [
         require('tailwindcss'),
     ]);
-
 
 mix.options({
     hmrOptions: {
@@ -37,7 +33,7 @@ mix.webpackConfig({
             chokidar.watch([
               './resources/views/**/*.blade.php'
             ]).on('all', function() {
-              server.sockWrite(server.sockets, 'content-changed');
+              server.sendMessage(server.webSocketServer.clients, 'content-changed');
             })
         },
     },

@@ -12,7 +12,7 @@
                 <span id="developerHighlight">developer</span>, and
                 <span id="photographerHighlight">photographer</span>.
                 As a multi-disciplinary creative, I blend design, development, and photography
-                to craft immersive experiences that capture attention and inspire wonder. 
+                to craft immersive experiences that capture attention and inspire wonder.
                 Whether I'm typing on a keyboard, clicking a mouse, or releasing a shutter, my
                 ultimate goal is to create simple, yet stunning visuals that leave a lasting
                 impact on viewers. Let's work together to bring your vision to life.
@@ -30,59 +30,33 @@
                 src="{{ asset('svgs/designAnimation.html') }}"
                 frameborder="0">
             </iframe>
-
-            <p class="hidden">
-
-            </p>
         </div>
 
         <div class="relative flex-1 mx-4">
-	    <a href="https://github.com/revertcreations" target="_blank">
-		<h2 class="relative skill cursor-pointer text-3xl md:text-5xl mb-8">Code</h2>
-	    </a>
+            <a href="https://github.com/revertcreations" target="_blank">
+                <h2 class="relative skill cursor-pointer text-3xl md:text-5xl mb-8">Code</h2>
+            </a>
             <iframe
                 id="code_skill_svg"
                 class="absolute"
                 src="{{ asset('svgs/codeAnimation.html') }}"
                 frameborder="0">
             </iframe>
-            <p class="hidden">
-                My previous position I worked as a full-stack web developer building ticketing
-                software with the great people at
-                <a  class="text-hmt-green underline"
-                    target="_blank"
-                    href="https://tickets.holdmyticket.com">
-                    HoldMyTicket
-                </a>.
-                I've gained a lot of confidence in many technologies - Docker, Kubernetes, Heroku,
-                Git; languages - Javascript, NodeJS, PHP, Bash, and Swift; and software - DevTools,
-                Xcode, GitHub, Cloudinary, Vagrant, Linux. These tools help me effenciently
-                build complex, interactive, responsive, and secure applications, where limitations
-                now only lie in my imagination.
-            </p>
         </div>
 
-	<div class="relative flex-1 mx-4">
-	    <a href="{{ route('photography') }}">
-            	<h2 id="photo_skill" class="skill relative cursor-pointer text-3xl md:text-5xl mb-8">Photo</h2>
-	    </a>
-            <iframe
-                id="photo_skill_svg"
-                class="absolute"
-                src="{{ asset('svgs/polaroidAnimation.html') }}"
-                frameborder="0">
-	    </iframe>
-            <p class="hidden">
-                With over 15 years of photographic experience, I still get butterflies
-                unveiling newly developed rolls of film. I mainly shoot medium format
-                through my trusty Mamiya RB67, and m645 1000s systems. I use photography as my
-                main artistic outlet, and hope to share my work through a subdomain of this site
-                current under development. Keep an look out here for a subdomain link coming soon...
-            </p>
+	    <div class="relative flex-1 mx-4">
+            <a href="{{ route('photography') }}">
+                <h2 id="photo_skill" class="skill relative cursor-pointer text-3xl md:text-5xl mb-8">Photo</h2>
+                <iframe
+                    id="photo_skill_svg"
+                    class="absolute"
+                    src="{{ asset('svgs/polaroidAnimation.html') }}"
+                    frameborder="0">
+                </iframe>
+            </a>
         </div>
 
     </div>
 
-    <script src="{{ asset('js/home.js') }}"></script>
 
 </x-layout>

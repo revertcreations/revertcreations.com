@@ -4,9 +4,6 @@
         <i class="mt-1 bg-black text-white text-4xl">Portfolio</i>
     </span>
 
-    <div id="close_button" class="hidden fixed top-10 right-10 text-5xl bg-black text-white hover:text-red-500 cursor-pointer" onclick="closeImage()">
-        <span>X</span>
-    </div>
 
     <div class="flex flex-col">
 
@@ -48,31 +45,41 @@
         function openImage(e) {
 
             document.getElementById('thumbnail_wrap').style.display = 'none'
+            let close_button = document.createElement('div')
+            close_button.id = 'close_button'
+            close_button.classList.add('fixed', 'top-10', 'right-10', 'text-5xl', 'bg-black', 'text-white', 'hover:text-red-500', 'cursor-pointer');
+            close_button.addEventListener('click', closeImage)
+            close_button.innerHTML = '<span>X</span>'
+            document.body.appendChild(close_button)
 
             let body = document.body
             body.style.backgroundImage = 'url('+e.target.dataset.src+')'
             body.style.backgroundSize = 'contain'
             body.style.backgroundRepeat = 'no-repeat'
             body.style.backgroundPosition = 'center center'
-            body.style.zIndex = 2
+            //body.style.zIndex = 2
 
-            document.getElementById('close_button').style.display = 'block'
+            //document.getElementById('close_button').style.display = 'block'
+            //
+            document.getElementById('app').classList.add('hidden');
 
-            slideOut(document.getElementById('page_title'), 'left')
-            slideOut(document.getElementById('home_title'), 'right')
+            //slideOut(document.getElementById('page_title'), 'left')
+            //slideOut(document.getElementById('home_title'), 'right')
 
         }
 
         function closeImage() {
 
-            document.getElementById('close_button').style.display = 'none'
-            document.body.style.backgroundImage = 'unset'
-
+            let close_button = document.getElementById('close_button')
             let thumbnail_wrap = document.getElementById('thumbnail_wrap')
             thumbnail_wrap.style.display = 'flex'
 
-            slideBack(document.getElementById('page_title'), 'left')
-            slideBack(document.getElementById('home_title'), 'right')
+            close_button.remove()
+            document.body.style.backgroundImage = 'unset'
+            document.getElementById('app').classList.remove('hidden');
+
+            //slideBack(document.getElementById('page_title'), 'left')
+            //slideBack(document.getElementById('home_title'), 'right')
         }
 
         function slideOut(el, direction) {

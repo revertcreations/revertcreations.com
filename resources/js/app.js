@@ -2,6 +2,11 @@
     const app = document.getElementById('app')
     const skills = document.getElementsByClassName('skill')
 
+//    if (document.getElementById('design_skill_svg'))
+//        document.getElementById('photo_skill_svg').contentDocument.body.addEventListener('mouseup', function(){
+//            console.log('clicked');
+//            window.location.href = '/photography'
+//        });
 
 
     for (let i = 0; i < skills.length; i++) {
@@ -30,7 +35,7 @@
                 var iframe = document.getElementsByTagName("iframe")[2].contentWindow;
                 iframe.exportRoot.photo.play()
                 document.getElementById('photo_skill_svg').style.zIndex = 10
-                break;
+                                break;
         }
         // let blurb = e.target.nextElementSibling;
         // let blurbVisible = blurb.classList.contains('hidden')
@@ -56,9 +61,5 @@
             blurb.classList.add('hidden')
         }
     }
-
-    console.log('ran')
-
-
 
 })();
