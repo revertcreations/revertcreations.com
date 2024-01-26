@@ -41,6 +41,14 @@ Route::domain($domain)->group(function () {
         return view('home');
     })->name('home');
 
+    Route::get('/resume', function () {
+        $resume = public_path('TreverHillisDeveloperResume2024.pdf');
+        $headers = [
+            'Content-Type' => 'application/pdf',
+        ];
+        return response()->download($resume, 'TreverHillisDeveloperResume.pdf', $headers);
+    })->name('resume');
+
     // Route::get('/web-development', function () {
     //     $skills = Skill::all();
     //     return view('web-development', compact('skills'));
