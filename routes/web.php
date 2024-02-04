@@ -58,9 +58,9 @@ Route::domain($domain)->group(function () {
         return compact('skills');
     })->name('skills');
 
-    Route::get('/contact', function () {
-        return view('contact');
-    })->name('contact');
+//    Route::get('/contact', function () {
+//        return view('contact');
+//    })->name('contact');
 
     Route::get('/about', function () {
         return view('about');

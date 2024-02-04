@@ -65,7 +65,7 @@
         </div>
 
         <div class="relative grow p-4 bg-gruvbox-blue">
-            <a href="{{ route('contact') }}">
+            <a href="mailto:trever@revertcreations.com">
                 <h2 class="skill cursor-pointer text-3xl md:text-5xl">contact</h2>
             </a>
         </div>

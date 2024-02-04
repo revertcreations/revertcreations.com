@@ -1605,7 +1605,7 @@ var Playground = {
           }
           if (data.errors["email"] && data.errors["email"][0] !== "The email has already been taken.") {
             emailLabel.classList.remove("text-gruvbox-green");
-            emailLabel.innerText = "Last Name *required";
+            emailLabel.innerText = "Email *required";
             emailLabel.classList.add("text-gruvbox-red");
           }
           if (data.errors["email"] && data.errors["email"][0] == "The email has already been taken.") {
