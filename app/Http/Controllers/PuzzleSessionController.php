@@ -49,8 +49,6 @@ class PuzzleSessionController extends Controller
         $content = json_decode($request->getContent());
 
         if (!$token_is_valid ||
-            $request->headers->get('origin') != env('APP_URL') ||
-            $request->headers->get('referer') != env('APP_URL')."/" ||
             ($puzzle_session->puzzle_type_id == 1 && $content->hintCount == 0) ||
             ($puzzle_session->puzzle_type_id == 1 && $content->time <= 3.4)
         )
