@@ -9,8 +9,6 @@ export class NameElement extends HTMLElement {
     #error = new Audio("/audio/error3.wav");
     #success = new Audio("/audio/success3.wav");
     #unlock = new Audio("/audio/unlock.wav");
-    //#success2 = new Audio("/audio/success1.wav");
-    //#unlock2 = new Audio("/audio/unlock2.wav");
 
     #textColors = [
         "text-gruvbox-light-yellow",
@@ -42,8 +40,6 @@ export class NameElement extends HTMLElement {
             this.innerHTML = '';
             this.render();
         }
-        //this.dataset.content = newValue;
-        //this.render()
     }
 
     loadAnimation = (span, index) => {

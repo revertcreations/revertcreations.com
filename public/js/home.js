@@ -228,11 +228,17 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       _this.addEventListener("mouseup", _this.handleMouseUp);
       _this.addEventListener("touchcancel", _this.handleMouseUp);
       _this.addEventListener("dragstart", _this.handleDragStart);
-      _this.addEventListener("touchstart", _this.handleDragStart, true);
+      _this.addEventListener("touchstart", _this.handleDragStart, {
+        passive: true
+      });
       _this.addEventListener("dragend", _this.handleDragEnd);
-      _this.addEventListener("touchend", _this.handleDragEnd, true);
+      _this.addEventListener("touchend", _this.handleDragEnd, {
+        passive: true
+      });
       _this.addEventListener("drag", _this.handleDrag);
-      _this.addEventListener("touchmove", _this.handleDrag, true);
+      _this.addEventListener("touchmove", _this.handleDrag, {
+        passive: true
+      });
       treasure.addEventListener("dragenter", _this.handleDragEnter);
       treasure.addEventListener("dragleave", _this.handleDragLeave);
     });
@@ -243,6 +249,9 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       _this.removeEventListener("dragstart", _this.handleDragStart);
       _this.removeEventListener("dragend", _this.handleDragEnd);
       _this.removeEventListener("drag", _this.handleDrag);
+      _this.removeEventListener("touchstart", _this.handleDragStart);
+      _this.removeEventListener("touchend", _this.handleDragEnd);
+      _this.removeEventListener("touchmove", _this.handleDrag);
       treasure.removeEventListener("dragenter", _this.handleDragEnter);
       treasure.removeEventListener("dragleave", _this.handleDragLeave);
     });
@@ -626,8 +635,6 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
       writable: true,
       value: new Audio("/audio/unlock.wav")
     });
-    //#success2 = new Audio("/audio/success1.wav");
-    //#unlock2 = new Audio("/audio/unlock2.wav");
     _classPrivateFieldInitSpec(_assertThisInitialized(_this), _textColors, {
       writable: true,
       value: ["text-gruvbox-light-yellow", "text-gruvbox-yellow", "text-gruvbox-orange", "text-gruvbox-purple", "text-gruvbox-blue", "text-gruvbox-aqua", "text-gruvbox-gray", "text-gruvbox-green", "text-gruvbox-red"]
@@ -704,8 +711,6 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
         this.innerHTML = '';
         this.render();
       }
-      //this.dataset.content = newValue;
-      //this.render()
     }
   }, {
     key: "render",

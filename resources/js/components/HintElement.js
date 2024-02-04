@@ -34,11 +34,11 @@ export class HintElement extends HTMLElement {
         this.addEventListener("mouseup", this.handleMouseUp);
         this.addEventListener("touchcancel", this.handleMouseUp);
         this.addEventListener("dragstart", this.handleDragStart);
-        this.addEventListener("touchstart", this.handleDragStart, true);
+        this.addEventListener("touchstart", this.handleDragStart, {passive: true});
         this.addEventListener("dragend", this.handleDragEnd);
-        this.addEventListener("touchend", this.handleDragEnd, true);
+        this.addEventListener("touchend", this.handleDragEnd, {passive: true});
         this.addEventListener("drag", this.handleDrag);
-        this.addEventListener("touchmove", this.handleDrag, true);
+        this.addEventListener("touchmove", this.handleDrag, {passive: true});
 
         treasure.addEventListener("dragenter", this.handleDragEnter);
         treasure.addEventListener("dragleave", this.handleDragLeave);
@@ -51,6 +51,10 @@ export class HintElement extends HTMLElement {
         this.removeEventListener("dragstart", this.handleDragStart);
         this.removeEventListener("dragend", this.handleDragEnd);
         this.removeEventListener("drag", this.handleDrag);
+
+        this.removeEventListener("touchstart", this.handleDragStart);
+        this.removeEventListener("touchend", this.handleDragEnd);
+        this.removeEventListener("touchmove", this.handleDrag);
 
         treasure.removeEventListener("dragenter", this.handleDragEnter);
         treasure.removeEventListener("dragleave", this.handleDragLeave);

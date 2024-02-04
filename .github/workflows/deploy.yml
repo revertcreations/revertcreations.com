@@ -33,5 +33,5 @@ jobs:
         password: ${{ secrets.DIGITAL_OCEAN_PASSWORD }}
         key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
         passphrase: ${{ secrets.DIGITAL_OCEAN_KEY_PASSPRHASE }}
-        script: 'cd /var/www/revertcreations.com && ./server_deploy.sh'
+        script: 'cd /var/www/revertcreations.com && chmod +x server_deploy.sh && ./server_deploy.sh'
 

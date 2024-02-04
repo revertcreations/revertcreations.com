@@ -12,11 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>REVERT CREATIONS</title>
 
-    <link href="{{ mix('css/app.css') }}"
-        rel="preload"
-        type="text/css"
-        as="style"
-        onload="this.onload=null;this.rel='stylesheet';">
+    <link href="/css/app.css" rel="stylesheet">
 
     @if (app()->environment() == 'production')
         <!-- Google tag (gtag.js) -->
@@ -34,7 +30,6 @@
         </script>
     @endif
 
-    <script src="/js/home.js" type="module" defer></script>
 </head>
 
 <body class="flex flex-col bg-gruvbox-black-hidden overflow-hidden h-full">

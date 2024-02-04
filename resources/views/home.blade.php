@@ -29,4 +29,5 @@
 
     </div>
 
+    <script src="/js/home.js"></script>
 </x-layout>
