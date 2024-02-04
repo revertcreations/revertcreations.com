@@ -11,15 +11,16 @@ use Illuminate\Support\Carbon;
 class PuzzleSessionController extends Controller
 {
 
-    public function check(PuzzleSession $puzzle_session, Request $request) {
+    public function check($puzzle_type_id, Request $request) {
         $session_id = $request->session()->getId();
-        $puzzle_session = $puzzle_session->where('session_id', $session_id)->first();
+        $puzzle_session = new PuzzleSession();
+        $puzzle_session = $puzzle_session->where('session_id', $session_id)->where('puzzle_type_id', $puzzle_type_id)->first();
 
         // if the session expired when the puzzle was solved
         // sessions expire every 30 days, should be fine to just
         // send back a json error for frontend to window.location reload
         if (!$puzzle_session)
-            return response()->json(['error' => 'session expired']);
+            return redirect()->route('home');
 
         // this is immediately sent back to solved post endpoint
         $puzzle_token = new PuzzleToken;
@@ -33,13 +34,16 @@ class PuzzleSessionController extends Controller
         return response()->json(['token' => $new_token]);
     }
 
-    public function solved(PuzzleSession $puzzle_session, PuzzleToken $puzzle_token, Request $request) {
+    public function solved($puzzle_type_id, $token, Request $request) {
         $session_id = $request->session()->getId();
-        $puzzle_session = $puzzle_session->where('session_id', $session_id)->first();
+        $puzzle_session = new PuzzleSession;
+        $puzzle_session = $puzzle_session->where('session_id', $session_id)->where('puzzle_type_id', $puzzle_type_id)->first();
 
-        $token_is_valid = $puzzle_token->valid($puzzle_session->id, $puzzle_token->token);
+        //get the PuzzleToken where token = $token and puzzle_session_id = $session_id
+        $puzzle_token = new PuzzleToken;
+        $token_is_valid = $puzzle_token->valid($puzzle_session->id, $token);
 
-       // just delete the token, we will regenearte again on every check
+        // just delete the token, we will regenearte again on every check
         $puzzle_session->token()->delete();
 
         $content = json_decode($request->getContent());
@@ -51,8 +55,7 @@ class PuzzleSessionController extends Controller
             ($puzzle_session->puzzle_type_id == 1 && $content->time <= 3.4)
         )
             return response()->json([
-                'error' => "Hmmm you trying to cheat over there? session: ".$session_id,
-                'token' => $token_is_valid,
+                'error' => "Hmmm you trying to cheat over there?",
             ]);
 
         $puzzle_score = new PuzzleScore;
