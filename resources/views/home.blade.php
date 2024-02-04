@@ -30,4 +30,13 @@
     </div>
 
     <script src="/js/home.js"></script>
+    @if (app()->environment('production'))
+    <script>
+        gtag('event', 'page_view', {
+            'page_title': 'Home',
+            'page_location': '{{ request()->url() }}',
+            'page_path': '{{ request()->path() }}'
+        });
+    </script>
+    @endif
 </x-layout>
