@@ -15,4 +15,13 @@
         {!! $post->html !!}
     </article>
 
+    @if (app()->environment('production'))
+    <script>
+        gtag('event', 'page_view', {
+            'page_title': '{{ $post->title }}',
+            'page_location': '{{ request()->url() }}',
+            'page_path': '{{ request()->path() }}'
+        });
+    </script>
+    @endif
 </x-layout>
