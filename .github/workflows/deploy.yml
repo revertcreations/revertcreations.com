@@ -31,5 +31,6 @@ jobs:
         username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
         host: ${{ secrets.DIGITAL_OCEAN_HOST }}
         password: ${{ secrets.DIGITAL_OCEAN_PASSWORD }}
+        key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
         script: 'cd /var/www/revertcreations.com && ./server_deploy.sh'
 
