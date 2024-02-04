@@ -1,4 +1,25 @@
 @tailwind base;
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #282828 #32302f;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 15px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #282828;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #32302f;
+    border-radius: 14px;
+    color: 3px solid #282828;
+  }
 @tailwind components;
 @tailwind utilities;
 
@@ -11,16 +32,16 @@
     }
 }
 
-h1, h2, h3 {
-    font-family: bely,sans-serif;
+h1, h2, h3, .text-8xl {
+    font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
     font-weight: 700;
     font-style: normal;
 }
 
-p {
-    font-family: pt-sans, sans-serif;
-    font-weight: 400;
-    font-style: normal;
+html, p, content-element {
+    font-family: SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono",
+    "Courier New", monospace;
 }
 
 /* #photoSkill::before {
@@ -29,7 +50,7 @@ p {
 } */
 
 
-#design_skill_svg {
+/* #design_skill_svg {
     z-index: -1;
     right: -56px;
     bottom: -7px;
@@ -43,7 +64,7 @@ p {
     z-index: -1;
     left: 53px;
     top: 0px;
-}
+} */
 
 
 :root{

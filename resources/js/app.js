@@ -1,28 +1,17 @@
 (function(){
-    const app = document.getElementById('app')
     const skills = document.getElementsByClassName('skill')
-
-//    if (document.getElementById('design_skill_svg'))
-//        document.getElementById('photo_skill_svg').contentDocument.body.addEventListener('mouseup', function(){
-//            console.log('clicked');
-//            window.location.href = '/photography'
-//        });
-
 
     for (let i = 0; i < skills.length; i++) {
         const skill = skills[i];
-        skill.addEventListener('mouseover', skillTargeted)
-        skill.addEventListener('touchstart', skillTargeted)
+        skill.addEventListener('mouseover', disiplineTargeted, { passive: true })
+        skill.addEventListener('touchstart', disiplineTargeted, { passive: true })
     }
 
-    function skillTargeted(e) {
-        let title = e.target
-        // console.log('e.target', e.target)
-        // window.title = e.target
-        let target_skill = e.target.innerText.toLowerCase()
+    function disiplineTargeted(e) {
+        let target_disipline = e.target.innerText.toLowerCase()
 
 
-        switch (target_skill) {
+        switch (target_disipline) {
             case 'design':
                 var iframe = document.getElementsByTagName("iframe")[0].contentWindow;
                 iframe.exportRoot.triangle.play();

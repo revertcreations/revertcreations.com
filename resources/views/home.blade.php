@@ -1,62 +1,32 @@
 <x-layout>
 
-    <div class="mx-6 mb-20 text-revert-black">
-        <div id="title" class="mb-8">
-            <h1 class="text-5xl md:text-6xl">Hi.</h1>
-            <h1 class="text-5xl md:text-6xl">I'm Trever.</h1>
+    <div class="flex flex-col flex-1 text-gruvbox-gray w-full">
+
+        <div id="title" class="self-top p-2 sm:p-4 md:p-6">
+            <h1 class="text-5xl md:text-6xl">Hi. I'm</h1>
+            <name-element data-content="Trever" class="table"></name-element>
         </div>
 
-        <div id="lead" class="max-w-xs">
-            <p class="text-xl md:text-2xl">
-                I'm a <span id="designerHighlight">designer</span>,
-                <span id="developerHighlight">developer</span>, and
-                <span id="photographerHighlight">photographer</span>.
-                As a multi-disciplinary creative, I blend design, development, and photography
-                to craft immersive experiences that capture attention and inspire wonder.
-                Whether I'm typing on a keyboard, clicking a mouse, or releasing a shutter, my
-                ultimate goal is to create simple, yet stunning visuals that leave a lasting
-                impact on viewers. Let's work together to bring your vision to life!
-            </p>
-        </div>
-    </div>
+        <div id="lead" class="flex-1 w-full text-gruvbox-gray p-2 sm:p-4 md:p-6">
 
-    <div class="fixed bottom-8  flex mx-6 text-revert-black">
+            <content-element class="block m-3 text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal select-none">
+                I am a full-stack web <span class="text-3xl font-bold text-gruvbox-green"
+                    id="developer">developer</span> who strives
+                to create applications that users tend to <treasure-element data-name="treasure">treasure</treasure-element>.
+            </content-element>
 
-        <div id="design_skill" class="relative flex-1 mx-4">
-            <h2 name="design" class="skill cursor-pointer text-3xl md:text-5xl mb-8">Design</h2>
-            <iframe
-                id="design_skill_svg"
-                class="absolute"
-                src="{{ asset('svgs/designAnimation.html') }}"
-                frameborder="0">
-            </iframe>
-        </div>
+            <content-element class="block m-3 text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal select-none">
+                I'm constanstly coming up with startup ideas, tinkering with
+                interfaces, and fiddling with technologies. I hope this
+                platform can be a source of motivation for myself to bring
+                those creative ideas to life and share them with the rest of
+                the internet. Hope you find some
+                <hint-element data-content="hidden"></hint-element>
+                gems laying around.
+            </content-element>
 
-        <div class="relative flex-1 mx-4">
-            <a href="https://github.com/revertcreations" target="_blank">
-                <h2 class="relative skill cursor-pointer text-3xl md:text-5xl mb-8">Code</h2>
-            </a>
-            <iframe
-                id="code_skill_svg"
-                class="absolute"
-                src="{{ asset('svgs/codeAnimation.html') }}"
-                frameborder="0">
-            </iframe>
-        </div>
-
-	    <div class="relative flex-1 mx-4">
-            <a href="{{ route('photography') }}">
-                <h2 id="photo_skill" class="skill relative cursor-pointer text-3xl md:text-5xl mb-8">Photo</h2>
-                <iframe
-                    id="photo_skill_svg"
-                    class="absolute"
-                    src="{{ asset('svgs/polaroidAnimation.html') }}"
-                    frameborder="0">
-                </iframe>
-            </a>
         </div>
 
     </div>
-
 
 </x-layout>

@@ -1,24 +1,32 @@
 module.exports = {
-    purge: [
+    content: [
         './resources/**/*.blade.php',
         './resources/**/*.js',
         './resources/**/*.vue',
     ],
-    darkMode: false, // or 'media' or 'class'
+    darkMode: 'media', // or 'media' or 'class'
     theme: {
         boxShadow: {
             inner: 'inset 0 4px 8px 0 rgba(0, 0, 0, 1)',
+            outer: '0 4px 8px 0 rgba(0, 0, 0, 1)',
         },
         extend: {
+            fontSize: {
+                'text-7xl': '5rem',
+                'text-8xl': '6rem',
+            },
             spacing: {
                 'small-square-full': '150px',
                 'small-square-half': '75px',
-                'large-square-full': '300px',
+                'large-square-full': '250px',
                 'large-square-half': '150px'
             },
             colors: {
                 'revert-black': '#2a2727',
                 'revert-gray': '#c1bfbe',
+                'revert-yellow': '#f0d43a',
+                'revert-green': '#c1e718',
+                'revert-blue': '#22b2da',
                 'gruvbox-light-red': '#fb3934',
                 'gruvbox-red': '#cc241d',
                 'gruvbox-light-yellow': '#d79921',
@@ -37,7 +45,8 @@ module.exports = {
                 'gruvbox-black': '#282828',
                 'gruvbox-black-hidden': '#32302f',
                 'gruvbox-white': '#fbf1c7',
-                'hmt-green': '#b9cc33'
+                'hmt-green': '#b9cc33',
+                'motorsportreg-red': '#f13a44',
             },
             animation: {
                 'sharpen-text': 'sharpen-text 0.2s linear 1 forwards',
@@ -46,6 +55,7 @@ module.exports = {
                 'float-bg': 'float-bg 1s linear .1s forwards',
                 'experience': 'experience 2s linear .1s forwards',
                 'translate': 'translate 1s linear .1s forwards',
+                'falling': 'falling 1s linear .1s forwards',
             },
             keyframes: {
                 'translate': {
@@ -173,6 +183,10 @@ module.exports = {
                 'experience': {
                     '1%': { 'background-image': 'linear-gradient(to right, #b8bb26 0%, #b8bb26 1%, #fbf1c7 1%)' },
                     '100%': { 'background-image': 'linear-gradient(to right, #b8bb26 0%, #b8bb26 var(--experience-percent), #fbf1c7 var(--experience-percent))' }
+                },
+                'falling': {
+                    '0%': { 'transform': 'translate3d(0, 0, 0)' },
+                    '100%': { 'transform': 'translate3d(0, var(--screen-height), 0)' }
                 },
             },
         }

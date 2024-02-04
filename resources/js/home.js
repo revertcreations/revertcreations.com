@@ -1,12 +1,10 @@
-// (function() {
-//  console.log('ran')
-// })();
+import { NameElement } from './components/NameElement.js';
+import { HintElement } from './components/HintElement.js';
+import { TreasureElement } from './components/TreasureElement.js';
+import { ContentElement } from './components/ContentElement.js';
 
+import { Playground } from "./playground.js";
 
-// /* Photos */
-
-// function select(e) {
-//     let description = e.target
-
-//     console.log('description: ', description)
-// }
+// document.addEventListener("visibilitychange", () => {
+//     console.log(document.visibilityState);
+// });
