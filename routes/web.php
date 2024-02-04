@@ -10,6 +10,7 @@ use App\Http\Controllers\PhotoshootController;
 use App\Http\Controllers\PhotoshootImageController;
 use App\Http\Controllers\SkillsController;
 use App\Http\Controllers\PuzzleSessionController;
+use App\Http\Controllers\BlogController;
 use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
@@ -35,16 +36,31 @@ Route::domain('admin.'.$domain)->group(function () {
     Route::resource('skills', SkillsController::class)->middleware('auth');
 });
 
+Route::domain('blog.'.$domain)->group(function () {
+    Route::get('/', [BlogController::class, 'index'])->name('blog');
+    Route::get('/{slug}', [BlogController::class, 'show'])->name('blog.show');
+});
+
 Route::domain($domain)->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/puzzle/{puzzle}/check', [PuzzleSessionController::class, 'check'])->name('puzzle-check');
+    Route::post('/puzzle/{puzzle}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
 
-    Route::get('/web-development', function () {
+    Route::get('/developer', function () {
         $skills = Skill::all();
-        return view('web-development', compact('skills'));
-    })->name('web-development');
+        return view('developer', compact('skills'));
+    })->name('developer');
+    Route::post('/developer', [ClientController::class, 'hire'])->name('hire-me');
 
-    Route::post('/web-development', [ClientController::class, 'hire'])->name('hire-me');
+    Route::get('/skills', function () {
+        $skills = Skill::all();
+        return compact('skills');
+    })->name('skills');
+
+    Route::get('/contact', function () {
+        return view('contact');
+    })->name('contact');
 
     Route::get('/about', function () {
         return view('about');
@@ -64,12 +80,4 @@ Route::domain($domain)->group(function () {
     Route::post('/photography/photoshoot/{photoshoot}/{token}/accepts', [PublicPhotoshootController::class, 'accepts'])->name('public.photoshoot.accepts');
     Route::post('/photography/photoshoot/{photoshoot}/{token}/download', [PublicPhotoshootController::class, 'download'])->name('public.photoshoot.download');
 
-    Route::get('/puzzle/{puzzle}/check', [PuzzleSessionController::class, 'check'])->name('puzzle-check');
-    Route::post('/puzzle/{puzzle}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
-
 });
-
-
-// Route::resource('Invoices', [InvoicesController::class]);
-// Route::resource('Images', [ImagesController::class]);
-// Route::resource('Customers',[CustomersController::class]);

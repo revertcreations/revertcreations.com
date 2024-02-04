@@ -2,7 +2,7 @@
 /* Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--revert-gray) var(--revert-gray);
+    scrollbar-color: #282828 #32302f;
   }
 
   /* Chrome, Edge, and Safari */
@@ -11,14 +11,14 @@
   }
 
   *::-webkit-scrollbar-track {
-    background: var(--revert-gray);
+    background: #282828;
     border-radius: 5px;
   }
 
   *::-webkit-scrollbar-thumb {
-    background-color: var(--revert-gray);
+    background-color: #32302f;
     border-radius: 14px;
-    border: 3px solid var(--revert-gray);
+    color: 3px solid #282828;
   }
 @tailwind components;
 @tailwind utilities;
@@ -38,7 +38,7 @@ h1, h2, h3, .text-8xl {
     font-style: normal;
 }
 
-p, content-element {
+html, p, content-element {
     font-family: SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono",
     "Courier New", monospace;

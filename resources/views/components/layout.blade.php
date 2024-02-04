@@ -37,52 +37,38 @@
     <script src="/js/home.js" type="module" defer></script>
 </head>
 
-<body class="h-full bg-gruvbox-black-hidden overflow-hidden">
+<body class="flex flex-col bg-gruvbox-black-hidden overflow-hidden h-full">
 
-    <div class="space-between flex h-full flex-col overflow-hidden"
-        id="app">
-
-        <header class=""
-            id="main_header">
-            <div class="bg-gruvbox-blue"
-                id="logo">
-                <a class="right-0 top-2 z-10 w-10/12"
-                    href="{{ route('home') }}">
-                    <img class="w-full"
-                        src="{{ asset('svgs/logoBW.svg') }}"
-                        alt="Revert Creations">
-                </a>
-            </div>
-
-            {{-- <div class="">
-                <img class="w-small-square-half md:w-small-square-full" src="{{ asset('svgs/small_red_square.svg') }}" alt="">
-                <a class="md:text-2xl bg-revert-black text-white" href="mailto:trever@revertcreations.com">
-                <b>reach out</b>
-                <b>trever@revertcreations.com</b>
-                </a>
-            </div> --}}
-
-        </header>
-
-        <div class="flex w-full grow flex-row md:max-w-screen-lg self-center"
-            id="content">
-
-            {{ $slot }}
-
+    <header id="main_header">
+        <div class="bg-gruvbox-blue"
+            id="logo">
+            <a class="right-0 top-2 z-10 w-10/12"
+                href="{{ route('home') }}">
+                <img class="w-full"
+                    src="{{ asset('svgs/logoBW.svg') }}"
+                    alt="Revert Creations">
+            </a>
         </div>
+    </header>
 
-        <div id="footer" class="flex flex-nowrap bg-gruvbox-orange text-revert-black">
+    <div id="content" class="flex flex-col w-full flex-1 md:flex-row md:max-w-screen-xl self-center overflow-y-auto">
+        {{ $slot }}
+    </div>
 
-            <div class="relative grow p-4 bg-gruvbox-yellow"
-                id="">
+    <div id="footer" class="flex flex-nowrap bg-gruvbox-orange text-revert-black">
+
+        <div class="relative grow p-4 bg-gruvbox-yellow">
+            <a href="{{ route('blog') }}">
                 <h2 class="skill inline cursor-pointer text-3xl md:text-5xl"
                     name="design">blog</h2>
-            </div>
+            </a>
+        </div>
 
-            <div class="relative grow p-4 bg-gruvbox-blue">
+        <div class="relative grow p-4 bg-gruvbox-blue">
+            <a href="{{ route('contact') }}">
                 <h2 class="skill cursor-pointer text-3xl md:text-5xl">contact</h2>
-            </div>
-    </div>
+            </a>
+        </div>
 
 </body>
 

@@ -58,11 +58,13 @@ class PuzzleSessionController extends Controller
         $puzzle_score->puzzle_session_id = $puzzle_session->id;
         $puzzle_score->hint_count = $content->hintCount;
         $puzzle_score->solve_time_in_seconds = $content->time;
-        $score = number_format(exp(-0.1 * ($content->time+$content->hintCount))*100000, 2, '.', '');
-        $puzzle_score->score = $score;
+
+        $finalScore = $puzzle_score->calculateScore();
+
+        $puzzle_score->score = $finalScore;
         $puzzle_score->save();
 
-        return response()->json(['success' => 'You did it, your score is: '.$score]);
+        return response()->json(['success' => 'You did it, your score is: '.$finalScore, 'score' => $finalScore, 'hintCount' => $puzzle_score->hint_count, 'time' => $puzzle_score->solve_time_in_seconds]);
     }
 
 }

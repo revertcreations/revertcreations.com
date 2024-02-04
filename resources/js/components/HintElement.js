@@ -6,6 +6,8 @@ export class HintElement extends HTMLElement {
     #hintCount = 0;
     #hintInterval = null;
     #held = false;
+    #scoring = false;
+    #animating = false;
     #rngX = null;
     #rngY = null;
     #targetPosition = null;
@@ -20,7 +22,6 @@ export class HintElement extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log("connectedCallback");
         this.innerText = this.dataset.content;
         this.loadEventListeners();
         this.#glimmerHintTimeout = setTimeout(() => {
@@ -31,9 +32,13 @@ export class HintElement extends HTMLElement {
     loadEventListeners = () => {
         this.addEventListener("mousedown", this.handleMouseDown);
         this.addEventListener("mouseup", this.handleMouseUp);
+        this.addEventListener("touchcancel", this.handleMouseUp);
         this.addEventListener("dragstart", this.handleDragStart);
+        this.addEventListener("touchstart", this.handleDragStart, true);
         this.addEventListener("dragend", this.handleDragEnd);
+        this.addEventListener("touchend", this.handleDragEnd, true);
         this.addEventListener("drag", this.handleDrag);
+        this.addEventListener("touchmove", this.handleDrag, true);
 
         treasure.addEventListener("dragenter", this.handleDragEnter);
         treasure.addEventListener("dragleave", this.handleDragLeave);
@@ -75,7 +80,6 @@ export class HintElement extends HTMLElement {
     };
 
     handleDragLeave = () => {
-        console.log("handleDragLeave");
         this.#disableRotateEmoji = false;
         this.#emoji.innerHTML = "🧭";
     };
@@ -111,14 +115,23 @@ export class HintElement extends HTMLElement {
 
     handleDrag = (e) => {
         const target = e.target;
-        this.#emoji.style.left = `${e.clientX - 10}px`;
-        this.#emoji.style.top = `${e.clientY + 10}px`;
+        const clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
+        const clientY = e.clientY !== undefined ? e.clientY :  e.touches[0].clientY;
+        const emojiOffset = clientX == 0 && clientY == 0 ? -100 : 10;
+
+        this.#emoji.style.left = `${clientX - emojiOffset}px`;
+        this.#emoji.style.top = `${clientY + emojiOffset}px`;
+
+        if (clientX == 0 && clientY == 0) {
+            return;
+        }
+
         let distanceToTreasure = this.rotateKeyAndReturnDistanceToTarget(
-            e.clientX,
-            e.clientY,
+            clientX,
+            clientY,
         );
 
-        if (this.isInTarget(e.clientX, e.clientY)) {
+        if (this.isInTarget(clientX, clientY)) {
             this.#emoji.style.transform = "none";
             target.classList.remove("cursor-grabbing");
             target.classList.add("cursor-progress");
@@ -129,8 +142,10 @@ export class HintElement extends HTMLElement {
                     this.#held.getSeconds() + 2.0,
                 );
             } else if (this.#held < new Date().getTime()) {
+                target.classList.remove("cursor-progress");
                 this.levelUp();
                 if (this.#level == 2) {
+                    target.classList.add("cursor-pointer");
                     this.animateLevelTwo();
                 } else {
                     this.animateLevelThree();
@@ -140,19 +155,22 @@ export class HintElement extends HTMLElement {
                     ? (this.#emoji.innerHTML = "⏳")
                     : (this.#emoji.innerHTML = "🔐");
             }
-        } else if (this.inRangeOfTreasureHintAndOfLevel(distanceToTreasure)) {
+        } else {
             this.#held = null;
+            if (!this.#animating)
+                this.#emoji.innerHTML = this.#level == 1 ? "🧭" : "🔑";
+            target.classList.remove("text-gruvbox-yellow", "cursor-progress");
+            target.classList.add("text-gruvbox-gray", "cursor-grabbing");
+        }
+
+        if (this.inRangeOfTreasureHintAndOfLevel(distanceToTreasure)) {
             window.dispatchEvent(
                 new CustomEvent("treasureHint", {
                     detail: { distanceToTreasure: distanceToTreasure },
                 }),
             );
-        } else {
-            this.#held = null;
-            this.#emoji.innerHTML = this.#level == 1 ? "🧭" : "🔑";
-            treasure.classList.remove("text-gruvbox-yellow", "cursor-progress");
-            treasure.classList.add("text-gruvbox-gray", "cursor-grabbing");
         }
+
     };
 
     handleDragEnd = (e) => {
@@ -163,7 +181,8 @@ export class HintElement extends HTMLElement {
 
         const target = e.target;
         const body = document.querySelector("body");
-        body.removeChild(this.#emoji);
+        if (document.getElementById('emoji'))
+        body.removeChild(document.getElementById('emoji'));
 
         this.#level = 0;
 
@@ -217,6 +236,7 @@ export class HintElement extends HTMLElement {
     };
 
     rotateKeyAndReturnDistanceToTarget = (mouseX, mouseY) => {
+        if (!this.#targetPosition) return;
         const deltaX =
             this.#targetPosition.x + this.#targetPosition.width / 2 - mouseX;
         const deltaY =
@@ -242,6 +262,7 @@ export class HintElement extends HTMLElement {
     };
 
     isInTarget = (mouseX, mouseY) => {
+        if (!this.#targetPosition) return;
         return (
             mouseX > this.#targetPosition.x &&
             mouseX < this.#targetPosition.x + this.#targetPosition.width &&
@@ -252,6 +273,7 @@ export class HintElement extends HTMLElement {
 
     animateLevelTwo = () => {
         this.#held = null;
+        this.#animating = true;
         this.#emoji.innerHTML = "⌛";
         this.#emoji.style.transform = "none";
 
@@ -268,15 +290,20 @@ export class HintElement extends HTMLElement {
                     setTimeout(() => {
                         this.#emoji.style.transform = "none";
                         this.#emoji.innerHTML = "🔑";
+                        this.#animating = false;
                         clearTimeout(this.#levelTwoAnimationTimeout);
                     }, 200);
                 }, 200);
-            }, 200);
-        }, 400);
+            }, 400);
+        }, 500);
     };
 
     animateLevelThree = () => {
+        this.#animating = true;
         this.#emoji.innerHTML = "🔓";
+        setTimeout(() => {
+            this.#emoji.innerHTML = "🎉";
+        }, 200);
 
         this.analyticsTreasure({
             hintCount: this.#hintCount,
@@ -288,7 +315,7 @@ export class HintElement extends HTMLElement {
         ++this.#level;
         this.#targetPosition =
             this.#level == 1
-                ? { x: this.#rngX, y: this.#rngY, width: 10, height: 10 }
+                ? { x: this.#rngX, y: this.#rngY, width: 20, height: 20 }
                 : treasure.getBoundingClientRect();
     };
 
@@ -297,46 +324,86 @@ export class HintElement extends HTMLElement {
     };
 
     analyticsTreasure = (detail) => {
-        this.removeEventListeners();
-        const request = new Request(window.location.href + "puzzle/1/check", {
-            method: "GET",
-        });
-
-        fetch(request)
-            .then((response) => response.json())
-            .then((json) => {
-                if (json.error && json.error == "session expired") {
-                    window.location.reload();
-                } else {
-                    const request = new Request(
-                        window.location.href + "puzzle/1/solved/" + json.token,
-                        {
-                            method: "POST",
-                            headers: {
-                                "X-CSRF-TOKEN": document.querySelector(
-                                    'meta[name="csrf-token"]',
-                                ).content,
-                            },
-                            body: JSON.stringify(detail),
-                        },
-                    );
-                    fetch(request)
-                        .then((response) => response.json())
-                        .then((json) => {
-                            if (json.error) {
-                                this.reset();
-                                console.error(json.error);
-                            } else {
-                                this.reset();
-                                console.log("json: ", json);
-                            }
-                        });
-                }
+        this.#animating = false;
+        if (!this.#scoring) {
+            this.#scoring = true;
+            this.removeEventListeners();
+            const request = new Request(window.location.href + "puzzle/1/check", {
+                method: "GET",
             });
+
+            fetch(request)
+                .then((response) => response.json())
+                .then((json) => {
+                    if (json.error && json.error == "session expired") {
+                        window.location.reload();
+                    } else {
+                        const request = new Request(
+                            window.location.href + "puzzle/1/solved/" + json.token,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "X-CSRF-TOKEN": document.querySelector(
+                                        'meta[name="csrf-token"]',
+                                    ).content,
+                                },
+                                body: JSON.stringify(detail),
+                            },
+                        );
+                        fetch(request)
+                            .then((response) => response.json())
+                            .then((json) => {
+                                if (json.error) {
+                                    this.reset();
+                                    console.error(json.error);
+                                } else {
+                                    this.reset();
+                                    const lead = document.getElementById("lead");
+                                    while (lead.firstChild) {
+                                        lead.removeChild(lead.firstChild);
+                                    }
+
+                                    document.querySelector("#title > h1").innerHTML = `Score: ${json.score}`;
+                                    document.querySelector('name-element').remove();
+                                    const score = json.score;
+                                    for (let i = 0; i < score; i++) {
+                                        const scoreElement = document.createElement("span");
+                                        scoreElement.innerHTML = "💎";
+                                        scoreElement.style.setProperty(
+                                                    "--screen-height",
+                                                    window.innerHeight + "px"
+                                                );
+
+                                        scoreElement.classList.add(
+                                            "absolute",
+                                            "top-0",
+                                            "text-2xl",
+                                            "z-50",
+                                            "animate-falling"
+                                        );
+                                        //place the scoreElement in a random x position on the screen
+                                        scoreElement.style.left = Math.random() * 100 + "vw";
+                                        //animate the scoreElement falling to the bottom of the screen
+                                        //with a random duration from 1 to 5 seconds
+                                        let animationDuration = Math.random() * 4 + 1;
+                                        scoreElement.style.animationDuration = animationDuration + "s";
+
+                                        lead.appendChild(scoreElement);
+                                    }
+                                    setTimeout(() => {
+                                        while (lead.firstChild) {
+                                            lead.removeChild(lead.firstChild);
+                                        }
+                                    }, 6000);
+
+                                }
+                            });
+                    }
+                });
+        }
     };
 
     reset = () => {
-        console.log('resetting');
         this.#time = new Date();
         this.#level = 0;
         this.#hintCount = 0;
@@ -349,7 +416,9 @@ export class HintElement extends HTMLElement {
         this.#disableRotateEmoji = false;
         this.#levelTwoAnimationTimeout = null;
         const body = document.querySelector("body");
-        body.removeChild(document.getElementById("emoji"));
+
+        if (document.getElementById("emoji"))
+            body.removeChild(document.getElementById("emoji"));
 
         this.loadEventListeners();
         return;

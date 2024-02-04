@@ -55,6 +55,7 @@ module.exports = {
                 'float-bg': 'float-bg 1s linear .1s forwards',
                 'experience': 'experience 2s linear .1s forwards',
                 'translate': 'translate 1s linear .1s forwards',
+                'falling': 'falling 1s linear .1s forwards',
             },
             keyframes: {
                 'translate': {
@@ -182,6 +183,10 @@ module.exports = {
                 'experience': {
                     '1%': { 'background-image': 'linear-gradient(to right, #b8bb26 0%, #b8bb26 1%, #fbf1c7 1%)' },
                     '100%': { 'background-image': 'linear-gradient(to right, #b8bb26 0%, #b8bb26 var(--experience-percent), #fbf1c7 var(--experience-percent))' }
+                },
+                'falling': {
+                    '0%': { 'transform': 'translate3d(0, 0, 0)' },
+                    '100%': { 'transform': 'translate3d(0, var(--screen-height), 0)' }
                 },
             },
         }
