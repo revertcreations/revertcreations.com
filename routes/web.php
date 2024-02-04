@@ -44,8 +44,8 @@ Route::domain('blog.'.$domain)->group(function () {
 Route::domain($domain)->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/puzzle/{puzzle}/check', [PuzzleSessionController::class, 'check'])->name('puzzle-check');
-    Route::post('/puzzle/{puzzle}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
+    Route::get('/puzzle/{puzzle_type_id}/check', [PuzzleSessionController::class, 'check'])->name('puzzle-check');
+    Route::post('/puzzle/{puzzle_type_id}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
 
     Route::get('/resume', function () {
         $resume = public_path('TreverHillisDeveloperResume2024.pdf');

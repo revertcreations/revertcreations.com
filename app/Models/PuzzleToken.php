@@ -28,7 +28,7 @@ class PuzzleToken extends Model
     public function valid($puzzle_session_id, $token) {
         return $this->where('token', $token)
                     ->where('puzzle_session_id', $puzzle_session_id)
-                    ->where('expires_at', '>=', now());
+                    ->where('expires_at', '>=', now())->exists();
     }
 
 }
