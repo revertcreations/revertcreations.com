@@ -1,4 +1,4 @@
-name: Deploy DI RevertCreations
+name: CD Digital Ocean RevertCreations
 
 on:
   push:
@@ -9,35 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up PHP
-      uses: shivammathur/setup-php@master
+    - uses: actions/checkout@v4
+    - name: Set up Node
+      uses: actions/setup-node@v3
       with:
-        php-version: '8.2'
-
-    - name: Install dependencies
-      run: composer install --no-interaction --prefer-dist --no-dev
-
-    - name: Compile CSS JS
-      run: npm install && npm run prod
-
-    - name: Run tests
-      run: php artisan test
+        node-version: '20.x'
+    - run: npm ci
+    - run: npm run prod
+    - name: Commit built assets
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Github Action"
+        git checkout -B deploy
+        git add -f public/
+        git commit -m "Github action build front-end assets"
+        git push -f origin deploy
 
     - name: Deploy to Digital Ocean
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
         username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
-        key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
-        port: ${{ secrets.DIGITAL_OCEAN_SSH_PORT }}
-        script: |
-          cd /var/www/revertcreations
-          php artisan migrate
-          php artisan config:cache
-          php artisan route:cache
-          npm install
-          npm run prod
+        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+        password: ${{ secrets.DIGITAL_OCEAN_PASSWORD }}
+        script: 'cd /var/www/revertcreations.com && ./server_deploy.sh'
 
