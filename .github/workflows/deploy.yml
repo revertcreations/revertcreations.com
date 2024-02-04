@@ -1,0 +1,43 @@
+name: Deploy DI RevertCreations
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: '8.2'
+
+    - name: Install dependencies
+      run: composer install --no-interaction --prefer-dist --no-dev
+
+    - name: Compile CSS JS
+      run: npm install && npm run prod
+
+    - name: Run tests
+      run: php artisan test
+
+    - name: Deploy to Digital Ocean
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+        username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
+        key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
+        port: ${{ secrets.DIGITAL_OCEAN_SSH_PORT }}
+        script: |
+          cd /var/www/revertcreations
+          php artisan migrate
+          php artisan config:cache
+          php artisan route:cache
+          npm install
+          npm run prod
+
