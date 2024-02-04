@@ -51,7 +51,8 @@ class PuzzleSessionController extends Controller
             ($puzzle_session->puzzle_type_id == 1 && $content->time <= 3.4)
         )
             return response()->json([
-                'error' => "Hmmm you trying to cheat over there? session: ".$session_id
+                'error' => "Hmmm you trying to cheat over there? session: ".$session_id,
+                'token' => $token_is_valid,
             ]);
 
         $puzzle_score = new PuzzleScore;
