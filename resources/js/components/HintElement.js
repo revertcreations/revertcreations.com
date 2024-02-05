@@ -121,10 +121,10 @@ export class HintElement extends HTMLElement {
         const target = e.target;
         const clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
         const clientY = e.clientY !== undefined ? e.clientY :  e.touches[0].clientY;
-        const emojiOffset = clientX == 0 && clientY == 0 ? -100 : 10;
+        const emojiOffset = clientX == 0 && clientY == 0 ? -100 : 45;
 
         this.#emoji.style.left = `${clientX - emojiOffset}px`;
-        this.#emoji.style.top = `${clientY + emojiOffset}px`;
+        this.#emoji.style.top = `${clientY - emojiOffset}px`;
 
         if (clientX == 0 && clientY == 0) {
             return;

@@ -301,9 +301,9 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       var target = e.target;
       var clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
       var clientY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
-      var emojiOffset = clientX == 0 && clientY == 0 ? -100 : 10;
+      var emojiOffset = clientX == 0 && clientY == 0 ? -100 : 45;
       _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.left = "".concat(clientX - emojiOffset, "px");
-      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.top = "".concat(clientY + emojiOffset, "px");
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.top = "".concat(clientY - emojiOffset, "px");
       if (clientX == 0 && clientY == 0) {
         return;
       }
