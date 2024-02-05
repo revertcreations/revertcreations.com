@@ -115,9 +115,445 @@ var ContentElement = /*#__PURE__*/function (_HTMLElement) {
 /*!************************************************!*\
   !*** ./resources/js/components/HintElement.js ***!
   \************************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /var/www/html/resources/js/components/HintElement.js: Unexpected token (422:44)\n\n\u001b[0m \u001b[90m 420 |\u001b[39m         \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39m\u001b[33m#\u001b[39mdisableRotateEmoji \u001b[33m=\u001b[39m \u001b[36mfalse\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 421 |\u001b[39m         \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39m\u001b[33m#\u001b[39mlevelTwoAnimationTimeout \u001b[33m=\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 422 |\u001b[39m         \u001b[36mconst\u001b[39m body \u001b[33m=\u001b[39m document\u001b[33m.\u001b[39mquerySelector(\u001b[0m\n\u001b[0m \u001b[90m     |\u001b[39m                                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n    at constructor (/var/www/html/node_modules/@babel/parser/lib/index.js:353:19)\n    at Parser.raise (/var/www/html/node_modules/@babel/parser/lib/index.js:3277:19)\n    at Parser.unexpected (/var/www/html/node_modules/@babel/parser/lib/index.js:3297:16)\n    at Parser.parseExprAtom (/var/www/html/node_modules/@babel/parser/lib/index.js:10964:16)\n    at Parser.parseExprSubscripts (/var/www/html/node_modules/@babel/parser/lib/index.js:10580:23)\n    at Parser.parseUpdate (/var/www/html/node_modules/@babel/parser/lib/index.js:10563:21)\n    at Parser.parseMaybeUnary (/var/www/html/node_modules/@babel/parser/lib/index.js:10541:23)\n    at Parser.parseMaybeUnaryOrPrivate (/var/www/html/node_modules/@babel/parser/lib/index.js:10395:61)\n    at Parser.parseExprOps (/var/www/html/node_modules/@babel/parser/lib/index.js:10400:23)\n    at Parser.parseMaybeConditional (/var/www/html/node_modules/@babel/parser/lib/index.js:10377:23)\n    at Parser.parseMaybeAssign (/var/www/html/node_modules/@babel/parser/lib/index.js:10338:21)\n    at /var/www/html/node_modules/@babel/parser/lib/index.js:10308:39\n    at Parser.allowInAnd (/var/www/html/node_modules/@babel/parser/lib/index.js:11926:12)\n    at Parser.parseMaybeAssignAllowIn (/var/www/html/node_modules/@babel/parser/lib/index.js:10308:17)\n    at Parser.parseExprListItem (/var/www/html/node_modules/@babel/parser/lib/index.js:11686:18)\n    at Parser.parseCallExpressionArguments (/var/www/html/node_modules/@babel/parser/lib/index.js:10766:22)\n    at Parser.parseCoverCallAndAsyncArrowHead (/var/www/html/node_modules/@babel/parser/lib/index.js:10683:29)\n    at Parser.parseSubscript (/var/www/html/node_modules/@babel/parser/lib/index.js:10620:19)\n    at Parser.parseSubscripts (/var/www/html/node_modules/@babel/parser/lib/index.js:10593:19)\n    at Parser.parseExprSubscripts (/var/www/html/node_modules/@babel/parser/lib/index.js:10584:17)\n    at Parser.parseUpdate (/var/www/html/node_modules/@babel/parser/lib/index.js:10563:21)\n    at Parser.parseMaybeUnary (/var/www/html/node_modules/@babel/parser/lib/index.js:10541:23)\n    at Parser.parseMaybeUnaryOrPrivate (/var/www/html/node_modules/@babel/parser/lib/index.js:10395:61)\n    at Parser.parseExprOps (/var/www/html/node_modules/@babel/parser/lib/index.js:10400:23)\n    at Parser.parseMaybeConditional (/var/www/html/node_modules/@babel/parser/lib/index.js:10377:23)\n    at Parser.parseMaybeAssign (/var/www/html/node_modules/@babel/parser/lib/index.js:10338:21)\n    at /var/www/html/node_modules/@babel/parser/lib/index.js:10308:39\n    at Parser.allowInAnd (/var/www/html/node_modules/@babel/parser/lib/index.js:11921:16)\n    at Parser.parseMaybeAssignAllowIn (/var/www/html/node_modules/@babel/parser/lib/index.js:10308:17)\n    at Parser.parseVar (/var/www/html/node_modules/@babel/parser/lib/index.js:12854:91)\n    at Parser.parseVarStatement (/var/www/html/node_modules/@babel/parser/lib/index.js:12700:10)\n    at Parser.parseStatementContent (/var/www/html/node_modules/@babel/parser/lib/index.js:12312:23)\n    at Parser.parseStatementLike (/var/www/html/node_modules/@babel/parser/lib/index.js:12229:17)\n    at Parser.parseStatementListItem (/var/www/html/node_modules/@babel/parser/lib/index.js:12209:17)\n    at Parser.parseBlockOrModuleBlockBody (/var/www/html/node_modules/@babel/parser/lib/index.js:12786:61)\n    at Parser.parseBlockBody (/var/www/html/node_modules/@babel/parser/lib/index.js:12779:10)\n    at Parser.parseBlock (/var/www/html/node_modules/@babel/parser/lib/index.js:12767:10)\n    at Parser.parseFunctionBody (/var/www/html/node_modules/@babel/parser/lib/index.js:11606:24)\n    at Parser.parseArrowExpression (/var/www/html/node_modules/@babel/parser/lib/index.js:11581:10)\n    at Parser.parseParenAndDistinguishExpression (/var/www/html/node_modules/@babel/parser/lib/index.js:11201:12)\n    at Parser.parseExprAtom (/var/www/html/node_modules/@babel/parser/lib/index.js:10847:23)\n    at Parser.parseExprSubscripts (/var/www/html/node_modules/@babel/parser/lib/index.js:10580:23)\n    at Parser.parseUpdate (/var/www/html/node_modules/@babel/parser/lib/index.js:10563:21)\n    at Parser.parseMaybeUnary (/var/www/html/node_modules/@babel/parser/lib/index.js:10541:23)\n    at Parser.parseMaybeUnaryOrPrivate (/var/www/html/node_modules/@babel/parser/lib/index.js:10395:61)\n    at Parser.parseExprOps (/var/www/html/node_modules/@babel/parser/lib/index.js:10400:23)\n    at Parser.parseMaybeConditional (/var/www/html/node_modules/@babel/parser/lib/index.js:10377:23)\n    at Parser.parseMaybeAssign (/var/www/html/node_modules/@babel/parser/lib/index.js:10338:21)\n    at /var/www/html/node_modules/@babel/parser/lib/index.js:10308:39\n    at Parser.allowInAnd (/var/www/html/node_modules/@babel/parser/lib/index.js:11921:16)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   HintElement: () => (/* binding */ HintElement)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+function _construct(t, e, r) { if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments); var o = [null]; o.push.apply(o, e); var p = new (t.bind.apply(t, o))(); return r && _setPrototypeOf(p, r.prototype), p; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _isNativeFunction(fn) { try { return Function.toString.call(fn).indexOf("[native code]") !== -1; } catch (e) { return typeof fn === "function"; } }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+var treasure = document.getElementsByTagName("treasure-element")[0];
+var _time = /*#__PURE__*/new WeakMap();
+var _level = /*#__PURE__*/new WeakMap();
+var _hintCount = /*#__PURE__*/new WeakMap();
+var _hintInterval = /*#__PURE__*/new WeakMap();
+var _held = /*#__PURE__*/new WeakMap();
+var _scoring = /*#__PURE__*/new WeakMap();
+var _animating = /*#__PURE__*/new WeakMap();
+var _rngX = /*#__PURE__*/new WeakMap();
+var _rngY = /*#__PURE__*/new WeakMap();
+var _targetPosition = /*#__PURE__*/new WeakMap();
+var _emoji = /*#__PURE__*/new WeakMap();
+var _disableRotateEmoji = /*#__PURE__*/new WeakMap();
+var _levelTwoAnimationTimeout = /*#__PURE__*/new WeakMap();
+var _glimmerHintTimeout = /*#__PURE__*/new WeakMap();
+var HintElement = /*#__PURE__*/function (_HTMLElement) {
+  _inherits(HintElement, _HTMLElement);
+  function HintElement() {
+    var _this;
+    _classCallCheck(this, HintElement);
+    _this = _callSuper(this, HintElement);
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _time, {
+      writable: true,
+      value: new Date()
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _level, {
+      writable: true,
+      value: 0
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _hintCount, {
+      writable: true,
+      value: 0
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _hintInterval, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _held, {
+      writable: true,
+      value: false
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _scoring, {
+      writable: true,
+      value: false
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _animating, {
+      writable: true,
+      value: false
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _rngX, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _rngY, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _targetPosition, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _emoji, {
+      writable: true,
+      value: document.createElement("div")
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _disableRotateEmoji, {
+      writable: true,
+      value: false
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _levelTwoAnimationTimeout, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _glimmerHintTimeout, {
+      writable: true,
+      value: null
+    });
+    _defineProperty(_assertThisInitialized(_this), "loadEventListeners", function () {
+      _this.addEventListener("mousedown", _this.handleMouseDown);
+      _this.addEventListener("mouseup", _this.handleMouseUp);
+      _this.addEventListener("touchcancel", _this.handleMouseUp);
+      _this.addEventListener("dragstart", _this.handleDragStart);
+      _this.addEventListener("touchstart", _this.handleDragStart, {
+        passive: true
+      });
+      _this.addEventListener("dragend", _this.handleDragEnd);
+      _this.addEventListener("touchend", _this.handleDragEnd, {
+        passive: true
+      });
+      _this.addEventListener("drag", _this.handleDrag);
+      _this.addEventListener("touchmove", _this.handleDrag, {
+        passive: true
+      });
+      treasure.addEventListener("dragenter", _this.handleDragEnter);
+      treasure.addEventListener("dragleave", _this.handleDragLeave);
+    });
+    _defineProperty(_assertThisInitialized(_this), "removeEventListeners", function () {
+      clearInterval(_classPrivateFieldGet(_assertThisInitialized(_this), _hintInterval));
+      _this.removeEventListener("mousedown", _this.handleMouseDown);
+      _this.removeEventListener("mouseup", _this.handleMouseUp);
+      _this.removeEventListener("dragstart", _this.handleDragStart);
+      _this.removeEventListener("dragend", _this.handleDragEnd);
+      _this.removeEventListener("drag", _this.handleDrag);
+      _this.removeEventListener("touchstart", _this.handleDragStart);
+      _this.removeEventListener("touchend", _this.handleDragEnd);
+      _this.removeEventListener("touchmove", _this.handleDrag);
+      treasure.removeEventListener("dragenter", _this.handleDragEnter);
+      treasure.removeEventListener("dragleave", _this.handleDragLeave);
+    });
+    _defineProperty(_assertThisInitialized(_this), "handleMouseDown", function (e) {
+      var target = e.target;
+      target.setAttribute("draggable", true);
+      target.classList.add("shadow-outer", "text-gruvbox-gray");
+    });
+    _defineProperty(_assertThisInitialized(_this), "handleMouseUp", function (e) {
+      var target = e.target;
+      target.classList.remove("text-gruvbox-gray", "shadow-outer", "cursor-grabbing");
+      target.classList.add("cursor-pointer");
+      target.setAttribute("draggable", false);
+    });
+    _defineProperty(_assertThisInitialized(_this), "handleDragEnter", function () {
+      if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) < 2) _classPrivateFieldSet(_assertThisInitialized(_this), _disableRotateEmoji, true);
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.transform = "none";
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🔒";
+    });
+    _defineProperty(_assertThisInitialized(_this), "handleDragLeave", function () {
+      _classPrivateFieldSet(_assertThisInitialized(_this), _disableRotateEmoji, false);
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🧭";
+    });
+    _defineProperty(_assertThisInitialized(_this), "handleDragStart", function (e) {
+      var target = e.target;
+      var mainHeader = document.getElementById("main_header");
+      var footer = document.getElementById("footer");
+      var body = document.querySelector("body");
+      var mainHeaderHeight = mainHeader.offsetHeight;
+      var footerHeight = footer.offsetHeight;
+      var padding = 15;
+      var maxHeight = window.innerHeight - footerHeight - padding;
+      var minHeight = mainHeaderHeight + padding;
+      clearInterval(_classPrivateFieldGet(_assertThisInitialized(_this), _hintInterval));
+      target.textContent = "\xA0\xA0\xA0\xA0\xA0\xA0";
+      _classPrivateFieldSet(_assertThisInitialized(_this), _rngX, Math.random() * (window.innerWidth - padding - padding) + padding);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _rngY, Math.random() * (maxHeight - minHeight) + minHeight);
+      _this.levelUp();
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🧭";
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.add("absolute", "z-50", "text-5xl");
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).id = "emoji";
+      body.appendChild(_classPrivateFieldGet(_assertThisInitialized(_this), _emoji));
+      target.classList.remove("cursor-pointer", "shadow-outer");
+      target.classList.add("cursor-grabbing");
+    });
+    _defineProperty(_assertThisInitialized(_this), "handleDrag", function (e) {
+      var target = e.target;
+      var clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
+      var clientY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
+      var emojiOffset = clientX == 0 && clientY == 0 ? -100 : 45;
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.left = "".concat(clientX - emojiOffset, "px");
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.top = "".concat(clientY - emojiOffset, "px");
+      if (clientX == 0 && clientY == 0) {
+        return;
+      }
+      var distanceToTreasure = _this.rotateKeyAndReturnDistanceToTarget(clientX, clientY);
+      if (_this.isInTarget(clientX, clientY)) {
+        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.transform = "none";
+        target.classList.remove("cursor-grabbing");
+        target.classList.add("cursor-progress");
+        if (_classPrivateFieldGet(_assertThisInitialized(_this), _held) === null) {
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, new Date());
+          _classPrivateFieldSet(_assertThisInitialized(_this), _held, _classPrivateFieldGet(_assertThisInitialized(_this), _held).setSeconds(_classPrivateFieldGet(_assertThisInitialized(_this), _held).getSeconds() + 2.0));
+        } else if (_classPrivateFieldGet(_assertThisInitialized(_this), _held) < new Date().getTime()) {
+          target.classList.remove("cursor-progress");
+          _this.levelUp();
+          if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) == 2) {
+            target.classList.add("cursor-pointer");
+            _this.animateLevelTwo();
+          } else {
+            _this.animateLevelThree();
+          }
+        } else {
+          _classPrivateFieldGet(_assertThisInitialized(_this), _level) == 1 ? _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "⏳" : _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🔐";
+        }
+      } else {
+        _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
+        if (!_classPrivateFieldGet(_assertThisInitialized(_this), _animating)) _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = _classPrivateFieldGet(_assertThisInitialized(_this), _level) == 1 ? "🧭" : "🔑";
+        target.classList.remove("text-gruvbox-yellow", "cursor-progress");
+        target.classList.add("text-gruvbox-gray", "cursor-grabbing");
+      }
+      if (_this.inRangeOfTreasureHintAndOfLevel(distanceToTreasure)) {
+        window.dispatchEvent(new CustomEvent("treasureHint", {
+          detail: {
+            distanceToTreasure: distanceToTreasure
+          }
+        }));
+      }
+    });
+    _defineProperty(_assertThisInitialized(_this), "handleDragEnd", function (e) {
+      clearTimeout(_classPrivateFieldGet(_assertThisInitialized(_this), _glimmerHintTimeout));
+      _classPrivateFieldSet(_assertThisInitialized(_this), _glimmerHintTimeout, setTimeout(function () {
+        _this.glimmerHint();
+      }, 10000));
+      var target = e.target;
+      var body = document.querySelector("body");
+      if (document.getElementById('emoji')) body.removeChild(document.getElementById('emoji'));
+      _classPrivateFieldSet(_assertThisInitialized(_this), _level, 0);
+      target.textContent = _this.dataset.content;
+      target.classList.remove("text-gruvbox-gray", "shadow-outer", "cursor-grabbing");
+      target.classList.add("cursor-pointer");
+      target.setAttribute("draggable", false);
+    });
+    _defineProperty(_assertThisInitialized(_this), "glimmerHint", function () {
+      var _this$hintCount, _this$hintCount2;
+      var content = _this.dataset.content;
+      var duration = 300 / _this.dataset.content.split("").length;
+      _this.innerHTML = "";
+      _this.classList.remove("cursor-pointer");
+      _this.classList.add("select-none");
+      _this.removeAttribute("draggable");
+      _this.removeEventListener("mousedown", _this.handleMouseDown);
+      clearInterval(_classPrivateFieldGet(_assertThisInitialized(_this), _hintInterval));
+      content.split("").forEach(function (letter, index) {
+        var offset = index * duration;
+        var span = document.createElement("span");
+        span.innerText = letter;
+        _this.appendChild(span);
+        setTimeout(function () {
+          if (index > 0 && index < content.length) {
+            _this.childNodes[index - 1].classList.remove("text-gruvbox-white");
+          }
+          span.classList.add("text-gruvbox-white");
+        }, offset);
+      });
+      setTimeout(function () {
+        _this.innerText = _this.dataset.content;
+        _this.classList.remove("select-none");
+        _this.classList.add("cursor-pointer");
+        _this.setAttribute("draggable", true);
+        _this.addEventListener("mousedown", _this.handleMouseDown);
+      }, 300);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _hintInterval, setInterval(_this.glimmerHint, 10000));
+      _classPrivateFieldSet(_assertThisInitialized(_this), _hintCount, (_this$hintCount = _classPrivateFieldGet(_assertThisInitialized(_this), _hintCount), _this$hintCount2 = _this$hintCount++, _this$hintCount)), _this$hintCount2;
+    });
+    _defineProperty(_assertThisInitialized(_this), "rotateKeyAndReturnDistanceToTarget", function (mouseX, mouseY) {
+      if (!_classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition)) return;
+      var deltaX = _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).x + _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).width / 2 - mouseX;
+      var deltaY = _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).y + _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).height / 2 - mouseY;
+      var distanceToTreasure = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      var theta = Math.atan2(deltaY, deltaX);
+      var angle = theta / Math.PI * 180 + (theta > 0 ? 0 : 360);
+
+      // adjusting the initial rotation of the emojis
+      var rotate = 0;
+      if (!_classPrivateFieldGet(_assertThisInitialized(_this), _disableRotateEmoji)) {
+        if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) == 1 && _classPrivateFieldGet(_assertThisInitialized(_this), _held) === null) {
+          rotate = angle + 45;
+        } else if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) == 2 && _classPrivateFieldGet(_assertThisInitialized(_this), _held) === null) {
+          rotate = angle + 225;
+        }
+        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.transform = "rotate(".concat(rotate, "deg)");
+      }
+      return distanceToTreasure;
+    });
+    _defineProperty(_assertThisInitialized(_this), "isInTarget", function (mouseX, mouseY) {
+      if (!_classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition)) return;
+      return mouseX > _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).x && mouseX < _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).x + _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).width && mouseY > _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).y && mouseY < _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).y + _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).height;
+    });
+    _defineProperty(_assertThisInitialized(_this), "animateLevelTwo", function () {
+      _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _animating, true);
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "⌛";
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.transform = "none";
+      _classPrivateFieldSet(_assertThisInitialized(_this), _levelTwoAnimationTimeout, setTimeout(function () {
+        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.remove("text-5xl");
+        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.add("text-2xl");
+        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "✨";
+        setTimeout(function () {
+          _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.remove("text-2xl");
+          _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.add("text-3xl");
+          setTimeout(function () {
+            _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.remove("text-3xl");
+            _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.add("text-5xl");
+            setTimeout(function () {
+              _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.transform = "none";
+              _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🔑";
+              _classPrivateFieldSet(_assertThisInitialized(_this), _animating, false);
+              clearTimeout(_classPrivateFieldGet(_assertThisInitialized(_this), _levelTwoAnimationTimeout));
+            }, 200);
+          }, 200);
+        }, 400);
+      }, 500));
+    });
+    _defineProperty(_assertThisInitialized(_this), "animateLevelThree", function () {
+      _classPrivateFieldSet(_assertThisInitialized(_this), _animating, true);
+      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🔓";
+      setTimeout(function () {
+        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🎉";
+      }, 200);
+      _this.analyticsTreasure({
+        hintCount: _classPrivateFieldGet(_assertThisInitialized(_this), _hintCount),
+        time: (new Date() - _classPrivateFieldGet(_assertThisInitialized(_this), _time)) / 1000
+      });
+    });
+    _defineProperty(_assertThisInitialized(_this), "levelUp", function () {
+      var _this$level;
+      _classPrivateFieldSet(_assertThisInitialized(_this), _level, (_this$level = _classPrivateFieldGet(_assertThisInitialized(_this), _level), ++_this$level));
+      _classPrivateFieldSet(_assertThisInitialized(_this), _targetPosition, _classPrivateFieldGet(_assertThisInitialized(_this), _level) == 1 ? {
+        x: _classPrivateFieldGet(_assertThisInitialized(_this), _rngX),
+        y: _classPrivateFieldGet(_assertThisInitialized(_this), _rngY),
+        width: 20,
+        height: 20
+      } : treasure.getBoundingClientRect());
+    });
+    _defineProperty(_assertThisInitialized(_this), "inRangeOfTreasureHintAndOfLevel", function (distanceToTreasure) {
+      return distanceToTreasure <= 400 && _classPrivateFieldGet(_assertThisInitialized(_this), _level) == 2;
+    });
+    _defineProperty(_assertThisInitialized(_this), "analyticsTreasure", function (detail) {
+      _classPrivateFieldSet(_assertThisInitialized(_this), _animating, false);
+      if (!_classPrivateFieldGet(_assertThisInitialized(_this), _scoring)) {
+        _classPrivateFieldSet(_assertThisInitialized(_this), _scoring, true);
+        _this.removeEventListeners();
+        var request = new Request(window.location.href + "puzzle/1/check", {
+          method: "GET"
+        });
+        fetch(request).then(function (response) {
+          return response.json();
+        }).then(function (json) {
+          if (json.error && json.error == "session expired") {
+            window.location.reload();
+          } else {
+            var _request = new Request(window.location.href + "puzzle/1/solved/" + json.token, {
+              method: "POST",
+              headers: {
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+              },
+              body: JSON.stringify(detail)
+            });
+            fetch(_request).then(function (response) {
+              return response.json();
+            }).then(function (json) {
+              if (json.error) {
+                _this.reset();
+                console.error(json.error);
+              } else {
+                _this.reset();
+                var lead = document.getElementById("lead");
+                while (lead.firstChild) {
+                  lead.removeChild(lead.firstChild);
+                }
+                document.querySelector("#title > h1").innerHTML = "Score: ".concat(json.score);
+                document.querySelector('name-element').remove();
+                var score = json.score;
+                for (var i = 0; i < score; i++) {
+                  var scoreElement = document.createElement("span");
+                  scoreElement.innerHTML = "💎";
+                  scoreElement.style.setProperty("--screen-height", window.innerHeight + "px");
+                  scoreElement.classList.add("absolute", "top-0", "text-2xl", "z-50", "animate-falling");
+                  //place the scoreElement in a random x position on the screen
+                  scoreElement.style.left = Math.random() * 100 + "vw";
+                  //animate the scoreElement falling to the bottom of the screen
+                  //with a random duration from 1 to 5 seconds
+                  var animationDuration = Math.random() * 4 + 1;
+                  scoreElement.style.animationDuration = animationDuration + "s";
+                  lead.appendChild(scoreElement);
+                }
+                setTimeout(function () {
+                  while (lead.firstChild) {
+                    lead.removeChild(lead.firstChild);
+                  }
+                }, 6000);
+              }
+            });
+          }
+        });
+      }
+    });
+    _defineProperty(_assertThisInitialized(_this), "reset", function () {
+      _classPrivateFieldSet(_assertThisInitialized(_this), _time, new Date());
+      _classPrivateFieldSet(_assertThisInitialized(_this), _level, 0);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _hintCount, 0);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _hintInterval, null);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _held, false);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _rngX, null);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _rngY, null);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _targetPosition, null);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _emoji, document.createElement("div"));
+      _classPrivateFieldSet(_assertThisInitialized(_this), _disableRotateEmoji, false);
+      _classPrivateFieldSet(_assertThisInitialized(_this), _levelTwoAnimationTimeout, null);
+      var body = document.querySelector("body");
+      if (document.getElementById("emoji")) body.removeChild(document.getElementById("emoji"));
+      _this.loadEventListeners();
+      return;
+    });
+    _this.dataset.content;
+    return _this;
+  }
+  _createClass(HintElement, [{
+    key: "connectedCallback",
+    value: function connectedCallback() {
+      var _this2 = this;
+      this.innerText = this.dataset.content;
+      this.loadEventListeners();
+      _classPrivateFieldSet(this, _glimmerHintTimeout, setTimeout(function () {
+        _this2.glimmerHint();
+      }, 500));
+    }
+  }]);
+  return HintElement;
+}( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
+customElements.define("hint-element", HintElement);
 
 /***/ }),
 
