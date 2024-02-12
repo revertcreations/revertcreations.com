@@ -623,8 +623,6 @@ var _error = /*#__PURE__*/new WeakMap();
 var _success = /*#__PURE__*/new WeakMap();
 var _unlock = /*#__PURE__*/new WeakMap();
 var _textColors = /*#__PURE__*/new WeakMap();
-//import { Playground } from "../playground.js";
-
 var NameElement = /*#__PURE__*/function (_HTMLElement) {
   _inherits(NameElement, _HTMLElement);
   function NameElement() {
@@ -758,6 +756,13 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
                 return response.json();
               }).then(function (data) {
                 window.Playground.init(data.skills);
+                // add anayltics if gtag is defined
+                if (typeof gtag === 'function') {
+                  gtag('event', 'Skills Puzzle', {
+                    'event_category': 'Skills',
+                    'event_label': 'Skills Playground Loaded'
+                  });
+                }
                 return;
               });
             case 1:
