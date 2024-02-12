@@ -121,7 +121,7 @@ export class HintElement extends HTMLElement {
         const target = e.target;
         const clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
         const clientY = e.clientY !== undefined ? e.clientY :  e.touches[0].clientY;
-        const emojiOffset = clientX == 0 && clientY == 0 ? -100 : 45;
+        const emojiOffset = clientX == 0 && clientY == 0 ? 200 : 45;
 
         this.#emoji.style.left = `${clientX - emojiOffset}px`;
         this.#emoji.style.top = `${clientY - emojiOffset}px`;
@@ -275,31 +275,29 @@ export class HintElement extends HTMLElement {
         );
     };
 
+    animateLevelTwoTryAgain = () => {
+        const animation = Animation();
+
+    };
     animateLevelTwo = () => {
         this.#held = null;
         this.#animating = true;
-        this.#emoji.innerHTML = "⌛";
-        this.#emoji.style.transform = "none";
+        const animationSteps = [
+            { fontSize: "5xl", emoji: "⌛", timeout: 300 },
+            { fontSize: "xl", emoji: "✨", timeout: 400 },
+            { fontSize: "2xl", emoji: "✨", timeout: 400 },
+            { fontSize: "3xl", emoji: "✨", timeout: 400 },
+            { fontSize: "5xl", emoji: "✨", timeout: 400 },
+            { fontSize: "5xl", emoji: "🔑", timeout: 200 },
+        ];
 
-        this.#levelTwoAnimationTimeout = setTimeout(() => {
-            this.#emoji.classList.remove("text-5xl");
-            this.#emoji.classList.add("text-2xl");
-            this.#emoji.innerHTML = "✨";
+        animationSteps.forEach((step, index) => {
             setTimeout(() => {
-                this.#emoji.classList.remove("text-2xl");
-                this.#emoji.classList.add("text-3xl");
-                setTimeout(() => {
-                    this.#emoji.classList.remove("text-3xl");
-                    this.#emoji.classList.add("text-5xl");
-                    setTimeout(() => {
-                        this.#emoji.style.transform = "none";
-                        this.#emoji.innerHTML = "🔑";
-                        this.#animating = false;
-                        clearTimeout(this.#levelTwoAnimationTimeout);
-                    }, 200);
-                }, 200);
-            }, 400);
-        }, 500);
+                this.#emoji.classList.remove(`text-${animationSteps[index - 1]?.fontSize}`);
+                this.#emoji.classList.add(`text-${step.fontSize}`);
+                this.#emoji.innerHTML = step.emoji;
+            }, index === 0 ? 0 : animationSteps[index - 1].timeout);
+        });
     };
 
     animateLevelThree = () => {
@@ -307,12 +305,13 @@ export class HintElement extends HTMLElement {
         this.#emoji.innerHTML = "🔓";
         setTimeout(() => {
             this.#emoji.innerHTML = "🎉";
-        }, 200);
+            this.#animating = false;
+            this.analyticsTreasure({
+                hintCount: this.#hintCount,
+                time: (new Date() - this.#time) / 1000,
+            });
+        }, 300);
 
-        this.analyticsTreasure({
-            hintCount: this.#hintCount,
-            time: (new Date() - this.#time) / 1000,
-        });
     };
 
     levelUp = () => {

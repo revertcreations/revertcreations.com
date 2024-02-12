@@ -343,11 +343,6 @@ const Playground = {
 
         //Playground.homepageTag.classList.remove("text-gruvbox-green");
         Playground.homepageTag.classList.add("border", "border-dashed", "border-4");
-        //    "shadow-inner",
-        //    "text-gruvbox-gray",
-        //    "border-dashed",
-        //    "border-gruvbox-green",
-        //);
 
         if (skill && skill.element) {
             if (e.type == "touchstart") {
@@ -442,7 +437,7 @@ const Playground = {
             //);
         }
 
-        //this.requestAnimationFrameID = null;
+        this.requestAnimationFrameID = null;
     },
 
     dragElement: (e) => {

@@ -301,7 +301,7 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       var target = e.target;
       var clientX = e.clientX !== undefined ? e.clientX : e.touches[0].clientX;
       var clientY = e.clientY !== undefined ? e.clientY : e.touches[0].clientY;
-      var emojiOffset = clientX == 0 && clientY == 0 ? -100 : 45;
+      var emojiOffset = clientX == 0 && clientY == 0 ? 200 : 45;
       _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.left = "".concat(clientX - emojiOffset, "px");
       _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.top = "".concat(clientY - emojiOffset, "px");
       if (clientX == 0 && clientY == 0) {
@@ -411,41 +411,57 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       if (!_classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition)) return;
       return mouseX > _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).x && mouseX < _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).x + _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).width && mouseY > _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).y && mouseY < _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).y + _classPrivateFieldGet(_assertThisInitialized(_this), _targetPosition).height;
     });
+    _defineProperty(_assertThisInitialized(_this), "animateLevelTwoTryAgain", function () {
+      var animation = Animation();
+    });
     _defineProperty(_assertThisInitialized(_this), "animateLevelTwo", function () {
       _classPrivateFieldSet(_assertThisInitialized(_this), _held, null);
       _classPrivateFieldSet(_assertThisInitialized(_this), _animating, true);
-      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "⌛";
-      _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.transform = "none";
-      _classPrivateFieldSet(_assertThisInitialized(_this), _levelTwoAnimationTimeout, setTimeout(function () {
-        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.remove("text-5xl");
-        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.add("text-2xl");
-        _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "✨";
+      var animationSteps = [{
+        fontSize: "5xl",
+        emoji: "⌛",
+        timeout: 300
+      }, {
+        fontSize: "xl",
+        emoji: "✨",
+        timeout: 400
+      }, {
+        fontSize: "2xl",
+        emoji: "✨",
+        timeout: 400
+      }, {
+        fontSize: "3xl",
+        emoji: "✨",
+        timeout: 400
+      }, {
+        fontSize: "5xl",
+        emoji: "✨",
+        timeout: 400
+      }, {
+        fontSize: "5xl",
+        emoji: "🔑",
+        timeout: 200
+      }];
+      animationSteps.forEach(function (step, index) {
         setTimeout(function () {
-          _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.remove("text-2xl");
-          _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.add("text-3xl");
-          setTimeout(function () {
-            _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.remove("text-3xl");
-            _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.add("text-5xl");
-            setTimeout(function () {
-              _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).style.transform = "none";
-              _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🔑";
-              _classPrivateFieldSet(_assertThisInitialized(_this), _animating, false);
-              clearTimeout(_classPrivateFieldGet(_assertThisInitialized(_this), _levelTwoAnimationTimeout));
-            }, 200);
-          }, 200);
-        }, 400);
-      }, 500));
+          var _animationSteps;
+          _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.remove("text-".concat((_animationSteps = animationSteps[index - 1]) === null || _animationSteps === void 0 ? void 0 : _animationSteps.fontSize));
+          _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).classList.add("text-".concat(step.fontSize));
+          _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = step.emoji;
+        }, index === 0 ? 0 : animationSteps[index - 1].timeout);
+      });
     });
     _defineProperty(_assertThisInitialized(_this), "animateLevelThree", function () {
       _classPrivateFieldSet(_assertThisInitialized(_this), _animating, true);
       _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🔓";
       setTimeout(function () {
         _classPrivateFieldGet(_assertThisInitialized(_this), _emoji).innerHTML = "🎉";
-      }, 200);
-      _this.analyticsTreasure({
-        hintCount: _classPrivateFieldGet(_assertThisInitialized(_this), _hintCount),
-        time: (new Date() - _classPrivateFieldGet(_assertThisInitialized(_this), _time)) / 1000
-      });
+        _classPrivateFieldSet(_assertThisInitialized(_this), _animating, false);
+        _this.analyticsTreasure({
+          hintCount: _classPrivateFieldGet(_assertThisInitialized(_this), _hintCount),
+          time: (new Date() - _classPrivateFieldGet(_assertThisInitialized(_this), _time)) / 1000
+        });
+      }, 300);
     });
     _defineProperty(_assertThisInitialized(_this), "levelUp", function () {
       var _this$level;
@@ -1165,12 +1181,6 @@ var Playground = {
 
     //Playground.homepageTag.classList.remove("text-gruvbox-green");
     Playground.homepageTag.classList.add("border", "border-dashed", "border-4");
-    //    "shadow-inner",
-    //    "text-gruvbox-gray",
-    //    "border-dashed",
-    //    "border-gruvbox-green",
-    //);
-
     if (skill && skill.element) {
       if (e.type == "touchstart") {
         skill.element.addEventListener("touchend", Playground.dragEnd, false);
@@ -1233,8 +1243,7 @@ var Playground = {
       //    "shadow-inner",
       //);
     }
-
-    //this.requestAnimationFrameID = null;
+    _this.requestAnimationFrameID = null;
   },
   dragElement: function dragElement(e) {
     if (_this.requestAnimationFrameID) return;
