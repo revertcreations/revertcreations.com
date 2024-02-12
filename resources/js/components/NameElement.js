@@ -1,4 +1,3 @@
-//import { Playground } from "../playground.js";
 
 export class NameElement extends HTMLElement {
     static observedAttributes = ["data-content"];
@@ -133,6 +132,13 @@ export class NameElement extends HTMLElement {
                 .then((response) => response.json())
                 .then((data) => {
                     window.Playground.init(data.skills);
+                    // add anayltics if gtag is defined
+                    if (typeof gtag === 'function') {
+                        gtag('event', 'Skills Puzzle', {
+                            'event_category': 'Skills',
+                            'event_label': 'Skills Playground Loaded'
+                        });
+                    }
                     return;
                 });
     }
