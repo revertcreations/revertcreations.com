@@ -47,16 +47,18 @@
             document.getElementById('thumbnail_wrap').style.display = 'none'
             let close_button = document.createElement('div')
             close_button.id = 'close_button'
-            close_button.classList.add('fixed', 'top-10', 'right-10', 'text-5xl', 'bg-black', 'text-white', 'hover:text-red-500', 'cursor-pointer');
+            close_button.classList.add('absolute', 'right-20', 'text-5xl', 'bg-black', 'text-white', 'hover:text-red-500', 'cursor-pointer');
             close_button.addEventListener('click', closeImage)
             close_button.innerHTML = '<span>X</span>'
-            document.body.appendChild(close_button)
 
             let body = document.body
-            body.style.backgroundImage = 'url('+e.target.dataset.src+')'
-            body.style.backgroundSize = 'contain'
-            body.style.backgroundRepeat = 'no-repeat'
-            body.style.backgroundPosition = 'center center'
+            let content = document.getElementById('content');
+
+            content.appendChild(close_button)
+            content.style.backgroundImage = 'url('+e.target.dataset.src+')'
+            content.style.backgroundSize = 'contain'
+            content.style.backgroundRepeat = 'no-repeat'
+            content.style.backgroundPosition = 'center center'
             //body.style.zIndex = 2
 
             //document.getElementById('close_button').style.display = 'block'
@@ -75,7 +77,9 @@
             thumbnail_wrap.style.display = 'flex'
 
             close_button.remove()
-            document.body.style.backgroundImage = 'unset'
+            let content = document.getElementById('content');
+
+            content.style.backgroundImage = 'unset'
             document.getElementById('app').classList.remove('hidden');
 
             //slideBack(document.getElementById('page_title'), 'left')
