@@ -1698,6 +1698,10 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(250 204 21 / var(--tw-bg-opacity));
 }
+.bg-gruvbox-light-blue {
+  --tw-bg-opacity: 1;
+  background-color: rgb(69 133 136 / var(--tw-bg-opacity));
+}
 .p-1 {
   padding: 0.25rem;
 }
