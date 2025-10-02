@@ -34,35 +34,38 @@
                         <h2 id="public-pipeline-{{ $state }}" class="text-3xl font-semibold text-gruvbox-light-yellow">{{ $label }}</h2>
                     </div>
 
-                    <div class="grid gap-4">
+                    <div class="grid gap-5">
                         @foreach ($entries as $opportunity)
                             @php($anchor = $opportunity->slug ?? ('id-' . $opportunity->getKey()))
-                            <article id="opportunity-{{ $anchor }}" class="card-surface p-6" style="background: rgba(37, 29, 39, 0.9); border-color: #362c39;">
-                                <div class="flex flex-wrap justify-between gap-2 mb-4">
-                                    <div>
-                                        <h3 class="text-2xl font-semibold text-gruvbox-light-yellow">
-                                            @if ($opportunity->is_favorite)
-                                                <span class="mr-2 inline-flex items-center gap-2 rounded-full bg-gruvbox-purple/40 px-2.5 py-1 text-sm text-gruvbox-light-purple" title="Favorite">
-                                                    <span class="text-lg leading-none">★</span>
-                                                    <span class="uppercase tracking-wide">Favorite</span>
-                                                </span>
-                                            @endif
-                                            {{ $opportunity->public_visibility ? ($opportunity->company_name ?? 'Stealth Company') : 'Confidential Opportunity' }}
-                                        </h3>
+                            <article id="opportunity-{{ $anchor }}" class="card-surface p-6 flex flex-col gap-4" style="background: rgba(43, 35, 48, 0.88); border-color: #3a2f3f;">
+                                <div class="flex flex-wrap items-start justify-between gap-3">
+                                    <div class="space-y-1">
+                                        <p class="text-xs uppercase tracking-wide" style="color: rgba(69,133,136,0.7);">{{ $label }}</p>
+                                        <h3 class="text-2xl font-semibold text-gruvbox-light-yellow">{{ $opportunity->public_visibility ? ($opportunity->company_name ?? 'Stealth Company') : 'Confidential opportunity' }}</h3>
                                         <p class="text-gruvbox-aqua">{{ $opportunity->role_title }}</p>
                                     </div>
-                                    <span class="badge">{{ ucfirst($opportunity->priority) }} priority</span>
+                                    <div class="flex flex-col gap-2 items-end">
+                                        @if ($opportunity->is_favorite)
+                                            <span class="inline-flex items-center gap-2 rounded-full bg-gruvbox-purple/40 px-2.5 py-1 text-xs text-gruvbox-light-purple" title="Favorite">
+                                                <span class="text-base leading-none">★</span>
+                                                <span class="uppercase tracking-wide">Favorite</span>
+                                            </span>
+                                        @endif
+                                        <span class="badge">{{ ucfirst($opportunity->priority) }} priority</span>
+                                    </div>
                                 </div>
 
-                                <p class="text-gruvbox-white/85 mb-4 leading-relaxed">{{ $opportunity->summary ?? 'More details coming soon.' }}</p>
+                                <p class="text-gruvbox-white/85 leading-relaxed">{{ $opportunity->summary ?? 'More details coming soon.' }}</p>
 
                                 <div class="flex flex-wrap gap-2 text-xs text-gruvbox-light-blue/80">
-                                    <span class="px-3 py-1 rounded-full bg-gruvbox-blue/20">Workflow · {{ $label }}</span>
+                                    @if ($opportunity->status)
+                                        <span class="px-3 py-1 rounded-full bg-gruvbox-green/20">Status · {{ $opportunity->status }}</span>
+                                    @endif
                                     @if ($opportunity->stage)
                                         <span class="px-3 py-1 rounded-full bg-gruvbox-light-blue/20">Stage · {{ $opportunity->stage }}</span>
                                     @endif
-                                    @if ($opportunity->status)
-                                        <span class="px-3 py-1 rounded-full bg-gruvbox-green/20">Status · {{ $opportunity->status }}</span>
+                                    @if ($opportunity->next_action_at)
+                                        <span class="px-3 py-1 rounded-full bg-gruvbox-yellow/20">Next step {{ $opportunity->next_action_at->diffForHumans() }}</span>
                                     @endif
                                     @if ($opportunity->is_remote)
                                         <span class="px-3 py-1 rounded-full bg-gruvbox-aqua/20">Remote friendly</span>
@@ -70,26 +73,25 @@
                                     @if ($opportunity->fit_score)
                                         <span class="px-3 py-1 rounded-full bg-gruvbox-purple/20">Fit score · {{ $opportunity->fit_score }}</span>
                                     @endif
-                                    @if ($opportunity->next_action_at)
-                                        <span class="px-3 py-1 rounded-full bg-gruvbox-yellow/20">Next action {{ $opportunity->next_action_at->diffForHumans() }}</span>
+                                    @if ($opportunity->domain_tags)
+                                        <span class="px-3 py-1 rounded-full bg-gruvbox-blue/20">Tags · {{ implode(', ', $opportunity->domain_tags) }}</span>
                                     @endif
                                     @if ($opportunity->source)
-                                        <span class="px-3 py-1 rounded-full bg-gruvbox-purple/20">Found via {{ $opportunity->source }}</span>
+                                        <span class="px-3 py-1 rounded-full bg-gruvbox-light-blue/20">Found via {{ $opportunity->source }}</span>
                                     @endif
                                 </div>
 
-                                @if ($opportunity->source_channel)
-                                    <p class="mt-4 text-xs text-gruvbox-light-blue/70">
-                                        <span class="font-semibold text-gruvbox-light-yellow/80">Automation detail:</span>
-                                        <a href="{{ $opportunity->source_channel }}" target="_blank" rel="nofollow noopener" class="underline decoration-dotted hover:text-gruvbox-light-blue">{{ $opportunity->source_channel }}</a>
-                                    </p>
-                                @endif
-                                @if ($opportunity->salary_min)
-                                    <p class="text-xs text-gruvbox-light-blue/70">Salary: {{ $opportunity->salary_currency ?? 'USD' }} {{ number_format($opportunity->salary_min) }}@if($opportunity->salary_max) – {{ number_format($opportunity->salary_max) }}@endif</p>
-                                @endif
-                                @if ($opportunity->domain_tags)
-                                    <p class="text-xs text-gruvbox-light-blue/70">Tags: {{ implode(', ', $opportunity->domain_tags) }}</p>
-                                @endif
+                                <div class="space-y-2 text-xs text-gruvbox-light-blue/70">
+                                    @if ($opportunity->source_channel)
+                                        <p>
+                                            <span class="font-semibold text-gruvbox-light-yellow/80">Automation detail:</span>
+                                            <a href="{{ $opportunity->source_channel }}" target="_blank" rel="nofollow noopener" class="underline decoration-dotted hover:text-gruvbox-light-blue">{{ $opportunity->source_channel }}</a>
+                                        </p>
+                                    @endif
+                                    @if ($opportunity->salary_min)
+                                        <p>Salary: {{ $opportunity->salary_currency ?? 'USD' }} {{ number_format($opportunity->salary_min) }}@if($opportunity->salary_max) – {{ number_format($opportunity->salary_max) }}@endif</p>
+                                    @endif
+                                </div>
                             </article>
                         @endforeach
                     </div>
