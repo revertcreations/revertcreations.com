@@ -79,11 +79,11 @@
                     </div>
                 </div>
 
-                <aside class="space-y-4">
+                <aside class="space-y-4" style="position: sticky; top: 7rem;">
                     <h2 class="text-2xl font-semibold text-gruvbox-light-yellow">Recent activity</h2>
-                    <div class="space-y-3">
+                    <div class="space-y-3" style="max-height: 600px; overflow-y: auto; padding-right: 0.25rem;">
                         @forelse ($activities as $activity)
-                            <article class="card-surface p-4 text-sm text-gruvbox-white/80">
+                            <article class="card-surface p-4 text-sm text-gruvbox-white/80" style="background: rgba(40, 32, 41, 0.88); border-color: #332a33;">
                                 <header class="flex justify-between text-xs text-gruvbox-light-blue/70 mb-1">
                                     <span>{{ optional($activity->occurred_at)->diffForHumans() }}</span>
                                     <span class="uppercase tracking-wide">{{ $activity->category }}</span>

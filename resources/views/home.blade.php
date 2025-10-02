@@ -15,7 +15,7 @@
                         <a href="{{ route('build.index') }}" class="ghost-btn">Follow the build journals</a>
                     </div>
                 </div>
-                <div class="card-surface space-y-4 p-6">
+                    <div class="card-surface space-y-4 p-6" style="background: rgba(36, 33, 36, 0.92); border-color: #3a333d;">
                     <h2 class="text-xl font-semibold text-gruvbox-light-yellow">Current status</h2>
                     <ul class="space-y-3 text-sm text-gruvbox-light-blue">
                         <li class="flex items-start gap-2">
@@ -39,9 +39,9 @@
             </div>
         </section>
 
-        <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black-hidden">
+        <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black-hidden" style="border-top: 1px solid rgba(47,47,47,0.8);">
             <div class="max-w-6xl mx-auto space-y-8">
-                <article class="card-surface space-y-5 p-6">
+                <article class="card-surface space-y-5 p-6" style="background: rgba(43, 35, 48, 0.88); border-color: #3a2f3f;">
                     <p class="text-sm uppercase tracking-wide text-gruvbox-light-blue">Project spotlight</p>
                     @if ($featureProject)
                         <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">{{ $featureProject->title }}</h2>
@@ -69,14 +69,14 @@
                     @endif
                 </article>
 
-                <article class="card-surface space-y-4 p-6">
+                <article class="card-surface space-y-4 p-6" style="background: rgba(38, 32, 37, 0.9); border-color: #332b33;">
                     <header class="space-y-1">
                         <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">What moved this week</h2>
                         <p class="text-sm text-gruvbox-light-blue/80">Quick snippets from the build log—code reviews, design tweaks, automation updates.</p>
                     </header>
                     <div class="grid gap-3">
                         @forelse ($activities->take(4) as $activity)
-                            <article class="card-surface border border-transparent/0 p-4">
+                            <article class="card-surface border border-transparent/0 p-4" style="background: rgba(46, 40, 45, 0.85); border-color: transparent;">
                                 <header class="flex justify-between text-[11px] uppercase tracking-wide text-gruvbox-light-blue/70">
                                     <span>{{ optional($activity->occurred_at)->diffForHumans() }}</span>
                                     <span class="uppercase tracking-wide text-gruvbox-aqua">{{ $activity->category ?? 'general' }}</span>
@@ -146,7 +146,7 @@
             </div>
         </section>
 
-        <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black-hidden">
+        <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black-hidden" style="border-top: 1px solid rgba(47,47,47,0.7);">
             <div class="max-w-6xl mx-auto">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">Latest build notes</h2>
@@ -154,7 +154,7 @@
                 </div>
                 <div class="grid gap-4 md:grid-cols-2">
                     @forelse ($buildLogs->take(4) as $log)
-                        <article class="card-surface p-5">
+                        <article class="card-surface p-5" style="background: rgba(42, 35, 43, 0.88); border-color: #3a303d;">
                             <header class="flex justify-between text-xs text-gruvbox-light-blue/70">
                                 <span>{{ optional($log->logged_at)->toFormattedDateString() }}</span>
                                 <span>{{ $log->phase ?? '—' }}</span>

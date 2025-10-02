@@ -1,8 +1,8 @@
 <x-layout>
-    <section class="p-6 w-full text-gruvbox-white">
-        <header class="max-w-4xl mb-8">
-            <h1 class="text-4xl md:text-5xl mb-4">Opportunity Pipeline</h1>
-            <p class="text-lg text-gruvbox-light-blue">
+    <section class="px-6 md:px-12 lg:px-16 py-10 w-full text-gruvbox-white" style="background: linear-gradient(180deg, #1b191a, #151314 45%, #0f0f0f);">
+        <header class="max-w-4xl mb-8 space-y-4">
+            <h1 class="text-4xl md:text-5xl font-semibold text-gruvbox-light-yellow">Opportunity Pipeline</h1>
+            <p class="text-lg" style="color: rgba(69, 133, 136, 0.85);">
                 A transparent view into active roles and pilots Trever is evaluating. Sensitive details may be redacted.
             </p>
         </header>
@@ -28,17 +28,17 @@
 
                 @php($hasVisibleStages = true)
 
-                <section aria-labelledby="public-pipeline-{{ $state }}" class="space-y-4 max-w-5xl">
+                <section aria-labelledby="public-pipeline-{{ $state }}" class="space-y-6 max-w-5xl">
                     <div>
-                        <p class="text-xs uppercase tracking-[0.3em] text-gruvbox-light-blue">Pipeline Stage</p>
+                        <p class="text-xs uppercase tracking-[0.3em]" style="color: rgba(69, 133, 136, 0.7);">Pipeline Stage</p>
                         <h2 id="public-pipeline-{{ $state }}" class="text-3xl font-semibold text-gruvbox-light-yellow">{{ $label }}</h2>
                     </div>
 
                     <div class="grid gap-4">
                         @foreach ($entries as $opportunity)
                             @php($anchor = $opportunity->slug ?? ('id-' . $opportunity->getKey()))
-                            <article id="opportunity-{{ $anchor }}" class="card-surface p-6">
-                                <div class="flex flex-wrap justify-between gap-2 mb-3">
+                            <article id="opportunity-{{ $anchor }}" class="card-surface p-6" style="background: rgba(37, 29, 39, 0.9); border-color: #362c39;">
+                                <div class="flex flex-wrap justify-between gap-2 mb-4">
                                     <div>
                                         <h3 class="text-2xl font-semibold text-gruvbox-light-yellow">
                                             @if ($opportunity->is_favorite)
@@ -54,21 +54,21 @@
                                     <span class="badge">{{ ucfirst($opportunity->priority) }} priority</span>
                                 </div>
 
-                                <p class="text-gruvbox-white/80 mb-4">{{ $opportunity->summary ?? 'More details coming soon.' }}</p>
+                                <p class="text-gruvbox-white/85 mb-4 leading-relaxed">{{ $opportunity->summary ?? 'More details coming soon.' }}</p>
 
-                                <div class="flex flex-wrap gap-3 text-xs text-gruvbox-light-blue/80">
-                                    <span class="px-3 py-1 rounded-full bg-gruvbox-blue/20">Workflow: {{ $label }}</span>
+                                <div class="flex flex-wrap gap-2 text-xs text-gruvbox-light-blue/80">
+                                    <span class="px-3 py-1 rounded-full bg-gruvbox-blue/20">Workflow · {{ $label }}</span>
                                     @if ($opportunity->stage)
-                                        <span class="px-3 py-1 rounded-full bg-gruvbox-light-blue/20">Stage: {{ $opportunity->stage }}</span>
+                                        <span class="px-3 py-1 rounded-full bg-gruvbox-light-blue/20">Stage · {{ $opportunity->stage }}</span>
                                     @endif
                                     @if ($opportunity->status)
-                                        <span class="px-3 py-1 rounded-full bg-gruvbox-green/20">Status: {{ $opportunity->status }}</span>
+                                        <span class="px-3 py-1 rounded-full bg-gruvbox-green/20">Status · {{ $opportunity->status }}</span>
                                     @endif
                                     @if ($opportunity->is_remote)
                                         <span class="px-3 py-1 rounded-full bg-gruvbox-aqua/20">Remote friendly</span>
                                     @endif
                                     @if ($opportunity->fit_score)
-                                        <span class="px-3 py-1 rounded-full bg-gruvbox-purple/20">Fit score: {{ $opportunity->fit_score }}</span>
+                                        <span class="px-3 py-1 rounded-full bg-gruvbox-purple/20">Fit score · {{ $opportunity->fit_score }}</span>
                                     @endif
                                     @if ($opportunity->next_action_at)
                                         <span class="px-3 py-1 rounded-full bg-gruvbox-yellow/20">Next action {{ $opportunity->next_action_at->diffForHumans() }}</span>
@@ -79,8 +79,8 @@
                                 </div>
 
                                 @if ($opportunity->source_channel)
-                                    <p class="mt-3 text-xs text-gruvbox-light-blue/70">
-                                        Automation detail:
+                                    <p class="mt-4 text-xs text-gruvbox-light-blue/70">
+                                        <span class="font-semibold text-gruvbox-light-yellow/80">Automation detail:</span>
                                         <a href="{{ $opportunity->source_channel }}" target="_blank" rel="nofollow noopener" class="underline decoration-dotted hover:text-gruvbox-light-blue">{{ $opportunity->source_channel }}</a>
                                     </p>
                                 @endif

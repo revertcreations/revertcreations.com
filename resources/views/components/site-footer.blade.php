@@ -13,7 +13,8 @@
         @else
             <span>Building in public — Trever Hillis</span>
             <div class="flex items-center gap-4">
-                <a href="mailto:trever@revertcreations.com" class="hover:underline">Email</a>
+                <a href="mailto:trever@revertcreations.com" class="hover:underline">Start a project</a>
+                <a href="{{ route('build.index') }}" class="hover:underline">Read build journals</a>
             </div>
         @endif
     </div>
