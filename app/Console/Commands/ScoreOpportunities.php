@@ -4,12 +4,21 @@ namespace App\Console\Commands;
 
 use App\Models\Opportunity;
 use Illuminate\Console\Command;
+use App\Services\OpportunityScoringService;
 
 class ScoreOpportunities extends Command
 {
+    protected OpportunityScoringService $scoringService;
+
     protected $signature = 'opportunity:score';
 
     protected $description = 'Recalculate fit scores for existing opportunities.';
+
+    public function __construct(OpportunityScoringService $scoringService)
+    {
+        parent::__construct();
+        $this->scoringService = $scoringService;
+    }
 
     public function handle(): int
     {
@@ -20,19 +29,13 @@ class ScoreOpportunities extends Command
 
         foreach ($opportunities as $opportunity) {
             $original = $opportunity->fit_score;
-            $opportunity->fit_score = $this->score($opportunity);
+            $wasDirty = $this->scoringService->apply($opportunity);
 
             if ($opportunity->fit_score < $fitFloor && ($opportunity->public_visibility ?? false)) {
-                $opportunity->public_visibility = false;
                 $autoHidden++;
             }
 
-            if ($opportunity->fit_score >= $fitFloor && is_null($opportunity->public_visibility)) {
-                $opportunity->public_visibility = true;
-            }
-
-            if ($opportunity->isDirty()) {
-                $opportunity->save();
+            if ($wasDirty) {
                 $updated++;
             }
         }
@@ -47,33 +50,4 @@ class ScoreOpportunities extends Command
         return self::SUCCESS;
     }
 
-    protected function score(Opportunity $opportunity): int
-    {
-        $score = 0;
-
-        if ($opportunity->is_remote) {
-            $score += 2;
-        }
-
-        $async = $opportunity->async_level ?? 0;
-        if ($async >= 4) {
-            $score += 2;
-        } elseif ($async >= 2) {
-            $score += 1;
-        }
-
-        $prefs = config('opportunity_prefs');
-        $salaryMin = $opportunity->salary_min ?? 0;
-        $currency = strtoupper($opportunity->salary_currency ?? 'USD');
-        if ($currency === strtoupper($prefs['salary_currency']) && $salaryMin >= ($prefs['minimum_salary'] ?? 0)) {
-            $score += 3;
-        }
-
-        $domainTags = collect($opportunity->domain_tags ?? [])->map(fn ($tag) => strtolower($tag));
-        $preferred = collect($prefs['preferred_domains'] ?? []);
-        $matches = $preferred->intersect($domainTags)->count();
-        $score += min(3, $matches * 2);
-
-        return min(10, $score);
-    }
 }

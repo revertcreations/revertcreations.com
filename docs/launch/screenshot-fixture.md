@@ -4,7 +4,7 @@ Use `ScreenshotDemoSeeder` to populate staging with realistic Pro accounts for A
 
 ## Run the Seeder
 1. SSH to the staging host and switch to the backend directory (e.g., `/var/www/junkyardwatchdog/backend`).
-2. Optionally export `SCREENSHOT_DEMO_PASSWORD` to override the default login (`Screenshot2025!`).
+2. Set `SCREENSHOT_DEMO_PASSWORD` to the staging password from 1Password before seeding (no default is checked into the repo).
 3. Execute:
    ```
    php artisan db:seed --class=ScreenshotDemoSeeder
@@ -24,7 +24,7 @@ The seeder is idempotent—rerunning it will refresh the records without duplica
   - Watchlists: MkIV Supra, S13 Hatch, CRX Revival—all stocked with part filters, unread matches, and status variety (open/closed part requests, observations, notifications).
   - Garage projects: `1994 Supra Aerotop`, `1990 CRX Track Car` with build notes, photos, and part tracking.
 
-Both accounts share the same password (`Screenshot2025!` unless overridden) so swapping between them on device is quick during capture sessions.
+Both accounts share the staging password (see **Junkyard Watchdog – Screenshot Demo** in 1Password) so swapping between them on device is quick during capture sessions.
 
 ## Data Coverage Highlights
 - Multiple junkyards/brands with populated rows, distances, and ingest history.

@@ -9,7 +9,7 @@ Use this worksheet while executing the launch regression plan (`docs/qa/mobile-r
 - [ ] Prepare test accounts:
   - Free baseline: `free-smoke@junkyardwatchdog.com` (reset password if needed).
   - Paid smoke: `pro-smoke@junkyardwatchdog.com` (set to Pro, reset after run).
-  - Admin: `trever@revertcreations.com` / `LaunchDay2024!`.
+  - Admin: `trever@revertcreations.com` (password in 1Password — rotate after each regression cycle).
 - [ ] Gather Stripe test cards, Mailgun logs, Expo push tokens for device testing.
 
 ## iOS (TestFlight Release Candidate)

@@ -2,10 +2,12 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CaptureOpportunity;
 use App\Console\Commands\ImportOpportunitySources;
 use App\Console\Commands\RefreshJournalMetrics;
 use App\Console\Commands\ResetAdminPassword;
 use App\Console\Commands\ScoreOpportunities;
+use App\Console\Commands\SyncBuildLogs;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -21,6 +23,8 @@ class Kernel extends ConsoleKernel
         ImportOpportunitySources::class,
         RefreshJournalMetrics::class,
         ScoreOpportunities::class,
+        CaptureOpportunity::class,
+        SyncBuildLogs::class,
     ];
 
     /**

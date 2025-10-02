@@ -13,7 +13,7 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=revertcreations
 DB_USERNAME=sail
-DB_PASSWORD=password
+DB_PASSWORD=<your-sail-password>
 
 JUNKYARD_WATCHDOG_PATH="/Users/treverhillis/Code/junkyardwatchdog"
 SITE_RELAUNCH_PATH="/Users/treverhillis/Code/revertcreations.com"

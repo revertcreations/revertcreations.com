@@ -58,7 +58,7 @@ Support docs: `infra-provisioning-checklist.md`, `dns-cutover-plan.md`, `backup-
 ## Production Configuration & Data (2025-09-30)
 - **Robots gate**: Production `.env` has `ROBOTS_ALLOW_INDEX=false`. Launch flip plan: update `/var/www/junkyardwatchdog/backend/.env` to `ROBOTS_ALLOW_INDEX=true`, run `php artisan config:cache`, and reload Nginx; perform only after public announcement.
 - **Seed data**: Base junkyard catalog + locations seeded from staging export (counts: 4 junkyards, 165 locations). `AutomotiveCatalogSeeder` executed; `catalog:build` refreshed on 2025-09-29 to populate 62 automotive makes. Admin user `trever@revertcreations.com` confirmed.
-- **Ingest cadence**: `OPS_INGEST_AUTOMATION_ENABLED=true` on production; scheduler dispatches UPullAndPay every 2h, Pull-A-Part/Pick-n-Pull every 2h (offset), and LKQ every 3h. Verified via `ingest_runs` rows through 2025-09-30 14:22 ET and Supervisor logs.
+- **Ingest cadence**: `OPS_INGEST_AUTOMATION_ENABLED=true` on production; scheduler dispatches UPullAndPay every 2h and LKQ every 3h. Pick-n-Pull is paused (config `JUNKYARD_PICKNPULL_ENABLED=false`) pending written approval. Verified via `ingest_runs` rows through 2025-09-30 14:22 ET and Supervisor logs.
 - **Rehearsal deploy & migrations**: Production deploy dry-run executed 2025-09-29; nightly MySQL backup restored to `jw_restore_test` for integrity check. `php artisan migrate --pretend --force` run 2025-09-30 (no pending migrations).
 - **Retention & purge jobs**: Nightly encrypted MySQL dumps (keep 7 days locally, offsite copy), weekly `alerts:prune-matches --days=90` scheduled, backup logs rotated via `/etc/logrotate.d/jw-backup`. TODO: extend to asset rsync and Laravel log rotation.
 

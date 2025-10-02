@@ -5,6 +5,7 @@
             eyebrow="Pipeline command center"
         >
             <x-slot:actions>
+                <a href="{{ route('admin.opportunities.capture') }}" class="ghost-btn">Capture from URL</a>
                 <a href="{{ route('admin.opportunities.create') }}" class="primary-btn">New Opportunity</a>
             </x-slot:actions>
         </x-admin.page-header>
@@ -13,6 +14,34 @@
             <x-admin.flash type="success">
                 {{ session('status') }}
             </x-admin.flash>
+        @endif
+
+        @if (!empty($recentIngests))
+            @php
+                $queuedCount = $recentIngests->whereIn('status', ['queued', 'processing'])->count();
+                $failed = $recentIngests->where('status', 'failed');
+            @endphp
+
+            @if ($queuedCount > 0)
+                <x-admin.flash type="info">
+                    <p class="font-semibold">Ingestion queue status</p>
+                    <p class="text-sm">{{ $queuedCount }} capture{{ $queuedCount === 1 ? '' : 's' }} currently processing. Latest submission: {{ optional($recentIngasts->first())->created_at?->diffForHumans() ?? 'n/a' }}.</p>
+                </x-admin.flash>
+            @endif
+
+            @if ($failed->isNotEmpty())
+                <x-admin.flash type="warning">
+                    <p class="font-semibold">{{ $failed->count() }} capture{{ $failed->count() === 1 ? '' : 's' }} need attention.</p>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gruvbox-light-yellow/90">
+                        @foreach ($failed as $failedIngest)
+                            <li>
+                                <a href="{{ route('admin.opportunities.capture') }}?retry={{ $failedIngest->id }}" class="underline decoration-dotted">{{ $failedIngest->source_url }}</a>
+                                — {{ data_get($failedIngest->errors, 'message', 'Unknown error') }}
+                            </li>
+                        @endforeach
+                    </ul>
+                </x-admin.flash>
+            @endif
         @endif
 
         @php
@@ -35,7 +64,6 @@
 
             $stageSort = $sortLink('stage');
             $prioritySort = $sortLink('priority');
-            $fitSort = $sortLink('fit_score');
             $nextActionSort = $sortLink('next_action_at');
         @endphp
 
@@ -61,13 +89,10 @@
                             <a href="{{ $stageSort['url'] }}" class="hover:text-gruvbox-yellow">Stage{{ $stageSort['indicator'] }}</a>
                         </th>
                         <th class="px-4 py-3 text-left">
-                            <a href="{{ $prioritySort['url'] }}" class="hover:text-gruvbox-yellow">Priority{{ $prioritySort['indicator'] }}</a>
-                        </th>
-                        <th class="px-4 py-3 text-left">Remote</th>
-                        <th class="px-4 py-3 text-left">
-                            <a href="{{ $fitSort['url'] }}" class="hover:text-gruvbox-yellow">Fit{{ $fitSort['indicator'] }}</a>
+                            <a href="{{ $prioritySort['url'] }}" class="hover:text-gruvbox-yellow">Signals{{ $prioritySort['indicator'] }}</a>
                         </th>
                         <th class="px-4 py-3 text-left">Source</th>
+                        <th class="px-4 py-3 text-left">Ingest</th>
                         <th class="px-4 py-3 text-left">
                             <a href="{{ $nextActionSort['url'] }}" class="hover:text-gruvbox-yellow">Next Action{{ $nextActionSort['indicator'] }}</a>
                         </th>
@@ -118,17 +143,20 @@
                             </td>
                             <td class="px-4 py-3 text-gruvbox-white/80">{{ $opportunity->stage ?? '—' }}</td>
                             <td class="px-4 py-3">
-                                <span class="badge">{{ ucfirst($opportunity->priority) }}</span>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="badge">{{ ucfirst($opportunity->priority) }}</span>
+                                    @if ($opportunity->is_remote)
+                                        <span class="badge bg-gruvbox-aqua/30 text-gruvbox-aqua">Remote</span>
+                                    @else
+                                        <span class="badge bg-gruvbox-red/30 text-gruvbox-light-red">Onsite</span>
+                                    @endif
+                                    <span class="badge bg-gruvbox-purple/25 text-gruvbox-light-purple">Fit {{ $opportunity->fit_score ?? '—' }}</span>
+                                </div>
                             </td>
-                            <td class="px-4 py-3">
-                                @if ($opportunity->is_remote)
-                                    <span class="badge bg-gruvbox-aqua/30 text-gruvbox-aqua">Remote</span>
-                                @else
-                                    <span class="badge bg-gruvbox-red/30 text-gruvbox-light-red">Onsite</span>
-                                @endif
-                            </td>
-                            <td class="px-4 py-3 text-gruvbox-white/80">{{ $opportunity->fit_score ?? '—' }}</td>
                             <td class="px-4 py-3 text-gruvbox-white/70">{{ $opportunity->source ?? '—' }}</td>
+                            <td class="px-4 py-3 text-gruvbox-white/70">
+                                <x-ingest-status-tooltip :status="$opportunity->ingest_status" :ingest="$opportunity->ingests()->latest()->first()" />
+                            </td>
                             <td class="px-4 py-3 text-gruvbox-white/70">{{ optional($opportunity->next_action_at)->format('M j, Y') ?? '—' }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex flex-wrap items-center justify-end gap-2 text-xs font-semibold uppercase tracking-wide">

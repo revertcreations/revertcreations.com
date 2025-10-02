@@ -27,7 +27,7 @@ Junkyard Watchdog keeps self-service yard diehards ahead of fresh arrivals so th
 • Log part requests from the yard, track responses, and keep mileage, row, and VIN details at your fingertips.
 • Manage notification, location, and billing preferences without leaving the app, including Stripe-powered plan upgrades.
 
-Start free with up to three watchlists and weekly digests. Upgrade to Pro for expanded watchlists, daily summaries, CSV exports, and priority ingest windows.
+Start free with up to three watchlists and weekly digests. Upgrade to Pro for expanded watchlists, daily summaries, and priority ingest windows. (CSV exports remain on the roadmap and are not part of the 1.0 build.)
 
 We’re a small team of builders and junkyard regulars. Questions or feedback? Email support@junkyardwatchdog.com.
 ```
@@ -62,20 +62,19 @@ We’re a small team of builders and junkyard regulars. Questions or feedback? E
 - [x] Seeded staging demo accounts via `php artisan db:seed --class=ScreenshotDemoSeeder` (see `docs/launch/screenshot-fixture.md`).
 - [x] Uploaded iPhone screenshot sets for 6.9", 6.5", 6.3", and 6.1" slots in App Store Connect. Final PNGs live under `docs/launch/screenshots/<size>/` and cover Home radar, Watchlist detail with unread matches, Garage project notes, notifications/billing, and part request flows.
 - [ ] App Preview video (optional, 15–30s) — capture once we script the flow we want to highlight.
-- [ ] 12.9" iPad Pro screenshots captured and uploaded. Use the plan in `docs/launch/screenshots/12.9-inch/README.md`.
+- [x] 12.9" iPad Pro screenshots captured and uploaded. Use the plan in `docs/launch/screenshots/12.9-inch/README.md`.
 
 ## Pricing & Categories
-- [ ] Primary category set to **Shopping** (secondary: `Utilities`).
-- [ ] Price tier set to **Free (Tier 0)** so the app can distribute without upfront cost (subscriptions run through Stripe on the web for now).
+- [x] Primary category set to **Lifestyle**
 
 ## App Privacy
-- [ ] Admin completed the App Privacy questionnaire using `docs/launch/app-store-privacy.md` (no tracking, see table for data types and purposes).
+- [x] Admin completed the App Privacy questionnaire using `docs/launch/app-store-privacy.md` (no tracking, see table for data types and purposes).
 
 ## App Review Prep
 
 ### Reviewer Sign-in Payload
 - **Username**: appreview@junkyardwatchdog.com
-- **Password**: AppReview2024!
+- **Password**: refer to the 1Password entry **Junkyard Watchdog – App Review** (rotate after every review cycle).
 - **Account notes**: Pro plan account seeded with Miata/Supra/CRX watchlists, unread matches, linked garage projects, and part notes (email verified; reset flow tested).
 
 ### Reviewer Notes
@@ -91,8 +90,8 @@ We’re a small team of builders and junkyard regulars. Questions or feedback? E
 
 ## Build Pipeline
 - [x] Latest production build (EAS) archived as `603b890b-12a9-4aa1-84d6-72fcbc9b4983` (version 1.0.0, build number 3).
-- [ ] `eas submit` pending — run interactively (`yarn eas submit --platform ios --latest`) or configure an App Store Connect API key.
-- [ ] Add `appstoreConnectApiKey` to `eas.json` (optional) for non-interactive submits.
+- [x] `eas submit` pending — run interactively (`yarn eas submit --platform ios --latest`) or configure an App Store Connect API key.
+- [x] Add `appstoreConnectApiKey` to `eas.json` (optional) for non-interactive submits.
 - [x] Once TestFlight upload succeeds, attach build 1.0.0 (3) to this App Store version, then create the internal tester group (Ops/QA) and invite devices; stage external beta if desired.
 
 ## Push Credentials

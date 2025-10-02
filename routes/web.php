@@ -34,6 +34,8 @@ Route::prefix('admin')->group(function () {
         Route::patch('opportunities/{opportunity}/restore', [AdminOpportunityController::class, 'restore'])->name('opportunities.restore');
         Route::patch('opportunities/{opportunity}/favorite', [AdminOpportunityController::class, 'toggleFavorite'])->name('opportunities.favorite');
         Route::patch('opportunities/{opportunity}/visibility', [AdminOpportunityController::class, 'toggleVisibility'])->name('opportunities.visibility');
+        Route::get('opportunities/capture', [AdminOpportunityController::class, 'capture'])->name('opportunities.capture');
+        Route::post('opportunities/capture', [AdminOpportunityController::class, 'storeCapture'])->name('opportunities.capture.store');
         Route::resource('opportunities', AdminOpportunityController::class)->parameters([
             'opportunities' => 'opportunity',
         ]);

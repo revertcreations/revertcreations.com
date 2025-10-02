@@ -17,5 +17,8 @@ return [
         'creative',
         'media',
         'tools',
+        'ai',
+        'insurtech',
+        'insurance',
     ],
 ];

@@ -2,7 +2,7 @@
 
 @php($isAdmin = $variant === 'admin')
 
-<footer class="bg-gradient-to-r from-gruvbox-purple via-gruvbox-light-purple to-gruvbox-purple px-6 py-4 text-sm font-semibold uppercase tracking-wide text-gruvbox-white">
+<footer class="bg-gradient-to-r from-gruvbox-charcoal via-gruvbox-stone to-gruvbox-charcoal px-6 py-4 text-sm font-semibold uppercase tracking-wide text-gruvbox-white">
     <div class="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 md:flex-row">
         @if ($isAdmin)
             <span>Admin • Revert Creations</span>

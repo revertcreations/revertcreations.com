@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\OpportunityIngest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,6 +40,11 @@ class Opportunity extends Model
         'salary_currency',
         'domain_tags',
         'fit_score',
+        'source_url',
+        'ingest_status',
+        'ingest_payload',
+        'ingest_raw_content',
+        'ingest_errors',
     ];
 
     protected $casts = [
@@ -50,6 +56,8 @@ class Opportunity extends Model
         'is_favorite' => 'boolean',
         'domain_tags' => 'array',
         'archived_at' => 'datetime',
+        'ingest_payload' => 'array',
+        'ingest_errors' => 'array',
     ];
 
     /**
@@ -97,5 +105,10 @@ class Opportunity extends Model
     public function scopeArchived(Builder $query): Builder
     {
         return $query->whereNotNull('archived_at');
+    }
+
+    public function ingests()
+    {
+        return $this->hasMany(OpportunityIngest::class);
     }
 }

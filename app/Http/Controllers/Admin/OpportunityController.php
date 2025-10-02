@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessOpportunityIngest;
 use App\Models\Opportunity;
+use App\Models\OpportunityIngest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -57,6 +59,7 @@ class OpportunityController extends Controller
             'currentDirection' => $direction,
             'workflowStates' => config('opportunity_pipeline.workflow_states', []),
             'showArchived' => $showArchived,
+            'recentIngests' => OpportunityIngest::latest()->take(5)->get(),
         ]);
     }
 
@@ -170,6 +173,41 @@ class OpportunityController extends Controller
         }
 
         return back()->with('status', $message);
+    }
+
+    public function capture(Request $request)
+    {
+        $retryIngest = null;
+
+        if ($request->filled('retry')) {
+            $retryIngest = OpportunityIngest::find($request->query('retry'));
+        }
+
+        return view('admin.opportunities.capture', [
+            'retryIngest' => $retryIngest,
+        ]);
+    }
+
+    public function storeCapture(Request $request)
+    {
+        $data = $request->validate([
+            'posting_url' => ['required', 'url', 'max:2048'],
+            'raw_html' => ['nullable', 'string'],
+            'job_text' => ['nullable', 'string'],
+            'note' => ['nullable', 'string'],
+            'generate_note' => ['sometimes', 'boolean'],
+        ]);
+
+        $ingest = OpportunityIngest::create([
+            'source_url' => $data['posting_url'],
+            'raw_html' => $data['raw_html'] ?? null,
+            'raw_text' => $data['job_text'] ?? null,
+            'note' => $data['note'] ?? null,
+            'generate_note' => $request->boolean('generate_note'),
+            'status' => 'queued',
+        ]);
+
+        return redirect()->route('admin.opportunities.index')->with('status', 'Opportunity capture queued for processing.');
     }
 
     private function validateOpportunity(Request $request, ?Opportunity $opportunity = null): array
