@@ -41,7 +41,6 @@
                 <nav class="flex flex-wrap gap-3 text-sm uppercase tracking-wide text-gruvbox-light-blue">
                     <a href="{{ route('opportunities.index') }}" class="nav-link">Pipeline</a>
                     <a href="{{ route('build.index') }}" class="nav-link">Build journals</a>
-                    <a href="{{ route('docs.show', ['path' => 'ai-product-studio-prd']) }}" class="nav-link">Docs</a>
                     <a href="mailto:trever@revertcreations.com" class="nav-link">Contact</a>
                 </nav>
             </div>
