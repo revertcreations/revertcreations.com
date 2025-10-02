@@ -33,11 +33,11 @@
 <body class="flex flex-col bg-gruvbox-black-hidden overflow-hidden h-full">
 
     <header id="main_header" class="sticky top-0 z-20 bg-gradient-to-b from-[#1f1f1f]/95 via-[#1a1a1a]/90 to-transparent backdrop-blur border-b border-[#2f2f2f]">
-        <div class="mx-auto w-full max-w-6xl px-6 py-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div class="mx-auto w-full max-w-6xl px-6 py-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <a class="block" style="max-width: clamp(12rem, 50vw, 20rem);" href="{{ route('home') }}">
                 <img class="w-full" src="{{ asset('svgs/logoBW.svg') }}" alt="Revert Creations">
             </a>
-            <nav class="flex flex-wrap gap-3 text-sm uppercase tracking-wide text-gruvbox-light-blue lg:justify-end">
+            <nav class="flex flex-wrap gap-3 text-sm uppercase tracking-wide text-gruvbox-light-blue md:justify-end">
                 <a href="{{ route('opportunities.index') }}" class="nav-link">Pipeline</a>
                 <a href="{{ route('build.index') }}" class="nav-link">Build journals</a>
                 <a href="mailto:trever@revertcreations.com" class="nav-link">Contact</a>
