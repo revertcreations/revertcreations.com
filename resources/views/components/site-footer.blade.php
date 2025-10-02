@@ -13,7 +13,6 @@
         @else
             <span>Building in public — Trever Hillis</span>
             <div class="flex items-center gap-4">
-                <a href="https://www.linkedin.com/in/trever-hillis-6961a779/" target="_blank" class="hover:underline">LinkedIn</a>
                 <a href="mailto:trever@revertcreations.com" class="hover:underline">Email</a>
             </div>
         @endif

@@ -34,4 +34,4 @@
 ## Closing CTA
 - Heading: "Want to see what we can ship together?"
 - Body: "Send over the role or product idea. I’ll reply with how I’d spin up the agents, the review checkpoints, and the week-one plan."
-- Buttons: "Email Trever" (mailto), "Connect on LinkedIn" (profile link)
+- Buttons: primary email CTA with optional secondary link to build journals

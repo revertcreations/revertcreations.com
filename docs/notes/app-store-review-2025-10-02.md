@@ -9,9 +9,6 @@
   "description": "Added a self-serve account deletion flow, refreshed mobile legal copy, and resubmitted iOS build 1.0.0 (4) with the required business-model answers.",
   "agent_contribution": "Agents implemented the authenticated deletion endpoint, the mobile delete-account UI, and drafted the App Review business-model response.",
   "review_notes": "Verified staging and production deploys, reset the review account to Free, and queued the 1.0.0 (4) submission under ID 6cf5342a-621b-4574-9304-af3e10079b12.",
-  "links": {
-    "notes": "docs/notes/app-store-review-2025-10-02"
-  },
   "public_visibility": true
 }
 -->

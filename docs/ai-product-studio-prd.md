@@ -12,7 +12,7 @@ Create a transparent, plain-spoken home base that showcases Trever’s ability t
 ### 1.3 Core Outcomes (Plain Language)
 - **Show the work:** spotlight active builds like Junkyard Watchdog (and this site) with clear problem → plan → build → result storytelling that anyone can follow quickly.
 - **Explain how you operate:** describe the project cadence, the moments agents help, where Trever steps in, and how quality gets kept high—no jargon required.
-- **Make it easy to engage:** keep calls-to-action simple (chat, hire, follow progress) and back them with social proof (LinkedIn, testimonials, metrics).
+- **Make it easy to engage:** keep calls-to-action simple (chat, hire, follow progress) and back them with social proof (testimonials, metrics, community highlights).
 - **Surface open opportunities:** publish the roles Trever is targeting, including how they were discovered and how outreach gets automated end-to-end.
 
 ### 1.1 Mission Statement
@@ -139,7 +139,7 @@ Trever brings 14 years of full-stack engineering across startups and enterprise 
 2. Implement opportunity tracker and public pipeline view.
 3. Refresh homepage with mission control layout + activity feed.
 4. Add CTA flow and autoresponder.
-5. QA, deploy, announce on social channels (LinkedIn, X, Indie Hackers, AI builder communities).
+5. QA, deploy, announce across chosen communities (X, Indie Hackers, AI builder circles).
 
 ## 12. Risks & Mitigations
 - **Market clarity**: Emphasize 14 years of engineering experience and agent oversight to differentiate from prompt-only builders; pair messaging with recognizable titles (AI Product Engineer). Add glossary.

@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\ActivityController as AdminActivityController;
 use App\Http\Controllers\Admin\BuildLogController as AdminBuildLogController;
 use App\Http\Controllers\Admin\OpportunityController as AdminOpportunityController;
 use App\Http\Controllers\AdminLoginController;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BuildJournalController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HomeController;
@@ -13,12 +12,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/opportunities', OpportunityPipelineController::class)->name('opportunities.index');
-Route::get('/dispatches', [BlogController::class, 'index'])->name('dispatches.index');
-Route::get('/dispatches/{slug}', [BlogController::class, 'show'])->name('dispatches.show');
+Route::get('/dispatches', function () {
+    abort(404);
+})->name('dispatches.index');
+Route::get('/dispatches/{slug}', function () {
+    abort(404);
+})->name('dispatches.show');
 Route::get('/build', [BuildJournalController::class, 'index'])->name('build.index');
 Route::get('/build/{project}', [BuildJournalController::class, 'show'])->name('build.show');
 Route::get('/docs/{path}', DocumentController::class)->where('path', '.*')->name('docs.show');
-Route::view('/labs', 'labs.archive')->name('labs.archive');
+Route::get('/labs', function () {
+    abort(404);
+})->name('labs.archive');
 
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'login'])->name('admin.login');

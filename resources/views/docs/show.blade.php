@@ -5,7 +5,7 @@
                 <a href="{{ url()->previous() }}" class="text-sm text-gruvbox-green hover:underline">&larr; Back</a>
                 <h1 class="text-3xl font-semibold text-gruvbox-light-yellow">{{ $title }}</h1>
             </header>
-            <div class="space-y-4 text-gruvbox-white/85 leading-relaxed">
+            <div class="space-y-4 text-gruvbox-white/85 leading-relaxed break-words">
                 {!! $html !!}
             </div>
         </article>

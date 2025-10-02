@@ -33,18 +33,18 @@
 <body class="flex flex-col bg-gruvbox-black-hidden overflow-hidden h-full">
 
     <header id="main_header" class="sticky top-0 z-20 bg-gradient-to-b from-[#1f1f1f]/95 via-[#1a1a1a]/90 to-transparent backdrop-blur border-b border-[#2f2f2f]">
-        <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-            <a class="w-40" href="{{ route('home') }}">
-                <img class="w-full" src="{{ asset('svgs/logoBW.svg') }}" alt="Revert Creations">
-            </a>
-            <nav class="flex items-center gap-2">
-                <a href="{{ route('home') }}" class="nav-link">Home</a>
-                <a href="{{ route('opportunities.index') }}" class="nav-link">Pipeline</a>
-                <a href="{{ route('build.index') }}" class="nav-link">Build journals</a>
-                <a href="{{ route('dispatches.index') }}" class="nav-link">Dispatches</a>
-                <a href="{{ route('labs.archive') }}" class="nav-link">Labs</a>
-                <a href="mailto:trever@revertcreations.com" class="nav-link">Contact</a>
-            </nav>
+        <div class="mx-auto w-full max-w-6xl px-6 py-6">
+            <div class="flex flex-col gap-6">
+                <a class="block" style="max-width: clamp(12rem, 60vw, 20rem);" href="{{ route('home') }}">
+                    <img class="w-full" src="{{ asset('svgs/logoBW.svg') }}" alt="Revert Creations">
+                </a>
+                <nav class="flex flex-wrap gap-3 text-sm uppercase tracking-wide text-gruvbox-light-blue">
+                    <a href="{{ route('opportunities.index') }}" class="nav-link">Pipeline</a>
+                    <a href="{{ route('build.index') }}" class="nav-link">Build journals</a>
+                    <a href="{{ route('docs.show', ['path' => 'ai-product-studio-prd']) }}" class="nav-link">Docs</a>
+                    <a href="mailto:trever@revertcreations.com" class="nav-link">Contact</a>
+                </nav>
+            </div>
         </div>
     </header>
 

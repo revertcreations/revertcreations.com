@@ -40,7 +40,7 @@
         </section>
 
         <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black-hidden">
-            <div class="max-w-6xl mx-auto grid gap-8 lg:grid-cols-[2.2fr,1fr] items-start">
+            <div class="max-w-6xl mx-auto space-y-8">
                 <article class="card-surface space-y-5 p-6">
                     <p class="text-sm uppercase tracking-wide text-gruvbox-light-blue">Project spotlight</p>
                     @if ($featureProject)
@@ -69,9 +69,11 @@
                     @endif
                 </article>
 
-                <div class="space-y-4">
-                    <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">What moved this week</h2>
-                    <p class="text-sm text-gruvbox-light-blue/80">Quick snippets from the build log—code reviews, design tweaks, automation updates.</p>
+                <article class="card-surface space-y-4 p-6">
+                    <header class="space-y-1">
+                        <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">What moved this week</h2>
+                        <p class="text-sm text-gruvbox-light-blue/80">Quick snippets from the build log—code reviews, design tweaks, automation updates.</p>
+                    </header>
                     <div class="grid gap-3">
                         @forelse ($activities->take(4) as $activity)
                             <article class="card-surface border border-transparent/0 p-4">
@@ -94,7 +96,7 @@
                             <p class="text-gruvbox-white/70">No activity logged yet.</p>
                         @endforelse
                     </div>
-                </div>
+                </article>
             </div>
         </section>
 
@@ -176,7 +178,7 @@
                 <p class="text-lg text-gruvbox-light-blue/80">Send over the role or product idea. I’ll reply with how I’d spin up the agents, the review checkpoints, and the week-one plan.</p>
                 <div class="flex flex-wrap justify-center gap-4">
                     <a href="mailto:trever@revertcreations.com" class="primary-btn">Email Trever</a>
-                    <a href="https://www.linkedin.com/in/trever-hillis-6961a779/" target="_blank" class="ghost-btn">Connect on LinkedIn</a>
+                    <a href="{{ route('build.index') }}" class="ghost-btn">Browse build journals</a>
                 </div>
             </div>
         </section>
