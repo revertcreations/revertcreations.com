@@ -38,7 +38,7 @@
                     <h2 class="text-2xl font-semibold text-gruvbox-light-yellow">Build log timeline</h2>
                     <div class="space-y-4">
                         @forelse ($buildLogs as $log)
-                            <article class="card-surface p-6">
+                            <x-ui.card class="space-y-3">
                                 <header class="flex flex-wrap justify-between gap-3 text-sm text-gruvbox-light-blue/80 mb-2">
                                     <span class="badge">{{ $log->phase }}</span>
                                     <span>{{ optional($log->logged_at)->toDayDateTimeString() }}</span>
@@ -72,7 +72,7 @@
                                         @endforeach
                                     </ul>
                                 @endif
-                            </article>
+                            </x-ui.card>
                         @empty
                             <p class="text-gruvbox-white/70">No build log entries yet. Check back soon.</p>
                         @endforelse
@@ -83,7 +83,7 @@
                     <h2 class="text-2xl font-semibold text-gruvbox-light-yellow">Recent activity</h2>
                     <div class="space-y-3" style="max-height: 600px; overflow-y: auto; padding-right: 0.25rem;">
                         @forelse ($activities as $activity)
-                            <article class="card-surface p-4 text-sm text-gruvbox-white/80" style="background: rgba(40, 32, 41, 0.88); border-color: #332a33;">
+                            <x-ui.card class="text-sm text-gruvbox-white/80" padding="p-4">
                                 <header class="flex justify-between text-xs text-gruvbox-light-blue/70 mb-1">
                                     <span>{{ optional($activity->occurred_at)->diffForHumans() }}</span>
                                     <span class="uppercase tracking-wide">{{ $activity->category }}</span>
@@ -93,7 +93,7 @@
                                 @if ($activity->link)
                                     <a href="{{ $activity->link }}" target="_blank" class="mt-2 inline-flex text-gruvbox-green underline">View artifact</a>
                                 @endif
-                            </article>
+                            </x-ui.card>
                         @empty
                             <p class="text-gruvbox-white/70">No activity yet.</p>
                         @endforelse

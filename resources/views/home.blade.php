@@ -15,7 +15,7 @@
                         <a href="{{ route('build.index') }}" class="ghost-btn">Follow the build journals</a>
                     </div>
                 </div>
-                    <div class="card-surface space-y-4 p-6" style="background: rgba(36, 33, 36, 0.92); border-color: #3a333d;">
+                <x-ui.card as="div" class="space-y-4">
                     <h2 class="text-xl font-semibold text-gruvbox-light-yellow">Current status</h2>
                     <ul class="space-y-3 text-sm text-gruvbox-light-blue">
                         <li class="flex items-start gap-2">
@@ -35,13 +35,13 @@
                             <span><span class="text-gruvbox-light-yellow">Last update:</span> {{ $metrics['last_update'] }}</span>
                         </li>
                     </ul>
-                </div>
+                </x-ui.card>
             </div>
         </section>
 
         <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black-hidden" style="border-top: 1px solid rgba(47,47,47,0.8);">
             <div class="max-w-6xl mx-auto space-y-8">
-                <article class="card-surface space-y-5 p-6" style="background: rgba(43, 35, 48, 0.88); border-color: #3a2f3f;">
+                <x-ui.card class="space-y-5">
                     <p class="text-sm uppercase tracking-wide text-gruvbox-light-blue">Project spotlight</p>
                     @if ($featureProject)
                         <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">{{ $featureProject->title }}</h2>
@@ -67,16 +67,16 @@
                         <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">Coming Soon</h2>
                         <p class="text-gruvbox-white/80">I’ll rotate featured projects here as they go live.</p>
                     @endif
-                </article>
+                </x-ui.card>
 
-                <article class="card-surface space-y-4 p-6" style="background: rgba(38, 32, 37, 0.9); border-color: #332b33;">
+                <x-ui.card class="space-y-4">
                     <header class="space-y-1">
                         <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">What moved this week</h2>
                         <p class="text-sm text-gruvbox-light-blue/80">Quick snippets from the build log—code reviews, design tweaks, automation updates.</p>
                     </header>
                     <div class="grid gap-3">
                         @forelse ($activities->take(4) as $activity)
-                            <article class="card-surface border border-transparent/0 p-4" style="background: rgba(46, 40, 45, 0.85); border-color: transparent;">
+                            <x-ui.card class="border border-transparent/0" padding="p-4">
                                 <header class="flex justify-between text-[11px] uppercase tracking-wide text-gruvbox-light-blue/70">
                                     <span>{{ optional($activity->occurred_at)->diffForHumans() }}</span>
                                     <span class="uppercase tracking-wide text-gruvbox-aqua">{{ $activity->category ?? 'general' }}</span>
@@ -91,12 +91,12 @@
                                         <a href="{{ $activity->link }}" target="_blank" class="text-gruvbox-green underline">View artifact</a>
                                     @endif
                                 </div>
-                            </article>
+                            </x-ui.card>
                         @empty
                             <p class="text-gruvbox-white/70">No activity logged yet.</p>
                         @endforelse
                     </div>
-                </article>
+                </x-ui.card>
             </div>
         </section>
 
@@ -107,7 +107,7 @@
                     <a href="{{ route('opportunities.index') }}" class="text-sm uppercase tracking-wide text-gruvbox-green hover:underline">View the full pipeline</a>
                 </div>
                 <p class="text-sm text-gruvbox-light-blue/80">Each card shows where the lead came from, what’s automated, and the next move.</p>
-                <div class="grid gap-5 md:grid-cols-2">
+                <div class="grid gap-4 md:grid-cols-2">
                     @forelse ($pipeline->take(4) as $item)
                         <article class="card-surface p-6" style="background: rgba(42, 35, 43, 0.88); border-color: #3a303d;">
                             <header class="space-y-1">
@@ -159,7 +159,7 @@
                 </div>
                 <div class="grid gap-4 md:grid-cols-2">
                     @forelse ($buildLogs->take(4) as $log)
-                        <article class="card-surface p-5" style="background: rgba(42, 35, 43, 0.88); border-color: #3a303d;">
+                        <x-ui.card class="p-5">
                             <header class="flex justify-between text-xs text-gruvbox-light-blue/70">
                                 <span>{{ optional($log->logged_at)->toFormattedDateString() }}</span>
                                 <span>{{ $log->phase ?? '—' }}</span>
@@ -169,7 +169,7 @@
                             @if ($log->review_notes)
                                 <p class="mt-3 text-sm text-gruvbox-green/80">Review highlight: {{ \Illuminate\Support\Str::limit($log->review_notes, 120) }}</p>
                             @endif
-                        </article>
+                        </x-ui.card>
                     @empty
                         <p class="text-gruvbox-white/70">Build notes coming soon.</p>
                     @endforelse

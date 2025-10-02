@@ -9,7 +9,7 @@
 
             <div class="grid gap-6 md:grid-cols-2">
                 @foreach ($projects as $project)
-                    <article class="card-surface p-6 flex flex-col justify-between" style="background: rgba(43, 35, 48, 0.88); border-color: #3a2f3f;">
+                    <x-ui.card class="flex flex-col justify-between">
                         <div class="space-y-4">
                             <h2 class="text-2xl text-gruvbox-light-yellow">{{ $project->title }}</h2>
                             <p class="text-gruvbox-white/80">{{ $project->subtitle }}</p>
@@ -44,7 +44,7 @@
                             @endif
                             <a href="{{ route('build.show', $project->slug) }}" class="primary-btn w-full justify-center">Open journal</a>
                         </div>
-                    </article>
+                    </x-ui.card>
                 @endforeach
             </div>
         </div>

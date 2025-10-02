@@ -34,10 +34,10 @@
                         <h2 id="public-pipeline-{{ $state }}" class="text-3xl font-semibold text-gruvbox-light-yellow">{{ $label }}</h2>
                     </div>
 
-                    <div class="grid gap-5">
+                    <div class="grid gap-4">
                         @foreach ($entries as $opportunity)
                             @php($anchor = $opportunity->slug ?? ('id-' . $opportunity->getKey()))
-                            <article id="opportunity-{{ $anchor }}" class="card-surface p-6 flex flex-col gap-4" style="background: rgba(43, 35, 48, 0.88); border-color: #3a2f3f;">
+                            <x-ui.card id="opportunity-{{ $anchor }}" class="flex flex-col gap-4">
                                 <div class="flex flex-wrap items-start justify-between gap-3">
                                     <div class="space-y-1">
                                         <p class="text-xs uppercase tracking-wide" style="color: rgba(69,133,136,0.7);">{{ $label }}</p>
@@ -92,7 +92,7 @@
                                         <p>Salary: {{ $opportunity->salary_currency ?? 'USD' }} {{ number_format($opportunity->salary_min) }}@if($opportunity->salary_max) – {{ number_format($opportunity->salary_max) }}@endif</p>
                                     @endif
                                 </div>
-                            </article>
+                            </x-ui.card>
                         @endforeach
                     </div>
                 </section>
