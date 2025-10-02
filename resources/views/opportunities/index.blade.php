@@ -1,11 +1,5 @@
 <x-layout>
-    <section class="px-6 md:px-12 lg:px-16 py-10 w-full text-gruvbox-white" style="background: linear-gradient(180deg, #1b191a, #151314 45%, #0f0f0f);">
-        <header class="max-w-4xl mb-8 space-y-4">
-            <h1 class="text-4xl md:text-5xl font-semibold text-gruvbox-light-yellow">Opportunity Pipeline</h1>
-            <p class="text-lg" style="color: rgba(69, 133, 136, 0.85);">
-                A transparent view into active roles and pilots Trever is evaluating. Sensitive details may be redacted.
-            </p>
-        </header>
+    <x-page title="Opportunity Pipeline" eyebrow="Pipeline" lead="A transparent view into active roles and pilots Trever is evaluating. Sensitive details may be redacted." containerClass="max-w-5xl">
 
         @php
             $workflowStates = $workflowStates ?? [];
@@ -102,5 +96,5 @@
         @unless ($hasVisibleStages)
             <p class="text-lg text-gruvbox-white/70">Pipeline updates are on the way.</p>
         @endunless
-    </section>
+    </x-page>
 </x-layout>
