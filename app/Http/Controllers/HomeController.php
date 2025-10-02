@@ -2,24 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\PuzzleSession;
+use App\Models\Activity;
+use App\Models\BuildLog;
+use App\Models\Opportunity;
+use App\Models\Project;
+use App\Models\SiteStatus;
 
 class HomeController extends Controller
 {
-    public function index(Request $request) {
+    public function index()
+    {
+        $visibleOpportunities = Opportunity::public()->pipelineOrder()->take(6)->get();
+        $recentActivities = Activity::public()->recent()->take(8)->get();
+        $recentBuildLogs = BuildLog::public()->timeline()->take(5)->get();
 
-        $session_id = $request->session()->getId();
+        $siteStatus = SiteStatus::latest('updated_at')->first();
+        $metrics = [
+            'availability' => $siteStatus?->availability ?? 'Availability coming soon',
+            'current_focus' => $siteStatus?->current_focus ?? 'Project updates coming soon',
+            'next_in_queue' => $siteStatus?->next_in_queue ?? 'Next initiative coming soon',
+            'last_update' => optional($recentActivities->first())->occurred_at?->diffForHumans() ?? 'just getting started',
+        ];
 
-        $analytics_treasure = PuzzleSession::where('session_id', $session_id)
-                                    ->where('puzzle_type_id', 1)
-                                    ->first();
-        if (!$analytics_treasure)
-            PuzzleSession::create([
-                'session_id' => $session_id,
-                'puzzle_type_id' => 1,
-            ]);
+        $featureProject = Project::featured()->first() ?? Project::active()->first();
 
-        return view('home');
+        return view('home', [
+            'pipeline' => $visibleOpportunities,
+            'activities' => $recentActivities,
+            'buildLogs' => $recentBuildLogs,
+            'metrics' => $metrics,
+            'featureProject' => $featureProject,
+        ]);
     }
 }

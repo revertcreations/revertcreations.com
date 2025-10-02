@@ -5,100 +5,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ADMIN.revertcreations.com</title>
-    <meta name="author" content="name">
-    <meta name="description" content="admin page for revertcreations">
-    <meta name="keywords" content="revert creations, revertcreations, admin">
+    <title>AI Product Studio Admin</title>
+    <meta name="author" content="Trever Hillis">
+    <meta name="description" content="Admin control room for revertcreations.com">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
+<body class="bg-gradient-to-b from-gruvbox-charcoal via-[#1d1d1d] to-gruvbox-black-hidden text-gruvbox-white min-h-screen">
 
-<body>
-
-    <div>
-        <nav class="bg-gray-800">
-
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-
-                    <div class="flex items-center">
-                        <div class="hidden md:block">
-                            <div class="ml-10 flex items-baseline space-x-4">
-                                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                <a
-                                    href="{{ route('admin.dashboard') }}"
-                                    class="px-3 py-2 rounded-md text-sm font-medium
-                                        {{
-                                            Route::is('admin.dashboard') ?
-                                            "bg-gray-900 text-white" :
-                                            "text-gray-300 hover:bg-gray-700 hover:text-white"
-                                        }}"
-                                >
-                                    Dashboard
-                                </a>
-                                <a
-                                    href="{{ route('client.index') }}"
-                                    class="{{ Route::is('client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">
-                                    Clients
-                                </a>
-
-                                <a href="{{ route('skills.index') }}" class="{{ Route::is('skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
-
-                                <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a>
-
-                                <a href="#" class="{{ Route::is('invoices.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Invoices</a>
-
-                                <a href="/portfolio" class="{{ Route::is('portfolio.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photography Portfolio</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="hidden md:block">
-                        <div class="ml-4 flex items-center md:ml-6">
-                            <button class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                                <a href="/logout" class="">logout</a>
-                            </button>
-                        </div>
-                    </div>
-
+    <div class="flex min-h-screen flex-col">
+        <header class="sticky top-0 z-30 border-b border-[#2f2f2f] bg-gradient-to-b from-[#1f1f1f]/95 via-[#1a1a1a]/90 to-transparent backdrop-blur">
+            <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <a class="hidden md:block w-40" href="{{ route('home') }}">
+                        <img class="w-full" src="{{ asset('svgs/logoBW.svg') }}" alt="Revert Creations">
+                    </a>
+                    <nav class="flex items-center gap-2 text-sm font-medium uppercase tracking-wide">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Route::is('admin.dashboard') ? 'bg-gruvbox-highlight/60 text-gruvbox-yellow' : 'text-gruvbox-light-blue' }} px-3 py-2 rounded-md">
+                            Dashboard
+                        </a>
+                        <a href="{{ route('admin.opportunities.index') }}" class="nav-link {{ Route::is('admin.opportunities.*') ? 'bg-gruvbox-highlight/60 text-gruvbox-yellow' : 'text-gruvbox-light-blue' }} px-3 py-2 rounded-md">
+                            Opportunities
+                        </a>
+                        <a href="{{ route('admin.activities.index') }}" class="nav-link {{ Route::is('admin.activities.*') ? 'bg-gruvbox-highlight/60 text-gruvbox-yellow' : 'text-gruvbox-light-blue' }} px-3 py-2 rounded-md">
+                            Activity Feed
+                        </a>
+                        <a href="{{ route('admin.build-logs.index') }}" class="nav-link {{ Route::is('admin.build-logs.*') ? 'bg-gruvbox-highlight/60 text-gruvbox-yellow' : 'text-gruvbox-light-blue' }} px-3 py-2 rounded-md">
+                            Build Log
+                        </a>
+                    </nav>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('home') }}" class="hidden md:inline-flex items-center rounded-md border border-gruvbox-highlight px-3 py-2 text-xs font-semibold uppercase tracking-wide text-gruvbox-light-blue hover:bg-gruvbox-highlight/40">
+                        View Site
+                    </a>
+                    <a href="{{ route('admin.logout') }}" class="inline-flex items-center rounded-md bg-gruvbox-purple/30 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-gruvbox-light-yellow hover:bg-gruvbox-purple/40">
+                        Logout
+                    </a>
                 </div>
             </div>
+        </header>
 
-            <!-- Mobile menu, show/hide based on menu state. not wired up. maybe someday -->
-            <div class="md:hidden" id="mobile-menu">
-
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    <a href="{{ route('admin.dashboard') }}" class="{{ Route::is('admin.dashboard') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
-
-                    <a href="{{ route('client.index') }}" class="{{ Route::is('client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Clients</a>
-
-                    <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a>
-
-                    <a href="#" class="{{ Route::is('invoices.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Invoices</a>
-
-                    <a href="#" class="{{ Route::is('photography.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photography</a>
-                </div>
-
-                <div class="pt-4 pb-3 border-t border-gray-700">
-                    <div class="flex items-center px-5">
-                        <button class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                            <a href="/logout" class="">logout</a>
-                        </button>
-                    </div>
-                </div>
-
+        <main class="flex-1 px-4 py-10">
+            <div class="mx-auto w-full max-w-6xl">
+                {{ $slot }}
             </div>
+        </main>
 
-        </nav>
-
-        {{ $slot }}
-
-        <script src="{{ asset('js/app.js') }}"></script>
-
+        <x-site-footer variant="admin" />
     </div>
+
+    <script src="{{ asset('js/app.js') }}"></script>
 
 </body>
 

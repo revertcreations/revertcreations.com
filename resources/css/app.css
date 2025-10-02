@@ -1,124 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
 @tailwind base;
-/* Firefox */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #282828 #32302f;
-  }
-
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 15px;
-  }
-
-  *::-webkit-scrollbar-track {
-    background: #282828;
-    border-radius: 5px;
-  }
-
-  *::-webkit-scrollbar-thumb {
-    background-color: #32302f;
-    border-radius: 14px;
-    color: 3px solid #282828;
-  }
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-    .w-1000 {
-        width: 1000px;
+@layer base {
+    html {
+        @apply font-sans bg-gruvbox-charcoal text-gruvbox-white;
     }
-    .touch-action-none {
-        touch-action: none;
+
+    body {
+        @apply bg-gradient-to-b from-gruvbox-charcoal via-[#1d1d1d] to-gruvbox-black-hidden min-h-screen text-[15px] leading-relaxed;
+    }
+
+    h1, h2, h3, h4 {
+        @apply font-display tracking-tight text-gruvbox-light-yellow;
+    }
+
+    a {
+        @apply transition duration-150 ease-out;
     }
 }
 
-h1, h2, h3, .text-8xl {
-    font-family: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif, Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-    font-weight: 700;
-    font-style: normal;
+/* Scrollbar tweaks */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(189, 174, 147, 0.4) rgba(40, 40, 40, 0.9);
 }
 
-html, p, content-element {
-    font-family: SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono",
-    "Courier New", monospace;
+*::-webkit-scrollbar {
+    width: 12px;
 }
 
-/* #photoSkill::before {
-    content: url("/svgs/photo.svg");
-    position: absolute;
-} */
-
-
-/* #design_skill_svg {
-    z-index: -1;
-    right: -56px;
-    bottom: -7px;
-}
-#code_skill_svg {
-    z-index: -1;
-    bottom: -72px;
-    left: 11px;
-}
-#photo_skill_svg {
-    z-index: -1;
-    left: 53px;
-    top: 0px;
-} */
-
-
-:root{
-    --experience-color: #b8bb26;
-    --translate-origin: 0px;
+*::-webkit-scrollbar-track {
+    background: rgba(35, 35, 35, 0.9);
 }
 
-.logo-link.home {
-    @apply cursor-not-allowed;
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(189, 174, 147, 0.5);
+    border-radius: 9999px;
 }
 
-.logo-link.web-development {
-    @apply bg-gruvbox-black text-gruvbox-green hover:text-gruvbox-purple;
-}
+@layer components {
+    .nav-link {
+        @apply text-sm font-medium text-gruvbox-light-blue hover:text-gruvbox-green px-3 py-2 rounded-md transition;
+    }
 
-.logo-link.photography {
-    @apply bg-black text-white hover:text-black hover:bg-white;
-}
+    .primary-btn {
+        @apply inline-flex items-center justify-center px-5 py-3 font-semibold uppercase tracking-wide rounded-md bg-gruvbox-green text-gruvbox-black shadow-card hover:-translate-y-0.5 hover:shadow-lg;
+    }
 
-#playground::-webkit-scrollbar {
-    display: none;
-  }
+    .ghost-btn {
+        @apply inline-flex items-center justify-center px-5 py-3 font-semibold uppercase tracking-wide rounded-md border border-gruvbox-green text-gruvbox-green hover:bg-gruvbox-green/10;
+    }
 
-  /* Hide scrollbar for IE, Edge and Firefox */
-#playground {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
+    .card-surface {
+        @apply bg-gradient-to-br from-gruvbox-stone via-[#262626] to-gruvbox-highlight border border-[#2f2f2f] rounded-2xl shadow-card;
+    }
 
-#photographer_wrap {
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.square-film {
-    background: url('https://res.cloudinary.com/treverhillis/image/upload/v1625022773/assets/_MG_3942_rjkx1x.jpg');
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 375px;
-    width: 375px;
-}
-
-.inset-text {
-    background-color: #565656;
-    color: transparent;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    background-clip: text;
-}
-
-#homepage_tag {
-    /* box-sizing: border-box; */
-    /* border: 2px solid transparent; */
+    .badge {
+        @apply inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-wide rounded-full bg-gruvbox-purple/30 text-gruvbox-light-yellow;
+    }
 }

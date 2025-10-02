@@ -4,7 +4,7 @@
     @foreach($posts as $post)
         <article class="m-8">
             <h2 class="text-2xl text-gruvbox-light-yellow hover:underline">
-                <a href="/{{$post->slug}}">
+                <a href="{{ route('dispatches.show', $post->slug) }}">
                     {{ $post->title }}
                 </a>
             </h2>

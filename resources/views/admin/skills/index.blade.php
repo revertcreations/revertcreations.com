@@ -37,7 +37,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
 
                                     @forelse($skills as $skill)
-                                    <tr>
+                                    <tr class="odd:bg-white even:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">{{ $skill->name }}</div>
                                         </td>

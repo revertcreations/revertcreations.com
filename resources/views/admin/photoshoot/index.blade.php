@@ -40,7 +40,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
 
                                     @forelse($photoshoots as $photoshoot)
-                                    <tr>
+                                    <tr class="odd:bg-white even:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">{{ $photoshoot->title }}</div>
                                             <div class="text-sm text-gray-700">{{ $photoshoot->client->orginazation }}</div>

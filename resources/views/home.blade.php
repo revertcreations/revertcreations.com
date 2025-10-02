@@ -1,42 +1,194 @@
 <x-layout>
+    <div class="flex-1 w-full overflow-y-auto">
+        <section class="px-6 py-12 md:px-12 lg:px-16 text-gruvbox-white">
+            <div class="max-w-6xl mx-auto grid gap-12 md:grid-cols-[2fr,1fr] items-start">
+                <div class="space-y-6">
+                    <p class="text-sm uppercase tracking-[0.4em] text-gruvbox-light-blue">Hi, I’m Trever Hillis</p>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight">
+                        I ship production-ready products by pairing AI agents with senior engineering oversight so real apps go live fast.
+                    </h1>
+                    <p class="text-lg text-gruvbox-light-blue/80">
+                        I revived the shelved Junkyard Watchdog idea on September 3rd and, with agents plus senior review, submitted a production-ready iOS build to Apple 28 days later. This site unpacks exactly what the agents tackled, where I stepped in, and what shipped.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="mailto:trever@revertcreations.com" class="primary-btn">Let’s talk about your project</a>
+                        <a href="{{ route('build.index') }}" class="ghost-btn">Follow the build journals</a>
+                    </div>
+                </div>
+                <div class="card-surface space-y-4 p-6">
+                    <h2 class="text-xl font-semibold text-gruvbox-light-yellow">Current status</h2>
+                    <ul class="space-y-3 text-sm text-gruvbox-light-blue">
+                        <li class="flex items-start gap-2">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-gruvbox-green"></span>
+                            <span><span class="text-gruvbox-light-yellow">Availability:</span> {{ $metrics['availability'] }}</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-gruvbox-green"></span>
+                            <span><span class="text-gruvbox-light-yellow">Actively shipping:</span> {{ $metrics['current_focus'] }}</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-gruvbox-green"></span>
+                            <span><span class="text-gruvbox-light-yellow">Next in queue:</span> {{ $metrics['next_in_queue'] }}</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="mt-1 h-2 w-2 rounded-full bg-gruvbox-green"></span>
+                            <span><span class="text-gruvbox-light-yellow">Last update:</span> {{ $metrics['last_update'] }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-    <div class="flex flex-col flex-1 text-gruvbox-gray w-full">
+        <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black-hidden">
+            <div class="max-w-6xl mx-auto grid gap-8 lg:grid-cols-[2.2fr,1fr] items-start">
+                <article class="card-surface space-y-5 p-6">
+                    <p class="text-sm uppercase tracking-wide text-gruvbox-light-blue">Project spotlight</p>
+                    @if ($featureProject)
+                        <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">{{ $featureProject->title }}</h2>
+                        <p class="text-gruvbox-white/80">{{ $featureProject->summary }}</p>
+                        <ul class="space-y-3 text-sm text-gruvbox-light-blue">
+                            @if ($featureProject->status_label)
+                                <li><span class="text-gruvbox-light-yellow">What’s live:</span> {{ $featureProject->status_label }}</li>
+                            @endif
+                            @if ($featureProject->how_it_works)
+                                <li><span class="text-gruvbox-light-yellow">How it works:</span> {{ $featureProject->how_it_works }}</li>
+                            @endif
+                            @if ($featureProject->contribution)
+                                <li><span class="text-gruvbox-light-yellow">What I handled:</span> {{ $featureProject->contribution }}</li>
+                            @endif
+                        </ul>
+                        @if ($featureProject->cta_label && $featureProject->cta_url)
+                            <a href="{{ $featureProject->cta_url }}" class="inline-flex items-center gap-2 text-gruvbox-green font-semibold uppercase tracking-wide">
+                                {{ $featureProject->cta_label }}
+                                <span aria-hidden="true">→</span>
+                            </a>
+                        @endif
+                    @else
+                        <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">Coming Soon</h2>
+                        <p class="text-gruvbox-white/80">I’ll rotate featured projects here as they go live.</p>
+                    @endif
+                </article>
 
-        <div id="title" class="self-top p-2 sm:p-4 md:p-6">
-            <h1 class="text-5xl md:text-6xl">Hi. I'm</h1>
-            <name-element data-content="Trever" class="table"></name-element>
-        </div>
+                <div class="space-y-4">
+                    <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">What moved this week</h2>
+                    <p class="text-sm text-gruvbox-light-blue/80">Quick snippets from the build log—code reviews, design tweaks, automation updates.</p>
+                    <div class="grid gap-3">
+                        @forelse ($activities->take(4) as $activity)
+                            <article class="card-surface border border-transparent/0 p-4">
+                                <header class="flex justify-between text-[11px] uppercase tracking-wide text-gruvbox-light-blue/70">
+                                    <span>{{ optional($activity->occurred_at)->diffForHumans() }}</span>
+                                    <span class="uppercase tracking-wide text-gruvbox-aqua">{{ $activity->category ?? 'general' }}</span>
+                                </header>
+                                <h3 class="mt-1 text-base font-semibold text-gruvbox-light-yellow">{{ $activity->headline }}</h3>
+                                <p class="text-sm text-gruvbox-white/75">{{ \Illuminate\Support\Str::limit($activity->body, 140) }}</p>
+                                <div class="mt-2 flex flex-wrap gap-2 text-[11px] text-gruvbox-light-blue">
+                                    @foreach (($activity->tags ?? []) as $tag)
+                                        <span class="px-2 py-1 rounded-full bg-gruvbox-blue/20 text-gruvbox-light-blue lowercase">#{{ $tag }}</span>
+                                    @endforeach
+                                    @if ($activity->link)
+                                        <a href="{{ $activity->link }}" target="_blank" class="text-gruvbox-green underline">View artifact</a>
+                                    @endif
+                                </div>
+                            </article>
+                        @empty
+                            <p class="text-gruvbox-white/70">No activity logged yet.</p>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <div id="lead" class="flex-1 w-full text-gruvbox-gray p-2 sm:p-4 md:p-6">
+        <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">Roles & pilots I’m exploring</h2>
+                    <a href="{{ route('opportunities.index') }}" class="text-sm uppercase tracking-wide text-gruvbox-green hover:underline">View the full pipeline</a>
+                </div>
+                <p class="text-sm text-gruvbox-light-blue/80">Each card shows where the lead came from, what’s automated, and the next move.</p>
+                <div class="grid gap-4 md:grid-cols-2">
+                    @forelse ($pipeline->take(4) as $item)
+                        <article class="card-surface p-5">
+                            <header class="space-y-1">
+                                <p class="text-xs uppercase tracking-wide text-gruvbox-light-blue">{{ $item->stage ?? 'Stage TBD' }}</p>
+                                <h3 class="text-2xl font-semibold text-gruvbox-light-yellow">{{ $item->role_title }}</h3>
+                                <p class="text-gruvbox-white/70">{{ $item->public_visibility ? ($item->company_name ?? 'Stealth Company') : 'Confidential' }}</p>
+                            </header>
+                            <p class="mt-3 text-gruvbox-white/80">{{ $item->summary ?? 'Details coming soon.' }}</p>
+                            <ul class="mt-4 space-y-2 text-xs text-gruvbox-light-blue/80">
+                                <li><span class="text-gruvbox-light-yellow">Status:</span> {{ $item->status }}</li>
+                                @if ($item->next_action_at)
+                                    <li><span class="text-gruvbox-light-yellow">Next step:</span> {{ $item->next_action_at->diffForHumans() }}</li>
+                                @endif
+                                @if ($item->is_remote)
+                                    <li><span class="text-gruvbox-light-yellow">Remote:</span> Yes</li>
+                                @endif
+                                <li><span class="text-gruvbox-light-yellow">Fit score:</span> {{ $item->fit_score ?? '—' }}</li>
+                                @if ($item->source)
+                                    <li><span class="text-gruvbox-light-yellow">Found via:</span> {{ $item->source }}</li>
+                                @endif
+                                @if ($item->source_channel)
+                                    <li><span class="text-gruvbox-light-yellow">Automation:</span> {{ $item->source_channel }}</li>
+                                @endif
+                                @if ($item->salary_min)
+                                    <li><span class="text-gruvbox-light-yellow">Salary:</span> {{ $item->salary_currency ?? 'USD' }} {{ number_format($item->salary_min) }}@if($item->salary_max) – {{ number_format($item->salary_max) }}@endif</li>
+                                @endif
+                                @if ($item->domain_tags)
+                                    <li><span class="text-gruvbox-light-yellow">Tags:</span> {{ implode(', ', $item->domain_tags) }}</li>
+                                @endif
+                            </ul>
+                        </article>
+                    @empty
+                        <p class="text-gruvbox-white/70">Pipeline updates are on the way.</p>
+                    @endforelse
+                </div>
+            </div>
+        </section>
 
-            <content-element class="block m-3 text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal select-none">
-                I am a full-stack web <span class="text-3xl font-bold text-gruvbox-green"
-                    id="developer">developer</span> who strives
-                to create applications that users tend to <treasure-element data-name="treasure">treasure</treasure-element>.
-            </content-element>
+        <section class="px-6 md:px-12 lg:px-16 py-10 bg-gruvbox-black-hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-semibold text-gruvbox-light-yellow">Latest build notes</h2>
+                    <a href="{{ route('build.index') }}" class="text-sm uppercase tracking-wide text-gruvbox-green hover:underline">Browse build journals</a>
+                </div>
+                <div class="grid gap-4 md:grid-cols-2">
+                    @forelse ($buildLogs->take(4) as $log)
+                        <article class="card-surface p-5">
+                            <header class="flex justify-between text-xs text-gruvbox-light-blue/70">
+                                <span>{{ optional($log->logged_at)->toFormattedDateString() }}</span>
+                                <span>{{ $log->phase ?? '—' }}</span>
+                            </header>
+                            <h3 class="mt-2 text-2xl font-semibold text-gruvbox-light-yellow">{{ $log->title }}</h3>
+                            <p class="mt-2 text-gruvbox-white/80">{{ \Illuminate\Support\Str::limit($log->description, 160) }}</p>
+                            @if ($log->review_notes)
+                                <p class="mt-3 text-sm text-gruvbox-green/80">Review highlight: {{ \Illuminate\Support\Str::limit($log->review_notes, 120) }}</p>
+                            @endif
+                        </article>
+                    @empty
+                        <p class="text-gruvbox-white/70">Build notes coming soon.</p>
+                    @endforelse
+                </div>
+            </div>
+        </section>
 
-            <content-element class="block m-3 text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal select-none">
-                I'm constanstly coming up with startup ideas, tinkering with
-                interfaces, and fiddling with technologies. I hope this
-                platform can be a source of motivation for myself to bring
-                those creative ideas to life and share them with the rest of
-                the internet. Hope you find some
-                <hint-element data-content="hidden"></hint-element>
-                gems laying around.
-            </content-element>
-
-        </div>
-
+        <section class="px-6 md:px-12 lg:px-16 py-12 bg-[#1d1d1d] border-t border-[#2f2f2f]">
+            <div class="max-w-4xl mx-auto text-center space-y-6 text-gruvbox-white">
+                <h2 class="text-4xl font-semibold text-gruvbox-light-yellow">Want to see what we can ship together?</h2>
+                <p class="text-lg text-gruvbox-light-blue/80">Send over the role or product idea. I’ll reply with how I’d spin up the agents, the review checkpoints, and the week-one plan.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="mailto:trever@revertcreations.com" class="primary-btn">Email Trever</a>
+                    <a href="https://www.linkedin.com/in/trever-hillis-6961a779/" target="_blank" class="ghost-btn">Connect on LinkedIn</a>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <script src="/js/home.js"></script>
     @if (app()->environment('production'))
-    <script>
-        gtag('event', 'page_view', {
-            'page_title': 'Home',
-            'page_location': '{{ request()->url() }}',
-            'page_path': '{{ request()->path() }}'
-        });
-    </script>
+        <script>
+            gtag('event', 'page_view', {
+                'page_title': 'Home',
+                'page_location': '{{ request()->url() }}',
+                'page_path': '{{ request()->path() }}'
+            });
+        </script>
     @endif
 </x-layout>

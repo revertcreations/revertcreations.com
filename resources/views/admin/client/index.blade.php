@@ -39,7 +39,7 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @forelse($clients as $client)
-                                    <tr>
+                                    <tr class="odd:bg-white even:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900">{{ $client->organization }}</div>
                                             <a href="{{ $client->website }}" class="text-sm text-gray-700">{{ $client->website }}</a>

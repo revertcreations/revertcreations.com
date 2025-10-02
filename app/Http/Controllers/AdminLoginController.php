@@ -7,12 +7,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminLoginController extends Controller
 {
-
     public function login()
     {
         return view('admin.login');
     }
-
 
     public function authenticate(Request $request)
     {
@@ -21,10 +19,12 @@ class AdminLoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('admin.dashboard');
+            return redirect()->intended(route('admin.dashboard'));
         }
 
-        return back();
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 
     public function logout(Request $request)
@@ -32,7 +32,6 @@ class AdminLoginController extends Controller
         Auth::logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

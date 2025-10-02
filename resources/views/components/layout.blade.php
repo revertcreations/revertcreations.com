@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html class="h-screen"
-    lang="en">
+<html class="h-screen" lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible"
-        content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="theme-color" content="#317EFB">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>REVERT CREATIONS</title>
@@ -34,44 +32,27 @@
 
 <body class="flex flex-col bg-gruvbox-black-hidden overflow-hidden h-full">
 
-    <header id="main_header">
-        <div class="bg-gruvbox-blue"
-            id="logo">
-            <a class="right-0 top-2 z-10 w-10/12"
-                href="{{ route('home') }}">
-                <img class="w-full"
-                    src="{{ asset('svgs/logoBW.svg') }}"
-                    alt="Revert Creations">
+    <header id="main_header" class="sticky top-0 z-20 bg-gradient-to-b from-[#1f1f1f]/95 via-[#1a1a1a]/90 to-transparent backdrop-blur border-b border-[#2f2f2f]">
+        <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
+            <a class="w-40" href="{{ route('home') }}">
+                <img class="w-full" src="{{ asset('svgs/logoBW.svg') }}" alt="Revert Creations">
             </a>
+            <nav class="flex items-center gap-2">
+                <a href="{{ route('home') }}" class="nav-link">Home</a>
+                <a href="{{ route('opportunities.index') }}" class="nav-link">Pipeline</a>
+                <a href="{{ route('build.index') }}" class="nav-link">Build journals</a>
+                <a href="{{ route('dispatches.index') }}" class="nav-link">Dispatches</a>
+                <a href="{{ route('labs.archive') }}" class="nav-link">Labs</a>
+                <a href="mailto:trever@revertcreations.com" class="nav-link">Contact</a>
+            </nav>
         </div>
     </header>
 
-    <div id="content" class="flex flex-col w-full flex-1 md:flex-row md:max-w-screen-xl self-center overflow-y-auto">
+    <div id="content" class="flex flex-col w-full flex-1 md:max-w-screen-xl self-center overflow-y-auto px-4 md:px-0">
         {{ $slot }}
     </div>
 
-    <div id="footer" class="flex flex-nowrap bg-gruvbox-orange text-revert-black">
-
-        <div class="relative grow p-4 bg-gruvbox-yellow">
-            <a href="{{ route('blog') }}">
-                <h2 class="skill inline cursor-pointer text-3xl md:text-5xl"
-                    name="design">blog</h2>
-            </a>
-        </div>
-
-        <div class="relative grow p-4 bg-gruvbox-light-blue">
-            <a href="{{ route('photography') }}">
-                <h2 class="skill inline cursor-pointer text-3xl md:text-5xl"
-                    name="design">photography</h2>
-            </a>
-        </div>
-
-
-        <div class="relative grow p-4 bg-gruvbox-blue">
-            <a href="mailto:trever@revertcreations.com">
-                <h2 class="skill cursor-pointer text-3xl md:text-5xl">contact</h2>
-            </a>
-        </div>
+    <x-site-footer />
 
 </body>
 

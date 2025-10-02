@@ -1,0 +1,47 @@
+[
+  {
+    "company": "Axiom Launch Systems",
+    "role": "Director of AI Delivery",
+    "industry": "Aerospace",
+    "status": "open",
+    "stage": "Identified",
+    "priority": "high",
+    "source": "agent-scraped",
+    "source_channel": "LinkedIn alert → saved search",
+    "summary": "Scale an internal AI playbook for hardware + ops teams bringing new launch infrastructure online.",
+    "next_action_at": "2025-10-02T09:00:00-04:00",
+    "notes": "Needs tailored portfolio piece that highlights telemetry instrumentation.",
+    "links": {
+      "posting": "https://www.linkedin.com/jobs/view/0/",
+      "company": "https://axiomlaunch.com/careers"
+    },
+    "is_remote": true,
+    "async_level": 4,
+    "salary_min": 135000,
+    "salary_max": 165000,
+    "salary_currency": "USD",
+    "domain_tags": ["aerospace", "ops", "telemetry"]
+  },
+  {
+    "company": "Waypoint Robotics",
+    "role": "AI Product Lead",
+    "industry": "Industrial Automation",
+    "status": "open",
+    "stage": "Outreach drafted",
+    "priority": "medium",
+    "source": "newsletter",
+    "source_channel": "Ben Tossell AI Jobs digest",
+    "summary": "Own vision + execution for autonomous yard robots with agent-assisted fleet maintenance.",
+    "next_action_at": "2025-10-03T14:00:00-04:00",
+    "notes": "Need to mention Junkyard Watchdog ingest pipeline; highlight infra reliability.",
+    "links": {
+      "posting": "https://example.com/jobs/waypoint-ai-product-lead"
+    },
+    "is_remote": true,
+    "async_level": 3,
+    "salary_min": 120000,
+    "salary_max": 140000,
+    "salary_currency": "USD",
+    "domain_tags": ["robotics", "hardware", "ops"]
+  }
+]
