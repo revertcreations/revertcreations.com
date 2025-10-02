@@ -107,37 +107,42 @@
                     <a href="{{ route('opportunities.index') }}" class="text-sm uppercase tracking-wide text-gruvbox-green hover:underline">View the full pipeline</a>
                 </div>
                 <p class="text-sm text-gruvbox-light-blue/80">Each card shows where the lead came from, what’s automated, and the next move.</p>
-                <div class="grid gap-4 md:grid-cols-2">
+                <div class="grid gap-5 md:grid-cols-2">
                     @forelse ($pipeline->take(4) as $item)
-                        <article class="card-surface p-5">
+                        <article class="card-surface p-6" style="background: rgba(42, 35, 43, 0.88); border-color: #3a303d;">
                             <header class="space-y-1">
-                                <p class="text-xs uppercase tracking-wide text-gruvbox-light-blue">{{ $item->stage ?? 'Stage TBD' }}</p>
+                                <p class="text-xs uppercase tracking-wide" style="color: rgba(69,133,136,0.7);">{{ $item->stage ?? 'Stage TBD' }}</p>
                                 <h3 class="text-2xl font-semibold text-gruvbox-light-yellow">{{ $item->role_title }}</h3>
-                                <p class="text-gruvbox-white/70">{{ $item->public_visibility ? ($item->company_name ?? 'Stealth Company') : 'Confidential' }}</p>
+                                <p class="text-gruvbox-white/75">{{ $item->public_visibility ? ($item->company_name ?? 'Stealth Company') : 'Confidential' }}</p>
                             </header>
-                            <p class="mt-3 text-gruvbox-white/80">{{ $item->summary ?? 'Details coming soon.' }}</p>
-                            <ul class="mt-4 space-y-2 text-xs text-gruvbox-light-blue/80">
-                                <li><span class="text-gruvbox-light-yellow">Status:</span> {{ $item->status }}</li>
+                            <p class="mt-3 text-gruvbox-white/85 leading-relaxed">{{ $item->summary ?? 'Details coming soon.' }}</p>
+                            <div class="mt-4 flex flex-wrap gap-2 text-xs text-gruvbox-light-blue/80">
+                                <span class="px-3 py-1 rounded-full bg-gruvbox-blue/20">Status · {{ $item->status }}</span>
                                 @if ($item->next_action_at)
-                                    <li><span class="text-gruvbox-light-yellow">Next step:</span> {{ $item->next_action_at->diffForHumans() }}</li>
+                                    <span class="px-3 py-1 rounded-full bg-gruvbox-yellow/20">Next step {{ $item->next_action_at->diffForHumans() }}</span>
                                 @endif
                                 @if ($item->is_remote)
-                                    <li><span class="text-gruvbox-light-yellow">Remote:</span> Yes</li>
+                                    <span class="px-3 py-1 rounded-full bg-gruvbox-aqua/20">Remote friendly</span>
                                 @endif
-                                <li><span class="text-gruvbox-light-yellow">Fit score:</span> {{ $item->fit_score ?? '—' }}</li>
+                                @if ($item->fit_score)
+                                    <span class="px-3 py-1 rounded-full bg-gruvbox-purple/20">Fit score · {{ $item->fit_score }}</span>
+                                @endif
                                 @if ($item->source)
-                                    <li><span class="text-gruvbox-light-yellow">Found via:</span> {{ $item->source }}</li>
+                                    <span class="px-3 py-1 rounded-full bg-gruvbox-light-blue/20">Found via {{ $item->source }}</span>
                                 @endif
-                                @if ($item->source_channel)
-                                    <li><span class="text-gruvbox-light-yellow">Automation:</span> {{ $item->source_channel }}</li>
-                                @endif
-                                @if ($item->salary_min)
-                                    <li><span class="text-gruvbox-light-yellow">Salary:</span> {{ $item->salary_currency ?? 'USD' }} {{ number_format($item->salary_min) }}@if($item->salary_max) – {{ number_format($item->salary_max) }}@endif</li>
-                                @endif
-                                @if ($item->domain_tags)
-                                    <li><span class="text-gruvbox-light-yellow">Tags:</span> {{ implode(', ', $item->domain_tags) }}</li>
-                                @endif
-                            </ul>
+                            </div>
+                            @if ($item->source_channel)
+                                <p class="mt-4 text-xs text-gruvbox-light-blue/70 break-words">
+                                    <span class="font-semibold text-gruvbox-light-yellow/80">Automation detail:</span>
+                                    {{ $item->source_channel }}
+                                </p>
+                            @endif
+                            @if ($item->salary_min)
+                                <p class="text-xs text-gruvbox-light-blue/70 mt-2">Salary: {{ $item->salary_currency ?? 'USD' }} {{ number_format($item->salary_min) }}@if($item->salary_max) – {{ number_format($item->salary_max) }}@endif</p>
+                            @endif
+                            @if ($item->domain_tags)
+                                <p class="text-xs text-gruvbox-light-blue/70 mt-2">Tags: {{ implode(', ', $item->domain_tags) }}</p>
+                            @endif
                         </article>
                     @empty
                         <p class="text-gruvbox-white/70">Pipeline updates are on the way.</p>
