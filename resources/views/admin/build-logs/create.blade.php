@@ -21,7 +21,7 @@
         @endif
 
         <div class="card-surface p-6">
-            <form action="{{ route('admin.build-logs.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('admin.build-logs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @include('admin.build-logs._form')
             </form>
         </div>

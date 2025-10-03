@@ -12,6 +12,11 @@
                 <span>{{ $buildLog->category ?? '—' }}</span>
                 <span>{{ $buildLog->public_visibility ? 'Public' : 'Private' }}</span>
             </div>
+            @if ($buildLog->image_url)
+                <div class="rounded border border-gray-800 bg-black/40 overflow-hidden">
+                    <img src="{{ $buildLog->image_url }}" alt="{{ $buildLog->title }} image" class="w-full object-cover">
+                </div>
+            @endif
             <div>
                 <h2 class="text-xl font-semibold mb-2">Summary</h2>
                 <p class="text-gray-300 whitespace-pre-line">{{ $buildLog->description }}</p>

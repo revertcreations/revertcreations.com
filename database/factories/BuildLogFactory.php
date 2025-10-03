@@ -24,6 +24,8 @@ class BuildLogFactory extends Factory
             'category' => $this->faker->randomElement(['research', 'architecture', 'delivery', 'retro']),
             'title' => $this->faker->sentence(6),
             'description' => $this->faker->paragraph(),
+            'image_url' => null,
+            'image_public_id' => null,
             'agent_contribution' => $this->faker->boolean(70) ? $this->faker->sentences(2, true) : null,
             'review_notes' => $this->faker->boolean(65) ? $this->faker->sentences(2, true) : null,
             'links' => $this->faker->boolean(50) ? [

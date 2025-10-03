@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BuildLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 
 class BuildLogController extends Controller
 {
@@ -25,6 +27,11 @@ class BuildLogController extends Controller
     public function store(Request $request)
     {
         $data = $this->validateBuildLog($request);
+
+        if ($request->hasFile('image')) {
+            $data = array_merge($data, $this->uploadImageFromRequest($request));
+        }
+
         BuildLog::create($data);
 
         return redirect()->route('admin.build-logs.index')->with('status', 'Build log entry created.');
@@ -43,6 +50,16 @@ class BuildLogController extends Controller
     public function update(Request $request, BuildLog $buildLog)
     {
         $data = $this->validateBuildLog($request);
+
+        if ($request->boolean('remove_image')) {
+            $data['image_url'] = null;
+            $data['image_public_id'] = null;
+        }
+
+        if ($request->hasFile('image')) {
+            $data = array_merge($data, $this->uploadImageFromRequest($request));
+        }
+
         $buildLog->update($data);
 
         return redirect()->route('admin.build-logs.index')->with('status', 'Build log entry updated.');
@@ -63,14 +80,18 @@ class BuildLogController extends Controller
             'category' => ['nullable', 'max:120'],
             'title' => ['required', 'max:255'],
             'description' => ['nullable'],
+            'image' => ['nullable', 'image', 'max:5120'],
             'agent_contribution' => ['nullable'],
             'review_notes' => ['nullable'],
             'links' => ['nullable'],
             'public_visibility' => ['sometimes', 'boolean'],
+            'remove_image' => ['sometimes', 'boolean'],
         ]);
 
         $validated['logged_at'] = $validated['logged_at'] ?? now();
         $validated['public_visibility'] = $request->boolean('public_visibility');
+
+        $validated = Arr::except($validated, ['image', 'remove_image']);
 
         if (!empty($validated['links']) && is_string($validated['links'])) {
             $decoded = json_decode($validated['links'], true);
@@ -78,5 +99,29 @@ class BuildLogController extends Controller
         }
 
         return $validated;
+    }
+
+    private function uploadImageFromRequest(Request $request): array
+    {
+        if (empty(config('cloudinary.cloud_url'))) {
+            throw ValidationException::withMessages([
+                'image' => 'Cloudinary is not configured. Add CLOUDINARY_URL to the environment before uploading images.',
+            ]);
+        }
+
+        try {
+            $upload = $request->file('image')->storeOnCloudinary('build-logs');
+        } catch (\Throwable $exception) {
+            report($exception);
+
+            throw ValidationException::withMessages([
+                'image' => 'We couldn’t upload the image right now. Please try again.',
+            ]);
+        }
+
+        return [
+            'image_url' => $upload->getSecurePath(),
+            'image_public_id' => $upload->getPublicId(),
+        ];
     }
 }

@@ -17,6 +17,8 @@ class BuildLog extends Model
         'project',
         'title',
         'description',
+        'image_url',
+        'image_public_id',
         'agent_contribution',
         'review_notes',
         'links',

@@ -165,6 +165,11 @@
                                 <span>{{ $log->phase ?? '—' }}</span>
                             </header>
                             <h3 class="mt-2 text-2xl font-semibold text-gruvbox-light-yellow">{{ $log->title }}</h3>
+                            @if ($log->image_url)
+                                <div class="mt-3 overflow-hidden rounded-md border border-[#2f2f2f] bg-black/30">
+                                    <img src="{{ $log->image_url }}" alt="{{ $log->title }} image" class="w-full h-auto object-cover">
+                                </div>
+                            @endif
                             <p class="mt-2 text-gruvbox-white/80">{{ \Illuminate\Support\Str::limit($log->description, 160) }}</p>
                             @if ($log->review_notes)
                                 <p class="mt-3 text-sm text-gruvbox-green/80">Review highlight: {{ \Illuminate\Support\Str::limit($log->review_notes, 120) }}</p>

@@ -44,6 +44,11 @@
                                     <span>{{ optional($log->logged_at)->toDayDateTimeString() }}</span>
                                 </header>
                                 <h3 class="text-xl font-semibold text-gruvbox-light-yellow">{{ $log->title }}</h3>
+                                @if ($log->image_url)
+                                    <div class="mt-3 overflow-hidden rounded-lg border border-[#2f2f2f] bg-black/20">
+                                        <img src="{{ $log->image_url }}" alt="{{ $log->title }} image" class="w-full h-auto object-cover">
+                                    </div>
+                                @endif
                                 <p class="mt-2 text-gruvbox-white/80">{{ $log->description }}</p>
 
                                 @if ($log->agent_contribution)

@@ -32,7 +32,23 @@ return [
     |
     |
     */
-    'cloud_url' => env('CLOUDINARY_URL'),
+    'cloud_url' => value(function () {
+        $cloudinaryUrl = env('CLOUDINARY_URL');
+
+        if (! empty($cloudinaryUrl)) {
+            return $cloudinaryUrl;
+        }
+
+        $cloudName = env('CLOUDINARY_CLOUD_NAME');
+        $apiKey = env('CLOUDINARY_API_KEY');
+        $apiSecret = env('CLOUDINARY_API_SECRET');
+
+        if ($cloudName && $apiKey && $apiSecret) {
+            return sprintf('cloudinary://%s:%s@%s', $apiKey, $apiSecret, $cloudName);
+        }
+
+        return null;
+    }),
 
     /**
      * Upload Preset From Cloudinary Dashboard

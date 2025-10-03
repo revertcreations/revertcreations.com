@@ -42,6 +42,28 @@
     <textarea id="description" name="description" rows="3" class="{{ $inputClass }}">{{ old('description', $buildLog->description) }}</textarea>
 </div>
 
+<div class="mt-6 space-y-3">
+    <div>
+        <label class="{{ $labelClass }}" for="image">Highlight image</label>
+        <input id="image" name="image" type="file" accept="image/*" class="{{ $inputClass }}">
+        <p class="{{ $helpTextClass }}">Optional hero visual shown on the build log timeline.</p>
+        @error('image')<span class="{{ $errorClass }}">{{ $message }}</span>@enderror
+    </div>
+
+    @if ($buildLog->image_url)
+        <div class="grid gap-4 md:grid-cols-2 items-start">
+            <div class="rounded-lg border border-gruvbox-purple/30 bg-[#1d1522] p-3">
+                <p class="text-xs uppercase tracking-wide text-gruvbox-light-blue mb-2">Current image</p>
+                <img src="{{ $buildLog->image_url }}" alt="{{ $buildLog->title }} image" class="w-full rounded-md object-cover">
+            </div>
+            <label class="flex items-center gap-3 text-sm text-gruvbox-white/80">
+                <input id="remove_image" name="remove_image" type="checkbox" value="1" @checked(old('remove_image')) class="{{ $checkboxClass }}">
+                Remove current image
+            </label>
+        </div>
+    @endif
+</div>
+
 <div class="mt-6 grid md:grid-cols-2 gap-6">
     <div>
         <label class="{{ $labelClass }}" for="agent_contribution">Agent Contribution</label>
