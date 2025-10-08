@@ -16,7 +16,7 @@ class PuzzleScore extends Model
     ];
 
     public function puzzle() {
-        return $this->belongsTo(PuzzleSession::class);
+        return $this->belongsTo(PuzzleSession::class, 'puzzle_session_id');
     }
 
     public function puzzleType() {

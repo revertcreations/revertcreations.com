@@ -1,4 +1,4 @@
-export default class ContentElement extends HTMLElement {
+export class ContentElement extends HTMLElement {
     constructor() {
         super();
     }
@@ -10,6 +10,7 @@ export default class ContentElement extends HTMLElement {
     disapearingParagraphs(selected) {
         if (!selected) return;
         const lead = document.getElementById("lead");
+        if (!lead) return;
 
         let paragraphs = lead.childNodes;
         let newParagraphs = [];
@@ -53,8 +54,8 @@ export default class ContentElement extends HTMLElement {
             if (newParagraph) newParagraphs.push(newParagraph);
         });
 
-        document.getElementById("default").classList.add("hidden");
-        document.getElementById("secondary").classList.add("hidden");
+        document.getElementById("default")?.classList.add("hidden");
+        document.getElementById("secondary")?.classList.add("hidden");
 
         newParagraphs.forEach((newParagraph) => {
             lead.appendChild(newParagraph);
@@ -80,7 +81,6 @@ export default class ContentElement extends HTMLElement {
                             setTimeout(() => {
                                 //remove letter from dom
                                 paragraph.removeChild(letter);
-                                window.dispatchEvent("foo");
                             }, 2000);
                             letter.style.opacity = 0;
                             letter.style.transition = `opacity ${
@@ -98,3 +98,5 @@ export default class ContentElement extends HTMLElement {
     }
 
 }
+
+customElements.define('content-element', ContentElement);

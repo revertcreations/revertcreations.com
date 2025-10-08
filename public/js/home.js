@@ -10,7 +10,7 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ ContentElement)
+/* harmony export */   ContentElement: () => (/* binding */ ContentElement)
 /* harmony export */ });
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40,8 +40,10 @@ var ContentElement = /*#__PURE__*/function (_HTMLElement) {
   }, {
     key: "disapearingParagraphs",
     value: function disapearingParagraphs(selected) {
+      var _document$getElementB, _document$getElementB2;
       if (!selected) return;
       var lead = document.getElementById("lead");
+      if (!lead) return;
       var paragraphs = lead.childNodes;
       var newParagraphs = [];
       var newParagraph;
@@ -72,8 +74,8 @@ var ContentElement = /*#__PURE__*/function (_HTMLElement) {
         }
         if (newParagraph) newParagraphs.push(newParagraph);
       });
-      document.getElementById("default").classList.add("hidden");
-      document.getElementById("secondary").classList.add("hidden");
+      (_document$getElementB = document.getElementById("default")) === null || _document$getElementB === void 0 || _document$getElementB.classList.add("hidden");
+      (_document$getElementB2 = document.getElementById("secondary")) === null || _document$getElementB2 === void 0 || _document$getElementB2.classList.add("hidden");
       newParagraphs.forEach(function (newParagraph) {
         lead.appendChild(newParagraph);
       });
@@ -93,7 +95,6 @@ var ContentElement = /*#__PURE__*/function (_HTMLElement) {
                 setTimeout(function () {
                   //remove letter from dom
                   paragraph.removeChild(letter);
-                  window.dispatchEvent("foo");
                 }, 2000);
                 letter.style.opacity = 0;
                 letter.style.transition = "opacity ".concat(Math.random() * (2 - 1), "s ease-in-out");
@@ -107,7 +108,7 @@ var ContentElement = /*#__PURE__*/function (_HTMLElement) {
   }]);
   return ContentElement;
 }( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
-
+customElements.define('content-element', ContentElement);
 
 /***/ }),
 
@@ -146,7 +147,6 @@ function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { 
 function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
 function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
 function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
-var treasure = document.getElementsByTagName("treasure-element")[0];
 var _time = /*#__PURE__*/new WeakMap();
 var _level = /*#__PURE__*/new WeakMap();
 var _hintCount = /*#__PURE__*/new WeakMap();
@@ -161,6 +161,7 @@ var _emoji = /*#__PURE__*/new WeakMap();
 var _disableRotateEmoji = /*#__PURE__*/new WeakMap();
 var _levelTwoAnimationTimeout = /*#__PURE__*/new WeakMap();
 var _glimmerHintTimeout = /*#__PURE__*/new WeakMap();
+var _treasureElement = /*#__PURE__*/new WeakMap();
 var HintElement = /*#__PURE__*/function (_HTMLElement) {
   _inherits(HintElement, _HTMLElement);
   function HintElement() {
@@ -223,7 +224,12 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       writable: true,
       value: null
     });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _treasureElement, {
+      writable: true,
+      value: null
+    });
     _defineProperty(_assertThisInitialized(_this), "loadEventListeners", function () {
+      var _classPrivateFieldGet2, _classPrivateFieldGet3;
       _this.addEventListener("mousedown", _this.handleMouseDown);
       _this.addEventListener("mouseup", _this.handleMouseUp);
       _this.addEventListener("touchcancel", _this.handleMouseUp);
@@ -239,10 +245,11 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       _this.addEventListener("touchmove", _this.handleDrag, {
         passive: true
       });
-      treasure.addEventListener("dragenter", _this.handleDragEnter);
-      treasure.addEventListener("dragleave", _this.handleDragLeave);
+      (_classPrivateFieldGet2 = _classPrivateFieldGet(_assertThisInitialized(_this), _treasureElement)) === null || _classPrivateFieldGet2 === void 0 || _classPrivateFieldGet2.addEventListener("dragenter", _this.handleDragEnter);
+      (_classPrivateFieldGet3 = _classPrivateFieldGet(_assertThisInitialized(_this), _treasureElement)) === null || _classPrivateFieldGet3 === void 0 || _classPrivateFieldGet3.addEventListener("dragleave", _this.handleDragLeave);
     });
     _defineProperty(_assertThisInitialized(_this), "removeEventListeners", function () {
+      var _classPrivateFieldGet4, _classPrivateFieldGet5;
       clearInterval(_classPrivateFieldGet(_assertThisInitialized(_this), _hintInterval));
       _this.removeEventListener("mousedown", _this.handleMouseDown);
       _this.removeEventListener("mouseup", _this.handleMouseUp);
@@ -252,8 +259,8 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       _this.removeEventListener("touchstart", _this.handleDragStart);
       _this.removeEventListener("touchend", _this.handleDragEnd);
       _this.removeEventListener("touchmove", _this.handleDrag);
-      treasure.removeEventListener("dragenter", _this.handleDragEnter);
-      treasure.removeEventListener("dragleave", _this.handleDragLeave);
+      (_classPrivateFieldGet4 = _classPrivateFieldGet(_assertThisInitialized(_this), _treasureElement)) === null || _classPrivateFieldGet4 === void 0 || _classPrivateFieldGet4.removeEventListener("dragenter", _this.handleDragEnter);
+      (_classPrivateFieldGet5 = _classPrivateFieldGet(_assertThisInitialized(_this), _treasureElement)) === null || _classPrivateFieldGet5 === void 0 || _classPrivateFieldGet5.removeEventListener("dragleave", _this.handleDragLeave);
     });
     _defineProperty(_assertThisInitialized(_this), "handleMouseDown", function (e) {
       var target = e.target;
@@ -280,8 +287,8 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
       var mainHeader = document.getElementById("main_header");
       var footer = document.getElementById("footer");
       var body = document.querySelector("body");
-      var mainHeaderHeight = mainHeader.offsetHeight;
-      var footerHeight = footer.offsetHeight;
+      var mainHeaderHeight = mainHeader ? mainHeader.offsetHeight : 0;
+      var footerHeight = footer ? footer.offsetHeight : 0;
       var padding = 15;
       var maxHeight = window.innerHeight - footerHeight - padding;
       var minHeight = mainHeaderHeight + padding;
@@ -466,12 +473,18 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
     _defineProperty(_assertThisInitialized(_this), "levelUp", function () {
       var _this$level;
       _classPrivateFieldSet(_assertThisInitialized(_this), _level, (_this$level = _classPrivateFieldGet(_assertThisInitialized(_this), _level), ++_this$level));
-      _classPrivateFieldSet(_assertThisInitialized(_this), _targetPosition, _classPrivateFieldGet(_assertThisInitialized(_this), _level) == 1 ? {
-        x: _classPrivateFieldGet(_assertThisInitialized(_this), _rngX),
-        y: _classPrivateFieldGet(_assertThisInitialized(_this), _rngY),
-        width: 20,
-        height: 20
-      } : treasure.getBoundingClientRect());
+      if (_classPrivateFieldGet(_assertThisInitialized(_this), _level) === 1) {
+        _classPrivateFieldSet(_assertThisInitialized(_this), _targetPosition, {
+          x: _classPrivateFieldGet(_assertThisInitialized(_this), _rngX),
+          y: _classPrivateFieldGet(_assertThisInitialized(_this), _rngY),
+          width: 20,
+          height: 20
+        });
+      } else if (_classPrivateFieldGet(_assertThisInitialized(_this), _treasureElement)) {
+        _classPrivateFieldSet(_assertThisInitialized(_this), _targetPosition, _classPrivateFieldGet(_assertThisInitialized(_this), _treasureElement).getBoundingClientRect());
+      } else {
+        _classPrivateFieldSet(_assertThisInitialized(_this), _targetPosition, null);
+      }
     });
     _defineProperty(_assertThisInitialized(_this), "inRangeOfTreasureHintAndOfLevel", function (distanceToTreasure) {
       return distanceToTreasure <= 400 && _classPrivateFieldGet(_assertThisInitialized(_this), _level) == 2;
@@ -479,62 +492,160 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
     _defineProperty(_assertThisInitialized(_this), "analyticsTreasure", function (detail) {
       _classPrivateFieldSet(_assertThisInitialized(_this), _animating, false);
       if (!_classPrivateFieldGet(_assertThisInitialized(_this), _scoring)) {
+        var _document$querySelect;
         _classPrivateFieldSet(_assertThisInitialized(_this), _scoring, true);
         _this.removeEventListeners();
-        var request = new Request(window.location.href + "puzzle/1/check", {
-          method: "GET"
-        });
-        fetch(request).then(function (response) {
+        var csrfToken = (_document$querySelect = document.querySelector('meta[name="csrf-token"]')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.content;
+        var checkUrl = new URL('/puzzle/1/check', window.location.origin);
+        fetch(checkUrl.toString(), {
+          credentials: "same-origin"
+        }).then(function (response) {
+          if (!response.ok) {
+            throw new Error("Puzzle check failed (".concat(response.status, ")"));
+          }
           return response.json();
         }).then(function (json) {
-          if (json.error && json.error == "session expired") {
+          if (json.error && json.error === "session expired") {
             window.location.reload();
-          } else {
-            var _request = new Request(window.location.href + "puzzle/1/solved/" + json.token, {
-              method: "POST",
-              headers: {
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-              },
-              body: JSON.stringify(detail)
-            });
-            fetch(_request).then(function (response) {
-              return response.json();
-            }).then(function (json) {
-              if (json.error) {
-                _this.reset();
-                console.error(json.error);
-              } else {
-                _this.reset();
-                var lead = document.getElementById("lead");
-                while (lead.firstChild) {
-                  lead.removeChild(lead.firstChild);
-                }
-                document.querySelector("#title > h1").innerHTML = "Score: ".concat(json.score);
-                document.querySelector('name-element').remove();
-                var score = json.score;
-                for (var i = 0; i < score; i++) {
-                  var scoreElement = document.createElement("span");
-                  scoreElement.innerHTML = "💎";
-                  scoreElement.style.setProperty("--screen-height", window.innerHeight + "px");
-                  scoreElement.classList.add("absolute", "top-0", "text-2xl", "z-50", "animate-falling");
-                  //place the scoreElement in a random x position on the screen
-                  scoreElement.style.left = Math.random() * 100 + "vw";
-                  //animate the scoreElement falling to the bottom of the screen
-                  //with a random duration from 1 to 5 seconds
-                  var animationDuration = Math.random() * 4 + 1;
-                  scoreElement.style.animationDuration = animationDuration + "s";
-                  lead.appendChild(scoreElement);
-                }
-                setTimeout(function () {
-                  while (lead.firstChild) {
-                    lead.removeChild(lead.firstChild);
-                  }
-                }, 6000);
-              }
-            });
+            return;
           }
+          var solvedUrl = new URL("/puzzle/1/solved/".concat(json.token), window.location.origin);
+          return fetch(solvedUrl.toString(), {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": csrfToken !== null && csrfToken !== void 0 ? csrfToken : ""
+            },
+            credentials: "same-origin",
+            body: JSON.stringify(detail)
+          }).then(function (response) {
+            if (!response.ok) {
+              throw new Error("Puzzle solve failed (".concat(response.status, ")"));
+            }
+            return response.json();
+          }).then(function (json) {
+            if (json.error) {
+              _this.reset();
+              console.error(json.error);
+              return;
+            }
+            _this.reset();
+            _this.renderCelebration(json);
+          });
+        })["catch"](function (error) {
+          console.error(error);
+          _this.reset();
         });
       }
+    });
+    _defineProperty(_assertThisInitialized(_this), "renderCelebration", function (result) {
+      var _result$score;
+      var lead = document.getElementById("lead");
+      if (!lead) {
+        return;
+      }
+      _this.populateGems((_result$score = result === null || result === void 0 ? void 0 : result.score) !== null && _result$score !== void 0 ? _result$score : 0);
+      lead.innerHTML = "";
+      var leaderboard = document.createElement("div");
+      leaderboard.id = "puzzle-leaderboard";
+      lead.appendChild(leaderboard);
+      _this.buildLeaderboard(leaderboard, result);
+    });
+    _defineProperty(_assertThisInitialized(_this), "populateGems", function (score) {
+      var content = document.getElementById("content");
+      if (!content) return;
+      var gemOverlay = document.getElementById("puzzle-gem-overlay");
+      if (!gemOverlay) {
+        gemOverlay = document.createElement("div");
+        gemOverlay.id = "puzzle-gem-overlay";
+        content.appendChild(gemOverlay);
+      }
+      gemOverlay.innerHTML = "";
+      var header = document.getElementById("main_header");
+      var footer = document.getElementById("footer");
+      var contentRect = content.getBoundingClientRect();
+      var padding = 32;
+      var availableHeight = window.innerHeight - (footer ? footer.offsetHeight : 0) - (header ? header.offsetHeight : 0) - padding;
+      var overlayHeight = Math.max(availableHeight, 240);
+      gemOverlay.style.top = "".concat(header ? header.offsetHeight : 0, "px");
+      gemOverlay.style.height = "".concat(overlayHeight, "px");
+      for (var i = 0; i < score; i++) {
+        var gem = document.createElement("span");
+        gem.classList.add("puzzle-gem");
+        gem.textContent = "💎";
+        var sizeRem = 1.3 + Math.random() * 1.2;
+        gem.style.fontSize = "".concat(sizeRem, "rem");
+        var gemPx = sizeRem * 16;
+        var maxLeft = Math.max(contentRect.width - gemPx, 0);
+        var left = maxLeft > 0 ? Math.random() * maxLeft : 0;
+        gem.style.left = "".concat(left, "px");
+        var distance = Math.max(overlayHeight - gemPx - 24, 0);
+        gem.style.setProperty("--gem-distance", "".concat(distance, "px"));
+        gem.style.setProperty("--gem-duration", "".concat(1.8 + Math.random() * 2, "s"));
+        gem.style.setProperty("--gem-delay", "".concat(Math.random() * 0.6, "s"));
+        gemOverlay.appendChild(gem);
+      }
+    });
+    _defineProperty(_assertThisInitialized(_this), "buildLeaderboard", function (container, result) {
+      var _result$score2;
+      if (!container) {
+        return;
+      }
+      container.classList.add("puzzle-leaderboard");
+      var summary = document.createElement("div");
+      summary.classList.add("puzzle-leaderboard-summary");
+      var scoreLabel = document.createElement("div");
+      scoreLabel.classList.add("puzzle-leaderboard-score");
+      scoreLabel.textContent = "Score: ".concat((_result$score2 = result === null || result === void 0 ? void 0 : result.score) !== null && _result$score2 !== void 0 ? _result$score2 : 0);
+      var rankLabel = document.createElement("div");
+      rankLabel.classList.add("puzzle-leaderboard-rank");
+      if (result !== null && result !== void 0 && result.rank) {
+        rankLabel.textContent = "Current Rank: #".concat(result.rank);
+      } else if (result !== null && result !== void 0 && result.totalPlayers) {
+        rankLabel.textContent = "Current Rank: #".concat(result.totalPlayers);
+      } else {
+        rankLabel.textContent = "Current Rank: #1";
+      }
+      var population = document.createElement("div");
+      population.classList.add("puzzle-leaderboard-population");
+      if (result !== null && result !== void 0 && result.totalPlayers) {
+        population.textContent = "Across ".concat(result.totalPlayers, " solve").concat(result.totalPlayers === 1 ? "" : "s", ".");
+      } else {
+        population.textContent = "You set the first score!";
+      }
+      summary.appendChild(scoreLabel);
+      summary.appendChild(rankLabel);
+      summary.appendChild(population);
+      container.appendChild(summary);
+      if (!Array.isArray(result === null || result === void 0 ? void 0 : result.leaderboard) || result.leaderboard.length === 0) {
+        var empty = document.createElement("p");
+        empty.classList.add("puzzle-leaderboard-empty");
+        empty.textContent = "No leaderboard data yet. Keep exploring!";
+        container.appendChild(empty);
+        return;
+      }
+      var list = document.createElement("ol");
+      list.classList.add("puzzle-leaderboard-list");
+      result.leaderboard.forEach(function (entry) {
+        var _entry$hint_count;
+        var item = document.createElement("li");
+        item.classList.add("puzzle-leaderboard-item");
+        if (entry !== null && entry !== void 0 && entry.is_current) {
+          item.classList.add("puzzle-leaderboard-current");
+        }
+        var left = document.createElement("span");
+        left.classList.add("puzzle-leaderboard-item-rank");
+        left.textContent = "#".concat(entry.rank, " \u2022 ").concat(entry.score);
+        var right = document.createElement("span");
+        right.classList.add("puzzle-leaderboard-item-meta");
+        var hints = (_entry$hint_count = entry.hint_count) !== null && _entry$hint_count !== void 0 ? _entry$hint_count : 0;
+        var time = typeof entry.time === "number" ? entry.time.toFixed(1) : entry.time;
+        right.textContent = "".concat(hints, " hint").concat(hints === 1 ? "" : "s", ", ").concat(time !== null && time !== void 0 ? time : "0.0", "s");
+        item.appendChild(left);
+        item.appendChild(right);
+        list.appendChild(item);
+      });
+      container.appendChild(list);
     });
     _defineProperty(_assertThisInitialized(_this), "reset", function () {
       _classPrivateFieldSet(_assertThisInitialized(_this), _time, new Date());
@@ -561,6 +672,10 @@ var HintElement = /*#__PURE__*/function (_HTMLElement) {
     value: function connectedCallback() {
       var _this2 = this;
       this.innerText = this.dataset.content;
+      _classPrivateFieldSet(this, _treasureElement, document.querySelector("treasure-element"));
+      if (!_classPrivateFieldGet(this, _treasureElement)) {
+        return;
+      }
       this.loadEventListeners();
       _classPrivateFieldSet(this, _glimmerHintTimeout, setTimeout(function () {
         _this2.glimmerHint();
@@ -749,23 +864,30 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
     key: "loadPlayground",
     value: function () {
       var _loadPlayground = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var skillsUrl;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              fetch("/skills").then(function (response) {
+              skillsUrl = new URL('/skills', window.location.origin);
+              fetch(skillsUrl.toString()).then(function (response) {
+                if (!response.ok) {
+                  throw new Error("Failed to load skills (".concat(response.status, ")"));
+                }
                 return response.json();
               }).then(function (data) {
-                window.Playground.init(data.skills);
-                // add anayltics if gtag is defined
+                if (data !== null && data !== void 0 && data.skills && window.Playground) {
+                  window.Playground.init(data.skills);
+                }
                 if (typeof gtag === 'function') {
                   gtag('event', 'Skills Puzzle', {
                     'event_category': 'Skills',
                     'event_label': 'Skills Playground Loaded'
                   });
                 }
-                return;
+              })["catch"](function (error) {
+                console.error(error);
               });
-            case 1:
+            case 2:
             case "end":
               return _context.stop();
           }
@@ -784,8 +906,13 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               return _context2.abrupt("return", new Promise(function (resolve, reject) {
+                var _document$getElementB, _document$getElementB2;
                 if (!selected) return;
                 var lead = document.getElementById("lead");
+                if (!lead) {
+                  resolve();
+                  return;
+                }
                 var paragraphs = lead.childNodes;
                 var newParagraphs = [];
                 var newParagraph;
@@ -816,8 +943,8 @@ var NameElement = /*#__PURE__*/function (_HTMLElement) {
                   }
                   if (newParagraph) newParagraphs.push(newParagraph);
                 });
-                document.getElementById("default").classList.add("hidden");
-                document.getElementById("secondary").classList.add("hidden");
+                (_document$getElementB = document.getElementById("default")) === null || _document$getElementB === void 0 || _document$getElementB.classList.add("hidden");
+                (_document$getElementB2 = document.getElementById("secondary")) === null || _document$getElementB2 === void 0 || _document$getElementB2.classList.add("hidden");
                 newParagraphs.forEach(function (newParagraph) {
                   lead.appendChild(newParagraph);
                 });
@@ -893,21 +1020,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   TreasureElement: () => (/* binding */ TreasureElement)
 /* harmony export */ });
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
 function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _wrapNativeSuper(t) { var r = "function" == typeof Map ? new Map() : void 0; return _wrapNativeSuper = function _wrapNativeSuper(t) { if (null === t || !_isNativeFunction(t)) return t; if ("function" != typeof t) throw new TypeError("Super expression must either be null or a function"); if (void 0 !== r) { if (r.has(t)) return r.get(t); r.set(t, Wrapper); } function Wrapper() { return _construct(t, arguments, _getPrototypeOf(this).constructor); } return Wrapper.prototype = Object.create(t.prototype, { constructor: { value: Wrapper, enumerable: !1, writable: !0, configurable: !0 } }), _setPrototypeOf(Wrapper, t); }, _wrapNativeSuper(t); }
 function _construct(t, e, r) { if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments); var o = [null]; o.push.apply(o, e); var p = new (t.bind.apply(t, o))(); return r && _setPrototypeOf(p, r.prototype), p; }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
-function _isNativeFunction(fn) { try { return Function.toString.call(fn).indexOf("[native code]") !== -1; } catch (e) { return typeof fn === "function"; } }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _isNativeFunction(t) { try { return -1 !== Function.toString.call(t).indexOf("[native code]"); } catch (n) { return "function" == typeof t; } }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 var TreasureElement = /*#__PURE__*/function (_HTMLElement) {
   _inherits(TreasureElement, _HTMLElement);
@@ -1016,7 +1143,9 @@ var Playground = {
     window.onresize = function () {
       if (Playground.playground.offsetParent) {
         clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(Playground.reset("resize"), 1000);
+        resizeTimeout = setTimeout(function () {
+          return Playground.reset("resize");
+        }, 1000);
       }
     };
   },

@@ -46,20 +46,17 @@
 
                                 <a href="{{ route('skills.index') }}" class="{{ Route::is('skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
 
-                                <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a>
-
                                 <a href="#" class="{{ Route::is('invoices.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Invoices</a>
-
-                                <a href="/portfolio" class="{{ Route::is('portfolio.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photography Portfolio</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="hidden md:block">
                         <div class="ml-4 flex items-center md:ml-6">
-                            <button class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                                <a href="/logout" class="">logout</a>
-                            </button>
+                            <a class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                                href="{{ route('admin.logout') }}">
+                                logout
+                            </a>
                         </div>
                     </div>
 
@@ -75,18 +72,15 @@
 
                     <a href="{{ route('client.index') }}" class="{{ Route::is('client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Clients</a>
 
-                    <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a>
-
                     <a href="#" class="{{ Route::is('invoices.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Invoices</a>
-
-                    <a href="#" class="{{ Route::is('photography.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photography</a>
                 </div>
 
                 <div class="pt-4 pb-3 border-t border-gray-700">
                     <div class="flex items-center px-5">
-                        <button class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                            <a href="/logout" class="">logout</a>
-                        </button>
+                        <a class="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                            href="{{ route('admin.logout') }}">
+                            logout
+                        </a>
                     </div>
                 </div>
 

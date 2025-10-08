@@ -128,19 +128,31 @@ export class NameElement extends HTMLElement {
     }
 
     async loadPlayground() {
-        fetch("/skills")
-                .then((response) => response.json())
-                .then((data) => {
+        const skillsUrl = new URL('/skills', window.location.origin);
+
+        fetch(skillsUrl.toString())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load skills (${response.status})`);
+                }
+
+                return response.json();
+            })
+            .then((data) => {
+                if (data?.skills && window.Playground) {
                     window.Playground.init(data.skills);
-                    // add anayltics if gtag is defined
-                    if (typeof gtag === 'function') {
-                        gtag('event', 'Skills Puzzle', {
-                            'event_category': 'Skills',
-                            'event_label': 'Skills Playground Loaded'
-                        });
-                    }
-                    return;
-                });
+                }
+
+                if (typeof gtag === 'function') {
+                    gtag('event', 'Skills Puzzle', {
+                        'event_category': 'Skills',
+                        'event_label': 'Skills Playground Loaded'
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     async disapearingParagraphs(selected) {
@@ -148,6 +160,10 @@ export class NameElement extends HTMLElement {
         return new Promise((resolve, reject) => {
             if (!selected) return;
             const lead = document.getElementById("lead");
+            if (!lead) {
+                resolve();
+                return;
+            }
 
             let paragraphs = lead.childNodes;
             let newParagraphs = [];
@@ -191,8 +207,8 @@ export class NameElement extends HTMLElement {
                 if (newParagraph) newParagraphs.push(newParagraph);
             });
 
-            document.getElementById("default").classList.add("hidden");
-            document.getElementById("secondary").classList.add("hidden");
+            document.getElementById("default")?.classList.add("hidden");
+            document.getElementById("secondary")?.classList.add("hidden");
 
             newParagraphs.forEach((newParagraph) => {
                 lead.appendChild(newParagraph);

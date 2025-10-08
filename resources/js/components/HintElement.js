@@ -1,5 +1,3 @@
-const treasure = document.getElementsByTagName("treasure-element")[0];
-
 export class HintElement extends HTMLElement {
     #time = new Date();
     #level = 0;
@@ -15,6 +13,7 @@ export class HintElement extends HTMLElement {
     #disableRotateEmoji = false;
     #levelTwoAnimationTimeout = null;
     #glimmerHintTimeout = null;
+    #treasureElement = null;
 
     constructor() {
         super();
@@ -23,6 +22,10 @@ export class HintElement extends HTMLElement {
 
     connectedCallback() {
         this.innerText = this.dataset.content;
+        this.#treasureElement = document.querySelector("treasure-element");
+        if (!this.#treasureElement) {
+            return;
+        }
         this.loadEventListeners();
         this.#glimmerHintTimeout = setTimeout(() => {
             this.glimmerHint();
@@ -40,8 +43,8 @@ export class HintElement extends HTMLElement {
         this.addEventListener("drag", this.handleDrag);
         this.addEventListener("touchmove", this.handleDrag, {passive: true});
 
-        treasure.addEventListener("dragenter", this.handleDragEnter);
-        treasure.addEventListener("dragleave", this.handleDragLeave);
+        this.#treasureElement?.addEventListener("dragenter", this.handleDragEnter);
+        this.#treasureElement?.addEventListener("dragleave", this.handleDragLeave);
     };
 
     removeEventListeners = () => {
@@ -56,8 +59,8 @@ export class HintElement extends HTMLElement {
         this.removeEventListener("touchend", this.handleDragEnd);
         this.removeEventListener("touchmove", this.handleDrag);
 
-        treasure.removeEventListener("dragenter", this.handleDragEnter);
-        treasure.removeEventListener("dragleave", this.handleDragLeave);
+        this.#treasureElement?.removeEventListener("dragenter", this.handleDragEnter);
+        this.#treasureElement?.removeEventListener("dragleave", this.handleDragLeave);
     };
 
     handleMouseDown = (e) => {
@@ -93,8 +96,8 @@ export class HintElement extends HTMLElement {
         const mainHeader = document.getElementById("main_header");
         const footer = document.getElementById("footer");
         const body = document.querySelector("body");
-        const mainHeaderHeight = mainHeader.offsetHeight;
-        const footerHeight = footer.offsetHeight;
+        const mainHeaderHeight = mainHeader ? mainHeader.offsetHeight : 0;
+        const footerHeight = footer ? footer.offsetHeight : 0;
         const padding = 15;
         const maxHeight = window.innerHeight - footerHeight - padding;
         const minHeight = mainHeaderHeight + padding;
@@ -316,10 +319,13 @@ export class HintElement extends HTMLElement {
 
     levelUp = () => {
         ++this.#level;
-        this.#targetPosition =
-            this.#level == 1
-                ? { x: this.#rngX, y: this.#rngY, width: 20, height: 20 }
-                : treasure.getBoundingClientRect();
+        if (this.#level === 1) {
+            this.#targetPosition = { x: this.#rngX, y: this.#rngY, width: 20, height: 20 };
+        } else if (this.#treasureElement) {
+            this.#targetPosition = this.#treasureElement.getBoundingClientRect();
+        } else {
+            this.#targetPosition = null;
+        }
     };
 
     inRangeOfTreasureHintAndOfLevel = (distanceToTreasure) => {
@@ -331,79 +337,198 @@ export class HintElement extends HTMLElement {
         if (!this.#scoring) {
             this.#scoring = true;
             this.removeEventListeners();
-            const request = new Request(window.location.href + "puzzle/1/check", {
-                method: "GET",
-            });
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            const checkUrl = new URL('/puzzle/1/check', window.location.origin);
 
-            fetch(request)
-                .then((response) => response.json())
-                .then((json) => {
-                    if (json.error && json.error == "session expired") {
-                        window.location.reload();
-                    } else {
-                        const request = new Request(
-                            window.location.href + "puzzle/1/solved/" + json.token,
-                            {
-                                method: "POST",
-                                headers: {
-                                    "X-CSRF-TOKEN": document.querySelector(
-                                        'meta[name="csrf-token"]',
-                                    ).content,
-                                },
-                                body: JSON.stringify(detail),
-                            },
-                        );
-                        fetch(request)
-                            .then((response) => response.json())
-                            .then((json) => {
-                                if (json.error) {
-                                    this.reset();
-                                    console.error(json.error);
-                                } else {
-                                    this.reset();
-                                    const lead = document.getElementById("lead");
-                                    while (lead.firstChild) {
-                                        lead.removeChild(lead.firstChild);
-                                    }
-
-                                    document.querySelector("#title > h1").innerHTML = `Score: ${json.score}`;
-                                    document.querySelector('name-element').remove();
-                                    const score = json.score;
-                                    for (let i = 0; i < score; i++) {
-                                        const scoreElement = document.createElement("span");
-                                        scoreElement.innerHTML = "💎";
-                                        scoreElement.style.setProperty(
-                                                    "--screen-height",
-                                                    window.innerHeight + "px"
-                                                );
-
-                                        scoreElement.classList.add(
-                                            "absolute",
-                                            "top-0",
-                                            "text-2xl",
-                                            "z-50",
-                                            "animate-falling"
-                                        );
-                                        //place the scoreElement in a random x position on the screen
-                                        scoreElement.style.left = Math.random() * 100 + "vw";
-                                        //animate the scoreElement falling to the bottom of the screen
-                                        //with a random duration from 1 to 5 seconds
-                                        let animationDuration = Math.random() * 4 + 1;
-                                        scoreElement.style.animationDuration = animationDuration + "s";
-
-                                        lead.appendChild(scoreElement);
-                                    }
-                                    setTimeout(() => {
-                                        while (lead.firstChild) {
-                                            lead.removeChild(lead.firstChild);
-                                        }
-                                    }, 6000);
-
-                                }
-                            });
+            fetch(checkUrl.toString(), {
+                credentials: "same-origin",
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Puzzle check failed (${response.status})`);
                     }
+
+                    return response.json();
+                })
+                .then((json) => {
+                    if (json.error && json.error === "session expired") {
+                        window.location.reload();
+                        return;
+                    }
+
+                    const solvedUrl = new URL(`/puzzle/1/solved/${json.token}`, window.location.origin);
+
+                    return fetch(solvedUrl.toString(), {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": csrfToken ?? "",
+                        },
+                        credentials: "same-origin",
+                        body: JSON.stringify(detail),
+                    })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error(`Puzzle solve failed (${response.status})`);
+                            }
+
+                            return response.json();
+                        })
+                        .then((json) => {
+                            if (json.error) {
+                                this.reset();
+                                console.error(json.error);
+                                return;
+                            }
+
+                            this.reset();
+                            this.renderCelebration(json);
+                        });
+                })
+                .catch((error) => {
+                    console.error(error);
+                    this.reset();
                 });
         }
+    };
+
+    renderCelebration = (result) => {
+        const lead = document.getElementById("lead");
+        if (!lead) {
+            return;
+        }
+
+        this.populateGems(result?.score ?? 0);
+
+        lead.innerHTML = "";
+
+        const leaderboard = document.createElement("div");
+        leaderboard.id = "puzzle-leaderboard";
+        lead.appendChild(leaderboard);
+        this.buildLeaderboard(leaderboard, result);
+    };
+
+    populateGems = (score) => {
+        const content = document.getElementById("content");
+        if (!content) return;
+
+        let gemOverlay = document.getElementById("puzzle-gem-overlay");
+        if (!gemOverlay) {
+            gemOverlay = document.createElement("div");
+            gemOverlay.id = "puzzle-gem-overlay";
+            content.appendChild(gemOverlay);
+        }
+
+        gemOverlay.innerHTML = "";
+
+        const header = document.getElementById("main_header");
+        const footer = document.getElementById("footer");
+        const contentRect = content.getBoundingClientRect();
+        const padding = 32;
+
+        const availableHeight =
+            window.innerHeight -
+            (footer ? footer.offsetHeight : 0) -
+            (header ? header.offsetHeight : 0) -
+            padding;
+        const overlayHeight = Math.max(availableHeight, 240);
+
+        gemOverlay.style.top = `${header ? header.offsetHeight : 0}px`;
+        gemOverlay.style.height = `${overlayHeight}px`;
+
+        for (let i = 0; i < score; i++) {
+            const gem = document.createElement("span");
+            gem.classList.add("puzzle-gem");
+            gem.textContent = "💎";
+
+            const sizeRem = 1.3 + Math.random() * 1.2;
+            gem.style.fontSize = `${sizeRem}rem`;
+
+            const gemPx = sizeRem * 16;
+            const maxLeft = Math.max(contentRect.width - gemPx, 0);
+            const left = maxLeft > 0 ? Math.random() * maxLeft : 0;
+            gem.style.left = `${left}px`;
+
+            const distance = Math.max(overlayHeight - gemPx - 24, 0);
+            gem.style.setProperty("--gem-distance", `${distance}px`);
+            gem.style.setProperty("--gem-duration", `${1.8 + Math.random() * 2}s`);
+            gem.style.setProperty("--gem-delay", `${Math.random() * 0.6}s`);
+
+            gemOverlay.appendChild(gem);
+        }
+    };
+
+    buildLeaderboard = (container, result) => {
+        if (!container) {
+            return;
+        }
+
+        container.classList.add("puzzle-leaderboard");
+
+        const summary = document.createElement("div");
+        summary.classList.add("puzzle-leaderboard-summary");
+
+        const scoreLabel = document.createElement("div");
+        scoreLabel.classList.add("puzzle-leaderboard-score");
+        scoreLabel.textContent = `Score: ${result?.score ?? 0}`;
+
+        const rankLabel = document.createElement("div");
+        rankLabel.classList.add("puzzle-leaderboard-rank");
+        if (result?.rank) {
+            rankLabel.textContent = `Current Rank: #${result.rank}`;
+        } else if (result?.totalPlayers) {
+            rankLabel.textContent = `Current Rank: #${result.totalPlayers}`;
+        } else {
+            rankLabel.textContent = "Current Rank: #1";
+        }
+
+        const population = document.createElement("div");
+        population.classList.add("puzzle-leaderboard-population");
+        if (result?.totalPlayers) {
+            population.textContent = `Across ${result.totalPlayers} solve${result.totalPlayers === 1 ? "" : "s"}.`;
+        } else {
+            population.textContent = "You set the first score!";
+        }
+
+        summary.appendChild(scoreLabel);
+        summary.appendChild(rankLabel);
+        summary.appendChild(population);
+        container.appendChild(summary);
+
+        if (!Array.isArray(result?.leaderboard) || result.leaderboard.length === 0) {
+            const empty = document.createElement("p");
+            empty.classList.add("puzzle-leaderboard-empty");
+            empty.textContent = "No leaderboard data yet. Keep exploring!";
+            container.appendChild(empty);
+            return;
+        }
+
+        const list = document.createElement("ol");
+        list.classList.add("puzzle-leaderboard-list");
+
+        result.leaderboard.forEach((entry) => {
+            const item = document.createElement("li");
+            item.classList.add("puzzle-leaderboard-item");
+            if (entry?.is_current) {
+                item.classList.add("puzzle-leaderboard-current");
+            }
+
+            const left = document.createElement("span");
+            left.classList.add("puzzle-leaderboard-item-rank");
+            left.textContent = `#${entry.rank} • ${entry.score}`;
+
+            const right = document.createElement("span");
+            right.classList.add("puzzle-leaderboard-item-meta");
+            const hints = entry.hint_count ?? 0;
+            const time = typeof entry.time === "number" ? entry.time.toFixed(1) : entry.time;
+            right.textContent = `${hints} hint${hints === 1 ? "" : "s"}, ${time ?? "0.0"}s`;
+
+            item.appendChild(left);
+            item.appendChild(right);
+            list.appendChild(item);
+        });
+
+        container.appendChild(list);
     };
 
     reset = () => {

@@ -39,7 +39,7 @@
                                 experience
                             </label>
                             <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="range" min="1" max="100" value="{{ old('experience') ?: $skill->experience }}" class="slider" id="range" name="experience">
+                                <input type="range" min="1" max="102" value="{{ old('experience') ?: $skill->experience }}" class="slider" id="range" name="experience">
                             </div>
                         </div>
 

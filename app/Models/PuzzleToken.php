@@ -17,10 +17,6 @@ class PuzzleToken extends Model
         return $this->belongsTo(PuzzleSession::class, 'puzzle_session_id');
     }
 
-    public function active($session_id) {
-        return $this->where('session_id', $session_id);
-    }
-
     public function generate() {
         return Str::random(40);
     }

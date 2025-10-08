@@ -47,7 +47,7 @@ const Playground = {
         window.onresize = function () {
             if (Playground.playground.offsetParent) {
                 clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(Playground.reset("resize"), 1000);
+                resizeTimeout = setTimeout(() => Playground.reset("resize"), 1000);
             }
         };
     },

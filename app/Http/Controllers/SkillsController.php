@@ -37,6 +37,15 @@ class SkillsController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'experience' => ['required', 'integer', 'between:1,102'],
+            'excerpt' => ['nullable', 'string'],
+            'logo' => ['nullable', 'string'],
+        ]);
+
+        Skill::create($validated);
+
         return redirect()->route('skills.index');
     }
 
@@ -88,6 +97,8 @@ class SkillsController extends Controller
      */
     public function destroy(Skill $skill)
     {
+        $skill->delete();
+
         return redirect()->route('skills.index');
     }
 }

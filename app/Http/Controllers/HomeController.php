@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 use App\Models\PuzzleSession;
 
 class HomeController extends Controller
@@ -11,14 +13,24 @@ class HomeController extends Controller
 
         $session_id = $request->session()->getId();
 
-        $analytics_treasure = PuzzleSession::where('session_id', $session_id)
-                                    ->where('puzzle_type_id', 1)
-                                    ->first();
-        if (!$analytics_treasure)
-            PuzzleSession::create([
+        try {
+            $analytics_treasure = PuzzleSession::where('session_id', $session_id)
+                ->where('puzzle_type_id', 1)
+                ->first();
+
+            if (!$analytics_treasure) {
+                PuzzleSession::create([
+                    'session_id' => $session_id,
+                    'puzzle_type_id' => 1,
+                ]);
+            }
+        } catch (QueryException $exception) {
+            Log::warning('Failed to initialize puzzle session', [
                 'session_id' => $session_id,
                 'puzzle_type_id' => 1,
+                'error' => $exception->getMessage(),
             ]);
+        }
 
         return view('home');
     }

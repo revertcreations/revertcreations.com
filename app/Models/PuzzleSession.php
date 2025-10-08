@@ -10,7 +10,6 @@ class PuzzleSession extends Model
     use HasFactory;
 
     protected $fillable = [
-        'puzzle_token_id',
         'session_id',
         'puzzle_type_id',
     ];
