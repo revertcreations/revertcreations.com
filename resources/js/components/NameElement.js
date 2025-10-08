@@ -5,9 +5,13 @@ export class NameElement extends HTMLElement {
     #intervals = [];
     #cursorTimeout;
 
-    #error = new Audio("/audio/error3.wav");
-    #success = new Audio("/audio/success3.wav");
-    #unlock = new Audio("/audio/unlock.wav");
+    #audioContext = null;
+    #audioBuffers = {
+        error: null,
+        success: null,
+        unlock: null,
+    };
+    #audioReadyPromise = null;
 
     #textColors = [
         "text-gruvbox-light-yellow",
@@ -23,9 +27,11 @@ export class NameElement extends HTMLElement {
 
     constructor() {
         super();
+        this.#ensureAudioLoaded();
     }
 
     connectedCallback() {
+        this.#ensureAudioLoaded();
         this.render();
     }
 
@@ -51,6 +57,58 @@ export class NameElement extends HTMLElement {
 
         span.setAttribute("data-loading-count", ++count);
     };
+
+    #ensureAudioLoaded() {
+        if (this.#audioReadyPromise) {
+            return this.#audioReadyPromise;
+        }
+
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) {
+            this.#audioReadyPromise = Promise.resolve();
+            return this.#audioReadyPromise;
+        }
+
+        this.#audioContext = new AudioContext();
+
+        const loadBuffer = async (url) => {
+            try {
+                const response = await fetch(url);
+                const arrayBuffer = await response.arrayBuffer();
+                return await this.#audioContext.decodeAudioData(arrayBuffer);
+            } catch (error) {
+                console.error(`Failed to load audio: ${url}`, error);
+                return null;
+            }
+        };
+
+        this.#audioReadyPromise = Promise.all([
+            loadBuffer("/audio/error3.wav"),
+            loadBuffer("/audio/success3.wav"),
+            loadBuffer("/audio/unlock.wav"),
+        ]).then(([errorBuffer, successBuffer, unlockBuffer]) => {
+            this.#audioBuffers.error = errorBuffer;
+            this.#audioBuffers.success = successBuffer;
+            this.#audioBuffers.unlock = unlockBuffer;
+        });
+
+        return this.#audioReadyPromise;
+    }
+
+    #playAudio(type) {
+        if (!this.#audioContext || !this.#audioBuffers[type]) {
+            return;
+        }
+
+        if (this.#audioContext.state === "suspended") {
+            this.#audioContext.resume().catch((error) => console.error("Failed to resume audio context", error));
+        }
+
+        const source = this.#audioContext.createBufferSource();
+        source.buffer = this.#audioBuffers[type];
+        source.connect(this.#audioContext.destination);
+        source.start(0);
+    }
 
     render() {
         this.dataset.content.split("").forEach((letter, i) => {
@@ -90,14 +148,12 @@ export class NameElement extends HTMLElement {
         const isGreen = target.classList.contains("text-gruvbox-green");
 
         if (!loading && isGreen) {
-            this.#success.currentTime = 0;
-            this.#success.play();
+            this.#ensureAudioLoaded().then(() => this.#playAudio('success'));
 
             target.classList.remove("cursor-not-allowed");
             target.classList.add("cursor-copy");
         } else if (!loading) {
-            this.#error.currentTime = 0;
-            this.#error.play();
+            this.#ensureAudioLoaded().then(() => this.#playAudio('error'));
 
             target.classList.remove(
                 "cursor-pointer",
@@ -121,8 +177,7 @@ export class NameElement extends HTMLElement {
 
         if (!loading && allGreen) {
             let unlockType = "green";
-            this.#unlock.currentTime = 0;
-            this.#unlock.play();
+            this.#ensureAudioLoaded().then(() => this.#playAudio('unlock'));
             this.loadPlayground();
         }
     }

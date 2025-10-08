@@ -14,6 +14,11 @@ export class HintElement extends HTMLElement {
     #levelTwoAnimationTimeout = null;
     #glimmerHintTimeout = null;
     #treasureElement = null;
+    #gemOverlay = null;
+    #gemStates = [];
+    #gemAnimationFrame = null;
+    #lastGemFrameTime = null;
+    #gemGravity = 1800; // pixels per second squared
 
     constructor() {
         super();
@@ -410,7 +415,11 @@ export class HintElement extends HTMLElement {
 
     populateGems = (score) => {
         const content = document.getElementById("content");
-        if (!content) return;
+        const lead = document.getElementById("lead");
+        if (!content || !lead) return;
+
+        this.stopGemAnimation();
+        this.#gemStates = [];
 
         let gemOverlay = document.getElementById("puzzle-gem-overlay");
         if (!gemOverlay) {
@@ -421,20 +430,15 @@ export class HintElement extends HTMLElement {
 
         gemOverlay.innerHTML = "";
 
-        const header = document.getElementById("main_header");
-        const footer = document.getElementById("footer");
+        const leadRect = lead.getBoundingClientRect();
         const contentRect = content.getBoundingClientRect();
-        const padding = 32;
+        const overlayTop = leadRect.top - contentRect.top;
+        gemOverlay.style.top = `${overlayTop}px`;
+        gemOverlay.style.height = `${leadRect.height}px`;
 
-        const availableHeight =
-            window.innerHeight -
-            (footer ? footer.offsetHeight : 0) -
-            (header ? header.offsetHeight : 0) -
-            padding;
-        const overlayHeight = Math.max(availableHeight, 240);
-
-        gemOverlay.style.top = `${header ? header.offsetHeight : 0}px`;
-        gemOverlay.style.height = `${overlayHeight}px`;
+        const usedPositions = [];
+        const fragment = document.createDocumentFragment();
+        const now = (typeof performance !== "undefined" ? performance.now() : Date.now());
 
         for (let i = 0; i < score; i++) {
             const gem = document.createElement("span");
@@ -445,17 +449,116 @@ export class HintElement extends HTMLElement {
             gem.style.fontSize = `${sizeRem}rem`;
 
             const gemPx = sizeRem * 16;
-            const maxLeft = Math.max(contentRect.width - gemPx, 0);
-            const left = maxLeft > 0 ? Math.random() * maxLeft : 0;
+            const maxLeft = Math.max(leadRect.width - gemPx, 0);
+            let left = 0;
+            let attempts = 0;
+            const minGap = gemPx + 12;
+
+            do {
+                left = maxLeft > 0 ? Math.random() * maxLeft : 0;
+                attempts++;
+            } while (
+                attempts < 25 &&
+                usedPositions.some((position) => Math.abs(position - left) < minGap)
+            );
+
+            usedPositions.push(left);
+
+            const settleTop = Math.max(leadRect.height - gemPx - 12, 0);
+            const startY = -(Math.random() * leadRect.height * 0.6 + gemPx);
+
             gem.style.left = `${left}px`;
+            gem.style.transform = `translate(${left}px, ${startY}px)`;
+            gem.style.opacity = "1";
 
-            const distance = Math.max(overlayHeight - gemPx - 24, 0);
-            gem.style.setProperty("--gem-distance", `${distance}px`);
-            gem.style.setProperty("--gem-duration", `${1.8 + Math.random() * 2}s`);
-            gem.style.setProperty("--gem-delay", `${Math.random() * 0.6}s`);
+            fragment.appendChild(gem);
 
-            gemOverlay.appendChild(gem);
+            this.#gemStates.push({
+                element: gem,
+                x: left,
+                y: startY,
+                vy: 0,
+                settleY: settleTop,
+                startAt: now + Math.random() * 800,
+                done: false,
+                removed: false,
+            });
         }
+
+        gemOverlay.appendChild(fragment);
+
+        this.#gemOverlay = gemOverlay;
+        this.startGemAnimation();
+    };
+
+    startGemAnimation = () => {
+        if (this.#gemAnimationFrame) {
+            cancelAnimationFrame(this.#gemAnimationFrame);
+        }
+
+        const step = (time) => {
+            if (!this.#gemStates.length) {
+                this.stopGemAnimation();
+                return;
+            }
+
+            if (this.#lastGemFrameTime === null) {
+                this.#lastGemFrameTime = time;
+            }
+
+            const delta = Math.min((time - this.#lastGemFrameTime) / 1000, 0.05);
+            this.#lastGemFrameTime = time;
+
+            let anyActive = false;
+
+            this.#gemStates.forEach((state) => {
+                if (state.removed || state.done) {
+                    return;
+                }
+
+                if (time < state.startAt) {
+                    anyActive = true;
+                    return;
+                }
+
+                state.vy += this.#gemGravity * delta;
+                state.y += state.vy * delta;
+
+                if (state.y >= state.settleY) {
+                    state.y = state.settleY;
+                    state.done = true;
+                    state.element.style.opacity = "0";
+                    setTimeout(() => {
+                        state.element.remove();
+                        state.removed = true;
+                    }, 250);
+                } else {
+                    state.element.style.transform = `translate(${state.x}px, ${state.y}px)`;
+                    anyActive = true;
+                }
+            });
+
+            this.#gemStates = this.#gemStates.filter((state) => !state.removed);
+
+            if (anyActive) {
+                this.#gemAnimationFrame = requestAnimationFrame(step);
+            } else {
+                this.stopGemAnimation();
+            }
+        };
+
+        this.#lastGemFrameTime = null;
+        this.#gemAnimationFrame = requestAnimationFrame(step);
+    };
+
+    stopGemAnimation = () => {
+        if (this.#gemAnimationFrame) {
+            cancelAnimationFrame(this.#gemAnimationFrame);
+            this.#gemAnimationFrame = null;
+        }
+
+        this.#lastGemFrameTime = null;
+        this.#gemStates = [];
     };
 
     buildLeaderboard = (container, result) => {
@@ -547,6 +650,13 @@ export class HintElement extends HTMLElement {
 
         if (document.getElementById("emoji"))
             body.removeChild(document.getElementById("emoji"));
+
+        if (this.#gemOverlay) {
+            this.#gemOverlay.remove();
+            this.#gemOverlay = null;
+        }
+
+        this.stopGemAnimation();
 
         this.loadEventListeners();
         return;

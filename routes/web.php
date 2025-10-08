@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\AdminPostController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SkillsController;
@@ -22,6 +23,7 @@ Route::domain('admin.'.$domain)->group(function () {
 
     Route::resource('client', ClientController::class)->middleware('auth');
     Route::resource('skills', SkillsController::class)->middleware('auth');
+    Route::resource('posts', AdminPostController::class)->middleware('auth');
 });
 
 Route::domain('blog.'.$domain)->group(function () {
@@ -36,7 +38,7 @@ Route::domain($domain)->group(function () {
     Route::post('/puzzle/{puzzle_type_id}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
 
     Route::get('/resume', function () {
-        $resume = public_path('TreverHillisDeveloperResume2024.pdf');
+        $resume = public_path('TreverHillisDeveloperResume2025.pdf');
         $headers = [
             'Content-Type' => 'application/pdf',
         ];

@@ -20,6 +20,35 @@ const Playground = {
         while (Playground.playground.firstChild)
             Playground.playground.removeChild(Playground.playground.firstChild);
 
+        Playground.playground.style.position = "relative";
+        Playground.playground.style.overflow = "hidden";
+
+        const header = document.getElementById("main_header");
+        const footer = document.getElementById("footer");
+        const viewportHeight = window.innerHeight;
+        const contentPaddingTop = 0;
+        const availableHeight = Math.max(
+            viewportHeight -
+                (header ? header.offsetHeight : 0) -
+                (footer ? footer.offsetHeight : 0) -
+                contentPaddingTop,
+            420,
+        );
+        Playground.playground.style.height = `${availableHeight}px`;
+
+        const computedStyle = getComputedStyle(Playground.playground);
+        const paddingLeft = parseFloat(computedStyle.paddingLeft) || 0;
+        const paddingRight = parseFloat(computedStyle.paddingRight) || 0;
+        const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
+        const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
+
+        const placementBounds = {
+            width: Playground.playground.clientWidth - paddingLeft - paddingRight,
+            height: Playground.playground.clientHeight - paddingTop - paddingBottom,
+            paddingLeft,
+            paddingTop,
+        };
+
         for (let skill in Playground.skills) {
             Playground.needsReset = false;
             Playground.skills[skill].element = document.createElement("div");
@@ -35,8 +64,9 @@ const Playground = {
 
             Playground.styleElement(Playground.skills[skill]);
             Playground.playground.appendChild(Playground.skills[skill].element);
+            Playground.skills[skill].element.classList.add("skill-item");
 
-            if (!Playground.positionElement(Playground.skills[skill])) break;
+            if (!Playground.positionElement(Playground.skills[skill], placementBounds)) break;
 
             Playground.addClickListener(Playground.skills[skill]);
         }
@@ -149,27 +179,29 @@ const Playground = {
         skill.element.style.setProperty("--float-fifty-percent-x", y);
     },
 
-    positionElement: (skill) => {
+    positionElement: (skill, bounds = null) => {
         while (!skill.isPositioned) {
             if (Playground.placedSkillAttempts > 200) {
                 Playground.fontScale = Playground.fontScale + 2;
                 Playground.needsReset = true;
                 return false;
             }
-            // get the cordinate of the playground
-            let playgroundCords = Playground.playground.getBoundingClientRect();
+
+            const playgroundBounds = bounds ?? {
+                width: Playground.playground.clientWidth,
+                height: Playground.playground.clientHeight,
+                paddingLeft: 0,
+                paddingTop: 0,
+            };
 
             let width = skill.element.offsetWidth;
             let height = skill.element.offsetHeight;
 
-            const maxX = playgroundCords.right - width;
-            const maxY = playgroundCords.bottom - height;
-            const textXBound =
-                Math.random() * (maxX - playgroundCords.left) +
-                playgroundCords.left;
-            const textYBound =
-                Math.random() * (maxY - playgroundCords.top) +
-                playgroundCords.top;
+            const maxX = Math.max(playgroundBounds.width - width, 0);
+            const maxY = Math.max(playgroundBounds.height - height, 0);
+
+            const textXBound = playgroundBounds.paddingLeft + (maxX > 0 ? Math.random() * maxX : 0);
+            const textYBound = playgroundBounds.paddingTop + (maxY > 0 ? Math.random() * maxY : 0);
 
             let cords = {
                 width: width,
