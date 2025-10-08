@@ -59,14 +59,6 @@
             </a>
         </div>
 
-        <div class="relative grow p-4 bg-gruvbox-light-blue">
-            <a href="{{ route('photography') }}">
-                <h2 class="skill inline cursor-pointer text-3xl md:text-5xl"
-                    name="design">photography</h2>
-            </a>
-        </div>
-
-
         <div class="relative grow p-4 bg-gruvbox-blue">
             <a href="mailto:trever@revertcreations.com">
                 <h2 class="skill cursor-pointer text-3xl md:text-5xl">contact</h2>
