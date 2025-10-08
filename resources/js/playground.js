@@ -13,13 +13,16 @@ const Playground = {
     speedLimit: 12,
     homepageTagHtml: false,
     requestAnimationFrameID: null,
+    resetAttempts: 0,
 
     setup({ playground, homepageTag, pageTitle }) {
         Playground.playground = playground;
         Playground.homepageTag = homepageTag;
         Playground.pageTitle = pageTitle;
+        Playground.resetAttempts = 0;
         if (Playground.playground) {
             Playground.playground.style.touchAction = 'none';
+            Playground.playground.style.position = Playground.playground.style.position || 'relative';
         }
     },
 
@@ -38,6 +41,7 @@ const Playground = {
         Playground.homepageTag = null;
         Playground.pageTitle = null;
         Playground.initialized = false;
+        Playground.resetAttempts = 0;
     },
 
     init: (data) => {
@@ -73,6 +77,7 @@ const Playground = {
         }
 
         if (Playground.needsReset) Playground.reset("exceeded");
+        else Playground.resetAttempts = 0;
 
         let resizeTimeout;
         Playground.resizeHandler = () => {
@@ -276,8 +281,20 @@ const Playground = {
             Playground.playground.style.touchAction = hire === 'hire' ? 'auto' : 'none';
         }
 
+        if (hire === 'exceeded') {
+            Playground.resetAttempts += 1;
+        } else if (hire !== 'retry') {
+            Playground.resetAttempts = 0;
+        }
+
         if (hire == "hire") {
             Playground.buildForm();
+        } else if ((hire === 'retry' || hire === 'exceeded') && Playground.initialized) {
+            if (Playground.resetAttempts <= 3) {
+                Playground.init(Playground.skills);
+            } else {
+                Playground.renderFallbackLayout();
+            }
         } else if (Playground.initialized && hire !== "destroy") {
             Playground.init(Playground.skills);
         }
@@ -359,6 +376,42 @@ const Playground = {
             POINTER_OPTS,
         );
         skill.element.style.touchAction = 'none';
+    },
+
+    renderFallbackLayout: () => {
+        if (!Playground.playground) {
+            return;
+        }
+
+        Playground.playground.innerHTML = '';
+        Playground.playground.style.position = 'relative';
+        Playground.playground.style.touchAction = 'none';
+
+        const rootRect = Playground.playground.getBoundingClientRect();
+        const gutter = 16;
+        const columns = rootRect.width > 1200 ? 4 : rootRect.width > 900 ? 3 : 2;
+        const columnWidth = Math.max((rootRect.width - gutter * (columns - 1)) / columns, 140);
+        const rowHeight = 96;
+
+        Playground.skills.forEach((skill, index) => {
+            skill.element = document.createElement('div');
+            Playground.styleElement(skill);
+
+            const row = Math.floor(index / columns);
+            const col = index % columns;
+            skill.element.style.position = 'absolute';
+            skill.element.style.width = `${columnWidth}px`;
+            skill.element.style.left = `${col * (columnWidth + gutter)}px`;
+            skill.element.style.top = `${row * (rowHeight + gutter)}px`;
+
+            Playground.playground.appendChild(skill.element);
+            Playground.addClickListener(skill);
+        });
+
+        const rows = Math.ceil(Playground.skills.length / columns);
+        Playground.playground.style.minHeight = `${rows * (rowHeight + gutter) + rowHeight}px`;
+        Playground.needsReset = false;
+        Playground.resetAttempts = 0;
     },
 
     dragStart: (e) => {
