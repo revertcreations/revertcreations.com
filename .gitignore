@@ -2,11 +2,13 @@
 /public/hot
 /public/storage
 /public/audio
+/public/build
 /storage/*.key
 /vendor
 .env
 .env.backup
 .phpunit.result.cache
+.phpunit.cache/
 docker-compose.override.yml
 Homestead.json
 Homestead.yaml

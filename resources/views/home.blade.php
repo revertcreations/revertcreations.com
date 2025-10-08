@@ -28,8 +28,9 @@
         </div>
 
     </div>
-
-    <script src="/js/home.js"></script>
+    @push('scripts')
+        @vite('resources/js/home.js')
+    @endpush
     @if (app()->environment('production'))
     <script>
         gtag('event', 'page_view', {

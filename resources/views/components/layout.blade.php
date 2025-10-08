@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>REVERT CREATIONS</title>
 
-    <link href="/css/app.css" rel="stylesheet">
+    @vite('resources/css/app.css')
 
     @if (app()->environment() == 'production')
         <!-- Google tag (gtag.js) -->
@@ -72,6 +72,7 @@
                 <h2 class="skill cursor-pointer text-3xl md:text-5xl">contact</h2>
             </a>
         </div>
+@stack('scripts')
 
 </body>
 
