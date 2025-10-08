@@ -1,4 +1,4 @@
-
+import { bootPlayground } from '../playground.js';
 export class NameElement extends HTMLElement {
     static observedAttributes = ["data-content"];
 
@@ -53,7 +53,11 @@ export class NameElement extends HTMLElement {
     };
 
     render() {
-        this.dataset.content.split("").forEach((letter, i) => {
+        this.#intervals.forEach((interval) => clearInterval(interval));
+        this.#intervals = [];
+        this.innerHTML = "";
+
+        (this.dataset.content || "").split("").forEach((letter, i) => {
             let span = document.createElement("span");
             span.classList.add("cursor-pointer", "select-none", "text-8xl");
             span.innerText = letter;
@@ -131,7 +135,7 @@ export class NameElement extends HTMLElement {
         fetch("/skills")
                 .then((response) => response.json())
                 .then((data) => {
-                    window.Playground.init(data.skills);
+                    bootPlayground(data.skills);
                     // add anayltics if gtag is defined
                     if (typeof gtag === 'function') {
                         gtag('event', 'Skills Puzzle', {

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class UpdatePhotographyContractStatusColumn extends Migration
@@ -13,8 +14,11 @@ class UpdatePhotographyContractStatusColumn extends Migration
      */
     public function up()
     {
-        DB::statement("ALTER TABLE `photography_contracts` CHANGE `status` `status` ENUM('client_pending', 'client_approved', 'client_declined', 'admin_pending', 'active', 'inactive', 'declined') DEFAULT 'client_pending';");
+        if (Schema::getConnection()->getDriverName() !== 'mysql') {
+            return;
+        }
 
+        DB::statement("ALTER TABLE `photography_contracts` CHANGE `status` `status` ENUM('client_pending', 'client_approved', 'client_declined', 'admin_pending', 'active', 'inactive', 'declined') DEFAULT 'client_pending';");
     }
 
     /**

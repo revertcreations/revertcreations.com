@@ -10,7 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>REVERT CREATIONS</title>
 
-    <link href="/css/app.css" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @if (app()->environment() == 'production')
         <!-- Google tag (gtag.js) -->
@@ -49,6 +49,8 @@
     </div>
 
     <x-site-footer />
+
+    @stack('scripts')
 
 </body>
 

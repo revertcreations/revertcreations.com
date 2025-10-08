@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SkillSeeder::class,
             PuzzleTypeSeeder::class,
+            AdminSeeder::class,
         ]);
 
         Opportunity::truncate();

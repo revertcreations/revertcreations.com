@@ -34,15 +34,16 @@
 
     </div>
 
-    <script src="{{ asset('js/playground.js') }}"></script>
 
-    <script>
-        
-        document.addEventListener('DOMContentLoaded', function () {
-            const data = JSON.parse('@json($skills)');
-            Playground.init(data);
-        });
-    </script>
+    @push('scripts')
+        @vite('resources/js/playground.js')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const data = JSON.parse('@json($skills)');
+                Playground.init(data);
+            });
+        </script>
+    @endpush
 
 
 </x-layout>

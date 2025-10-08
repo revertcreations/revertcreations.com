@@ -2,14 +2,32 @@
 
 namespace App\Models;
 
+use App\Models\JobApplication;
 use App\Models\OpportunityIngest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Opportunity extends Model
 {
     use HasFactory;
+
+    public const STATUS_OPEN = 'open';
+    public const STATUS_NEW = 'open';
+    public const STATUS_SHORTLISTED = 'shortlisted';
+    public const STATUS_APPLIED = 'applied';
+    public const STATUS_ARCHIVED = 'archived';
+
+    /**
+     * @var array<int, string>
+     */
+    public const STATUSES = [
+        self::STATUS_OPEN,
+        self::STATUS_SHORTLISTED,
+        self::STATUS_APPLIED,
+        self::STATUS_ARCHIVED,
+    ];
 
     /**
      * Mass assignable columns for quick pipeline updates.
@@ -107,7 +125,15 @@ class Opportunity extends Model
         return $query->whereNotNull('archived_at');
     }
 
-    public function ingests()
+    /**
+     * Related job applications.
+     */
+    public function applications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+
+    public function ingests(): HasMany
     {
         return $this->hasMany(OpportunityIngest::class);
     }

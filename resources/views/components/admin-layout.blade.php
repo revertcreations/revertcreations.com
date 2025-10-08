@@ -10,7 +10,7 @@
     <meta name="description" content="Admin control room for revertcreations.com">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gradient-to-b from-gruvbox-charcoal via-[#1d1d1d] to-gruvbox-black-hidden text-gruvbox-white min-h-screen">
@@ -56,8 +56,6 @@
 
         <x-site-footer variant="admin" />
     </div>
-
-    <script src="{{ asset('js/app.js') }}"></script>
 
 </body>
 

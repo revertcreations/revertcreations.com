@@ -1,9 +1,9 @@
-import { NameElement } from './components/NameElement.js';
-import { HintElement } from './components/HintElement.js';
-import { TreasureElement } from './components/TreasureElement.js';
-import { ContentElement } from './components/ContentElement.js';
+import './components/NameElement.js';
+import './components/HintElement.js';
+import './components/TreasureElement.js';
+import './components/ContentElement.js';
 
-import { Playground } from "./playground.js";
+export { bootPlayground } from './playground.js';
 
 // document.addEventListener("visibilitychange", () => {
 //     console.log(document.visibilityState);

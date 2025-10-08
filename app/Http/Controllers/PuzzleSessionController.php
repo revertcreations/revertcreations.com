@@ -13,6 +13,11 @@ class PuzzleSessionController extends Controller
 
     public function check($puzzle_type_id, Request $request) {
         $session_id = $request->session()->getId();
+
+        if (empty($session_id)) {
+            $sessionCookie = config('session.cookie');
+            $session_id = $request->cookie($sessionCookie) ?? $request->query('session_id');
+        }
         $puzzle_session = new PuzzleSession();
         $puzzle_session = $puzzle_session->where('session_id', $session_id)->where('puzzle_type_id', $puzzle_type_id)->first();
 
@@ -67,6 +72,54 @@ class PuzzleSessionController extends Controller
         $puzzle_score->save();
 
         return response()->json(['success' => 'You did it, your score is: '.$finalScore, 'score' => $finalScore, 'hintCount' => $puzzle_score->hint_count, 'time' => $puzzle_score->solve_time_in_seconds]);
+    }
+
+    public function leaderboard($puzzle_type_id, Request $request)
+    {
+        $sessionCookie = config('session.cookie');
+        $possibleSessionIds = array_filter([
+            $request->session()->getId(),
+            $request->cookie($sessionCookie),
+            $request->query('session_id'),
+        ]);
+
+        $scores = PuzzleScore::query()
+            ->select([
+                'puzzle_scores.id',
+                'puzzle_scores.score',
+                'puzzle_scores.hint_count',
+                'puzzle_scores.solve_time_in_seconds',
+                'puzzle_scores.created_at',
+                'puzzle_sessions.session_id as session_identifier',
+            ])
+            ->join('puzzle_sessions', 'puzzle_sessions.id', '=', 'puzzle_scores.puzzle_session_id')
+            ->where('puzzle_sessions.puzzle_type_id', $puzzle_type_id)
+            ->orderByDesc('puzzle_scores.score')
+            ->orderBy('puzzle_scores.solve_time_in_seconds')
+            ->orderBy('puzzle_scores.created_at')
+            ->get();
+
+        $leaderboard = $scores->map(function ($score, $index) use ($possibleSessionIds) {
+            $isCurrentSession = in_array($score->session_identifier, $possibleSessionIds, true);
+
+            return [
+                'rank' => $index + 1,
+                'score' => (int) $score->score,
+                'hintCount' => (int) $score->hint_count,
+                'solveTimeInSeconds' => (float) $score->solve_time_in_seconds,
+                'achievedAt' => optional($score->created_at)->toIso8601String(),
+                'isCurrentSession' => $isCurrentSession,
+            ];
+        })->values();
+
+        $currentEntry = $leaderboard->firstWhere('isCurrentSession', true);
+        $currentRank = $currentEntry['rank'] ?? null;
+
+        return response()->json([
+            'leaderboard' => $leaderboard,
+            'currentRank' => $currentRank,
+            'totalEntries' => $leaderboard->count(),
+        ]);
     }
 
 }
