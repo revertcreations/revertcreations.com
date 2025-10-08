@@ -20,5 +20,8 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.10"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.52.4"
   }
 }
