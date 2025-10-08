@@ -15,7 +15,7 @@ jobs:
       with:
         node-version: '20.x'
     - run: npm ci
-    - run: npm run prod
+    - run: ROLLUP_SKIP_NODE_RESOLUTION=1 npm run prod
     - name: Commit built assets
       run: |
         git config --local user.email "action@github.com"
@@ -34,4 +34,3 @@ jobs:
         key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
         passphrase: ${{ secrets.DIGITAL_OCEAN_KEY_PASSPRHASE }}
         script: 'cd /var/www/revertcreations.com && chmod +x server_deploy.sh && ./server_deploy.sh'
-
