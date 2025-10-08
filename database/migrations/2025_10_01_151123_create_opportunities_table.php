@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasTable('opportunities')) {
+            Schema::drop('opportunities');
+        }
+
         Schema::create('opportunities', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
