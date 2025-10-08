@@ -11,6 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (Schema::hasTable('job_applications')) {
+            Schema::disableForeignKeyConstraints();
+            Schema::drop('job_applications');
+            Schema::enableForeignKeyConstraints();
+        }
+
         if (Schema::hasTable('opportunities')) {
             Schema::drop('opportunities');
         }
