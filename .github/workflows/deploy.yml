@@ -14,8 +14,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '20.x'
-    - run: npm ci
-    - run: ROLLUP_SKIP_NODE_RESOLUTION=1 npm run prod
+    - run: npm_config_ignore_optional=true npm ci
+    - run: ROLLUP_NO_NATIVE=1 npm run prod
     - name: Commit built assets
       run: |
         git config --local user.email "action@github.com"
