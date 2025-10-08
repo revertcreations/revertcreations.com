@@ -13,6 +13,11 @@ class PuzzleSessionController extends Controller
 
     public function check($puzzle_type_id, Request $request) {
         $session_id = $request->session()->getId();
+
+        if (empty($session_id)) {
+            $sessionCookie = config('session.cookie');
+            $session_id = $request->cookie($sessionCookie) ?? $request->query('session_id');
+        }
         $puzzle_session = new PuzzleSession();
         $puzzle_session = $puzzle_session->where('session_id', $session_id)->where('puzzle_type_id', $puzzle_type_id)->first();
 
@@ -71,7 +76,12 @@ class PuzzleSessionController extends Controller
 
     public function leaderboard($puzzle_type_id, Request $request)
     {
-        $session_id = $request->session()->getId();
+        $sessionCookie = config('session.cookie');
+        $possibleSessionIds = array_filter([
+            $request->session()->getId(),
+            $request->cookie($sessionCookie),
+            $request->query('session_id'),
+        ]);
 
         $scores = PuzzleScore::query()
             ->select([
@@ -89,14 +99,16 @@ class PuzzleSessionController extends Controller
             ->orderBy('puzzle_scores.created_at')
             ->get();
 
-        $leaderboard = $scores->map(function ($score, $index) use ($session_id) {
+        $leaderboard = $scores->map(function ($score, $index) use ($possibleSessionIds) {
+            $isCurrentSession = in_array($score->session_identifier, $possibleSessionIds, true);
+
             return [
                 'rank' => $index + 1,
                 'score' => (int) $score->score,
                 'hintCount' => (int) $score->hint_count,
                 'solveTimeInSeconds' => (float) $score->solve_time_in_seconds,
                 'achievedAt' => optional($score->created_at)->toIso8601String(),
-                'isCurrentSession' => $score->session_identifier === $session_id,
+                'isCurrentSession' => $isCurrentSession,
             ];
         })->values();
 

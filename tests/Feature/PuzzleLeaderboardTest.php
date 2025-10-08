@@ -18,9 +18,10 @@ class PuzzleLeaderboardTest extends TestCase
     #[Test]
     public function it_returns_ranked_scores_and_highlights_current_session(): void
     {
-        $sessionId = 'test-session-id';
-        Session::setId($sessionId);
         Session::start();
+        $sessionId = Session::getId();
+        Session::put('puzzle_leaderboard_test', true);
+        Session::save();
 
         $puzzleType = new PuzzleType();
         $puzzleType->name = 'analytics_treasure';
@@ -46,9 +47,14 @@ class PuzzleLeaderboardTest extends TestCase
         $this->storeScore($currentSession, 2200, 1, 11.2);
         $this->storeScore($thirdSession, 1800, 4, 18.7);
 
-        $response = $this->withSession([])->getJson(
-            route('puzzle-leaderboard', ['puzzle_type_id' => $puzzleType->id])
-        );
+        $response = $this
+            ->withCookie(config('session.cookie'), $sessionId)
+            ->getJson(
+                route('puzzle-leaderboard', [
+                    'puzzle_type_id' => $puzzleType->id,
+                    'session_id' => $sessionId,
+                ])
+            );
 
         $response->assertOk();
         $response->assertJsonPath('totalEntries', 3);
