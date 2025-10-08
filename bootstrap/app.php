@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__.'/../routes/channels.php',
         health: '/up',
     )
+    ->withCommands([
+        \App\Console\Commands\CollectRemoteJobs::class,
+    ])
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->replace(
             \Illuminate\Http\Middleware\TrustProxies::class,

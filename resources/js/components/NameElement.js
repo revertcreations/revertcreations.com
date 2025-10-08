@@ -53,7 +53,11 @@ export class NameElement extends HTMLElement {
     };
 
     render() {
-        this.dataset.content.split("").forEach((letter, i) => {
+        this.#intervals.forEach((interval) => clearInterval(interval));
+        this.#intervals = [];
+        this.innerHTML = "";
+
+        (this.dataset.content || "").split("").forEach((letter, i) => {
             let span = document.createElement("span");
             span.classList.add("cursor-pointer", "select-none", "text-8xl");
             span.innerText = letter;

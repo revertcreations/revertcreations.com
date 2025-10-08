@@ -57,7 +57,13 @@ class SkillSeeder extends Seeder
         ]);
 
         foreach ($skills as $skill) {
-            Skill::create($skill);
+            Skill::updateOrCreate(
+                ['name' => $skill['name']],
+                [
+                    'experience' => $skill['experience'],
+                    'excerpt' => $skill['excerpt'] ?? null,
+                ]
+            );
         }
     }
 }

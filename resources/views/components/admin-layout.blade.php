@@ -43,14 +43,20 @@
                                     class="{{ Route::is('client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">
                                     Clients
                                 </a>
+                                <a
+                                    href="{{ route('admin.jobs.index') }}"
+                                    class="{{ Route::is('admin.jobs.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">
+                                    Jobs
+                                </a>
 
                                 <a href="{{ route('skills.index') }}" class="{{ Route::is('skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
+                                <a href="{{ route('admin.posts.index') }}" class="{{ Route::is('admin.posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Posts</a>
 
-                                <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a>
+                                {{-- <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a> --}}
 
                                 <a href="#" class="{{ Route::is('invoices.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Invoices</a>
 
-                                <a href="/portfolio" class="{{ Route::is('portfolio.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photography Portfolio</a>
+                                {{-- <a href="{{ route('portfolio.index') }}" class="{{ Route::is('portfolio.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photography Portfolio</a> --}}
                             </div>
                         </div>
                     </div>
@@ -75,11 +81,14 @@
 
                     <a href="{{ route('client.index') }}" class="{{ Route::is('client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Clients</a>
 
-                    <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a>
+                    <a href="{{ route('admin.jobs.index') }}" class="{{ Route::is('admin.jobs.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Jobs</a>
+                    <a href="{{ route('admin.posts.index') }}" class="{{ Route::is('admin.posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Posts</a>
+
+                    {{-- <a href="{{ route('photoshoot.index') }}" class="{{ Route::is('photoshoot.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photoshoots</a> --}}
 
                     <a href="#" class="{{ Route::is('invoices.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Invoices</a>
 
-                    <a href="#" class="{{ Route::is('photography.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photography</a>
+                    {{-- <a href="{{ route('portfolio.index') }}" class="{{ Route::is('photography.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Photography</a> --}}
                 </div>
 
                 <div class="pt-4 pb-3 border-t border-gray-700">

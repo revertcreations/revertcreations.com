@@ -11,6 +11,8 @@ use App\Http\Controllers\PhotoshootImageController;
 use App\Http\Controllers\SkillsController;
 use App\Http\Controllers\PuzzleSessionController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\AdminJobController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
@@ -28,12 +30,30 @@ Route::domain('admin.'.$domain)->group(function () {
 
     Route::post('contract/{contract}/email', [PhotographyContractController::class, 'email'])->middleware('auth')->name('admin.contract.email');
 
-    Route::resource('photoshoot', PhotoshootController::class)->middleware('auth');
-    Route::resource('photoshoot/{photoshoot}/images', PhotoshootImageController::class)->middleware('auth');
-    Route::post('photoshoot/{photoshoot}/email', [PhotoshootController::class, 'email'])->middleware('auth')->name('admin.photoshoot.email');
-    Route::resource('portfolio', PhotographyPortfolioImageController::class)->middleware('auth');
+    // Route::resource('photoshoot', PhotoshootController::class)->middleware('auth');
+    // Route::resource('photoshoot/{photoshoot}/images', PhotoshootImageController::class)->middleware('auth');
+    // Route::post('photoshoot/{photoshoot}/email', [PhotoshootController::class, 'email'])->middleware('auth')->name('admin.photoshoot.email');
+    // Route::resource('portfolio', PhotographyPortfolioImageController::class)->middleware('auth');
     Route::resource('client', ClientController::class)->middleware('auth');
     Route::resource('skills', SkillsController::class)->middleware('auth');
+    Route::resource('posts', AdminPostController::class)
+        ->except(['show'])
+        ->middleware('auth')
+        ->names([
+            'index' => 'admin.posts.index',
+            'create' => 'admin.posts.create',
+            'store' => 'admin.posts.store',
+            'edit' => 'admin.posts.edit',
+            'update' => 'admin.posts.update',
+            'destroy' => 'admin.posts.destroy',
+        ]);
+
+    Route::get('/jobs', [AdminJobController::class, 'index'])->middleware('auth')->name('admin.jobs.index');
+    Route::post('/jobs/sync', [AdminJobController::class, 'sync'])->middleware('auth')->name('admin.jobs.sync');
+    Route::post('/jobs/mass-apply', [AdminJobController::class, 'massApply'])->middleware('auth')->name('admin.jobs.mass-apply');
+    Route::post('/jobs/{opportunity}/applications', [AdminJobController::class, 'storeApplication'])->middleware('auth')->name('admin.jobs.applications.store');
+    Route::patch('/jobs/applications/{application}', [AdminJobController::class, 'updateApplication'])->middleware('auth')->name('admin.jobs.applications.update');
+    Route::patch('/jobs/opportunities/{opportunity}', [AdminJobController::class, 'updateOpportunity'])->middleware('auth')->name('admin.jobs.opportunities.update');
 });
 
 Route::domain('blog.'.$domain)->group(function () {
@@ -46,13 +66,14 @@ Route::domain($domain)->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/puzzle/{puzzle_type_id}/check', [PuzzleSessionController::class, 'check'])->name('puzzle-check');
     Route::post('/puzzle/{puzzle_type_id}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
+    Route::get('/puzzle/{puzzle_type_id}/leaderboard', [PuzzleSessionController::class, 'leaderboard'])->name('puzzle-leaderboard');
 
     Route::get('/resume', function () {
-        $resume = public_path('TreverHillisDeveloperResume2024.pdf');
+        $resume = public_path('TreverHillisDeveloperResume2025.pdf');
         $headers = [
             'Content-Type' => 'application/pdf',
         ];
-        return response()->download($resume, 'TreverHillisDeveloperResume.pdf', $headers);
+        return response()->download($resume, 'TreverHillisDeveloperResume2025.pdf', $headers);
     })->name('resume');
 
     Route::get('/developer', function () {

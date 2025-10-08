@@ -5,25 +5,38 @@ export class TreasureElement extends HTMLElement {
 
     connectedCallback() {
         window.addEventListener('treasureHint', this.treasureHint);
+        this.style.transition = "color 0.2s ease, text-shadow 0.2s ease";
     }
 
-    treasureHint = (data) => {
-        let distanceToTreasure = data.detail.distanceToTreasure;
-        let spread = distanceToTreasure < 40 ? 0.5 : 0.1;
+    disconnectedCallback() {
+        window.removeEventListener('treasureHint', this.treasureHint);
+        this.resetGlow();
+    }
 
-        if (distanceToTreasure < 25) {
-//            this.style.textShadow = `0 0 ${distanceToTreasure / spread}px #fe8019, 0 0 ${
-//                distanceToTreasure / spread
-//            }px #fe8019, 0 0 ${distanceToTreasure / spread}px #EDD205`;
-//            this.style.color = `#fe8019`;
-        } else {
-            //this.style.textShadow = '';
-//            this.style.textShadow = `0 0 ${distanceToTreasure / spread}px #FFE205, 0 0 ${
-//                distanceToTreasure / spread
-//            }px #FFE205, 0 0 ${distanceToTreasure / spread}px #EDD205`;
-//            this.style.color = `#FFE205`;
+    resetGlow = () => {
+        this.style.textShadow = "";
+        this.style.color = "";
+    };
+
+    treasureHint = (data) => {
+        const distanceToTreasure = data?.detail?.distanceToTreasure;
+        if (typeof distanceToTreasure !== "number") {
+            this.resetGlow();
+            return;
         }
 
+        if (distanceToTreasure > 240) {
+            this.resetGlow();
+            return;
+        }
+
+        const clamped = Math.max(0, Math.min(distanceToTreasure, 240));
+        const intensity = 1 - clamped / 240;
+        const radius = 8 + intensity * 24;
+        const glow = `0 0 ${radius}px rgba(250,189,47,${0.3 + intensity * 0.4}), 0 0 ${radius * 1.8}px rgba(214,93,14,${0.25 + intensity * 0.3})`;
+
+        this.style.textShadow = glow;
+        this.style.color = intensity > 0.6 ? "#fabd2f" : "";
     }
 
 }
