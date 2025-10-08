@@ -1,4 +1,4 @@
-
+import { bootPlayground } from '../playground.js';
 export class NameElement extends HTMLElement {
     static observedAttributes = ["data-content"];
 
@@ -131,7 +131,7 @@ export class NameElement extends HTMLElement {
         fetch("/skills")
                 .then((response) => response.json())
                 .then((data) => {
-                    window.Playground.init(data.skills);
+                    bootPlayground(data.skills);
                     // add anayltics if gtag is defined
                     if (typeof gtag === 'function') {
                         gtag('event', 'Skills Puzzle', {

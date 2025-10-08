@@ -1,8 +1,10 @@
+const POINTER_OPTS = { passive: false };
+
 const Playground = {
     initialized: false,
-    playground: document.getElementById("lead"),
-    homepageTag: document.querySelector("name-element"),
-    pageTitle: document.querySelector("#title > h1"),
+    playground: null,
+    homepageTag: null,
+    pageTitle: null,
     skills: [],
     needsReset: false,
     fontScale: 25,
@@ -12,7 +14,36 @@ const Playground = {
     homepageTagHtml: false,
     requestAnimationFrameID: null,
 
+    setup({ playground, homepageTag, pageTitle }) {
+        Playground.playground = playground;
+        Playground.homepageTag = homepageTag;
+        Playground.pageTitle = pageTitle;
+        if (Playground.playground) {
+            Playground.playground.style.touchAction = 'none';
+        }
+    },
+
+    destroy: () => {
+        if (Playground.resizeHandler) {
+            window.removeEventListener('resize', Playground.resizeHandler);
+            Playground.resizeHandler = null;
+        }
+
+        if (!Playground.playground) {
+            return;
+        }
+
+        Playground.reset('destroy');
+        Playground.playground = null;
+        Playground.homepageTag = null;
+        Playground.pageTitle = null;
+        Playground.initialized = false;
+    },
+
     init: (data) => {
+        if (!Playground.playground || !Playground.homepageTag || !Playground.pageTitle) {
+            return;
+        }
         Playground.initialized = true;
 
         Playground.skills = data;
@@ -44,12 +75,14 @@ const Playground = {
         if (Playground.needsReset) Playground.reset("exceeded");
 
         let resizeTimeout;
-        window.onresize = function () {
-            if (Playground.playground.offsetParent) {
+        Playground.resizeHandler = () => {
+            if (Playground.playground && Playground.playground.offsetParent) {
                 clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(Playground.reset("resize"), 1000);
+                resizeTimeout = setTimeout(() => Playground.reset("resize"), 250);
             }
         };
+
+        window.addEventListener('resize', Playground.resizeHandler, { passive: true });
     },
 
     styleElement: (skill) => {
@@ -93,14 +126,9 @@ const Playground = {
                 skill.element.classList.add("animate-blur-text");
 
             skill.element.removeEventListener(
-                "mousedown",
+                "pointerdown",
                 Playground.dragStart,
-                false,
-            );
-            skill.element.removeEventListener(
-                "touchstart",
-                Playground.dragStart,
-                false,
+                POINTER_OPTS,
             );
         });
     },
@@ -124,14 +152,9 @@ const Playground = {
             );
 
             skill.element.addEventListener(
-                "mousedown",
+                "pointerdown",
                 Playground.dragStart,
-                false,
-            );
-            skill.element.addEventListener(
-                "touchstart",
-                Playground.dragStart,
-                false,
+                POINTER_OPTS,
             );
         });
     },
@@ -224,20 +247,19 @@ const Playground = {
             Playground.skills[skill].active = false;
             if (Playground.skills[skill].element) {
                 Playground.skills[skill].element.removeEventListener(
-                    "mousedown",
+                    "pointerdown",
                     Playground.dragStart,
+                    POINTER_OPTS,
                 );
                 Playground.skills[skill].element.removeEventListener(
-                    "touchstart",
-                    Playground.dragStart,
-                );
-                Playground.skills[skill].element.removeEventListener(
-                    "mouseup",
+                    "pointerup",
                     Playground.dragEnd,
+                    POINTER_OPTS,
                 );
                 Playground.skills[skill].element.removeEventListener(
-                    "mousemove",
+                    "pointermove",
                     Playground.dragElement,
+                    POINTER_OPTS,
                 );
                 Playground.playground.removeChild(
                     Playground.skills[skill].element,
@@ -250,9 +272,13 @@ const Playground = {
             Playground.playground.removeChild(Playground.playground.firstChild);
         }
 
+        if (Playground.playground) {
+            Playground.playground.style.touchAction = hire === 'hire' ? 'auto' : 'none';
+        }
+
         if (hire == "hire") {
             Playground.buildForm();
-        } else if (Playground.initialized) {
+        } else if (Playground.initialized && hire !== "destroy") {
             Playground.init(Playground.skills);
         }
     },
@@ -274,6 +300,10 @@ const Playground = {
                     skill.currentY,
                     skill.element,
                 );
+
+                delete skill.pointerId;
+                delete skill.prevClientX;
+                delete skill.prevClientY;
             }
         }
     },
@@ -324,84 +354,71 @@ const Playground = {
 
     addClickListener: (skill) => {
         skill.element.addEventListener(
-            "mousedown",
+            "pointerdown",
             Playground.dragStart,
-            false,
+            POINTER_OPTS,
         );
-        skill.element.addEventListener(
-            "touchstart",
-            Playground.dragStart,
-            false,
-        );
+        skill.element.style.touchAction = 'none';
     },
 
     dragStart: (e) => {
+        e.preventDefault();
+
         let skill = Playground.getSkillBasedOnName(e.target.id);
-        const nameElement = document.querySelector("name-element");
+        if (!skill || !skill.element) {
+            return;
+        }
+
         Playground.homepageTag.setAttribute("data-content", skill.name);
         Playground.pageTitle.innerText = "Drag & Drop";
-
-        //Playground.homepageTag.classList.remove("text-gruvbox-green");
         Playground.homepageTag.classList.add("border", "border-dashed", "border-4");
 
-        if (skill && skill.element) {
-            if (e.type == "touchstart") {
-                skill.element.addEventListener(
-                    "touchend",
-                    Playground.dragEnd,
-                    false,
-                );
-                skill.element.addEventListener(
-                    "touchmove",
-                    Playground.drag,
-                    false,
-                );
-            } else if (e.type == "mousedown") {
-                skill.element.addEventListener(
-                    "mouseup",
-                    Playground.dragEnd,
-                    false,
-                );
-                skill.element.addEventListener(
-                    "mousemove",
-                    Playground.drag,
-                    false,
-                );
-            }
+        skill.pointerId = e.pointerId;
+        skill.element.setPointerCapture(e.pointerId);
+        skill.element.addEventListener(
+            "pointerup",
+            Playground.dragEnd,
+            POINTER_OPTS,
+        );
+        skill.element.addEventListener(
+            "pointermove",
+            Playground.dragElement,
+            POINTER_OPTS,
+        );
 
-            skill.element.style.zIndex = "11";
-            skill.element.classList.remove("cursor-pointer");
-            skill.element.classList.add("cursor-move");
+        skill.element.style.zIndex = "11";
+        skill.element.classList.remove("cursor-pointer");
+        skill.element.classList.add("cursor-move");
 
-            if (skill.heldCounter && skill.heldCounter > 2) {
-                clearInterval(skill.heldCounter);
-            }
-
-            if (e.type === "touchstart") {
-                skill.initialX = e.touches[0].clientX - skill.xOffset;
-                skill.initialY = e.touches[0].clientY - skill.yOffset;
-            } else {
-                skill.initialX = e.clientX - skill.xOffset;
-                skill.initialY = e.clientY - skill.yOffset;
-            }
-
-            if (e.target === skill.element) {
-                skill.dragActive = true;
-            } else {
-                skill.dragActive = false;
-            }
+        if (skill.heldCounter && skill.heldCounter > 2) {
+            clearInterval(skill.heldCounter);
         }
+
+        const { clientX = 0, clientY = 0 } = e;
+        skill.initialX = clientX - skill.xOffset;
+        skill.initialY = clientY - skill.yOffset;
+
+        skill.dragActive = e.target === skill.element;
     },
 
     dragEnd: (e) => {
         let skill = Playground.getSkillBasedOnName(e.target.id);
 
         if (skill && skill.element) {
+            try {
+                if (e.pointerId !== undefined) {
+                    skill.element.releasePointerCapture(e.pointerId);
+                }
+            } catch (error) {
+                // ignore release errors
+            }
+
             skill.element.classList.remove("cursor-move");
-            skill.element.removeEventListener("mouseup", Playground.dragEnd);
+            skill.element.removeEventListener("pointerup", Playground.dragEnd, POINTER_OPTS);
             skill.element.removeEventListener(
-                "mousemove",
+                "pointermove",
                 Playground.dragElement,
+                POINTER_OPTS,
             );
 
             skill.element.style.zIndex = "1";
@@ -453,17 +470,16 @@ const Playground = {
         let skill = Playground.getSkillBasedOnName(e.target.id);
 
         if (skill && skill.dragActive) {
+            if (skill.pointerId !== undefined && e.pointerId !== undefined && e.pointerId !== skill.pointerId) {
+                return;
+            }
             if (!skill.elementChild) Playground.buildInfoCard(skill);
 
             let isForm = Playground.draggingEvents(e, skill);
 
-            if (e.type === "touchmove") {
-                skill.currentX = e.touches[0].clientX - skill.initialX;
-                skill.currentY = e.touches[0].clientY - skill.initialY;
-            } else {
-                skill.currentX = e.clientX - skill.initialX;
-                skill.currentY = e.clientY - skill.initialY;
-            }
+            const { clientX = 0, clientY = 0 } = e;
+            skill.currentX = clientX - skill.initialX;
+            skill.currentY = clientY - skill.initialY;
 
             if (!isForm)
                 Playground.setTranslate(
@@ -569,26 +585,20 @@ const Playground = {
     },
 
     handleShakeEvents: (e, skill) => {
-        if (e.type == "touchmove") {
-            if (!skill.initialTouch) {
-                skill.initialTouch = e.touches[0];
-            } else {
-                e.movementX =
-                    skill.initialTouch.pageX - skill.previousTouch.pageX;
-                e.movementY =
-                    skill.initialTouch.pageY - skill.previousTouch.pageY;
-            }
-            skill.previousTouch = e.touches[0];
-        }
+        const { clientX = 0, clientY = 0 } = e;
+        const movementX = clientX - (skill.prevClientX ?? clientX);
+        const movementY = clientY - (skill.prevClientY ?? clientY);
+        skill.prevClientX = clientX;
+        skill.prevClientY = clientY;
 
-        if (e.movementX && e.movementX > Playground.speedLimit) {
+        if (movementX > Playground.speedLimit) {
             skill.elementMovementRightExceeded = true;
             skill.elementMovementXTimeout = setTimeout(function () {
                 skill.elementMovementRightExceeded = false;
             }, 200);
         }
 
-        if (e.movementX && e.movementX < -Playground.speedLimit) {
+        if (movementX < -Playground.speedLimit) {
             skill.elementMovementLeftExceeded = true;
             skill.elementMovementXTimeout = setTimeout(function () {
                 skill.elementMovementLeftExceeded = false;
@@ -596,14 +606,14 @@ const Playground = {
         }
 
         if (skill.name == "hire me") {
-            if (e.movementY && e.movementY > Playground.speedLimit - 4) {
+            if (movementY > Playground.speedLimit - 4) {
                 skill.elementMovementUpExceeded = true;
                 skill.elementMovementYTimeout = setTimeout(function () {
                     skill.elementMovementUpExceeded = false;
                 }, 200);
             }
 
-            if (e.movementY && e.movementY < Playground.speedLimit - 4) {
+            if (movementY < Playground.speedLimit - 4) {
                 skill.elementMovementDownExceeded = true;
                 skill.elementMovementYTimeout = setTimeout(function () {
                     skill.elementMovementDownExceeded = false;
@@ -623,14 +633,14 @@ const Playground = {
         }
 
         if (skill.name == "GitHub") {
-            if (e.movementY && e.movementY > Playground.speedLimit - 4) {
+            if (movementY > Playground.speedLimit - 4) {
                 skill.elementMovementUpExceeded = true;
                 skill.elementMovementYTimeout = setTimeout(function () {
                     skill.elementMovementUpExceeded = false;
                 }, 200);
             }
 
-            if (e.movementY && e.movementY < Playground.speedLimit - 4) {
+            if (movementY < Playground.speedLimit - 4) {
                 skill.elementMovementDownExceeded = true;
                 skill.elementMovementYTimeout = setTimeout(function () {
                     skill.elementMovementDownExceeded = false;
@@ -794,14 +804,9 @@ const Playground = {
     removeAllClickListeners: () => {
         Playground.skills.forEach((skill) => {
             skill.element.removeEventListener(
-                "mousedown",
+                "pointerdown",
                 Playground.dragStart,
-                false,
-            );
-            skill.element.removeEventListener(
-                "touchstart",
-                Playground.dragStart,
-                false,
+                POINTER_OPTS,
             );
         });
     },
@@ -950,7 +955,9 @@ const Playground = {
         descriptionLabel.innerText = "Description";
         descriptionLabel.classList.add("text-gruvbox-green");
 
-        Playground.playground.classList.remove("touch-action-none");
+        if (Playground.playground) {
+            Playground.playground.style.touchAction = 'auto';
+        }
 
         Playground.playground.appendChild(formWrap);
         formWrap.appendChild(closeForm);
@@ -1088,5 +1095,30 @@ const Playground = {
     },
 };
 
-window.Playground = Playground;
-//export { Playground };
+export function bootPlayground(skills) {
+    const playgroundRoot = document.getElementById('lead');
+    const homepageTag = document.querySelector('name-element');
+    const title = document.querySelector('#title > h1');
+
+    if (!playgroundRoot || !homepageTag || !title || !Array.isArray(skills)) {
+        return null;
+    }
+
+    Playground.destroy();
+    Playground.setup({ playground: playgroundRoot, homepageTag, pageTitle: title });
+    Playground.init(skills);
+
+    if (typeof window !== 'undefined') {
+        window.Playground = Playground;
+    }
+
+    return Playground;
+}
+
+export function destroyPlayground() {
+    Playground.destroy();
+}
+
+if (typeof window !== 'undefined') {
+    window.Playground = Playground;
+}
