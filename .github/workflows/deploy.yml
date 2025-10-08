@@ -7,6 +7,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_DEPLOY_TOKEN }}
 
     steps:
     - uses: actions/checkout@v4
@@ -33,5 +35,5 @@ jobs:
         password: ${{ secrets.DIGITAL_OCEAN_PASSWORD }}
         key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
         passphrase: ${{ secrets.DIGITAL_OCEAN_KEY_PASSPRHASE }}
+        envs: GITHUB_DEPLOY_TOKEN
         script: 'cd /var/www/revertcreations.com && chmod +x server_deploy.sh && ./server_deploy.sh'
-
