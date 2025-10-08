@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'content',
+        'excerpt',
+        'published',
+        'published_at',
+    ];
+
+    protected $casts = [
+        'published' => 'boolean',
+        'published_at' => 'datetime',
+    ];
 }
