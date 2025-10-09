@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminJobController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminPostController;
 use App\Http\Controllers\HomeController;
@@ -24,6 +25,7 @@ Route::domain('admin.'.$domain)->group(function () {
     Route::resource('client', ClientController::class)->middleware('auth');
     Route::resource('skills', SkillsController::class)->middleware('auth');
     Route::resource('posts', AdminPostController::class)->middleware('auth');
+    Route::resource('jobs', AdminJobController::class)->middleware('auth');
 });
 
 Route::domain('blog.'.$domain)->group(function () {

@@ -18,10 +18,10 @@ const palette = [
 
 const LETTER_CLASS = "magnet-letter";
 const ACTIVE_CLASS = "magnet-active";
-const RESET_WORD = "reset";
 const LETTER_HORIZONTAL_TOLERANCE = 35;
 const LETTER_VERTICAL_TOLERANCE = 20;
 const OVERLAP_TOLERANCE = 5;
+const SECRET_WORDS = ["hire", "reset"];
 
 const DRAG_STATE = new WeakMap();
 
@@ -152,6 +152,70 @@ const flattenInteractiveElements = (container) => {
     });
 };
 
+const snapshotInteractiveElement = (node) => {
+    const replacement = document.createElement("interactive-element");
+
+    const originalText =
+        node.dataset?.original ||
+        node.getAttribute("data-original") ||
+        node.textContent ||
+        "";
+
+    Array.from(node.attributes).forEach((attr) => {
+        const { name, value } = attr;
+        if (!value) return;
+
+        if (name === "class") {
+            const filtered = value
+                .split(/\s+/)
+                .map((cls) => cls.trim())
+                .filter(
+                    (cls) =>
+                        cls &&
+                        cls !== "interactive-element" &&
+                        cls !== "interactive-cycling",
+                );
+            if (filtered.length) {
+                replacement.className = filtered.join(" ");
+            }
+            return;
+        }
+
+        if (name === "style") {
+            replacement.setAttribute(name, value);
+            return;
+        }
+
+        if (name.startsWith("data-")) {
+            if (name === "data-original") return;
+            if (name === "data-badge-dismissed") {
+                replacement.setAttribute(name, value);
+            }
+            return;
+        }
+
+        if (name === "tabindex" && value === "0") return;
+
+        replacement.setAttribute(name, value);
+    });
+
+    if (originalText) {
+        replacement.textContent = originalText;
+        replacement.setAttribute("data-original", originalText);
+    }
+
+    return replacement;
+};
+
+const snapshotLeadMarkup = (container) => {
+    const clone = container.cloneNode(true);
+    clone.querySelectorAll("interactive-element").forEach((node) => {
+        const replacement = snapshotInteractiveElement(node);
+        node.replaceWith(replacement);
+    });
+    return clone.innerHTML;
+};
+
 const onPointerMove = (event) => {
     if (!activeLetter) return;
     lastPointerEvent = event;
@@ -270,11 +334,35 @@ const restoreMarkup = () => {
     leadContainer.style.height = "";
     leadContainer.style.position = "";
     leadContainer.style.userSelect = "";
+    if (leadContainer.dataset) {
+        delete leadContainer.dataset.hireModalShown;
+    }
     originalMarkup = null;
 
     stopResizeObserver();
     stopResetPolling();
     leadContainer = null;
+};
+
+const handleHireSecret = () => {
+    const scheduleHireForm = () => {
+        if (typeof window === "undefined") return;
+        const playground = window.Playground;
+        if (playground && typeof playground.reset === "function") {
+            playground.reset("hire");
+        }
+    };
+
+    if (typeof window !== "undefined" && window.requestAnimationFrame) {
+        window.requestAnimationFrame(scheduleHireForm);
+    } else {
+        scheduleHireForm();
+    }
+};
+
+const SECRET_HANDLERS = {
+    hire: handleHireSecret,
+    reset: restoreMarkup,
 };
 
 const calculateLetterPositions = () => {
@@ -294,30 +382,47 @@ const calculateLetterPositions = () => {
     );
 };
 
-const detectReset = () => {
+const triggerSecretWord = (word) => {
+    if (word === "hire" && leadContainer?.dataset?.hireModalShown === "true") {
+        return true;
+    }
+    const handler = SECRET_HANDLERS[word];
+    if (!handler) return false;
+    handler();
+    if (word === "hire" && leadContainer) {
+        leadContainer.dataset.hireModalShown = "true";
+    }
+    return true;
+};
+
+const detectWord = (targetWord) => {
     if (!leadContainer) return false;
+    if (!targetWord) return false;
 
     const letters = calculateLetterPositions();
-    const target = RESET_WORD.split("");
-    let matches = [];
+    if (!letters.length) return false;
+
+    const targetChars = targetWord.toLowerCase().split("");
+    const matches = [];
 
     letters.forEach((info) => {
         const char = (info.char || "").toLowerCase();
-        if (target.includes(char) && char.trim() !== "") {
+        if (targetChars.includes(char) && char.trim() !== "") {
             matches.push(info);
         }
     });
 
-    if (matches.length < RESET_WORD.length) return false;
+    if (matches.length < targetChars.length) return false;
 
     matches.sort((a, b) => a.left - b.left);
 
-    for (let i = 0; i <= matches.length - RESET_WORD.length; i++) {
-        const slice = matches.slice(i, i + RESET_WORD.length);
+    for (let i = 0; i <= matches.length - targetChars.length; i++) {
+        const slice = matches.slice(i, i + targetChars.length);
         let isSequence = true;
 
         for (let j = 0; j < slice.length; j++) {
-            if ((slice[j].char || "").toLowerCase() !== target[j]) {
+            const currentChar = (slice[j].char || "").toLowerCase();
+            if (currentChar !== targetChars[j]) {
                 isSequence = false;
                 break;
             }
@@ -348,10 +453,14 @@ const detectReset = () => {
     return false;
 };
 
-const frameResetCheck = () => {
-    if (detectReset()) {
-        restoreMarkup();
+const checkSecretWords = () => {
+    for (const word of SECRET_WORDS) {
+        if (detectWord(word)) {
+            triggerSecretWord(word);
+            return true;
+        }
     }
+    return false;
 };
 
 const logLetterGroup = (group) => {
@@ -422,21 +531,27 @@ const buildGroupAround = (letters, letterElement) => {
 const evaluateLetterDrop = (letterElement) => {
     if (!leadContainer || !letterElement) return;
 
+    if (leadContainer.dataset?.hireModalShown === "true") {
+        leadContainer.dataset.hireModalShown = "false";
+    }
+
     const letters = collectSortedLetters();
     const group = buildGroupAround(letters, letterElement);
-    const targetLower = RESET_WORD.toLowerCase();
 
     if (!group.length) {
-        frameResetCheck();
+        checkSecretWords();
         return;
     }
 
     const normalized = logLetterGroup(group);
-    if (normalized.includes(targetLower)) {
-        restoreMarkup();
-    } else {
-        frameResetCheck();
+    const matchedWord = SECRET_WORDS.find((word) =>
+        normalized.includes(word),
+    );
+    if (matchedWord) {
+        triggerSecretWord(matchedWord);
+        return;
     }
+    checkSecretWords();
 };
 
 const startResetPolling = () => {
@@ -446,7 +561,7 @@ const startResetPolling = () => {
         resetFrame = null;
         if (!leadContainer || !leadContainer.classList.contains(ACTIVE_CLASS))
             return;
-        frameResetCheck();
+        checkSecretWords();
         resetFrame = window.requestAnimationFrame(poll);
     };
     resetFrame = window.requestAnimationFrame(poll);
@@ -513,7 +628,8 @@ export const MagnetLetters = {
         if (!leadContainer) return;
 
         const rect = leadContainer.getBoundingClientRect();
-        originalMarkup = leadContainer.innerHTML;
+        leadContainer.dataset.hireModalShown = "false";
+        originalMarkup = snapshotLeadMarkup(leadContainer);
         leadContainer.classList.add(ACTIVE_CLASS);
         leadContainer.style.height = `${rect.height}px`;
         leadContainer.style.position = "relative";

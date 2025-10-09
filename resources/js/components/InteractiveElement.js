@@ -9,6 +9,9 @@ export class InteractiveElement extends HTMLElement {
     #originalText = "";
     #resizeObserver = null;
     #resizeRAF = null;
+    #badge = null;
+    #badgeTimeout = null;
+    #hasActivated = false;
 
     #fontFamilies = [
         '"Trebuchet MS", sans-serif',
@@ -59,6 +62,7 @@ export class InteractiveElement extends HTMLElement {
 
         this.addEventListener("pointerenter", this.startCycle);
         this.addEventListener("pointerleave", this.stopCycle);
+        this.addEventListener("click", this.handleClickHint);
         this.addEventListener("pointerdown", this.startCycle);
         this.addEventListener("pointerup", this.stopCycle);
         this.addEventListener("pointercancel", this.stopCycle);
@@ -75,6 +79,7 @@ export class InteractiveElement extends HTMLElement {
         this.stopCycle();
         this.removeEventListener("pointerenter", this.startCycle);
         this.removeEventListener("pointerleave", this.stopCycle);
+        this.removeEventListener("click", this.handleClickHint);
         this.removeEventListener("pointerdown", this.startCycle);
         this.removeEventListener("pointerup", this.stopCycle);
         this.removeEventListener("pointercancel", this.stopCycle);
@@ -83,6 +88,10 @@ export class InteractiveElement extends HTMLElement {
         this.removeEventListener("dblclick", this.handleDoubleClick);
         this.removeEventListener("touchend", this.handleDoubleTap);
         this.disconnectResizeObserver();
+        if (this.#badgeTimeout) {
+            window.clearTimeout(this.#badgeTimeout);
+            this.#badgeTimeout = null;
+        }
     }
 
     prepareCharacters() {
@@ -109,6 +118,7 @@ export class InteractiveElement extends HTMLElement {
         this.#baseSpan.textContent = text;
         this.#overlay.innerHTML = "";
 
+        this.ensureBadge();
         const measurements = this.measureCharacters(text);
         this.style.setProperty("--interactive-base-width", `${measurements.totalWidth}px`);
         this.style.setProperty("--interactive-base-height", `${measurements.height}px`);
@@ -243,6 +253,7 @@ export class InteractiveElement extends HTMLElement {
         this.#baseSpan.textContent = text;
         this.#overlay.innerHTML = "";
 
+        this.ensureBadge();
         const measurements = this.measureCharacters(text);
         this.style.setProperty("--interactive-base-width", `${measurements.totalWidth}px`);
         this.style.setProperty("--interactive-base-height", `${measurements.height}px`);
@@ -262,6 +273,13 @@ export class InteractiveElement extends HTMLElement {
             this.#overlay.appendChild(span);
             this.#characters.push(span);
         });
+    };
+
+    handleClickHint = (event) => {
+        if (this.#hasActivated) return;
+        if (event.detail > 1) return;
+        this.ensureBadge();
+        this.showBadge();
     };
 
     handleDoubleClick = (event) => {
@@ -300,15 +318,52 @@ export class InteractiveElement extends HTMLElement {
         this.lastTouchY = touch.clientY;
     };
 
+    ensureBadge() {
+        if (this.#badge) return this.#badge;
+        const badge = document.createElement("span");
+        badge.classList.add("interactive-badge");
+        badge.innerHTML = `<span aria-hidden="true">2x</span><span class="sr-only">Double click or double tap to scramble</span>`;
+        this.appendChild(badge);
+        this.#badge = badge;
+        return badge;
+    }
+
+    showBadge() {
+        if (this.dataset.badgeDismissed === "true") return;
+        const badge = this.ensureBadge();
+        if (!badge) return;
+
+        badge.classList.add("is-visible");
+        if (this.#badgeTimeout) window.clearTimeout(this.#badgeTimeout);
+        this.#badgeTimeout = window.setTimeout(() => {
+            this.hideBadge();
+        }, 2200);
+    }
+
+    hideBadge(force = false) {
+        if (!this.#badge) return;
+        this.#badge.classList.remove("is-visible");
+        if (this.#badgeTimeout) {
+            window.clearTimeout(this.#badgeTimeout);
+            this.#badgeTimeout = null;
+        }
+        if (force) {
+            this.dataset.badgeDismissed = "true";
+        }
+    }
+
     toggleMagnetMode() {
         this.stopCycle();
 
         if (MagnetLetters.isActive()) {
             MagnetLetters.deactivate();
+            this.hideBadge(true);
             return;
         }
 
+        this.hideBadge(true);
         MagnetLetters.activate();
+        this.#hasActivated = true;
     }
 }
 

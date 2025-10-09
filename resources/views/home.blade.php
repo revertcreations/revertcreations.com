@@ -24,8 +24,8 @@
 
             <content-element
                 class="m-3 block select-none text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal">
-                I'm always brainstorming new startup ideas, tinkering with new
-                interface designs, and exploring new technologies. I hope this
+                I'm always brainstorming startup ideas, tinkering with
+                interface designs, and exploring technologies. I hope this
                 platform can be a source of motivation for me to bring
                 some of those creative ideas to life and give them a home to display. Hope you find some
                 <hint-element data-content="hidden"></hint-element>

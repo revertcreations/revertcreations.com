@@ -3,6 +3,8 @@ const Playground = {
     playground: null,
     dynamicNodeClass: "playground-dynamic",
     formWrap: null,
+    hireOverlay: null,
+    hireKeyListener: null,
     skillLookup: {},
     activeSkill: null,
     dropZoneRect: null,
@@ -310,12 +312,23 @@ const Playground = {
         }
     },
 
-    reset: (hire) => {
-        hire = hire || false;
+    reset: (mode) => {
+        mode = mode || false;
+
+        if (mode === "hire") {
+            Playground.showHireForm();
+            return;
+        }
+
+        Playground.closeHireForm();
 
         Playground.placedSkillAttempts = 0;
         Playground.placedSkills = [];
-        if (hire != "exceeded") Playground.fontScale = 25;
+        if (mode != "exceeded") Playground.fontScale = 25;
+
+        if (typeof document !== "undefined" && document.body) {
+            document.body.classList.remove("hire-modal-open");
+        }
 
         for (let skill in Playground.skills) {
             Playground.skills[skill].active = false;
@@ -353,6 +366,7 @@ const Playground = {
 
         Playground.clearDynamicNodes();
         Playground.formWrap = null;
+        Playground.hireOverlay = null;
         Playground.skillLookup = Object.create(null);
         Playground.activeSkill = null;
         Playground.dropZoneRect = null;
@@ -361,9 +375,7 @@ const Playground = {
             Playground.resizeTimeoutId = null;
         }
 
-        if (hire == "hire") {
-            Playground.buildForm();
-        } else if (Playground.initialized) {
+        if (Playground.initialized) {
             Playground.init(Playground.skills);
         }
     },
@@ -923,7 +935,9 @@ const Playground = {
         skill.infoShowing = true;
     },
 
-    buildForm: () => {
+    showHireForm: () => {
+        if (Playground.hireOverlay) return;
+
         Playground.detachResizeListener();
 
         if (!Playground.playground)
@@ -937,32 +951,54 @@ const Playground = {
             return;
         }
 
-        let closeForm = document.createElement("div");
-        closeForm.classList.add("cursor-pointer", "text-6xl", "text-right");
-        const closeFormButton = document.createElement("span");
-        closeFormButton.classList.add(
-            "text-gruvbox-red",
-            "hover:text-red-400",
-        );
-        closeFormButton.setAttribute("role", "button");
-        closeFormButton.setAttribute("aria-label", "Close hire form");
-        closeFormButton.textContent = "×";
-        closeFormButton.addEventListener("click", () => Playground.reset());
-        closeForm.appendChild(closeFormButton);
+        if (typeof document !== "undefined" && document.body) {
+            document.body.classList.add("hire-modal-open");
+        }
 
-        let formWrap = document.createElement("div");
-        formWrap.classList.add("m-auto", "lg:w-5/12", "md:w-7/12", "w-11/12", "overflow-y-auto");
-        formWrap.classList.add(Playground.dynamicNodeClass);
+        const overlay = document.createElement("div");
+        overlay.classList.add("hire-modal-overlay");
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.addEventListener("click", (event) => {
+            if (event.target === overlay) Playground.closeHireForm();
+        });
+
+        const modal = document.createElement("div");
+        modal.classList.add("hire-modal");
+        overlay.appendChild(modal);
+
+        const modalHeader = document.createElement("div");
+        modalHeader.classList.add("hire-modal-header");
+        const closeFormButton = document.createElement("button");
+        closeFormButton.type = "button";
+        closeFormButton.classList.add("hire-modal-close");
+        closeFormButton.setAttribute("aria-label", "Close hire form");
+        closeFormButton.innerHTML = "&times;";
+        closeFormButton.addEventListener("click", () => Playground.closeHireForm());
+        modalHeader.appendChild(closeFormButton);
+        modal.appendChild(modalHeader);
+
+        const formWrap = document.createElement("div");
+        formWrap.classList.add("hire-modal-body");
         Playground.formWrap = formWrap;
+        modal.appendChild(formWrap);
 
         let hireMeForm = document.createElement("form");
         hireMeForm.id = "hire_me_form";
-        hireMeForm.classList.add("flex", "flex-col", "m-8");
+        hireMeForm.classList.add(
+            "flex",
+            "flex-col",
+            "items-center",
+            "gap-4",
+            "px-6",
+            "pb-6",
+            "w-full",
+        );
 
         let formInfo = document.createElement("p");
         formInfo.innerText =
             "First of all, I'm very excited to hear that you are interested in working with me! I love hearing new project ideas, so go ahead and fill out the form below with your contact info, and a brief overview of the project in mind, and I will get back to you asap!";
-        formInfo.classList.add("text-gruvbox-white", "mb-4");
+        formInfo.classList.add("text-gruvbox-white", "text-center", "mb-2");
 
         let submitButton = document.createElement("button");
         submitButton.type = "button";
@@ -973,73 +1009,94 @@ const Playground = {
             "text-gruvbox-black",
             "text-2xl",
             "font-bold",
-            "p-4",
+            "px-6",
+            "py-3",
             "mt-4",
-            "mb-4",
+            "self-center",
         );
 
         let formTitle = document.createElement("h2");
+        formTitle.id = "hire-form-title";
         formTitle.innerText = "hire me";
         formTitle.classList.add(
             "text-gruvbox-green",
             "text-4xl",
-            "mt-4",
-            "mb-4",
+            "text-center",
+            "mt-2",
         );
 
         let emailInput = document.createElement("input");
         emailInput.name = "email";
         emailInput.type = "email";
-        emailInput.classList.add("p-4", "m-4");
+        emailInput.classList.add("w-full", "p-4", "bg-gruvbox-black", "text-gruvbox-white");
         let emailLabel = document.createElement("label");
         emailLabel.innerText = "Email";
-        emailLabel.classList.add("text-gruvbox-green");
+        emailLabel.classList.add("text-gruvbox-green", "w-full", "text-left", "mt-4");
 
         let organizationInput = document.createElement("input");
         organizationInput.name = "name";
         organizationInput.type = "text";
-        organizationInput.classList.add("p-4", "m-4");
+        organizationInput.classList.add("w-full", "p-4", "bg-gruvbox-black", "text-gruvbox-white");
         let organizationLabel = document.createElement("label");
-        organizationLabel.classList.add("text-gruvbox-green");
+        organizationLabel.classList.add("text-gruvbox-green", "w-full", "text-left", "mt-4");
         organizationLabel.innerText = "Organization";
 
         let firstNameInput = document.createElement("input");
         firstNameInput.name = "first_name";
         firstNameInput.type = "text";
-        firstNameInput.classList.add("p-4", "m-4");
+        firstNameInput.classList.add("w-full", "p-4", "bg-gruvbox-black", "text-gruvbox-white");
         let firstNameLabel = document.createElement("label");
         firstNameLabel.innerText = "First Name";
-        firstNameLabel.classList.add("text-gruvbox-green");
+        firstNameLabel.classList.add("text-gruvbox-green", "w-full", "text-left", "mt-4");
 
         let lastNameInput = document.createElement("input");
         lastNameInput.name = "last_name";
         lastNameInput.type = "text";
-        lastNameInput.classList.add("p-4", "m-4");
+        lastNameInput.classList.add("w-full", "p-4", "bg-gruvbox-black", "text-gruvbox-white");
         let lastNameLabel = document.createElement("label");
         lastNameLabel.innerText = "Last Name";
-        lastNameLabel.classList.add("text-gruvbox-green");
+        lastNameLabel.classList.add("text-gruvbox-green", "w-full", "text-left", "mt-4");
 
         let phoneInput = document.createElement("input");
         phoneInput.type = "tel";
-        phoneInput.classList.add("p-4", "m-4");
+        phoneInput.classList.add("w-full", "p-4", "bg-gruvbox-black", "text-gruvbox-white");
         //phoneInputpattern = "[0-9]{3}-[0-9]{3}-[0-9]{4}";
         let phoneLabel = document.createElement("label");
         phoneLabel.innerText = "Phone Number";
-        phoneLabel.classList.add("text-gruvbox-green");
+        phoneLabel.classList.add("text-gruvbox-green", "w-full", "text-left", "mt-4");
 
         let descriptionInput = document.createElement("textarea");
         descriptionInput.name = "description";
-        descriptionInput.classList.add("p-4", "m-4");
+        descriptionInput.classList.add("w-full", "p-4", "bg-gruvbox-black", "text-gruvbox-white");
+        descriptionInput.style.minHeight = "8rem";
         let descriptionLabel = document.createElement("label");
         descriptionLabel.innerText = "Description";
-        descriptionLabel.classList.add("text-gruvbox-green");
+        descriptionLabel.classList.add("text-gruvbox-green", "w-full", "text-left", "mt-4");
 
         Playground.playground.classList.remove("touch-action-none");
 
-        Playground.playground.appendChild(formWrap);
-        formWrap.appendChild(closeForm);
+        Playground.hireOverlay = overlay;
+        document.body.appendChild(overlay);
+        modal.setAttribute("aria-labelledby", formTitle.id);
+        const handleKeydown = (event) => {
+            if (event.key === "Escape") {
+                event.preventDefault();
+                Playground.closeHireForm();
+            }
+        };
+        Playground.hireKeyListener = handleKeydown;
+        document.addEventListener("keydown", handleKeydown);
+        if (Playground.playground) {
+            Playground.playground.dataset.hireModalShown = "true";
+        }
+        if (typeof window !== "undefined") {
+            window.requestAnimationFrame(() => {
+                closeFormButton.focus();
+            });
+        }
         formWrap.appendChild(hireMeForm);
 
+        hireMeForm.appendChild(formTitle);
         hireMeForm.appendChild(formInfo);
         hireMeForm.appendChild(organizationLabel);
         hireMeForm.appendChild(organizationInput);
@@ -1169,6 +1226,25 @@ const Playground = {
                     formWrap.appendChild(formInfo);
                 });
         };
+    },
+
+    closeHireForm: () => {
+        if (typeof document !== "undefined" && document.body) {
+            document.body.classList.remove("hire-modal-open");
+        }
+
+        if (Playground.hireOverlay) {
+            Playground.hireOverlay.remove();
+            Playground.hireOverlay = null;
+        }
+
+        if (Playground.hireKeyListener) {
+            document.removeEventListener("keydown", Playground.hireKeyListener);
+            Playground.hireKeyListener = null;
+        }
+
+        Playground.formWrap = null;
+        Playground.attachResizeListener();
     },
 };
 
