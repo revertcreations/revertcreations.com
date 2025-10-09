@@ -1003,6 +1003,9 @@ select {
 .grow {
   flex-grow: 1;
 }
+.\!transform {
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
+}
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -2357,6 +2360,21 @@ interactive-element .interactive-char,
     text-align: center;
     transition: color 120ms ease, transform 160ms ease, font-family 160ms ease;
     transform-origin: center bottom;
+}
+
+#lead.magnet-active {
+    position: relative;
+}
+
+.magnet-letter {
+    font-weight: inherit;
+    line-height: 1;
+    pointer-events: all;
+    filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.35));
+}
+
+.magnet-letter:active {
+    cursor: grabbing;
 }
 
 .file\:mr-4::file-selector-button {

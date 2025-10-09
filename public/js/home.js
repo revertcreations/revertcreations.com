@@ -817,6 +817,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   InteractiveElement: () => (/* binding */ InteractiveElement)
 /* harmony export */ });
+/* harmony import */ var _magnetLetters_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../magnetLetters.js */ "./resources/js/magnetLetters.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
@@ -841,6 +842,7 @@ function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { 
 function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
 function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
 function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+
 var _cycleInterval = /*#__PURE__*/new WeakMap();
 var _characters = /*#__PURE__*/new WeakMap();
 var _baseSpan = /*#__PURE__*/new WeakMap();
@@ -925,6 +927,36 @@ var InteractiveElement = /*#__PURE__*/function (_HTMLElement) {
         _char.style.transform = "";
       });
     });
+    _defineProperty(_assertThisInitialized(_this), "handleDoubleClick", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      _this.toggleMagnetMode();
+    });
+    _defineProperty(_assertThisInitialized(_this), "handleDoubleTap", function (event) {
+      var _event$touches;
+      if (!event || !event.changedTouches || (_event$touches = event.touches) !== null && _event$touches !== void 0 && _event$touches.length) return;
+      var touch = event.changedTouches[0];
+      var timestamp = event.timeStamp;
+      if (!_this.lastTouchTimestamp) {
+        _this.lastTouchTimestamp = timestamp;
+        _this.lastTouchX = touch.clientX;
+        _this.lastTouchY = touch.clientY;
+        return;
+      }
+      var deltaTime = timestamp - _this.lastTouchTimestamp;
+      var deltaX = Math.abs(touch.clientX - _this.lastTouchX);
+      var deltaY = Math.abs(touch.clientY - _this.lastTouchY);
+      if (deltaTime < 300 && deltaX < 30 && deltaY < 30) {
+        event.preventDefault();
+        event.stopPropagation();
+        _this.toggleMagnetMode();
+        _this.lastTouchTimestamp = null;
+        return;
+      }
+      _this.lastTouchTimestamp = timestamp;
+      _this.lastTouchX = touch.clientX;
+      _this.lastTouchY = touch.clientY;
+    });
     return _this;
   }
   _createClass(InteractiveElement, [{
@@ -934,6 +966,7 @@ var InteractiveElement = /*#__PURE__*/function (_HTMLElement) {
       this.classList.add("interactive-element");
       this.setAttribute("tabindex", (_this$getAttribute = this.getAttribute("tabindex")) !== null && _this$getAttribute !== void 0 ? _this$getAttribute : "0");
       _classPrivateFieldSet(this, _originalText, ((_this$textContent = this.textContent) !== null && _this$textContent !== void 0 ? _this$textContent : "").trim());
+      this.dataset.original = _classPrivateFieldGet(this, _originalText);
       this.prepareCharacters();
       this.addEventListener("pointerenter", this.startCycle);
       this.addEventListener("pointerleave", this.stopCycle);
@@ -942,6 +975,10 @@ var InteractiveElement = /*#__PURE__*/function (_HTMLElement) {
       this.addEventListener("pointercancel", this.stopCycle);
       this.addEventListener("focus", this.startCycle);
       this.addEventListener("blur", this.stopCycle);
+      this.addEventListener("dblclick", this.handleDoubleClick);
+      this.addEventListener("touchend", this.handleDoubleTap, {
+        passive: true
+      });
       this.observeResize();
     }
   }, {
@@ -955,6 +992,8 @@ var InteractiveElement = /*#__PURE__*/function (_HTMLElement) {
       this.removeEventListener("pointercancel", this.stopCycle);
       this.removeEventListener("focus", this.startCycle);
       this.removeEventListener("blur", this.stopCycle);
+      this.removeEventListener("dblclick", this.handleDoubleClick);
+      this.removeEventListener("touchend", this.handleDoubleTap);
       this.disconnectResizeObserver();
     }
   }, {
@@ -1093,6 +1132,16 @@ var InteractiveElement = /*#__PURE__*/function (_HTMLElement) {
         _classPrivateFieldGet(_this5, _overlay).appendChild(span);
         _classPrivateFieldGet(_this5, _characters).push(span);
       });
+    }
+  }, {
+    key: "toggleMagnetMode",
+    value: function toggleMagnetMode() {
+      this.stopCycle();
+      if (_magnetLetters_js__WEBPACK_IMPORTED_MODULE_0__.MagnetLetters.isActive()) {
+        _magnetLetters_js__WEBPACK_IMPORTED_MODULE_0__.MagnetLetters.deactivate();
+        return;
+      }
+      _magnetLetters_js__WEBPACK_IMPORTED_MODULE_0__.MagnetLetters.activate();
     }
   }]);
   return InteractiveElement;
@@ -1599,6 +1648,510 @@ __webpack_require__.r(__webpack_exports__);
 // document.addEventListener("visibilitychange", () => {
 //     console.log(document.visibilityState);
 // });
+
+/***/ }),
+
+/***/ "./resources/js/magnetLetters.js":
+/*!***************************************!*\
+  !*** ./resources/js/magnetLetters.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   MagnetLetters: () => (/* binding */ MagnetLetters)
+/* harmony export */ });
+var palette = ["#fb3934",
+// gruvbox-light-red
+"#cc241d",
+// gruvbox-red
+"#d79921",
+// gruvbox-light-yellow
+"#fabd2f",
+// gruvbox-yellow
+"#d65d0e",
+// gruvbox-light-orange
+"#fe8019",
+// gruvbox-orange
+"#458588",
+// gruvbox-light-blue
+"#83a598",
+// gruvbox-blue
+"#689d6a",
+// gruvbox-light-aqua
+"#8ec07c",
+// gruvbox-aqua
+"#98971a",
+// gruvbox-light-green
+"#b8bb26",
+// gruvbox-green
+"#d3869b",
+// gruvbox-light-purple
+"#b16286",
+// gruvbox-purple
+"#fbf1c7" // gruvbox-white
+];
+var LETTER_CLASS = "magnet-letter";
+var ACTIVE_CLASS = "magnet-active";
+var RESET_WORD = "reset";
+var LETTER_HORIZONTAL_TOLERANCE = 35;
+var LETTER_VERTICAL_TOLERANCE = 20;
+var OVERLAP_TOLERANCE = 5;
+var DRAG_STATE = new WeakMap();
+var originalMarkup = null;
+var leadContainer = null;
+var pointerMoveListener = null;
+var pointerUpListener = null;
+var animationFrame = null;
+var resizeObserver = null;
+var lastPointerEvent = null;
+var activeLetter = null;
+var resetFrame = null;
+var randomFromPalette = function randomFromPalette() {
+  return palette[Math.floor(Math.random() * palette.length)];
+};
+var parseTranslate = function parseTranslate(element) {
+  var transform = element.style.transform;
+  if (!transform || transform === "none") return {
+    x: 0,
+    y: 0
+  };
+  var match = transform.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px/);
+  if (!match) return {
+    x: 0,
+    y: 0
+  };
+  return {
+    x: parseFloat(match[1]) || 0,
+    y: parseFloat(match[2]) || 0
+  };
+};
+var createLetterSpan = function createLetterSpan(_char, rect, containerRect, computedStyle) {
+  var span = document.createElement("span");
+  span.classList.add(LETTER_CLASS);
+  span.textContent = _char === "\n" ? "" : _char;
+  span.dataset["char"] = _char;
+  span.style.position = "absolute";
+  span.style.left = "".concat(rect.left - containerRect.left, "px");
+  span.style.top = "".concat(rect.top - containerRect.top, "px");
+  span.style.width = "".concat(rect.width, "px");
+  span.style.height = "".concat(rect.height, "px");
+  span.style.display = "flex";
+  span.style.alignItems = "center";
+  span.style.justifyContent = "center";
+  span.style.userSelect = "none";
+  span.style.touchAction = "none";
+  span.style.cursor = "grab";
+  if (computedStyle.font && computedStyle.font !== "inherit") {
+    span.style.font = computedStyle.font;
+  } else {
+    span.style.fontFamily = computedStyle.fontFamily;
+    span.style.fontSize = computedStyle.fontSize;
+    span.style.fontWeight = computedStyle.fontWeight;
+  }
+  span.style.lineHeight = computedStyle.lineHeight === "normal" ? computedStyle.fontSize : computedStyle.lineHeight;
+  span.style.letterSpacing = computedStyle.letterSpacing;
+  span.style.color = randomFromPalette();
+  span.style.textTransform = "none";
+  span.style.transform = "translate3d(0px, 0px, 0)";
+  span.style.transition = "color 120ms ease";
+  return span;
+};
+var letterizeNode = function letterizeNode(node, containerRect, fragments, computedStyle) {
+  if (node.nodeType === Node.TEXT_NODE) {
+    var _node$textContent;
+    var text = (_node$textContent = node.textContent) !== null && _node$textContent !== void 0 ? _node$textContent : "";
+    var range = document.createRange();
+    for (var i = 0; i < text.length; i++) {
+      var _char2 = text[i];
+      if (_char2.trim() === "" && _char2 !== " ") {
+        continue;
+      }
+      range.setStart(node, i);
+      range.setEnd(node, i + 1);
+      var rects = range.getClientRects();
+      if (!rects.length) continue;
+      var rect = rects[0];
+      var letterSpan = createLetterSpan(_char2, rect, containerRect, computedStyle);
+      fragments.push(letterSpan);
+    }
+    range.detach();
+  } else if (node.nodeType === Node.ELEMENT_NODE) {
+    var element = node;
+    if (element.classList.contains(LETTER_CLASS)) {
+      return;
+    }
+    var style = window.getComputedStyle(element);
+    if (style.display === "none" || style.visibility === "hidden") return;
+    Array.from(node.childNodes).forEach(function (child) {
+      return letterizeNode(child, containerRect, fragments, style);
+    });
+  }
+};
+var buildLetters = function buildLetters() {
+  if (!leadContainer) return;
+  var containerRect = leadContainer.getBoundingClientRect();
+  var computedStyle = window.getComputedStyle(leadContainer);
+  var fragments = [];
+  Array.from(leadContainer.childNodes).forEach(function (child) {
+    return letterizeNode(child, containerRect, fragments, computedStyle);
+  });
+  leadContainer.innerHTML = "";
+  fragments.forEach(function (fragment) {
+    return leadContainer.appendChild(fragment);
+  });
+};
+var flattenInteractiveElements = function flattenInteractiveElements(container) {
+  var interactiveNodes = container.querySelectorAll("interactive-element");
+  interactiveNodes.forEach(function (node) {
+    var _node$dataset;
+    var text = ((_node$dataset = node.dataset) === null || _node$dataset === void 0 ? void 0 : _node$dataset.original) || node.textContent || "";
+    var span = document.createElement("span");
+    span.textContent = text;
+    if (node.className) span.className = node.className;
+    if (node.hasAttribute("style")) span.setAttribute("style", node.getAttribute("style"));
+    node.replaceWith(span);
+  });
+};
+var onPointerMove = function onPointerMove(event) {
+  if (!activeLetter) return;
+  lastPointerEvent = event;
+  if (animationFrame) return;
+  animationFrame = window.requestAnimationFrame(function () {
+    var _ref, _lastPointerEvent$cli, _lastPointerEvent$tou, _ref2, _lastPointerEvent$cli2, _lastPointerEvent$tou2;
+    animationFrame = null;
+    if (!activeLetter || !lastPointerEvent) return;
+    var state = DRAG_STATE.get(activeLetter);
+    if (!state) return;
+    var pointerX = (_ref = (_lastPointerEvent$cli = lastPointerEvent.clientX) !== null && _lastPointerEvent$cli !== void 0 ? _lastPointerEvent$cli : (_lastPointerEvent$tou = lastPointerEvent.touches) === null || _lastPointerEvent$tou === void 0 || (_lastPointerEvent$tou = _lastPointerEvent$tou[0]) === null || _lastPointerEvent$tou === void 0 ? void 0 : _lastPointerEvent$tou.clientX) !== null && _ref !== void 0 ? _ref : 0;
+    var pointerY = (_ref2 = (_lastPointerEvent$cli2 = lastPointerEvent.clientY) !== null && _lastPointerEvent$cli2 !== void 0 ? _lastPointerEvent$cli2 : (_lastPointerEvent$tou2 = lastPointerEvent.touches) === null || _lastPointerEvent$tou2 === void 0 || (_lastPointerEvent$tou2 = _lastPointerEvent$tou2[0]) === null || _lastPointerEvent$tou2 === void 0 ? void 0 : _lastPointerEvent$tou2.clientY) !== null && _ref2 !== void 0 ? _ref2 : 0;
+    var deltaX = pointerX - state.startX;
+    var deltaY = pointerY - state.startY;
+    var x = state.initialX + deltaX;
+    var y = state.initialY + deltaY;
+    activeLetter.style.transform = "translate3d(".concat(x, "px, ").concat(y, "px, 0)");
+  });
+};
+var endDrag = function endDrag() {
+  if (!activeLetter) return;
+  var finishedLetter = activeLetter;
+  finishedLetter.style.cursor = "grab";
+  finishedLetter.style.zIndex = "1";
+  var state = DRAG_STATE.get(finishedLetter);
+  if ((state === null || state === void 0 ? void 0 : state.pointerId) !== undefined && activeLetter.releasePointerCapture) {
+    try {
+      finishedLetter.releasePointerCapture(state.pointerId);
+    } catch (_error) {
+      /* ignore */
+    }
+  }
+  evaluateLetterDrop(finishedLetter);
+  activeLetter = null;
+  lastPointerEvent = null;
+};
+var onPointerDown = function onPointerDown(event) {
+  var _ref3, _event$clientX, _event$touches, _ref4, _event$clientY, _event$touches2;
+  var target = event.currentTarget;
+  activeLetter = target;
+  var rect = target.getBoundingClientRect();
+  var pointerX = (_ref3 = (_event$clientX = event.clientX) !== null && _event$clientX !== void 0 ? _event$clientX : (_event$touches = event.touches) === null || _event$touches === void 0 || (_event$touches = _event$touches[0]) === null || _event$touches === void 0 ? void 0 : _event$touches.clientX) !== null && _ref3 !== void 0 ? _ref3 : 0;
+  var pointerY = (_ref4 = (_event$clientY = event.clientY) !== null && _event$clientY !== void 0 ? _event$clientY : (_event$touches2 = event.touches) === null || _event$touches2 === void 0 || (_event$touches2 = _event$touches2[0]) === null || _event$touches2 === void 0 ? void 0 : _event$touches2.clientY) !== null && _ref4 !== void 0 ? _ref4 : 0;
+  var currentTranslate = parseTranslate(target);
+  DRAG_STATE.set(target, {
+    startX: pointerX,
+    startY: pointerY,
+    initialX: currentTranslate.x,
+    initialY: currentTranslate.y,
+    pointerId: event.pointerId
+  });
+  if (target.setPointerCapture && event.pointerId !== undefined) {
+    try {
+      target.setPointerCapture(event.pointerId);
+    } catch (_error) {
+      /* ignore */
+    }
+  }
+  target.style.cursor = "grabbing";
+  target.style.zIndex = "10";
+};
+var activateLetters = function activateLetters() {
+  var letters = leadContainer.querySelectorAll(".".concat(LETTER_CLASS));
+  letters.forEach(function (letter) {
+    letter.addEventListener("pointerdown", onPointerDown, {
+      passive: true
+    });
+    letter.addEventListener("pointerup", endDrag, {
+      passive: true
+    });
+    letter.addEventListener("pointercancel", endDrag, {
+      passive: true
+    });
+  });
+  pointerMoveListener = onPointerMove;
+  pointerUpListener = endDrag;
+  window.addEventListener("pointermove", pointerMoveListener, {
+    passive: true
+  });
+  window.addEventListener("pointerup", pointerUpListener, {
+    passive: true
+  });
+  window.addEventListener("pointercancel", pointerUpListener, {
+    passive: true
+  });
+  window.addEventListener("touchmove", pointerMoveListener, {
+    passive: true
+  });
+  window.addEventListener("touchend", pointerUpListener, {
+    passive: true
+  });
+  window.addEventListener("touchcancel", pointerUpListener, {
+    passive: true
+  });
+};
+var deactivateLetters = function deactivateLetters() {
+  var _pointerMoveListener, _pointerUpListener, _pointerUpListener2, _pointerMoveListener2, _pointerUpListener3, _pointerUpListener4;
+  window.removeEventListener("pointermove", (_pointerMoveListener = pointerMoveListener) !== null && _pointerMoveListener !== void 0 ? _pointerMoveListener : function () {});
+  window.removeEventListener("pointerup", (_pointerUpListener = pointerUpListener) !== null && _pointerUpListener !== void 0 ? _pointerUpListener : function () {});
+  window.removeEventListener("pointercancel", (_pointerUpListener2 = pointerUpListener) !== null && _pointerUpListener2 !== void 0 ? _pointerUpListener2 : function () {});
+  window.removeEventListener("touchmove", (_pointerMoveListener2 = pointerMoveListener) !== null && _pointerMoveListener2 !== void 0 ? _pointerMoveListener2 : function () {});
+  window.removeEventListener("touchend", (_pointerUpListener3 = pointerUpListener) !== null && _pointerUpListener3 !== void 0 ? _pointerUpListener3 : function () {});
+  window.removeEventListener("touchcancel", (_pointerUpListener4 = pointerUpListener) !== null && _pointerUpListener4 !== void 0 ? _pointerUpListener4 : function () {});
+  pointerMoveListener = null;
+  pointerUpListener = null;
+  activeLetter = null;
+};
+var restoreMarkup = function restoreMarkup() {
+  if (!leadContainer || originalMarkup === null) return;
+  deactivateLetters();
+  leadContainer.innerHTML = originalMarkup;
+  leadContainer.classList.remove(ACTIVE_CLASS);
+  leadContainer.style.height = "";
+  leadContainer.style.position = "";
+  leadContainer.style.userSelect = "";
+  originalMarkup = null;
+  stopResizeObserver();
+  stopResetPolling();
+  leadContainer = null;
+};
+var calculateLetterPositions = function calculateLetterPositions() {
+  if (!leadContainer) return [];
+  return Array.from(leadContainer.querySelectorAll(".".concat(LETTER_CLASS))).map(function (letter) {
+    var _ref5, _letter$dataset$char;
+    var rect = letter.getBoundingClientRect();
+    return {
+      element: letter,
+      "char": (_ref5 = (_letter$dataset$char = letter.dataset["char"]) !== null && _letter$dataset$char !== void 0 ? _letter$dataset$char : letter.textContent) !== null && _ref5 !== void 0 ? _ref5 : "",
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height
+    };
+  });
+};
+var detectReset = function detectReset() {
+  if (!leadContainer) return false;
+  var letters = calculateLetterPositions();
+  var target = RESET_WORD.split("");
+  var matches = [];
+  letters.forEach(function (info) {
+    var _char3 = (info["char"] || "").toLowerCase();
+    if (target.includes(_char3) && _char3.trim() !== "") {
+      matches.push(info);
+    }
+  });
+  if (matches.length < RESET_WORD.length) return false;
+  matches.sort(function (a, b) {
+    return a.left - b.left;
+  });
+  for (var i = 0; i <= matches.length - RESET_WORD.length; i++) {
+    var slice = matches.slice(i, i + RESET_WORD.length);
+    var isSequence = true;
+    for (var j = 0; j < slice.length; j++) {
+      if ((slice[j]["char"] || "").toLowerCase() !== target[j]) {
+        isSequence = false;
+        break;
+      }
+      if (Math.abs(slice[j].top - slice[0].top) > LETTER_VERTICAL_TOLERANCE) {
+        isSequence = false;
+        break;
+      }
+      if (j > 0) {
+        var prev = slice[j - 1];
+        var prevRight = prev.left + prev.width;
+        var gap = slice[j].left - prevRight;
+        if (gap < 0 && Math.abs(gap) <= OVERLAP_TOLERANCE) gap = 0;
+        if (gap < 0 || gap > LETTER_HORIZONTAL_TOLERANCE) {
+          isSequence = false;
+          break;
+        }
+      }
+    }
+    if (isSequence) return true;
+  }
+  return false;
+};
+var frameResetCheck = function frameResetCheck() {
+  if (detectReset()) {
+    restoreMarkup();
+  }
+};
+var logLetterGroup = function logLetterGroup(group) {
+  var text = group.map(function (item) {
+    var _item$char;
+    return (_item$char = item["char"]) !== null && _item$char !== void 0 ? _item$char : "";
+  }).join("");
+  var compact = text.replace(/\s+/g, "");
+  var positions = group.map(function (item) {
+    return {
+      "char": item["char"],
+      left: Math.round(item.left),
+      top: Math.round(item.top),
+      width: Math.round(item.width)
+    };
+  });
+  // eslint-disable-next-line no-console
+  console.log("Magnet group:", compact || "(space)", positions);
+  return compact.toLowerCase();
+};
+var collectSortedLetters = function collectSortedLetters() {
+  var letters = calculateLetterPositions();
+  letters.sort(function (a, b) {
+    return a.left - b.left;
+  });
+  return letters;
+};
+var buildGroupAround = function buildGroupAround(letters, letterElement) {
+  var index = letters.findIndex(function (item) {
+    return item.element === letterElement;
+  });
+  if (index === -1) return [];
+  var anchor = letters[index];
+  var sameRow = letters.filter(function (letter) {
+    return Math.abs(letter.top - anchor.top) <= LETTER_VERTICAL_TOLERANCE;
+  }).sort(function (a, b) {
+    return a.left - b.left;
+  });
+  var rowIndex = sameRow.findIndex(function (item) {
+    return item.element === letterElement;
+  });
+  if (rowIndex === -1) return [anchor];
+  var group = [sameRow[rowIndex]];
+  var currentIndex = rowIndex;
+  for (var i = rowIndex - 1; i >= 0; i--) {
+    var candidate = sameRow[i];
+    var reference = sameRow[currentIndex];
+    var candidateRight = candidate.left + candidate.width;
+    var referenceLeft = reference.left;
+    var gap = referenceLeft - candidateRight;
+    if (gap < 0 && Math.abs(gap) <= OVERLAP_TOLERANCE) gap = 0;
+    if (gap < 0 || gap > LETTER_HORIZONTAL_TOLERANCE) break;
+    group.unshift(candidate);
+    currentIndex = i;
+  }
+  currentIndex = rowIndex;
+  for (var _i = rowIndex + 1; _i < sameRow.length; _i++) {
+    var _candidate = sameRow[_i];
+    var _reference = sameRow[currentIndex];
+    var referenceRight = _reference.left + _reference.width;
+    var _gap = _candidate.left - referenceRight;
+    if (_gap < 0 && Math.abs(_gap) <= OVERLAP_TOLERANCE) _gap = 0;
+    if (_gap < 0 || _gap > LETTER_HORIZONTAL_TOLERANCE) break;
+    group.push(_candidate);
+    currentIndex = _i;
+  }
+  return group;
+};
+var evaluateLetterDrop = function evaluateLetterDrop(letterElement) {
+  if (!leadContainer || !letterElement) return;
+  var letters = collectSortedLetters();
+  var group = buildGroupAround(letters, letterElement);
+  var targetLower = RESET_WORD.toLowerCase();
+  if (!group.length) {
+    frameResetCheck();
+    return;
+  }
+  var normalized = logLetterGroup(group);
+  if (normalized.includes(targetLower)) {
+    restoreMarkup();
+  } else {
+    frameResetCheck();
+  }
+};
+var startResetPolling = function startResetPolling() {
+  if (resetFrame !== null) return;
+  var poll = function poll() {
+    resetFrame = null;
+    if (!leadContainer || !leadContainer.classList.contains(ACTIVE_CLASS)) return;
+    frameResetCheck();
+    resetFrame = window.requestAnimationFrame(poll);
+  };
+  resetFrame = window.requestAnimationFrame(poll);
+};
+var stopResetPolling = function stopResetPolling() {
+  if (resetFrame !== null) {
+    window.cancelAnimationFrame(resetFrame);
+    resetFrame = null;
+  }
+};
+var stopResizeObserver = function stopResizeObserver() {
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
+  }
+};
+var initResizeObserver = function initResizeObserver() {
+  if (resizeObserver || !window.ResizeObserver) return;
+  resizeObserver = new ResizeObserver(function (entries) {
+    var entry = entries[0];
+    if (!entry || !leadContainer) return;
+    var node = entry.target;
+    var letters = Array.from(node.querySelectorAll(".".concat(LETTER_CLASS)));
+    if (!letters.length) return;
+    var containerRect = leadContainer.getBoundingClientRect();
+    letters.forEach(function (letter) {
+      var rect = letter.getBoundingClientRect();
+      var relativeLeft = rect.left - containerRect.left;
+      var relativeTop = rect.top - containerRect.top;
+      var translate = letter.style.transform.match(/translate3d\\((.+)\\)/);
+      var offsetX = 0;
+      var offsetY = 0;
+      if (translate && translate[1]) {
+        var parts = translate[1].split(",").map(function (value) {
+          return parseFloat(value) || 0;
+        });
+        offsetX = parts[0];
+        offsetY = parts[1];
+      }
+      letter.style.left = "".concat(relativeLeft, "px");
+      letter.style.top = "".concat(relativeTop, "px");
+      letter.style.transform = "translate3d(".concat(offsetX, "px, ").concat(offsetY, "px, 0)");
+    });
+  });
+  resizeObserver.observe(leadContainer);
+};
+var MagnetLetters = {
+  activate: function activate() {
+    if (originalMarkup !== null) return;
+    leadContainer = document.getElementById("lead");
+    if (!leadContainer) return;
+    var rect = leadContainer.getBoundingClientRect();
+    originalMarkup = leadContainer.innerHTML;
+    leadContainer.classList.add(ACTIVE_CLASS);
+    leadContainer.style.height = "".concat(rect.height, "px");
+    leadContainer.style.position = "relative";
+    leadContainer.style.userSelect = "none";
+    flattenInteractiveElements(leadContainer);
+    buildLetters();
+    activateLetters();
+    startResetPolling();
+    initResizeObserver();
+  },
+  deactivate: restoreMarkup,
+  isActive: function isActive() {
+    return originalMarkup !== null;
+  }
+};
 
 /***/ }),
 

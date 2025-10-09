@@ -1,3 +1,5 @@
+import { MagnetLetters } from "../magnetLetters.js";
+
 export class InteractiveElement extends HTMLElement {
     #cycleInterval = null;
     #characters = [];
@@ -52,6 +54,7 @@ export class InteractiveElement extends HTMLElement {
         this.classList.add("interactive-element");
         this.setAttribute("tabindex", this.getAttribute("tabindex") ?? "0");
         this.#originalText = (this.textContent ?? "").trim();
+        this.dataset.original = this.#originalText;
         this.prepareCharacters();
 
         this.addEventListener("pointerenter", this.startCycle);
@@ -61,6 +64,10 @@ export class InteractiveElement extends HTMLElement {
         this.addEventListener("pointercancel", this.stopCycle);
         this.addEventListener("focus", this.startCycle);
         this.addEventListener("blur", this.stopCycle);
+        this.addEventListener("dblclick", this.handleDoubleClick);
+        this.addEventListener("touchend", this.handleDoubleTap, {
+            passive: true,
+        });
         this.observeResize();
     }
 
@@ -73,6 +80,8 @@ export class InteractiveElement extends HTMLElement {
         this.removeEventListener("pointercancel", this.stopCycle);
         this.removeEventListener("focus", this.startCycle);
         this.removeEventListener("blur", this.stopCycle);
+        this.removeEventListener("dblclick", this.handleDoubleClick);
+        this.removeEventListener("touchend", this.handleDoubleTap);
         this.disconnectResizeObserver();
     }
 
@@ -254,6 +263,53 @@ export class InteractiveElement extends HTMLElement {
             this.#characters.push(span);
         });
     };
+
+    handleDoubleClick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.toggleMagnetMode();
+    };
+
+    handleDoubleTap = (event) => {
+        if (!event || !event.changedTouches || event.touches?.length) return;
+
+        const touch = event.changedTouches[0];
+        const timestamp = event.timeStamp;
+
+        if (!this.lastTouchTimestamp) {
+            this.lastTouchTimestamp = timestamp;
+            this.lastTouchX = touch.clientX;
+            this.lastTouchY = touch.clientY;
+            return;
+        }
+
+        const deltaTime = timestamp - this.lastTouchTimestamp;
+        const deltaX = Math.abs(touch.clientX - this.lastTouchX);
+        const deltaY = Math.abs(touch.clientY - this.lastTouchY);
+
+        if (deltaTime < 300 && deltaX < 30 && deltaY < 30) {
+            event.preventDefault();
+            event.stopPropagation();
+            this.toggleMagnetMode();
+            this.lastTouchTimestamp = null;
+            return;
+        }
+
+        this.lastTouchTimestamp = timestamp;
+        this.lastTouchX = touch.clientX;
+        this.lastTouchY = touch.clientY;
+    };
+
+    toggleMagnetMode() {
+        this.stopCycle();
+
+        if (MagnetLetters.isActive()) {
+            MagnetLetters.deactivate();
+            return;
+        }
+
+        MagnetLetters.activate();
+    }
 }
 
 customElements.define("interactive-element", InteractiveElement);
