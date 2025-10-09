@@ -7,6 +7,7 @@ use App\Models\JobSource;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class AdminJobController extends Controller
@@ -42,9 +43,13 @@ class AdminJobController extends Controller
                 });
             })
             ->when($filters['search'], function ($q) use ($filters) {
-                return $q->where(function ($inner) use ($filters) {
-                    $inner->where('title', 'like', '%'.$filters['search'].'%')
-                        ->orWhere('company', 'like', '%'.$filters['search'].'%');
+                $term = '%'.Str::lower($filters['search']).'%';
+                return $q->where(function ($inner) use ($term) {
+                    $inner->whereRaw('LOWER(title) LIKE ?', [$term])
+                        ->orWhereRaw('LOWER(company) LIKE ?', [$term])
+                        ->orWhereRaw('LOWER(summary) LIKE ?', [$term])
+                        ->orWhereRaw('LOWER(description) LIKE ?', [$term])
+                        ->orWhereRaw('LOWER(tags) LIKE ?', [$term]);
                 });
             })
             ->when(!is_null($filters['match']), function ($q) use ($filters) {
@@ -94,14 +99,25 @@ class AdminJobController extends Controller
     public function create(): View
     {
         $sources = JobSource::query()->orderBy('name')->pluck('name', 'id');
+        $drivers = [
+            'manual' => 'Manual entry',
+            'indeed' => 'Indeed',
+            'rss' => 'Generic RSS',
+        ];
 
-        return view('admin.jobs.create', compact('sources'));
+        return view('admin.jobs.create', compact('sources', 'drivers'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'job_source_id' => ['required', 'exists:job_sources,id'],
+            'job_source_id' => ['nullable', 'exists:job_sources,id', 'required_without:new_source_name'],
+            'new_source_name' => ['nullable', 'string', 'max:255', 'required_without:job_source_id'],
+            'new_source_slug' => ['nullable', 'string', 'max:255'],
+            'new_source_driver' => ['nullable', 'string', 'max:255'],
+            'new_source_base_url' => ['nullable', 'url', 'max:2048'],
+            'new_source_frequency' => ['nullable', 'integer', 'min:5', 'max:10080'],
+            'new_source_enabled' => ['nullable', 'boolean'],
             'title' => ['required', 'string', 'max:255'],
             'company' => ['nullable', 'string', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
@@ -127,6 +143,33 @@ class AdminJobController extends Controller
             ])],
         ]);
 
+        $jobSourceId = $validated['job_source_id'] ?? null;
+
+        if (!$jobSourceId) {
+            $slug = Str::slug($validated['new_source_slug'] ?? $validated['new_source_name']);
+            $baseSlug = $slug ?: Str::slug($validated['new_source_name']);
+            $counter = 1;
+            while (JobSource::where('slug', $slug)->exists()) {
+                $slug = Str::slug($baseSlug.'-'.$counter);
+                $counter++;
+            }
+
+            $jobSource = JobSource::create([
+                'name' => $validated['new_source_name'],
+                'slug' => $slug,
+                'driver' => $validated['new_source_driver'] ?? 'manual',
+                'base_url' => $validated['new_source_base_url'] ?? null,
+                'enabled' => $request->boolean('new_source_enabled', false),
+                'frequency_minutes' => $validated['new_source_frequency'] ?? 1440,
+                'filters' => null,
+                'meta' => [
+                    'created_via' => 'admin_manual_job',
+                ],
+            ]);
+
+            $jobSourceId = $jobSource->id;
+        }
+
         $tags = collect(explode(',', (string) ($validated['tags'] ?? '')))
             ->map(fn ($tag) => trim($tag))
             ->filter()
@@ -134,7 +177,7 @@ class AdminJobController extends Controller
             ->all();
 
         JobListing::create([
-            'job_source_id' => $validated['job_source_id'],
+            'job_source_id' => $jobSourceId,
             'external_id' => md5($validated['source_url']),
             'title' => $validated['title'],
             'company' => $validated['company'] ?? null,
@@ -220,6 +263,12 @@ class AdminJobController extends Controller
             'notes' => ['nullable', 'string'],
             'applied_at' => ['nullable', 'date'],
             'is_archived' => ['nullable', 'boolean'],
+            'new_source_name' => ['nullable', 'string', 'max:255'],
+            'new_source_slug' => ['nullable', 'string', 'max:255'],
+            'new_source_driver' => ['nullable', 'string', 'max:255'],
+            'new_source_base_url' => ['nullable', 'url', 'max:2048'],
+            'new_source_frequency' => ['nullable', 'integer', 'min:5', 'max:10080'],
+            'new_source_enabled' => ['nullable', 'boolean'],
         ]);
 
         if (isset($validated['tags'])) {
@@ -249,6 +298,40 @@ class AdminJobController extends Controller
                 ? Carbon::parse($validated['posted_at'])
                 : null;
         }
+
+        if (empty($validated['job_source_id']) && !empty($validated['new_source_name'])) {
+            $slug = Str::slug($validated['new_source_slug'] ?? $validated['new_source_name']);
+            $baseSlug = $slug ?: Str::slug($validated['new_source_name']);
+            $counter = 1;
+            while (JobSource::where('slug', $slug)->exists()) {
+                $slug = Str::slug($baseSlug.'-'.$counter);
+                $counter++;
+            }
+
+            $jobSource = JobSource::create([
+                'name' => $validated['new_source_name'],
+                'slug' => $slug,
+                'driver' => $validated['new_source_driver'] ?? 'manual',
+                'base_url' => $validated['new_source_base_url'] ?? null,
+                'enabled' => $request->boolean('new_source_enabled', false),
+                'frequency_minutes' => $validated['new_source_frequency'] ?? 1440,
+                'filters' => null,
+                'meta' => [
+                    'created_via' => 'admin_manual_job_update',
+                ],
+            ]);
+
+            $validated['job_source_id'] = $jobSource->id;
+        }
+
+        unset(
+            $validated['new_source_name'],
+            $validated['new_source_slug'],
+            $validated['new_source_driver'],
+            $validated['new_source_base_url'],
+            $validated['new_source_frequency'],
+            $validated['new_source_enabled']
+        );
 
         $job->fill($validated);
         $job->save();
