@@ -24,6 +24,7 @@ Route::domain('admin.'.$domain)->group(function () {
 
     Route::resource('client', ClientController::class)->middleware('auth');
     Route::resource('skills', SkillsController::class)->middleware('auth');
+    Route::post('posts/upload-image', [AdminPostController::class, 'uploadImage'])->middleware('auth')->name('posts.upload-image');
     Route::resource('posts', AdminPostController::class)->middleware('auth');
     Route::resource('jobs', AdminJobController::class)->middleware('auth');
 });
