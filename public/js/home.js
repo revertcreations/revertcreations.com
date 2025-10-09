@@ -806,6 +806,301 @@ customElements.define("hint-element", HintElement);
 
 /***/ }),
 
+/***/ "./resources/js/components/InteractiveElement.js":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/InteractiveElement.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   InteractiveElement: () => (/* binding */ InteractiveElement)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (Class === null || !_isNativeFunction(Class)) return Class; if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); } Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, Class); }; return _wrapNativeSuper(Class); }
+function _construct(t, e, r) { if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments); var o = [null]; o.push.apply(o, e); var p = new (t.bind.apply(t, o))(); return r && _setPrototypeOf(p, r.prototype), p; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _isNativeFunction(fn) { try { return Function.toString.call(fn).indexOf("[native code]") !== -1; } catch (e) { return typeof fn === "function"; } }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+function _classPrivateFieldSet(receiver, privateMap, value) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "set"); _classApplyDescriptorSet(receiver, descriptor, value); return value; }
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+function _classApplyDescriptorSet(receiver, descriptor, value) { if (descriptor.set) { descriptor.set.call(receiver, value); } else { if (!descriptor.writable) { throw new TypeError("attempted to set read only private field"); } descriptor.value = value; } }
+var _cycleInterval = /*#__PURE__*/new WeakMap();
+var _characters = /*#__PURE__*/new WeakMap();
+var _baseSpan = /*#__PURE__*/new WeakMap();
+var _overlay = /*#__PURE__*/new WeakMap();
+var _tick = /*#__PURE__*/new WeakMap();
+var _originalText = /*#__PURE__*/new WeakMap();
+var _resizeObserver = /*#__PURE__*/new WeakMap();
+var _resizeRAF = /*#__PURE__*/new WeakMap();
+var _fontFamilies = /*#__PURE__*/new WeakMap();
+var _palette = /*#__PURE__*/new WeakMap();
+var InteractiveElement = /*#__PURE__*/function (_HTMLElement) {
+  _inherits(InteractiveElement, _HTMLElement);
+  function InteractiveElement() {
+    var _this;
+    _classCallCheck(this, InteractiveElement);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    _this = _callSuper(this, InteractiveElement, [].concat(args));
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _cycleInterval, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _characters, {
+      writable: true,
+      value: []
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _baseSpan, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _overlay, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _tick, {
+      writable: true,
+      value: 0
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _originalText, {
+      writable: true,
+      value: ""
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _resizeObserver, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _resizeRAF, {
+      writable: true,
+      value: null
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _fontFamilies, {
+      writable: true,
+      value: ['"Trebuchet MS", sans-serif', '"Courier New", monospace', '"Georgia", serif', '"Lucida Console", monospace', '"Times New Roman", serif', '"Gill Sans", sans-serif', '"Andale Mono", monospace', '"Palatino Linotype", serif', '"Comic Sans MS", cursive']
+    });
+    _classPrivateFieldInitSpec(_assertThisInitialized(_this), _palette, {
+      writable: true,
+      value: ["#2a2727", "#c1bfbe", "#f0d43a", "#c1e718", "#22b2da", "#fb3934", "#cc241d", "#d79921", "#fabd2f", "#d65d0e", "#fe8019", "#458588", "#83a598", "#689d6a", "#8ec07c", "#a89984", "#98971a", "#b8bb26", "#d3869b", "#b16286", "#282828", "#32302f", "#fbf1c7", "#b9cc33", "#f13a44"]
+    });
+    _defineProperty(_assertThisInitialized(_this), "startCycle", function () {
+      var _window$matchMedia, _window;
+      if (_classPrivateFieldGet(_assertThisInitialized(_this), _cycleInterval)) return;
+      _this.prepareCharacters();
+      _this.classList.add("interactive-cycling");
+      _classPrivateFieldSet(_assertThisInitialized(_this), _tick, 0);
+      _this.tickCharacters();
+      var prefersReducedMotion = (_window$matchMedia = (_window = window).matchMedia) === null || _window$matchMedia === void 0 || (_window$matchMedia = _window$matchMedia.call(_window, "(prefers-reduced-motion: reduce)")) === null || _window$matchMedia === void 0 ? void 0 : _window$matchMedia.matches;
+      if (prefersReducedMotion) return;
+      _classPrivateFieldSet(_assertThisInitialized(_this), _cycleInterval, window.setInterval(function () {
+        _this.tickCharacters();
+      }, 170));
+    });
+    _defineProperty(_assertThisInitialized(_this), "stopCycle", function () {
+      if (_classPrivateFieldGet(_assertThisInitialized(_this), _cycleInterval)) {
+        window.clearInterval(_classPrivateFieldGet(_assertThisInitialized(_this), _cycleInterval));
+        _classPrivateFieldSet(_assertThisInitialized(_this), _cycleInterval, null);
+      }
+      _this.classList.remove("interactive-cycling");
+      _classPrivateFieldGet(_assertThisInitialized(_this), _characters).forEach(function (_char) {
+        _char.style.color = "";
+        _char.style.fontFamily = "";
+        _char.style.transform = "";
+      });
+    });
+    return _this;
+  }
+  _createClass(InteractiveElement, [{
+    key: "connectedCallback",
+    value: function connectedCallback() {
+      var _this$getAttribute, _this$textContent;
+      this.classList.add("interactive-element");
+      this.setAttribute("tabindex", (_this$getAttribute = this.getAttribute("tabindex")) !== null && _this$getAttribute !== void 0 ? _this$getAttribute : "0");
+      _classPrivateFieldSet(this, _originalText, ((_this$textContent = this.textContent) !== null && _this$textContent !== void 0 ? _this$textContent : "").trim());
+      this.prepareCharacters();
+      this.addEventListener("pointerenter", this.startCycle);
+      this.addEventListener("pointerleave", this.stopCycle);
+      this.addEventListener("pointerdown", this.startCycle);
+      this.addEventListener("pointerup", this.stopCycle);
+      this.addEventListener("pointercancel", this.stopCycle);
+      this.addEventListener("focus", this.startCycle);
+      this.addEventListener("blur", this.stopCycle);
+      this.observeResize();
+    }
+  }, {
+    key: "disconnectedCallback",
+    value: function disconnectedCallback() {
+      this.stopCycle();
+      this.removeEventListener("pointerenter", this.startCycle);
+      this.removeEventListener("pointerleave", this.stopCycle);
+      this.removeEventListener("pointerdown", this.startCycle);
+      this.removeEventListener("pointerup", this.stopCycle);
+      this.removeEventListener("pointercancel", this.stopCycle);
+      this.removeEventListener("focus", this.startCycle);
+      this.removeEventListener("blur", this.stopCycle);
+      this.disconnectResizeObserver();
+    }
+  }, {
+    key: "prepareCharacters",
+    value: function prepareCharacters() {
+      var _this2 = this;
+      if (_classPrivateFieldGet(this, _characters).length) return;
+      var text = _classPrivateFieldGet(this, _originalText);
+      if (!text.length) return;
+      if (!_classPrivateFieldGet(this, _baseSpan)) {
+        this.innerHTML = "";
+        this.style.position = "relative";
+        this.style.display = "inline-block";
+        this.style.verticalAlign = "baseline";
+        _classPrivateFieldSet(this, _baseSpan, document.createElement("span"));
+        _classPrivateFieldGet(this, _baseSpan).classList.add("interactive-base");
+        this.appendChild(_classPrivateFieldGet(this, _baseSpan));
+        _classPrivateFieldSet(this, _overlay, document.createElement("span"));
+        _classPrivateFieldGet(this, _overlay).classList.add("interactive-overlay");
+        this.appendChild(_classPrivateFieldGet(this, _overlay));
+      }
+      _classPrivateFieldGet(this, _baseSpan).textContent = text;
+      _classPrivateFieldGet(this, _overlay).innerHTML = "";
+      var measurements = this.measureCharacters(text);
+      this.style.setProperty("--interactive-base-width", "".concat(measurements.totalWidth, "px"));
+      this.style.setProperty("--interactive-base-height", "".concat(measurements.height, "px"));
+      this.style.setProperty("--interactive-line-height", "".concat(measurements.height, "px"));
+      _classPrivateFieldSet(this, _characters, []);
+      text.split("").forEach(function (_char2, index) {
+        var _measurements$widths$;
+        var span = document.createElement("span");
+        span.classList.add("interactive-char");
+        span.dataset.colorIndex = "".concat(index % _classPrivateFieldGet(_this2, _palette).length);
+        span.dataset.fontIndex = "".concat(index % _classPrivateFieldGet(_this2, _fontFamilies).length);
+        span.textContent = _char2 === " " ? "\xA0" : _char2;
+        var width = (_measurements$widths$ = measurements.widths[index]) !== null && _measurements$widths$ !== void 0 ? _measurements$widths$ : measurements.averageWidth;
+        span.style.width = "".concat(width, "px");
+        span.style.minWidth = "".concat(width, "px");
+        _classPrivateFieldGet(_this2, _overlay).appendChild(span);
+        _classPrivateFieldGet(_this2, _characters).push(span);
+      });
+    }
+  }, {
+    key: "measureCharacters",
+    value: function measureCharacters(text) {
+      var charCount = Math.max(text.length, 1);
+      var rect = _classPrivateFieldGet(this, _baseSpan).getBoundingClientRect();
+      var totalWidth = rect.width || 0;
+      var height = rect.height || parseFloat(getComputedStyle(this).lineHeight) || parseFloat(getComputedStyle(this).fontSize) || 0;
+      var averageWidth = charCount > 0 ? totalWidth / charCount : totalWidth;
+      var widths = new Array(charCount).fill(averageWidth);
+      var node = _classPrivateFieldGet(this, _baseSpan).firstChild;
+      if (node && node.nodeType === Node.TEXT_NODE) {
+        var range = document.createRange();
+        for (var i = 0; i < charCount; i++) {
+          range.setStart(node, i);
+          range.setEnd(node, i + 1);
+          var glyphRect = range.getBoundingClientRect();
+          widths[i] = glyphRect.width || averageWidth;
+        }
+        range.detach();
+      }
+      return {
+        totalWidth: totalWidth,
+        height: height,
+        averageWidth: averageWidth,
+        widths: widths
+      };
+    }
+  }, {
+    key: "tickCharacters",
+    value: function tickCharacters() {
+      var _this3 = this;
+      _classPrivateFieldSet(this, _tick, _classPrivateFieldGet(this, _tick) + 1);
+      var wobbleSeed = _classPrivateFieldGet(this, _tick) % 7;
+      _classPrivateFieldGet(this, _characters).forEach(function (_char3, index) {
+        var colorIndex = (parseInt(_char3.dataset.colorIndex || "0", 10) + 1) % _classPrivateFieldGet(_this3, _palette).length;
+        var fontIndex = (parseInt(_char3.dataset.fontIndex || "0", 10) + 1) % _classPrivateFieldGet(_this3, _fontFamilies).length;
+        _char3.dataset.colorIndex = "".concat(colorIndex);
+        _char3.dataset.fontIndex = "".concat(fontIndex);
+        _char3.style.color = _classPrivateFieldGet(_this3, _palette)[colorIndex];
+        _char3.style.fontFamily = _classPrivateFieldGet(_this3, _fontFamilies)[fontIndex];
+        var wobble = (wobbleSeed + index) % 5 - 2;
+        _char3.style.transform = "rotate(".concat(wobble * 1.2, "deg) skewY(").concat(wobble * 0.6, "deg)");
+      });
+    }
+  }, {
+    key: "observeResize",
+    value: function observeResize() {
+      var _this4 = this;
+      if (_classPrivateFieldGet(this, _resizeObserver) || !window.ResizeObserver) return;
+      _classPrivateFieldSet(this, _resizeObserver, new ResizeObserver(function () {
+        if (_classPrivateFieldGet(_this4, _resizeRAF)) window.cancelAnimationFrame(_classPrivateFieldGet(_this4, _resizeRAF));
+        _classPrivateFieldSet(_this4, _resizeRAF, window.requestAnimationFrame(function () {
+          _this4.recalculate();
+        }));
+      }));
+      _classPrivateFieldGet(this, _resizeObserver).observe(this);
+    }
+  }, {
+    key: "disconnectResizeObserver",
+    value: function disconnectResizeObserver() {
+      if (!_classPrivateFieldGet(this, _resizeObserver)) return;
+      _classPrivateFieldGet(this, _resizeObserver).disconnect();
+      _classPrivateFieldSet(this, _resizeObserver, null);
+      if (_classPrivateFieldGet(this, _resizeRAF)) {
+        window.cancelAnimationFrame(_classPrivateFieldGet(this, _resizeRAF));
+        _classPrivateFieldSet(this, _resizeRAF, null);
+      }
+    }
+  }, {
+    key: "recalculate",
+    value: function recalculate() {
+      var _this5 = this;
+      var text = (_classPrivateFieldGet(this, _originalText) || "").trim();
+      if (!text.length) return;
+      this.stopCycle();
+      if (!_classPrivateFieldGet(this, _baseSpan) || !_classPrivateFieldGet(this, _overlay)) return;
+      _classPrivateFieldSet(this, _characters, []);
+      _classPrivateFieldGet(this, _baseSpan).textContent = text;
+      _classPrivateFieldGet(this, _overlay).innerHTML = "";
+      var measurements = this.measureCharacters(text);
+      this.style.setProperty("--interactive-base-width", "".concat(measurements.totalWidth, "px"));
+      this.style.setProperty("--interactive-base-height", "".concat(measurements.height, "px"));
+      this.style.setProperty("--interactive-line-height", "".concat(measurements.height, "px"));
+      text.split("").forEach(function (_char4, index) {
+        var _measurements$widths$2;
+        var span = document.createElement("span");
+        span.classList.add("interactive-char");
+        span.dataset.colorIndex = "".concat(index % _classPrivateFieldGet(_this5, _palette).length);
+        span.dataset.fontIndex = "".concat(index % _classPrivateFieldGet(_this5, _fontFamilies).length);
+        span.textContent = _char4 === " " ? "\xA0" : _char4;
+        var width = (_measurements$widths$2 = measurements.widths[index]) !== null && _measurements$widths$2 !== void 0 ? _measurements$widths$2 : measurements.averageWidth;
+        span.style.width = "".concat(width, "px");
+        span.style.minWidth = "".concat(width, "px");
+        _classPrivateFieldGet(_this5, _overlay).appendChild(span);
+        _classPrivateFieldGet(_this5, _characters).push(span);
+      });
+    }
+  }]);
+  return InteractiveElement;
+}( /*#__PURE__*/_wrapNativeSuper(HTMLElement));
+customElements.define("interactive-element", InteractiveElement);
+
+/***/ }),
+
 /***/ "./resources/js/components/NameElement.js":
 /*!************************************************!*\
   !*** ./resources/js/components/NameElement.js ***!
@@ -1291,8 +1586,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_HintElement_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/HintElement.js */ "./resources/js/components/HintElement.js");
 /* harmony import */ var _components_TreasureElement_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/TreasureElement.js */ "./resources/js/components/TreasureElement.js");
 /* harmony import */ var _components_ContentElement_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/ContentElement.js */ "./resources/js/components/ContentElement.js");
-/* harmony import */ var _playground_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./playground.js */ "./resources/js/playground.js");
-/* harmony import */ var _playground_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_playground_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _components_InteractiveElement_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/InteractiveElement.js */ "./resources/js/components/InteractiveElement.js");
+/* harmony import */ var _playground_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./playground.js */ "./resources/js/playground.js");
+/* harmony import */ var _playground_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_playground_js__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 

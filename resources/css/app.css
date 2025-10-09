@@ -242,3 +242,57 @@ html, p, content-element {
 #lead .puzzle-leaderboard-header h2 {
     margin-bottom: 0.5rem;
 }
+
+interactive-element,
+.interactive-element {
+    position: relative;
+    display: inline-block;
+    vertical-align: baseline;
+    cursor: pointer;
+    transition: transform 120ms ease;
+}
+
+interactive-element:focus-visible,
+.interactive-element:focus-visible {
+    outline: 2px dashed #fabd2f;
+    outline-offset: 2px;
+    border-radius: 0.35rem;
+}
+
+interactive-element .interactive-base,
+.interactive-element .interactive-base {
+    transition: color 120ms ease;
+}
+
+interactive-element .interactive-overlay,
+.interactive-element .interactive-overlay {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    display: inline-flex;
+    align-items: baseline;
+    white-space: nowrap;
+    gap: 0;
+    opacity: 0;
+    z-index: 1;
+}
+
+interactive-element.interactive-cycling .interactive-overlay,
+.interactive-element.interactive-cycling .interactive-overlay {
+    opacity: 1;
+}
+
+interactive-element.interactive-cycling .interactive-base,
+.interactive-element.interactive-cycling .interactive-base {
+    color: transparent;
+}
+
+interactive-element .interactive-char,
+.interactive-element .interactive-char {
+    display: inline-block;
+    font: inherit;
+    line-height: inherit;
+    text-align: center;
+    transition: color 120ms ease, transform 160ms ease, font-family 160ms ease;
+    transform-origin: center bottom;
+}

@@ -1,28 +1,35 @@
 <x-layout>
 
-    <div class="flex flex-col flex-1 text-gruvbox-gray w-full">
+    <div class="flex w-full flex-1 flex-col text-gruvbox-gray">
 
-        <div id="title" class="self-top p-2 sm:p-4 md:p-6">
+        <div class="self-top p-2 sm:p-4 md:p-6"
+            id="title">
             <h1 class="text-5xl md:text-6xl">Hi. I'm</h1>
-            <name-element data-content="Trever" class="table"></name-element>
+            <name-element class="table"
+                data-content="Trever"></name-element>
         </div>
 
-        <div id="lead" class="flex-1 w-full text-gruvbox-gray p-2 sm:p-4 md:p-6">
+        <div class="w-full flex-1 p-2 text-gruvbox-gray sm:p-4 md:p-6"
+            id="lead">
 
-            <content-element class="block m-3 text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal select-none">
+            <content-element
+                class="m-3 block select-none text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal">
                 I am a full-stack web <span class="text-3xl font-bold text-gruvbox-green"
-                    id="developer">developer</span> who strives
-                to create applications that users tend to <treasure-element data-name="treasure">treasure</treasure-element>.
+                    id="developer">developer</span> who loves the process of creation. Lately I've been even more
+                interested in crafting <interactive-element>interactive</interactive-element>
+                and engaging user experiences. I enjoy the challenge of designing and implementing intuitive, rich
+                experiences users can
+                <treasure-element data-name="treasure">treasure</treasure-element>.
             </content-element>
 
-            <content-element class="block m-3 text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal select-none">
-                I'm constanstly coming up with startup ideas, tinkering with
-                interfaces, and fiddling with technologies. I hope this
-                platform can be a source of motivation for myself to bring
-                those creative ideas to life and share them with the rest of
-                the internet. Hope you find some
+            <content-element
+                class="m-3 block select-none text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal">
+                I'm always brainstorming new startup ideas, tinkering with new
+                interface designs, and exploring new technologies. I hope this
+                platform can be a source of motivation for me to bring
+                some of those creative ideas to life and give them a home to display. Hope you find some
                 <hint-element data-content="hidden"></hint-element>
-                gems laying around.
+                gems lying around.
             </content-element>
 
         </div>
@@ -31,12 +38,12 @@
 
     <script src="/js/home.js"></script>
     @if (app()->environment('production'))
-    <script>
-        gtag('event', 'page_view', {
-            'page_title': 'Home',
-            'page_location': '{{ request()->url() }}',
-            'page_path': '{{ request()->path() }}'
-        });
-    </script>
+        <script>
+            gtag('event', 'page_view', {
+                'page_title': 'Home',
+                'page_location': '{{ request()->url() }}',
+                'page_path': '{{ request()->path() }}'
+            });
+        </script>
     @endif
 </x-layout>
