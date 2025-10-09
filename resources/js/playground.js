@@ -90,6 +90,7 @@ const Playground = {
             Playground.skills[skill].initialY;
             Playground.skills[skill].xOffset = 0;
             Playground.skills[skill].yOffset = 0;
+            Playground.skills[skill].pointerId = null;
 
             Playground.styleElement(Playground.skills[skill]);
             Playground.playground.appendChild(Playground.skills[skill].element);
@@ -122,6 +123,7 @@ const Playground = {
             "--experience-color",
             Playground.getColorBasedOnExperience(skill.experience, "hex"),
         );
+        skill.element.style.touchAction = "none";
         skill.element.classList.add(
             "hover:animate-float-text",
             "text-bold",
@@ -190,12 +192,7 @@ const Playground = {
                 skill.element.classList.add("animate-blur-text");
 
             skill.element.removeEventListener(
-                "mousedown",
-                Playground.dragStart,
-                false,
-            );
-            skill.element.removeEventListener(
-                "touchstart",
+                "pointerdown",
                 Playground.dragStart,
                 false,
             );
@@ -221,12 +218,7 @@ const Playground = {
             );
 
             skill.element.addEventListener(
-                "mousedown",
-                Playground.dragStart,
-                false,
-            );
-            skill.element.addEventListener(
-                "touchstart",
+                "pointerdown",
                 Playground.dragStart,
                 false,
             );
@@ -322,6 +314,27 @@ const Playground = {
 
         Playground.closeHireForm();
 
+        if (
+            Playground.activeSkill &&
+            Playground.activeSkill.element &&
+            typeof Playground.activeSkill.element.releasePointerCapture ===
+                "function" &&
+            Playground.activeSkill.pointerId !== undefined &&
+            Playground.activeSkill.pointerId !== null
+        ) {
+            try {
+                Playground.activeSkill.element.releasePointerCapture(
+                    Playground.activeSkill.pointerId,
+                );
+            } catch (err) {
+                // ignore release errors (pointer already released)
+            }
+        }
+
+        window.removeEventListener("pointermove", Playground.drag);
+        window.removeEventListener("pointerup", Playground.dragEnd);
+        window.removeEventListener("pointercancel", Playground.dragEnd);
+
         Playground.placedSkillAttempts = 0;
         Playground.placedSkills = [];
         if (mode != "exceeded") Playground.fontScale = 25;
@@ -334,20 +347,8 @@ const Playground = {
             Playground.skills[skill].active = false;
             if (Playground.skills[skill].element) {
                 Playground.skills[skill].element.removeEventListener(
-                    "mousedown",
+                    "pointerdown",
                     Playground.dragStart,
-                );
-                Playground.skills[skill].element.removeEventListener(
-                    "touchstart",
-                    Playground.dragStart,
-                );
-                Playground.skills[skill].element.removeEventListener(
-                    "mouseup",
-                    Playground.dragEnd,
-                );
-                Playground.skills[skill].element.removeEventListener(
-                    "mousemove",
-                    Playground.dragElement,
                 );
 
                 if (
@@ -451,173 +452,174 @@ const Playground = {
 
     addClickListener: (skill) => {
         skill.element.addEventListener(
-            "mousedown",
-            Playground.dragStart,
-            false,
-        );
-        skill.element.addEventListener(
-            "touchstart",
+            "pointerdown",
             Playground.dragStart,
             false,
         );
     },
 
     dragStart: (e) => {
-        const skill = Playground.getSkillBasedOnName(e.target.id);
-        if (skill) {
+        const hostElement = e.currentTarget;
+        const skill =
+            (hostElement && Playground.getSkillBasedOnName(hostElement.id)) ||
+            Playground.getSkillBasedOnName(e.target?.id);
+
+        if (!skill || !skill.element) return;
+
+        if (!skill.element.contains(e.target)) return;
+
+        if (Playground.homepageTag)
             Playground.homepageTag.setAttribute("data-content", skill.name);
-            Playground.pageTitle.innerText = "Drag & Drop";
+        if (Playground.pageTitle) Playground.pageTitle.innerText = "Drag & Drop";
+
+        if (Playground.homepageTag)
+            Playground.homepageTag.classList.add(
+                "border",
+                "border-dashed",
+                "border-4",
+            );
+
+        Playground.activeSkill = skill;
+        Playground.dropZoneRect =
+            Playground.homepageTag &&
+            Playground.homepageTag.getBoundingClientRect();
+
+        if (e.pointerType === "touch") e.preventDefault();
+
+        if (typeof e.pointerId !== "undefined") {
+            skill.pointerId = e.pointerId;
+        } else {
+            skill.pointerId = null;
         }
 
-        //Playground.homepageTag.classList.remove("text-gruvbox-green");
-        Playground.homepageTag.classList.add("border", "border-dashed", "border-4");
-
-        if (skill && skill.element) {
-            Playground.activeSkill = skill;
-            Playground.dropZoneRect =
-                Playground.homepageTag &&
-                Playground.homepageTag.getBoundingClientRect();
-
-            if (e.type == "touchstart") {
-                skill.element.addEventListener(
-                    "touchend",
-                    Playground.dragEnd,
-                    false,
-                );
-                skill.element.addEventListener(
-                    "touchmove",
-                    Playground.dragElement,
-                    false,
-                );
-            } else if (e.type == "mousedown") {
-                skill.element.addEventListener(
-                    "mouseup",
-                    Playground.dragEnd,
-                    false,
-                );
-                skill.element.addEventListener(
-                    "mousemove",
-                    Playground.dragElement,
-                    false,
-                );
+        try {
+            if (
+                typeof e.pointerId !== "undefined" &&
+                skill.element.setPointerCapture
+            ) {
+                skill.element.setPointerCapture(e.pointerId);
             }
-
-            skill.element.style.zIndex = "11";
-            skill.element.classList.remove("cursor-pointer");
-            skill.element.classList.add("cursor-move");
-
-            if (skill.heldCounter && skill.heldCounter > 2) {
-                clearInterval(skill.heldCounter);
-            }
-
-            if (e.type === "touchstart") {
-                skill.initialX = e.touches[0].clientX - skill.xOffset;
-                skill.initialY = e.touches[0].clientY - skill.yOffset;
-            } else {
-                skill.initialX = e.clientX - skill.xOffset;
-                skill.initialY = e.clientY - skill.yOffset;
-            }
-
-            if (e.target === skill.element) {
-                skill.dragActive = true;
-            } else {
-                skill.dragActive = false;
-            }
+        } catch (err) {
+            // pointer capture optional; ignore failures
         }
+
+        window.addEventListener("pointermove", Playground.drag);
+        window.addEventListener("pointerup", Playground.dragEnd);
+        window.addEventListener("pointercancel", Playground.dragEnd);
+
+        skill.element.style.zIndex = "11";
+        skill.element.classList.remove("cursor-pointer");
+        skill.element.classList.add("cursor-move");
+
+        if (skill.heldCounter && skill.heldCounter > 2) {
+            clearInterval(skill.heldCounter);
+        }
+
+        skill.initialX = e.clientX - (skill.xOffset || 0);
+        skill.initialY = e.clientY - (skill.yOffset || 0);
+        skill.dragActive = true;
     },
 
     dragEnd: (e) => {
-        const skill = Playground.getSkillBasedOnName(e.target.id);
+        const skill =
+            Playground.activeSkill ||
+            Playground.getSkillBasedOnName(e.target?.id);
 
-        if (skill && skill.element) {
-            skill.element.classList.remove("cursor-move");
-            skill.element.removeEventListener("mouseup", Playground.dragEnd);
-            skill.element.removeEventListener(
-                "mousemove",
-                Playground.dragElement,
-            );
+        if (!skill || !skill.element) return;
 
-            skill.element.removeEventListener(
-                "touchmove",
-                Playground.dragElement,
-            );
-            skill.element.removeEventListener(
-                "touchend",
-                Playground.dragEnd,
-            );
-
-            skill.element.style.zIndex = "1";
-            skill.dragActive = false;
-            skill.infoShowing = false;
-
-            if (skill.name == "hire me") Playground.removeHireHint(skill);
-
-            Playground.removeHint(skill);
-            Playground.resetSkillPosition(skill);
-
-            if (skill.atTarget) {
-                //Playground.homepageTag.classList.add("text-gruvbox-green");
-
-                if (skill.name == "hire me") {
-                    Playground.reset("hire");
-                } else if (skill.name == "reset();") {
-                    Playground.reset();
-                } else {
-                    Playground.displayInfoCard(skill);
-                }
-
-                skill.atTarget = false;
-            } else {
-                //resetHomepageDeveloperTag();
-            }
-            //Playground.homepageTag.setAttribute("data-content", "Trever");
-            Playground.pageTitle.innerText = "Hi. I'm";
-            Playground.homepageTag.classList.remove("border", "border-dashed", "border-4");
-            //    "text-gruvbox-gray",
-            //    "border-gruvbox-green",
-            //    "shadow-inner",
-            //);
+        if (
+            typeof e.pointerId !== "undefined" &&
+            skill.pointerId !== undefined &&
+            skill.pointerId !== null &&
+            skill.pointerId !== e.pointerId
+        ) {
+            return;
         }
+
+        window.removeEventListener("pointermove", Playground.drag);
+        window.removeEventListener("pointerup", Playground.dragEnd);
+        window.removeEventListener("pointercancel", Playground.dragEnd);
+
+        try {
+            if (
+                skill.pointerId !== undefined &&
+                skill.pointerId !== null &&
+                typeof skill.element.releasePointerCapture === "function" &&
+                (!skill.element.hasPointerCapture ||
+                    skill.element.hasPointerCapture(skill.pointerId))
+            ) {
+                skill.element.releasePointerCapture(skill.pointerId);
+            }
+        } catch (err) {
+            // ignore pointer capture release failures
+        }
+
+        skill.pointerId = null;
+        skill.element.classList.remove("cursor-move");
+        skill.element.classList.add("cursor-pointer");
+        skill.element.style.zIndex = "1";
+        skill.dragActive = false;
+        skill.infoShowing = false;
+
+        if (skill.name == "hire me") Playground.removeHireHint(skill);
+
+        Playground.removeHint(skill);
+        Playground.resetSkillPosition(skill);
+
+        if (skill.atTarget) {
+            if (skill.name == "hire me") {
+                Playground.reset("hire");
+            } else if (skill.name == "reset();") {
+                Playground.reset();
+            } else {
+                Playground.displayInfoCard(skill);
+            }
+
+            skill.atTarget = false;
+        }
+
+        if (Playground.pageTitle) Playground.pageTitle.innerText = "Hi. I'm";
+        if (Playground.homepageTag)
+            Playground.homepageTag.classList.remove(
+                "border",
+                "border-dashed",
+                "border-4",
+            );
 
         Playground.activeSkill = null;
         Playground.dropZoneRect = null;
     },
 
-    dragElement: (e) => {
-        Playground.drag(e);
-    },
-
     drag: (e) => {
-        e.preventDefault();
+        const skill = Playground.activeSkill;
 
-        const targetElement = e.currentTarget || e.target;
-        const skillId = targetElement ? targetElement.id : null;
-        const skill =
-            (skillId &&
-                Playground.skillLookup &&
-                Playground.skillLookup[skillId]) ||
-            Playground.activeSkill;
+        if (!skill || !skill.dragActive || !skill.element) return;
 
-        if (!skill || !skill.dragActive) return;
+        if (
+            typeof e.pointerId !== "undefined" &&
+            skill.pointerId !== undefined &&
+            skill.pointerId !== null &&
+            skill.pointerId !== e.pointerId
+        ) {
+            return;
+        }
+
+        if (e.pointerType === "touch") e.preventDefault();
 
         if (!skill.elementChild) Playground.buildInfoCard(skill);
 
         const isForm = Playground.draggingEvents(e, skill);
 
-        if (e.type === "touchmove") {
-            skill.currentX = e.touches[0].clientX - skill.initialX;
-            skill.currentY = e.touches[0].clientY - skill.initialY;
-        } else {
-            skill.currentX = e.clientX - skill.initialX;
-            skill.currentY = e.clientY - skill.initialY;
-        }
+        skill.currentX = e.clientX - skill.initialX;
+        skill.currentY = e.clientY - skill.initialY;
 
-        if (!isForm)
+        if (!isForm) {
             Playground.setTranslate(
                 skill.currentX,
                 skill.currentY,
                 skill.element,
             );
+        }
     },
 
     draggingEvents: (e, skill) => {
