@@ -54,6 +54,59 @@ class JobIngestionService
         'remote usa',
     ];
 
+    /**
+     * Location keywords that suggest lower priority regions.
+     *
+     * @var array<int, string>
+     */
+    private array $deprioritizedLocations = [
+        'europe',
+        'emea',
+        'asia',
+        'australia',
+        'new zealand',
+        'canada',
+        'united kingdom',
+        'uk',
+        'ireland',
+        'germany',
+        'france',
+        'spain',
+        'portugal',
+        'switzerland',
+        'sweden',
+        'netherlands',
+        'belgium',
+        'italy',
+        'poland',
+        'brazil',
+        'mexico',
+        'latam',
+        'south america',
+        'africa',
+        'apac',
+    ];
+
+    /**
+     * Signals within descriptions that usually mean global/non-US roles.
+     *
+     * @var array<int, string>
+     */
+    private array $nonUsSignals = [
+        'worldwide',
+        'global team',
+        'work from anywhere',
+        'any timezone',
+        'anywhere in the world',
+        'timezone:',
+        'outside of the us',
+        'international applicants',
+        'non us',
+        'eu only',
+        'uk only',
+        'emea only',
+    ];
+
     public function __construct(
         private readonly JobFeedManager $feedManager
     ) {
@@ -165,12 +218,10 @@ class JobIngestionService
             }
         }
 
-        $techBonus = 0;
         foreach ($this->preferredTechnologies as $technology) {
             $possibleWeight += 4;
             if (Str::contains($searchText, $technology)) {
                 $score += 4;
-                $techBonus += 4;
             }
         }
 
@@ -178,6 +229,29 @@ class JobIngestionService
         if (!$locationBonusApplied && Str::contains($searchText, 'us based')) {
             $score += 6;
             $possibleWeight += 6;
+        }
+
+        $penalty = 0;
+        foreach ($this->deprioritizedLocations as $keyword) {
+            if ($location !== '' && Str::contains($location, $keyword)) {
+                $penalty += $locationBonusApplied ? 3 : 8;
+            }
+        }
+
+        // Multi-country listings usually mean global.
+        if (!$locationBonusApplied && substr_count($location, ',') >= 3) {
+            $penalty += 6;
+        }
+
+        foreach ($this->nonUsSignals as $signal) {
+            if (Str::contains($searchText, $signal)) {
+                $penalty += 5;
+            }
+        }
+
+        if ($penalty > 0) {
+            $possibleWeight += $penalty;
+            $score = max(0, $score - $penalty);
         }
 
         $filters = collect($source->filters ?? []);

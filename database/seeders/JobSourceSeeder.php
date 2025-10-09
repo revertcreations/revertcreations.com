@@ -75,6 +75,13 @@ class JobSourceSeeder extends Seeder
                 'driver' => 'remotive',
                 'base_url' => 'https://remotive.com/api/remote-jobs',
             ],
+            [
+                'name' => 'Indeed',
+                'slug' => 'indeed',
+                'driver' => 'indeed',
+                'base_url' => 'https://www.indeed.com/jobs',
+                'enabled' => false,
+            ],
         ];
 
         foreach ($sources as $source) {

@@ -25,15 +25,58 @@
                     <form method="POST" action="{{ route('jobs.store') }}" class="space-y-6">
                         @csrf
 
-                        <div>
+                        <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Source</label>
                             <select name="job_source_id" class="mt-1 block w-full rounded-md border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                                <option value="">Select an existing source</option>
                                 @foreach($sources as $id => $name)
                                     <option value="{{ $id }}" @selected(old('job_source_id') == $id)>
                                         {{ $name }}
                                     </option>
                                 @endforeach
                             </select>
+                            <p class="text-xs text-gray-500">Choose an existing source above, or fill out the fields below to create a new one (e.g. Indeed).</p>
+                        </div>
+
+                        <div class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 space-y-3">
+                            <h3 class="text-sm font-semibold text-gray-700">Create a new source</h3>
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600">Source name</label>
+                                    <input type="text" name="new_source_name" value="{{ old('new_source_name') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Indeed">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600">Slug (optional)</label>
+                                    <input type="text" name="new_source_slug" value="{{ old('new_source_slug') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="indeed">
+                                </div>
+                            </div>
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600">Driver</label>
+                                    <select name="new_source_driver" class="mt-1 block w-full rounded-md border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                                        <option value="">Manual (no automation)</option>
+                                        @foreach($drivers as $value => $label)
+                                            @continue($value === 'manual')
+                                            <option value="{{ $value }}" @selected(old('new_source_driver') === $value)>{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600">Base URL (optional)</label>
+                                    <input type="url" name="new_source_base_url" value="{{ old('new_source_base_url') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="https://www.indeed.com/jobs">
+                                </div>
+                            </div>
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600">Frequency minutes</label>
+                                    <input type="number" name="new_source_frequency" value="{{ old('new_source_frequency', 1440) }}" min="5" max="10080" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                </div>
+                                <div class="flex items-center gap-2 pt-5">
+                                    <input type="checkbox" name="new_source_enabled" value="1" id="new_source_enabled" @checked(old('new_source_enabled'))>
+                                    <label for="new_source_enabled" class="text-xs text-gray-600">Enable for automated ingestion</label>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500">Leave these fields blank if you just want to use an existing source.</p>
                         </div>
 
                         <div>
