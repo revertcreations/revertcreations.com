@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -165,5 +167,38 @@ class AdminPostController extends Controller
         $text = trim(preg_replace('/\s+/', ' ', strip_tags($html)));
 
         return Str::limit($text, 200);
+    }
+
+    public function uploadImage(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'image' => ['required', 'image', 'max:5120'],
+        ]);
+
+        if (blank(config('cloudinary.cloud_url'))) {
+            return response()->json([
+                'message' => 'Cloudinary is not configured. Set CLOUDINARY_URL or the individual Cloudinary env variables.',
+            ], 422);
+        }
+
+        try {
+            $upload = $validated['image']->storeOnCloudinary('blog_posts');
+
+            $url = $upload->getSecurePath();
+            $markdown = '!['.$upload->getOriginalFileName().']('.$url.')';
+
+            return response()->json([
+                'url' => $url,
+                'markdown' => $markdown,
+            ]);
+        } catch (\Throwable $exception) {
+            Log::error('Failed to upload blog image to Cloudinary', [
+                'message' => $exception->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => 'Failed to upload image.',
+            ], 422);
+        }
     }
 }

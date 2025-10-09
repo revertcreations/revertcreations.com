@@ -19,10 +19,19 @@ class BlogController extends Controller
     public function show($slug)
     {
         $post = Post::where('slug', $slug)->firstOrFail();
-        $dom = new DOMDocument();
+        $dom = new DOMDocument('1.0', 'UTF-8');
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
-        $dom->loadHTML(Str::of($post->content)->markdown);
+
+        $html = Str::of($post->content)->markdown();
+
+        $previousUseErrors = libxml_use_internal_errors(true);
+        $dom->loadHTML(
+            '<?xml encoding="utf-8" ?>'.$html,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        libxml_use_internal_errors($previousUseErrors);
 
         foreach($dom->getElementsByTagName('p') as $paragraph) {
             $paragraph->setAttribute('class', 'py-4 text-gruvbox-white');
