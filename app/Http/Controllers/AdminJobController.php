@@ -197,7 +197,7 @@ class AdminJobController extends Controller
             'collected_at' => now(),
         ]);
 
-        return redirect()->route('jobs.index')->with('status', 'Job created.');
+        return redirect()->route('admin.jobs.index')->with('status', 'Job created.');
     }
 
     public function show(JobListing $job): View
@@ -336,7 +336,7 @@ class AdminJobController extends Controller
         $job->fill($validated);
         $job->save();
 
-        return redirect()->route('jobs.show', $job)->with('status', 'Job updated.');
+        return redirect()->route('admin.jobs.show', $job)->with('status', 'Job updated.');
     }
 
     public function destroy(JobListing $job): RedirectResponse
@@ -346,6 +346,6 @@ class AdminJobController extends Controller
             'status' => JobListing::STATUS_ARCHIVED,
         ]);
 
-        return redirect()->route('jobs.index')->with('status', 'Job archived.');
+        return redirect()->route('admin.jobs.index')->with('status', 'Job archived.');
     }
 }

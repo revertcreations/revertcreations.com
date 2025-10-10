@@ -29,7 +29,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('jobs.update', $job) }}" class="space-y-6">
+                    <form method="POST" action="{{ route('admin.jobs.update', $job) }}" class="space-y-6">
                         @csrf
                         @method('PUT')
 
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="flex items-center justify-between gap-3">
-                            <a href="{{ route('jobs.show', $job) }}" class="text-sm text-gray-500 hover:text-gray-700">Cancel</a>
+                            <a href="{{ route('admin.jobs.show', $job) }}" class="text-sm text-gray-500 hover:text-gray-700">Cancel</a>
                             <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                 Update job
                             </button>

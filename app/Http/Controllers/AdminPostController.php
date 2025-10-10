@@ -60,7 +60,7 @@ class AdminPostController extends Controller
             'published_at' => $publishedAt,
         ]);
 
-        return redirect()->route('posts.index')->with('status', 'Post created.');
+        return redirect()->route('admin.posts.index')->with('status', 'Post created.');
     }
 
     public function edit(Post $post): View
@@ -103,14 +103,14 @@ class AdminPostController extends Controller
             'published_at' => $publishedAt,
         ]);
 
-        return redirect()->route('posts.index')->with('status', 'Post updated.');
+        return redirect()->route('admin.posts.index')->with('status', 'Post updated.');
     }
 
     public function destroy(Post $post): RedirectResponse
     {
         $post->delete();
 
-        return redirect()->route('posts.index')->with('status', 'Post deleted.');
+        return redirect()->route('admin.posts.index')->with('status', 'Post deleted.');
     }
 
     private function resolveContent(Request $request, ?string $default = null): ?string

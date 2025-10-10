@@ -56,7 +56,7 @@ class AdminProjectAssetController extends Controller
         $asset = ProjectAsset::create($this->transformData($request));
 
         return redirect()
-            ->route('project-assets.edit', $asset)
+            ->route('admin.project-assets.edit', $asset)
             ->with('status', 'Asset created.');
     }
 
@@ -65,7 +65,7 @@ class AdminProjectAssetController extends Controller
      */
     public function show(ProjectAsset $projectAsset): RedirectResponse
     {
-        return redirect()->route('project-assets.edit', $projectAsset);
+        return redirect()->route('admin.project-assets.edit', $projectAsset);
     }
 
     /**
@@ -88,7 +88,7 @@ class AdminProjectAssetController extends Controller
         $projectAsset->update($this->transformData($request, $projectAsset));
 
         return redirect()
-            ->route('project-assets.edit', $projectAsset)
+            ->route('admin.project-assets.edit', $projectAsset)
             ->with('status', 'Asset saved.');
     }
 
@@ -100,7 +100,7 @@ class AdminProjectAssetController extends Controller
         $projectAsset->delete();
 
         return redirect()
-            ->route('project-assets.index')
+            ->route('admin.project-assets.index')
             ->with('status', 'Asset archived.');
     }
 

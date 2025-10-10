@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Route;
 
 $domain = preg_replace("(^https?://)", "", config('app.url'));
 
-Route::domain('admin.'.$domain)->group(function () {
+Route::domain('admin.'.$domain)->name('admin.')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
-    })->name('admin.dashboard')->middleware('auth');
+    })->name('dashboard')->middleware('auth');
 
-    Route::get('/login', [AdminLoginController::class, 'login'])->name('admin.login');
-    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
-    Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('admin.authenticate');
+    Route::get('/login', [AdminLoginController::class, 'login'])->name('login');
+    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+    Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('authenticate');
 
     Route::resource('client', ClientController::class)->middleware('auth');
     Route::resource('skills', SkillsController::class)->middleware('auth');

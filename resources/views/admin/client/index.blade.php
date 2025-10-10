@@ -5,7 +5,7 @@
           <h1 class="text-3xl font-bold text-gray-900">
             Clients
           </h1>
-          <a href="{{ route('client.create') }}" class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end">
+          <a href="{{ route('admin.client.create') }}" class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end">
             Create
           </a>
         </div>
@@ -63,7 +63,7 @@
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{ route('client.edit', ['client' => $client->id]) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <a href="{{ route('admin.client.edit', ['client' => $client->id]) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                         </td>
 
                                     </tr>

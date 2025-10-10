@@ -61,7 +61,7 @@ class ClientController extends Controller
             'address_id' => $address->id
         ]);
 
-        return redirect()->route('client.index');
+        return redirect()->route('admin.client.index');
     }
 
     /**

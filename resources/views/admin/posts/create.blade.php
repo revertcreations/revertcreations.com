@@ -6,7 +6,7 @@
                 Create Post
             </h1>
             <a class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end"
-               href="{{ route('posts.index') }}">
+               href="{{ route('admin.posts.index') }}">
                 Back to Posts
             </a>
         </div>
@@ -24,7 +24,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('admin.posts.store') }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf
 
                 <div>
@@ -118,7 +118,7 @@
                 </div>
 
                 <div class="flex justify-end space-x-3">
-                    <a href="{{ route('posts.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                    <a href="{{ route('admin.posts.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                         Cancel
                     </a>
                     <button type="submit" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -160,7 +160,7 @@
             showStatus('Uploading image…');
 
             try {
-                const response = await fetch('{{ route('posts.upload-image') }}', {
+                const response = await fetch('{{ route('admin.posts.upload-image') }}', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',

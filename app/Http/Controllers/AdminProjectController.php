@@ -50,7 +50,7 @@ class AdminProjectController extends Controller
         $project = Project::create($this->transformData($request));
 
         return redirect()
-            ->route('projects.edit', $project)
+            ->route('admin.projects.edit', $project)
             ->with('status', 'Project created.');
     }
 
@@ -59,7 +59,7 @@ class AdminProjectController extends Controller
      */
     public function show(Project $project): RedirectResponse
     {
-        return redirect()->route('projects.edit', $project);
+        return redirect()->route('admin.projects.edit', $project);
     }
 
     /**
@@ -81,7 +81,7 @@ class AdminProjectController extends Controller
         $project->update($this->transformData($request, $project));
 
         return redirect()
-            ->route('projects.edit', $project)
+            ->route('admin.projects.edit', $project)
             ->with('status', 'Project updated.');
     }
 
@@ -93,7 +93,7 @@ class AdminProjectController extends Controller
         $project->delete();
 
         return redirect()
-            ->route('projects.index')
+            ->route('admin.projects.index')
             ->with('status', 'Project archived.');
     }
 

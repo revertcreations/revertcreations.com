@@ -46,7 +46,7 @@ class SkillsController extends Controller
 
         Skill::create($validated);
 
-        return redirect()->route('skills.index');
+        return redirect()->route('admin.skills.index');
     }
 
     /**
@@ -86,7 +86,7 @@ class SkillsController extends Controller
             'excerpt' => $request->excerpt
         ]);
 
-        return redirect()->route('skills.index');
+        return redirect()->route('admin.skills.index');
     }
 
     /**
@@ -99,6 +99,6 @@ class SkillsController extends Controller
     {
         $skill->delete();
 
-        return redirect()->route('skills.index');
+        return redirect()->route('admin.skills.index');
     }
 }

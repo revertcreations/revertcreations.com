@@ -11,7 +11,7 @@
                 </p>
             </div>
             <a class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-               href="{{ route('project-assets.create', ['project' => $projectId]) }}">
+               href="{{ route('admin.project-assets.create', ['project' => $projectId]) }}">
                 Add asset
             </a>
         </div>
@@ -25,7 +25,7 @@
                 </div>
             @endif
 
-            <form method="GET" action="{{ route('project-assets.index') }}" class="flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+            <form method="GET" action="{{ route('admin.project-assets.index') }}" class="flex flex-wrap items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wide text-gray-500">Filter by project</label>
                     <select name="project" class="mt-1 block rounded-md border-gray-300 bg-white py-2 pl-3 pr-10 text-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500">
@@ -38,7 +38,7 @@
                     </select>
                 </div>
                 <div class="ml-auto flex items-center gap-3">
-                    <a href="{{ route('project-assets.index') }}" class="text-sm text-gray-500 hover:text-gray-700">
+                    <a href="{{ route('admin.project-assets.index') }}" class="text-sm text-gray-500 hover:text-gray-700">
                         Reset
                     </a>
                     <button type="submit" class="inline-flex items-center rounded-md border border-transparent bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
@@ -92,7 +92,7 @@
                                     {{ $asset->display_order }}
                                 </td>
                                 <td class="px-6 py-4 text-right text-sm">
-                                    <a href="{{ route('project-assets.edit', $asset) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <a href="{{ route('admin.project-assets.edit', $asset) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                 </td>
                             </tr>
                         @empty

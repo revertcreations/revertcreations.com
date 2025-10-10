@@ -6,7 +6,7 @@
                 Skills
             </h1>
             <a class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end"
-                href="{{ route('skills.index') }}">
+                href="{{ route('admin.skills.index') }}">
                 Back
             </a>
         </div>
@@ -15,7 +15,7 @@
     <main>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
 
-            <form action="{{ route('skills.store') }}" method="POST">
+            <form action="{{ route('admin.skills.store') }}" method="POST">
                 @csrf
                 <div class="shadow overflow-hidden sm:rounded-md">
                     <div class="px-4 py-5 bg-white space-y-6 sm:p-6">

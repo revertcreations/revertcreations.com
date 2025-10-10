@@ -6,7 +6,7 @@
                 <h1 class="text-3xl font-bold text-gray-900">Add Project Asset</h1>
                 <p class="mt-1 text-sm text-gray-500">Upload media or reference links that support a project story.</p>
             </div>
-            <a href="{{ route('project-assets.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+            <a href="{{ route('admin.project-assets.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                 Back to assets
             </a>
         </div>
@@ -24,13 +24,13 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('project-assets.store') }}" class="space-y-8">
+            <form method="POST" action="{{ route('admin.project-assets.store') }}" class="space-y-8">
                 @csrf
 
                 @include('admin.project-assets._form', ['asset' => $asset, 'projects' => $projects, 'types' => $types])
 
                 <div class="flex justify-end gap-3">
-                    <a href="{{ route('project-assets.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                    <a href="{{ route('admin.project-assets.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                         Cancel
                     </a>
                     <button type="submit" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">

@@ -6,7 +6,7 @@
                 Posts
             </h1>
             <a class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end"
-               href="{{ route('posts.create') }}">
+               href="{{ route('admin.posts.create') }}">
                 Create
             </a>
         </div>
@@ -68,7 +68,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{ route('posts.edit', $post) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <a href="{{ route('admin.posts.edit', $post) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                         </td>
                                     </tr>
                                 @empty

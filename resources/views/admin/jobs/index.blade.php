@@ -55,7 +55,7 @@
 
             <div class="flex gap-3">
                 <a class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                    href="{{ route('jobs.create') }}">
+                    href="{{ route('admin.jobs.create') }}">
                     Add job manually
                 </a>
             </div>
@@ -66,7 +66,7 @@
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <div class="bg-white shadow sm:rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
-                    <form method="GET" action="{{ route('jobs.index') }}" class="grid gap-4 md:grid-cols-4">
+                    <form method="GET" action="{{ route('admin.jobs.index') }}" class="grid gap-4 md:grid-cols-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Search</label>
                             <input
@@ -126,7 +126,7 @@
                         </div>
 
                         <div class="md:col-span-4 flex items-center justify-end gap-3">
-                            <a href="{{ route('jobs.index') }}" class="text-sm text-gray-500 hover:text-gray-700">
+                            <a href="{{ route('admin.jobs.index') }}" class="text-sm text-gray-500 hover:text-gray-700">
                                 Reset
                             </a>
                             <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
@@ -196,7 +196,7 @@
                                 <tr class="{{ $job->is_archived ? 'bg-gray-50' : '' }}">
                                     <td class="px-6 py-4">
                                         <div class="text-sm font-medium text-gray-900">
-                                            <a href="{{ route('jobs.show', $job) }}" class="hover:underline">
+                                            <a href="{{ route('admin.jobs.show', $job) }}" class="hover:underline">
                                                 {{ $job->title }}
                                             </a>
                                         </div>
@@ -234,7 +234,7 @@
                                         {{ optional($job->posted_at)->format('M d, Y') ?? 'n/a' }}
                                     </td>
                                     <td class="px-6 py-4 text-right text-sm">
-                                        <a href="{{ route('jobs.show', $job) }}" class="text-indigo-600 hover:text-indigo-900">Review</a>
+                                        <a href="{{ route('admin.jobs.show', $job) }}" class="text-indigo-600 hover:text-indigo-900">Review</a>
                                     </td>
                                 </tr>
                             @empty

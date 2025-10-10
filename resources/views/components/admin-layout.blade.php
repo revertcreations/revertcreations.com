@@ -39,22 +39,22 @@
                                     Dashboard
                                 </a>
                                 <a
-                                    href="{{ route('client.index') }}"
-                                    class="{{ Route::is('client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">
+                                    href="{{ route('admin.client.index') }}"
+                                    class="{{ Route::is('admin.client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">
                                     Clients
                                 </a>
 
-                                <a href="{{ route('skills.index') }}" class="{{ Route::is('skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
+                                <a href="{{ route('admin.skills.index') }}" class="{{ Route::is('admin.skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
 
-                                <a href="{{ route('projects.index') }}" class="{{ Route::is('projects.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                                <a href="{{ route('admin.projects.index') }}" class="{{ Route::is('admin.projects.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Projects</a>
 
-                                <a href="{{ route('posts.index') }}" class="{{ Route::is('posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Blog Posts</a>
+                                <a href="{{ route('admin.posts.index') }}" class="{{ Route::is('admin.posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Blog Posts</a>
 
-                                <a href="{{ route('project-updates.index') }}" class="{{ Route::is('project-updates.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Updates</a>
+                                <a href="{{ route('admin.project-updates.index') }}" class="{{ Route::is('admin.project-updates.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Updates</a>
 
-                                <a href="{{ route('project-assets.index') }}" class="{{ Route::is('project-assets.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Assets</a>
+                                <a href="{{ route('admin.project-assets.index') }}" class="{{ Route::is('admin.project-assets.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Assets</a>
 
-                                <a href="{{ route('jobs.index') }}" class="{{ Route::is('jobs.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Jobs</a>
+                                <a href="{{ route('admin.jobs.index') }}" class="{{ Route::is('admin.jobs.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Jobs</a>
 
                                 <a href="#" class="{{ Route::is('invoices.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Invoices</a>
                             </div>
@@ -80,19 +80,19 @@
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                     <a href="{{ route('admin.dashboard') }}" class="{{ Route::is('admin.dashboard') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
 
-                    <a href="{{ route('client.index') }}" class="{{ Route::is('client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Clients</a>
+                    <a href="{{ route('admin.client.index') }}" class="{{ Route::is('admin.client.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Clients</a>
 
-                    <a href="{{ route('skills.index') }}" class="{{ Route::is('skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
+                    <a href="{{ route('admin.skills.index') }}" class="{{ Route::is('admin.skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
 
-                    <a href="{{ route('projects.index') }}" class="{{ Route::is('projects.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+                    <a href="{{ route('admin.projects.index') }}" class="{{ Route::is('admin.projects.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Projects</a>
 
-                    <a href="{{ route('posts.index') }}" class="{{ Route::is('posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Blog Posts</a>
+                    <a href="{{ route('admin.posts.index') }}" class="{{ Route::is('admin.posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Blog Posts</a>
 
-                    <a href="{{ route('project-updates.index') }}" class="{{ Route::is('project-updates.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Updates</a>
+                    <a href="{{ route('admin.project-updates.index') }}" class="{{ Route::is('admin.project-updates.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Updates</a>
 
-                    <a href="{{ route('project-assets.index') }}" class="{{ Route::is('project-assets.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Assets</a>
+                    <a href="{{ route('admin.project-assets.index') }}" class="{{ Route::is('admin.project-assets.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Assets</a>
 
-                    <a href="{{ route('jobs.index') }}" class="{{ Route::is('jobs.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Jobs</a>
+                    <a href="{{ route('admin.jobs.index') }}" class="{{ Route::is('admin.jobs.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Jobs</a>
 
                     <a href="#" class="{{ Route::is('invoices.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Invoices</a>
                 </div>

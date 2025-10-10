@@ -12,7 +12,7 @@
                 </p>
             </div>
             <a class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-               href="{{ route('projects.create') }}">
+               href="{{ route('admin.projects.create') }}">
                 New Project
             </a>
         </div>
@@ -42,7 +42,7 @@
                             <tr>
                                 <td class="px-6 py-4">
                                     <div class="text-sm font-semibold text-gray-900">
-                                        <a href="{{ route('projects.edit', $project) }}" class="hover:text-indigo-600">
+                                        <a href="{{ route('admin.projects.edit', $project) }}" class="hover:text-indigo-600">
                                             {{ $project->name }}
                                         </a>
                                     </div>
@@ -66,7 +66,7 @@
                                     {{ optional($project->published_at)->format('M d, Y') ?? 'Draft' }}
                                 </td>
                                 <td class="px-6 py-4 text-right text-sm">
-                                    <a href="{{ route('projects.edit', $project) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <a href="{{ route('admin.projects.edit', $project) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                 </td>
                             </tr>
                         @empty

@@ -6,7 +6,7 @@
                 <h1 class="text-3xl font-bold text-gray-900">Create Project</h1>
                 <p class="mt-1 text-sm text-gray-500">Craft a new spotlight for your product or experiment.</p>
             </div>
-            <a href="{{ route('projects.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+            <a href="{{ route('admin.projects.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                 Back to Projects
             </a>
         </div>
@@ -24,13 +24,13 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('projects.store') }}" class="space-y-8">
+            <form method="POST" action="{{ route('admin.projects.store') }}" class="space-y-8">
                 @csrf
 
                 @include('admin.projects._form', ['project' => $project, 'statuses' => $statuses])
 
                 <div class="flex justify-end gap-3">
-                    <a href="{{ route('projects.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                    <a href="{{ route('admin.projects.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
                         Cancel
                     </a>
                     <button type="submit" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">

@@ -101,7 +101,7 @@
                             <p class="mt-2 text-sm text-gray-600">
                                 Keep track of outreach, follow-ups, or red flags.
                             </p>
-                            <form action="{{ route('jobs.update', $job) }}" method="POST" class="mt-4 space-y-4">
+                            <form action="{{ route('admin.jobs.update', $job) }}" method="POST" class="mt-4 space-y-4">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="status" value="{{ $job->status }}">
@@ -183,7 +183,7 @@
                     <section class="bg-white shadow sm:rounded-lg">
                         <div class="px-4 py-5 sm:p-6">
                             <h2 class="text-lg font-medium text-gray-900">Update status</h2>
-                            <form action="{{ route('jobs.update', $job) }}" method="POST" class="mt-4 space-y-4">
+                            <form action="{{ route('admin.jobs.update', $job) }}" method="POST" class="mt-4 space-y-4">
                                 @csrf
                                 @method('PUT')
                                 <div>
@@ -223,7 +223,7 @@
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <a href="{{ route('jobs.edit', $job) }}" class="text-sm text-gray-500 hover:text-gray-700">Edit details</a>
+                                    <a href="{{ route('admin.jobs.edit', $job) }}" class="text-sm text-gray-500 hover:text-gray-700">Edit details</a>
                                     <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                         Save updates
                                     </button>
@@ -237,7 +237,7 @@
                             <h2 class="text-lg font-medium text-gray-900">Quick actions</h2>
                             <div class="grid gap-2 sm:grid-cols-2">
                                 @foreach($lifecycleStatuses as $value => $label)
-                                    <form action="{{ route('jobs.update', $job) }}" method="POST">
+                                    <form action="{{ route('admin.jobs.update', $job) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <input type="hidden" name="status" value="{{ $value }}">
@@ -252,7 +252,7 @@
                                 @endforeach
                             </div>
 
-                            <form action="{{ route('jobs.destroy', $job) }}" method="POST" onsubmit="return confirm('Archive this job?')" class="space-y-3 pt-3 border-t border-gray-200">
+                            <form action="{{ route('admin.jobs.destroy', $job) }}" method="POST" onsubmit="return confirm('Archive this job?')" class="space-y-3 pt-3 border-t border-gray-200">
                                 @csrf
                                 @method('DELETE')
                                 <p class="text-sm text-gray-600">Archiving keeps history but hides the role from the active queue.</p>

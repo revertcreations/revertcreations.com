@@ -5,7 +5,7 @@
           <h1 class="text-3xl font-bold text-gray-900">
             Skills
           </h1>
-          <a class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end" href="{{ route('skills.create') }}">
+          <a class="text-gray-300 bg-gray-900 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium self-end" href="{{ route('admin.skills.create') }}">
             Create
           </a>
         </div>
@@ -14,7 +14,7 @@
       <main>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
 
-            <form action="{{ route('skills.update', ['skill' => $skill->id]) }}" method="POST">
+            <form action="{{ route('admin.skills.update', ['skill' => $skill->id]) }}" method="POST">
                 @csrf
                 @method('put')
                 <div class="shadow overflow-hidden sm:rounded-md">
