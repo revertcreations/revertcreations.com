@@ -46,7 +46,13 @@
 
                                 <a href="{{ route('skills.index') }}" class="{{ Route::is('skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
 
-                                <a href="{{ route('posts.index') }}" class="{{ Route::is('posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Posts</a>
+                                <a href="{{ route('projects.index') }}" class="{{ Route::is('projects.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+
+                                <a href="{{ route('posts.index') }}" class="{{ Route::is('posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Blog Posts</a>
+
+                                <a href="{{ route('project-updates.index') }}" class="{{ Route::is('project-updates.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Updates</a>
+
+                                <a href="{{ route('project-assets.index') }}" class="{{ Route::is('project-assets.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Assets</a>
 
                                 <a href="{{ route('jobs.index') }}" class="{{ Route::is('jobs.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Jobs</a>
 
@@ -78,7 +84,13 @@
 
                     <a href="{{ route('skills.index') }}" class="{{ Route::is('skills.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Skills</a>
 
-                    <a href="{{ route('posts.index') }}" class="{{ Route::is('posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Posts</a>
+                    <a href="{{ route('projects.index') }}" class="{{ Route::is('projects.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Projects</a>
+
+                    <a href="{{ route('posts.index') }}" class="{{ Route::is('posts.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Blog Posts</a>
+
+                    <a href="{{ route('project-updates.index') }}" class="{{ Route::is('project-updates.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Updates</a>
+
+                    <a href="{{ route('project-assets.index') }}" class="{{ Route::is('project-assets.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Assets</a>
 
                     <a href="{{ route('jobs.index') }}" class="{{ Route::is('jobs.*') ? "bg-gray-900 text-white" : "text-gray-300 hover:bg-gray-700 hover:text-white" }} px-3 py-2 rounded-md text-sm font-medium">Jobs</a>
 

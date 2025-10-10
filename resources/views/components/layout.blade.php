@@ -10,9 +10,16 @@
         content="ie=edge">
     <meta name="theme-color" content="#317EFB">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>REVERT CREATIONS</title>
+    <title>
+        @isset($title)
+            {{ $title }} | REVERT CREATIONS
+        @else
+            REVERT CREATIONS
+        @endisset
+    </title>
 
     <link href="/css/app.css" rel="stylesheet">
+    @stack('styles')
 
     @if (app()->environment() == 'production')
         <!-- Google tag (gtag.js) -->
@@ -53,9 +60,9 @@
     <div id="footer" class="flex flex-nowrap bg-gruvbox-orange text-revert-black">
 
         <div class="relative grow p-4 bg-gruvbox-yellow">
-            <a href="{{ route('blog') }}">
+            <a href="{{ route('projects.index') }}">
                 <h2 class="skill inline cursor-pointer text-3xl md:text-5xl"
-                    name="design">blog</h2>
+                    name="design">projects</h2>
             </a>
         </div>
 
@@ -67,6 +74,7 @@
 
     </div>
 
+    @stack('scripts')
 </body>
 
 </html>
