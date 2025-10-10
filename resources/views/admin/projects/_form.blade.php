@@ -221,7 +221,7 @@
                 setStatus('Uploading hero image…');
 
                 try {
-                    const response = await fetch('{{ route('project-assets.upload') }}', {
+                    const response = await fetch('{{ route('admin.project-assets.upload') }}', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
