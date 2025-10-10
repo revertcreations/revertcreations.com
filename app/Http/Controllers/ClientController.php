@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Client;
 use App\Models\AddressClient;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -38,30 +39,20 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $this->validateClient($request);
 
-        $client = Client::create([
-            'organization' => $request->organization,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone_number
-        ]);
+        $client = Client::create($this->extractClientAttributes($data));
 
-        $address = Address::create([
-            'street_address' => $request->street_address,
-            'street_address_2' => $request->street_address_2,
-            'city' => $request->city,
-            'state_code' => $request->state,
-            'country_code' => $request->country,
-            'postal_code' => $request->postal_code
-        ]);
+        $address = Address::create($this->extractAddressAttributes($data));
 
         AddressClient::create([
             'client_id' => $client->id,
-            'address_id' => $address->id
+            'address_id' => $address->id,
         ]);
 
-        return redirect()->route('admin.client.index');
+        return redirect()
+            ->route('admin.client.index')
+            ->with('status', 'Client created successfully.');
     }
 
     /**
@@ -81,9 +72,11 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Client $client)
     {
-        //
+        $address = $client->addresses()->latest()->first();
+
+        return view('admin.client.edit', compact('client', 'address'));
     }
 
     /**
@@ -93,9 +86,26 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Client $client)
     {
-        //
+        $data = $this->validateClient($request, $client);
+
+        $client->update($this->extractClientAttributes($data));
+
+        $addressAttributes = $this->extractAddressAttributes($data);
+
+        $address = $client->addresses()->latest()->first();
+
+        if ($address) {
+            $address->update($addressAttributes);
+        } else {
+            $address = Address::create($addressAttributes);
+            $client->addresses()->syncWithoutDetaching([$address->id]);
+        }
+
+        return redirect()
+            ->route('admin.client.index')
+            ->with('status', 'Client updated successfully.');
     }
 
     /**
@@ -104,9 +114,22 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Client $client)
     {
-        //
+        $addresses = $client->addresses()->get();
+
+        $client->addresses()->detach();
+        $client->delete();
+
+        $addresses->each(function (Address $address) {
+            if ($address->client()->count() === 0) {
+                $address->delete();
+            }
+        });
+
+        return redirect()
+            ->route('admin.client.index')
+            ->with('status', 'Client deleted successfully.');
     }
 
     public function hire(Request $request)
@@ -125,5 +148,53 @@ class ClientController extends Controller
             'status' => 'ok',
             'message' => 'Thanks for reaching out, I\'ll be in contact shortly!',
         ]);
+    }
+
+    protected function validateClient(Request $request, ?Client $client = null): array
+    {
+        return $request->validate([
+            'organization' => ['nullable', 'string', 'max:255'],
+            'first_name' => ['nullable', 'string', 'max:255'],
+            'last_name' => ['nullable', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('clients', 'email')->ignore($client?->id),
+            ],
+            'website' => ['nullable', 'url', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'phone_number' => ['nullable', 'string', 'max:50'],
+            'country' => ['nullable', 'string', 'size:2'],
+            'street_address' => ['nullable', 'string', 'max:255'],
+            'street_address_2' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'state' => ['nullable', 'string', 'max:255'],
+            'postal_code' => ['nullable', 'string', 'max:20'],
+        ]);
+    }
+
+    protected function extractClientAttributes(array $data): array
+    {
+        return [
+            'organization' => $data['organization'] ?? null,
+            'first_name' => $data['first_name'] ?? null,
+            'last_name' => $data['last_name'] ?? null,
+            'email' => $data['email'],
+            'website' => $data['website'] ?? null,
+            'description' => $data['description'] ?? null,
+            'phone' => $data['phone_number'] ?? null,
+        ];
+    }
+
+    protected function extractAddressAttributes(array $data): array
+    {
+        return [
+            'street_address' => $data['street_address'] ?? '',
+            'street_address_2' => $data['street_address_2'] ?? null,
+            'city' => $data['city'] ?? '',
+            'state_code' => $data['state'] ?? '',
+            'country_code' => strtoupper($data['country'] ?? 'US'),
+            'postal_code' => $data['postal_code'] ?? null,
+        ];
     }
 }

@@ -12,6 +12,13 @@ class PuzzleSession extends Model
     protected $fillable = [
         'session_id',
         'puzzle_type_id',
+        'ip_address',
+        'user_agent',
+        'is_internal',
+    ];
+
+    protected $casts = [
+        'is_internal' => 'boolean',
     ];
 
     public function token() {
@@ -20,5 +27,9 @@ class PuzzleSession extends Model
 
     public function scores() {
         return $this->hasMany(PuzzleScore::class);
+    }
+
+    public function puzzleType() {
+        return $this->belongsTo(PuzzleType::class, 'puzzle_type_id');
     }
 }

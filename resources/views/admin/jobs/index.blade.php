@@ -66,7 +66,7 @@
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <div class="bg-white shadow sm:rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
-                    <form method="GET" action="{{ route('admin.jobs.index') }}" class="grid gap-4 md:grid-cols-4">
+                    <form method="GET" action="{{ route('admin.jobs.index') }}" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Search</label>
                             <input
@@ -108,6 +108,21 @@
                         </div>
 
                         <div>
+                            <label class="block text-sm font-medium text-gray-700">Location</label>
+                            <select
+                                name="location"
+                                class="mt-1 block w-full rounded-md border-gray-300 bg-white py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                            >
+                                <option value="">All locations</option>
+                                @foreach($locationOptions as $location)
+                                    <option value="{{ $location }}" @selected(Str::lower($filters['location']) === Str::lower($location))>
+                                        {{ $location }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
                             <label class="block text-sm font-medium text-gray-700">Min. match score</label>
                             <input
                                 type="number"
@@ -120,12 +135,17 @@
                             >
                         </div>
 
-                        <div class="flex items-center gap-2 md:col-span-2">
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" name="remote_only" id="remote_only" value="1" @checked($filters['remote_only'])>
+                            <label for="remote_only" class="text-sm text-gray-700">Remote only</label>
+                        </div>
+
+                        <div class="flex items-center gap-2">
                             <input type="checkbox" name="archived" id="archived" value="1" @checked($filters['archived'])>
                             <label for="archived" class="text-sm text-gray-700">Show archived</label>
                         </div>
 
-                        <div class="md:col-span-4 flex items-center justify-end gap-3">
+                        <div class="lg:col-span-6 flex items-center justify-end gap-3">
                             <a href="{{ route('admin.jobs.index') }}" class="text-sm text-gray-500 hover:text-gray-700">
                                 Reset
                             </a>
@@ -137,9 +157,108 @@
                 </div>
             </div>
 
-            <div class="mt-6">
-                <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-200">
+            <div class="mt-6 space-y-6">
+                <div class="space-y-4 sm:hidden">
+                    @forelse($jobs as $job)
+                        <article class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <h2 class="text-base font-semibold text-gray-900">
+                                        <a href="{{ route('admin.jobs.show', $job) }}" class="hover:underline">
+                                            {{ $job->title }}
+                                        </a>
+                                    </h2>
+                                    <p class="text-sm text-gray-500">{{ $job->company }}</p>
+                                </div>
+                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $statusStyles[$job->status] }}">
+                                    {{ $statusLabels[$job->status] ?? Str::title($job->status) }}
+                                </span>
+                            </div>
+
+                            <div class="mt-4 flex flex-wrap gap-6 text-sm text-gray-600">
+                                <div class="flex-1 min-w-[45%] space-y-2">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Match</span>
+                                        <span class="text-base font-semibold text-gray-900">
+                                            {{ !is_null($job->match_score) ? number_format((float) $job->match_score, 1) . '%' : '—' }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Location</span>
+                                        <span class="text-right text-gray-900">
+                                            {{ $job->displayLocation() }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Added</span>
+                                        <span class="text-right text-gray-900">
+                                            {{ optional($job->collected_at ?? $job->created_at)->format('M d, Y') ?? 'Not available' }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-[45%] space-y-2">
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Source</span>
+                                        <span class="text-right text-gray-900">
+                                            {{ optional($job->jobSource)->name ?? 'Manual' }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Posted</span>
+                                        <span class="text-right text-gray-900">
+                                            {{ optional($job->posted_at)->format('M d, Y') ?? 'Not available' }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Primary skill</span>
+                                        <span class="text-right text-gray-900">
+                                            {{ $job->primarySkill() ?? '—' }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Industry</span>
+                                        <span class="text-right text-gray-900">
+                                            {{ $job->inferredIndustry() ?? '—' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @php
+                                $tags = $job->topTags(6);
+                            @endphp
+                            @if($tags->isNotEmpty())
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    @foreach($tags as $tag)
+                                        <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700">
+                                            {{ $tag }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @endif
+
+                            <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
+                                <a href="{{ route('admin.jobs.show', $job) }}" class="inline-flex items-center rounded-md bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 hover:bg-indigo-100">
+                                    View details
+                                </a>
+                                <form method="POST" action="{{ route('admin.jobs.destroy', $job) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="inline-flex items-center rounded-md border border-gray-200 px-3 py-1 text-sm font-medium text-gray-600 hover:bg-gray-100">
+                                        Archive
+                                    </button>
+                                </form>
+                            </div>
+                        </article>
+                    @empty
+                        <p class="text-sm text-gray-500">No jobs match the current filters.</p>
+                    @endforelse
+                </div>
+
+                <div class="hidden sm:block">
+                    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -160,7 +279,7 @@
                                         <span class="text-xs text-gray-400 group-hover:text-gray-700">{{ $sortIndicator('company') }}</span>
                                     </a>
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Source</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Location</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                     <a
                                         href="{{ request()->fullUrlWithQuery(['sort' => 'match_score', 'direction' => $toggleSortDirection('match_score')]) }}"
@@ -170,6 +289,8 @@
                                         <span class="text-xs text-gray-400 group-hover:text-gray-700">{{ $sortIndicator('match_score') }}</span>
                                     </a>
                                 </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Primary Skill</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Industry</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                     <a
                                         href="{{ request()->fullUrlWithQuery(['sort' => 'status', 'direction' => $toggleSortDirection('status')]) }}"
@@ -177,6 +298,15 @@
                                     >
                                         Status
                                         <span class="text-xs text-gray-400 group-hover:text-gray-700">{{ $sortIndicator('status') }}</span>
+                                    </a>
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">
+                                    <a
+                                        href="{{ request()->fullUrlWithQuery(['sort' => 'collected_at', 'direction' => $toggleSortDirection('collected_at')]) }}"
+                                        class="group inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-gray-500 hover:text-gray-900"
+                                    >
+                                        Added
+                                        <span class="text-xs text-gray-400 group-hover:text-gray-700">{{ $sortIndicator('collected_at') }}</span>
                                     </a>
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -195,20 +325,36 @@
                             @forelse($jobs as $job)
                                 <tr class="{{ $job->is_archived ? 'bg-gray-50' : '' }}">
                                     <td class="px-6 py-4">
-                                        <div class="text-sm font-medium text-gray-900">
+                                        <div class="text-sm font-semibold text-gray-900">
                                             <a href="{{ route('admin.jobs.show', $job) }}" class="hover:underline">
                                                 {{ $job->title }}
                                             </a>
                                         </div>
-                                        <div class="text-xs text-gray-500 truncate max-w-xs">
-                                            {{ Str::limit($job->summary ?? strip_tags($job->description), 80) }}
+                                        <div class="mt-1 text-xs text-gray-500 max-w-sm">
+                                            {{ Str::limit($job->summary ?? strip_tags($job->description), 120) }}
+                                        </div>
+                                        @php $tags = $job->topTags(4); @endphp
+                                        @if($tags->isNotEmpty())
+                                            <div class="mt-2 flex flex-wrap gap-2">
+                                                @foreach($tags as $tag)
+                                                    <span class="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700">
+                                                        {{ $tag }}
+                                                    </span>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <div class="font-medium text-gray-900">{{ $job->company ?? 'Unknown' }}</div>
+                                        <div class="text-xs text-gray-500">
+                                            {{ optional($job->jobSource)->name ?? 'Manual' }}
+                                            @if($job->is_remote)
+                                                · Remote OK
+                                            @endif
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-700">
-                                        {{ $job->company ?? 'Unknown' }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700">
-                                        {{ optional($job->jobSource)->name ?? 'Manual' }}
+                                        {{ $job->displayLocation() }}
                                     </td>
                                     <td class="px-6 py-4">
                                         @if(!is_null($job->match_score))
@@ -221,6 +367,12 @@
                                             </span>
                                         @endif
                                     </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        {{ $job->primarySkill() ?? '—' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        {{ $job->inferredIndustry() ?? '—' }}
+                                    </td>
                                     <td class="px-6 py-4 text-sm">
                                         @php
                                             $statusClass = $statusStyles[$job->status] ?? 'bg-gray-100 text-gray-800';
@@ -231,10 +383,22 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-700">
+                                        {{ optional($job->collected_at ?? $job->created_at)->format('M d, Y') ?? 'n/a' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
                                         {{ optional($job->posted_at)->format('M d, Y') ?? 'n/a' }}
                                     </td>
                                     <td class="px-6 py-4 text-right text-sm">
-                                        <a href="{{ route('admin.jobs.show', $job) }}" class="text-indigo-600 hover:text-indigo-900">Review</a>
+                                        <div class="flex items-center justify-end gap-3">
+                                            <a href="{{ route('admin.jobs.show', $job) }}" class="text-indigo-600 hover:text-indigo-900">Review</a>
+                                            <form method="POST" action="{{ route('admin.jobs.destroy', $job) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-gray-500 hover:text-gray-700">
+                                                    Archive
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -248,6 +412,7 @@
                     </table>
                 </div>
             </div>
+        </div>
 
             <div class="mt-6">
                 {{ $jobs->links('vendor.pagination.jobs') }}

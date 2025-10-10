@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminJobController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminPostController;
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 $domain = preg_replace("(^https?://)", "", config('app.url'));
 
 Route::domain('admin.'.$domain)->name('admin.')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('dashboard')->middleware('auth');
+    Route::get('/', AdminDashboardController::class)->name('dashboard')->middleware('auth');
 
     Route::get('/login', [AdminLoginController::class, 'login'])->name('login');
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');

@@ -13,6 +13,11 @@
 
       <main>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            @if (session('status'))
+                <div class="mb-6 rounded border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                    {{ session('status') }}
+                </div>
+            @endif
 
             <!-- This example requires Tailwind CSS v2.0+ -->
             <div class="flex flex-col">
@@ -31,8 +36,8 @@
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Phone
                                         </th>
-                                        <th scope="col" class="relative px-6 py-3">
-                                            <span class="sr-only">Edit</span>
+                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Actions
                                         </th>
 
                                     </tr>
@@ -63,7 +68,16 @@
                                         </td>
 
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="{{ route('admin.client.edit', ['client' => $client->id]) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                            <div class="flex items-center justify-end gap-3">
+                                                <a href="{{ route('admin.client.edit', $client) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                                <form method="POST" action="{{ route('admin.client.destroy', $client) }}" onsubmit="return confirm('Delete this client permanently?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-600 hover:text-red-800">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
 
                                     </tr>

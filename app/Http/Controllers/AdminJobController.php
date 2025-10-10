@@ -20,9 +20,11 @@ class AdminJobController extends Controller
             'search' => $request->string('search')->toString(),
             'match' => $request->float('match', null),
             'archived' => $request->boolean('archived', false),
+            'location' => $request->string('location')->toString(),
+            'remote_only' => $request->boolean('remote_only', false),
         ];
 
-        $allowedSorts = ['title', 'company', 'match_score', 'status', 'posted_at'];
+        $allowedSorts = ['title', 'company', 'match_score', 'status', 'posted_at', 'collected_at', 'created_at'];
         $sort = $request->string('sort')->toString();
         $filters['sort'] = in_array($sort, $allowedSorts, true) ? $sort : 'match_score';
 
@@ -55,6 +57,20 @@ class AdminJobController extends Controller
             ->when(!is_null($filters['match']), function ($q) use ($filters) {
                 return $q->where('match_score', '>=', $filters['match']);
             })
+            ->when($filters['remote_only'], function ($q) {
+                return $q->where('is_remote', true);
+            })
+            ->when($filters['location'], function ($q) use ($filters) {
+                $location = Str::lower($filters['location']);
+
+                if ($location === 'remote') {
+                    return $q->where('is_remote', true);
+                }
+
+                return $q->where(function ($inner) use ($location) {
+                    $inner->whereRaw('LOWER(location) LIKE ?', ['%'.$location.'%']);
+                });
+            })
         ;
 
         switch ($filters['sort']) {
@@ -70,17 +86,38 @@ class AdminJobController extends Controller
             case 'status':
                 $query->orderBy('status', $filters['direction']);
                 break;
+            case 'collected_at':
+                $query->orderBy('collected_at', $filters['direction']);
+                break;
+            case 'created_at':
+                $query->orderBy('created_at', $filters['direction']);
+                break;
             case 'posted_at':
             default:
                 $query->orderBy('posted_at', $filters['direction']);
                 break;
         }
 
-        $query->orderBy('collected_at', 'desc')->orderBy('created_at', 'desc');
+        if (!in_array($filters['sort'], ['collected_at', 'created_at'], true)) {
+            $query->orderBy('collected_at', 'desc')->orderBy('created_at', 'desc');
+        }
 
         $jobs = $query->paginate(20)->withQueryString();
 
         $sources = JobSource::query()->orderBy('name')->get();
+        $locationOptions = JobListing::query()
+            ->select('location')
+            ->whereNotNull('location')
+            ->distinct()
+            ->pluck('location')
+            ->filter()
+            ->map(fn ($value) => trim($value))
+            ->unique()
+            ->sort()
+            ->values();
+        if (JobListing::where('is_remote', true)->exists()) {
+            $locationOptions = collect(['Remote'])->merge($locationOptions)->unique()->values();
+        }
 
         $statusOptions = [
             'all' => 'All',
@@ -93,7 +130,13 @@ class AdminJobController extends Controller
             JobListing::STATUS_ARCHIVED => 'Archived',
         ];
 
-        return view('admin.jobs.index', compact('jobs', 'sources', 'filters', 'statusOptions'));
+        return view('admin.jobs.index', compact(
+            'jobs',
+            'sources',
+            'filters',
+            'statusOptions',
+            'locationOptions'
+        ));
     }
 
     public function create(): View

@@ -2,54 +2,49 @@
 
 namespace App\View\Components;
 
-use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
-use CommerceGuys\Addressing\Country\CountryRepository;
-use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
+use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 
 class Address extends Component
 {
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
+    public string $countryCode;
+    public ?string $stateCode;
+    public Collection $countries;
+    public Collection $states;
+    public ?string $streetAddress;
+    public ?string $streetAddress2;
+    public ?string $city;
+    public ?string $postalCode;
 
-    public $countryCode;
-    public $countries;
-    public $states;
+    public function __construct(
+        string $countryCode = 'US',
+        ?string $stateCode = null,
+        ?string $streetAddress = null,
+        ?string $streetAddress2 = null,
+        ?string $city = null,
+        ?string $postalCode = null
+    ) {
+        $this->countryCode = strtoupper($countryCode ?: 'US');
+        $this->stateCode = $stateCode;
+        $this->streetAddress = $streetAddress;
+        $this->streetAddress2 = $streetAddress2;
+        $this->city = $city;
+        $this->postalCode = $postalCode;
 
-    public function __construct($countryCode='US', $countries=[], $states=[])
-    {
-        $this->countryCode = $countryCode;
-        $this->states = collect();
-        $this->countries = collect();
+        $countryList = collect(config('address.countries', []));
+        if ($countryList->isEmpty()) {
+            $countryList = collect(['US' => 'United States']);
+        }
 
-        $countryRepository = new CountryRepository();
-        $addressFormatRepository = new AddressFormatRepository();
-        $subdivisionRepository = new SubdivisionRepository();
+        $selectedCountry = $countryList->only([$this->countryCode])->filter();
+        $this->countries = $selectedCountry->union($countryList);
 
-        $countryListUnordered = collect($countryRepository->getList('en'));
-        $countryListUnordered->each(function ($item, $key) {
-            if($key == $this->countryCode)
-                $this->countries->prepend($item);
-            else
-                $this->countries->push($item);
-        });
-
-        $statesCollectionUnordered = collect($subdivisionRepository->getAll([$countryCode]));
-        $this->states = collect([]);
-        $statesCollectionUnordered->each(function ($item, $key) {
-                $this->states->put($item->getCode(), $item->getName());
-        });
-
+        $stateList = collect(config("address.states.{$this->countryCode}", []));
+        $this->states = $stateList->isEmpty()
+            ? collect(config('address.states.US', []))
+            : $stateList;
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|string
-     */
     public function render()
     {
         return view('components.address');
