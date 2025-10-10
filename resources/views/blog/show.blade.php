@@ -6,7 +6,7 @@
 
     <div class="m-4">
         <h1 class="mb-4 text-5xl text-gruvbox-light-yellow">{{ $post->title }}</h1>
-        <a class="hover:cursor-pointer text-gruvbox-light-green hover:text-gruvbox-green" href="{{ route('blog') }}">
+        <a class="hover:cursor-pointer text-gruvbox-light-green hover:text-gruvbox-green" href="{{ route('projects.index') }}">
             &larr; Back to posts
         </a>
     </div>

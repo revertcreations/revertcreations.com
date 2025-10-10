@@ -13,6 +13,7 @@ const chokidar = require('chokidar');
  */
 
 mix.js('resources/js/home.js', 'js')
+    .js('resources/js/projectDetail.js', 'js')
 //    .js('resources/js/playground.js', 'js')
     .postCss('resources/css/app.css', 'public/css', [
         require('tailwindcss'),
