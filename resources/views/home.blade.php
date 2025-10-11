@@ -13,24 +13,14 @@
             id="lead">
 
             <content-element
-                class="m-3 block select-none text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal">
-                I am a full-stack web <span class="text-3xl font-bold text-gruvbox-green"
-                    id="developer">developer</span> who loves the process of creation. Lately I've been even more
-                interested in crafting <interactive-element>interactive</interactive-element>
-                and engaging user experiences. I enjoy the challenge of designing and implementing intuitive, rich
-                experiences users can
-                <treasure-element data-name="treasure">treasure</treasure-element>.
-            </content-element>
-
-            <content-element
-                class="m-3 block select-none text-lg sm:leading-tight md:m-4 md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal">
-                I'm always brainstorming startup ideas, tinkering with
-                interface designs, and exploring technologies. I hope this
-                platform can be a source of motivation for me to bring
-                some of those creative ideas to life and give them a home to display. Hope you find some
-                <hint-element data-content="hidden"></hint-element>
+                class="w-2/3 m-auto block select-none text-lg sm:leading-tight md:text-xl md:leading-relaxed lg:text-2xl lg:leading-normal">
+                I'm a full-stack web <span class="text-3xl font-bold text-gruvbox-green" id="developer">developer</span>.
+                Lately I've been even focusing on building <interactive-element>interactive</interactive-element> user experiences.
+                I love the challenge of turning design into code that users can truly
+                <treasure-element data-name="treasure">treasure</treasure-element>. Hope you find some <hint-element data-content="hidden"></hint-element>
                 gems lying around.
             </content-element>
+
 
         </div>
 

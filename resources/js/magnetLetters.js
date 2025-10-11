@@ -18,8 +18,8 @@ const palette = [
 
 const LETTER_CLASS = "magnet-letter";
 const ACTIVE_CLASS = "magnet-active";
-const LETTER_HORIZONTAL_TOLERANCE = 35;
-const LETTER_VERTICAL_TOLERANCE = 20;
+const LETTER_HORIZONTAL_TOLERANCE = 15;
+const LETTER_VERTICAL_TOLERANCE = 15;
 const OVERLAP_TOLERANCE = 5;
 const SECRET_WORDS = ["hire", "reset"];
 
@@ -33,7 +33,23 @@ let animationFrame = null;
 let resizeObserver = null;
 let lastPointerEvent = null;
 let activeLetter = null;
-let resetFrame = null;
+
+const DEBUG_MAGNET = false;
+const debugLog = (...args) => {
+    if (!DEBUG_MAGNET) return;
+    // eslint-disable-next-line no-console
+    console.log("[Magnet]", ...args);
+};
+const debugCount = (label) => {
+    if (!DEBUG_MAGNET) return;
+    // eslint-disable-next-line no-console
+    console.count(`[Magnet] ${label}`);
+};
+const debugTimeEnd = (label, start) => {
+    if (!DEBUG_MAGNET) return;
+    // eslint-disable-next-line no-console
+    console.log("[Magnet]", `${label} ${Math.round((performance.now() - start) * 1000) / 1000}ms`);
+};
 
 const randomFromPalette = () =>
     palette[Math.floor(Math.random() * palette.length)];
@@ -226,8 +242,19 @@ const onPointerMove = (event) => {
         animationFrame = null;
         if (!activeLetter || !lastPointerEvent) return;
 
+        debugCount("pointer-move-frame");
+
         const state = DRAG_STATE.get(activeLetter);
         if (!state) return;
+
+        if (
+            state.pointerId !== undefined &&
+            state.pointerId !== null &&
+            event.pointerId !== undefined &&
+            state.pointerId !== event.pointerId
+        ) {
+            return;
+        }
 
         const pointerX =
             lastPointerEvent.clientX ?? lastPointerEvent.touches?.[0]?.clientX ?? 0;
@@ -288,6 +315,10 @@ const onPointerDown = (event) => {
         }
     }
 
+    if (event.pointerType === "touch") {
+        event.preventDefault();
+    }
+
     target.style.cursor = "grabbing";
     target.style.zIndex = "10";
 };
@@ -295,7 +326,7 @@ const onPointerDown = (event) => {
 const activateLetters = () => {
     const letters = leadContainer.querySelectorAll(`.${LETTER_CLASS}`);
     letters.forEach((letter) => {
-        letter.addEventListener("pointerdown", onPointerDown, { passive: true });
+        letter.addEventListener("pointerdown", onPointerDown, { passive: false });
         letter.addEventListener("pointerup", endDrag, { passive: true });
         letter.addEventListener("pointercancel", endDrag, { passive: true });
     });
@@ -303,22 +334,15 @@ const activateLetters = () => {
     pointerMoveListener = onPointerMove;
     pointerUpListener = endDrag;
 
-    window.addEventListener("pointermove", pointerMoveListener, { passive: true });
+    window.addEventListener("pointermove", pointerMoveListener, { passive: false });
     window.addEventListener("pointerup", pointerUpListener, { passive: true });
     window.addEventListener("pointercancel", pointerUpListener, { passive: true });
-
-    window.addEventListener("touchmove", pointerMoveListener, { passive: true });
-    window.addEventListener("touchend", pointerUpListener, { passive: true });
-    window.addEventListener("touchcancel", pointerUpListener, { passive: true });
 };
 
 const deactivateLetters = () => {
     window.removeEventListener("pointermove", pointerMoveListener ?? (() => {}));
     window.removeEventListener("pointerup", pointerUpListener ?? (() => {}));
     window.removeEventListener("pointercancel", pointerUpListener ?? (() => {}));
-    window.removeEventListener("touchmove", pointerMoveListener ?? (() => {}));
-    window.removeEventListener("touchend", pointerUpListener ?? (() => {}));
-    window.removeEventListener("touchcancel", pointerUpListener ?? (() => {}));
 
     pointerMoveListener = null;
     pointerUpListener = null;
@@ -340,7 +364,6 @@ const restoreMarkup = () => {
     originalMarkup = null;
 
     stopResizeObserver();
-    stopResetPolling();
     leadContainer = null;
 };
 
@@ -367,7 +390,10 @@ const SECRET_HANDLERS = {
 
 const calculateLetterPositions = () => {
     if (!leadContainer) return [];
-    return Array.from(leadContainer.querySelectorAll(`.${LETTER_CLASS}`)).map(
+    const start = DEBUG_MAGNET ? performance.now() : 0;
+    const positions = Array.from(
+        leadContainer.querySelectorAll(`.${LETTER_CLASS}`),
+    ).map(
         (letter) => {
             const rect = letter.getBoundingClientRect();
             return {
@@ -380,6 +406,11 @@ const calculateLetterPositions = () => {
             };
         },
     );
+    if (DEBUG_MAGNET) {
+        debugTimeEnd("calculateLetterPositions", start);
+        debugLog("letters measured", positions.length);
+    }
+    return positions;
 };
 
 const triggerSecretWord = (word) => {
@@ -473,7 +504,7 @@ const logLetterGroup = (group) => {
         width: Math.round(item.width),
     }));
     // eslint-disable-next-line no-console
-    console.log("Magnet group:", compact || "(space)", positions);
+    console.log("Magnet groups:", compact || "(space)", positions);
     return compact.toLowerCase();
 };
 
@@ -554,26 +585,6 @@ const evaluateLetterDrop = (letterElement) => {
     checkSecretWords();
 };
 
-const startResetPolling = () => {
-    if (resetFrame !== null) return;
-
-    const poll = () => {
-        resetFrame = null;
-        if (!leadContainer || !leadContainer.classList.contains(ACTIVE_CLASS))
-            return;
-        checkSecretWords();
-        resetFrame = window.requestAnimationFrame(poll);
-    };
-    resetFrame = window.requestAnimationFrame(poll);
-};
-
-const stopResetPolling = () => {
-    if (resetFrame !== null) {
-        window.cancelAnimationFrame(resetFrame);
-        resetFrame = null;
-    }
-};
-
 const stopResizeObserver = () => {
     if (resizeObserver) {
         resizeObserver.disconnect();
@@ -585,6 +596,7 @@ const initResizeObserver = () => {
     if (resizeObserver || !window.ResizeObserver) return;
 
     resizeObserver = new ResizeObserver((entries) => {
+        const resizeStart = DEBUG_MAGNET ? performance.now() : 0;
         const entry = entries[0];
         if (!entry || !leadContainer) return;
 
@@ -615,6 +627,10 @@ const initResizeObserver = () => {
             letter.style.top = `${relativeTop}px`;
             letter.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
         });
+        if (DEBUG_MAGNET) {
+            debugTimeEnd("resize-observer", resizeStart);
+            debugLog("resize letters adjusted", letters.length);
+        }
     });
 
     resizeObserver.observe(leadContainer);
@@ -637,8 +653,8 @@ export const MagnetLetters = {
         flattenInteractiveElements(leadContainer);
         buildLetters();
         activateLetters();
-        startResetPolling();
         initResizeObserver();
+        checkSecretWords();
     },
 
     deactivate: restoreMarkup,
