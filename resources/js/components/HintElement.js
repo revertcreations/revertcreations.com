@@ -1,3 +1,5 @@
+import { gsap } from 'gsap'
+
 export class HintElement extends HTMLElement {
     #time = new Date()
     #level = 0
@@ -19,6 +21,7 @@ export class HintElement extends HTMLElement {
     #gemAnimationFrame = null
     #lastGemFrameTime = null
     #gemGravity = 1800 // pixels per second squared
+    #levelTwoTimeline = null
 
     constructor () {
         super()
@@ -288,59 +291,71 @@ export class HintElement extends HTMLElement {
     animateLevelTwoTryAgain = () => {
         const animation = Animation()
     }
-    animateLevelTwo = async () => {
+    animateLevelTwo = () => {
         if (this.#animating) return
+        if (!document.body.contains(this.#emoji)) return
 
         this.#held = null
         this.#animating = true
 
-        const sleep = delay =>
-            new Promise(resolve => setTimeout(resolve, delay))
-
-        const animationSteps = [
-            { fontSize: 'text-5xl', emoji: '⌛', duration: 320 },
-            { fontSize: 'text-xl', emoji: '✨', duration: 220 },
-            { fontSize: 'text-2xl', emoji: '✨', duration: 220 },
-            { fontSize: 'text-3xl', emoji: '✨', duration: 220 },
-            { fontSize: 'text-5xl', emoji: '✨', duration: 220 },
-            { fontSize: 'text-5xl', emoji: '🔑', duration: 320 }
-        ]
+        if (this.#levelTwoTimeline) {
+            this.#levelTwoTimeline.kill()
+            this.#levelTwoTimeline = null
+        }
 
         let previousFontClass = null
 
-        try {
-            for (const step of animationSteps) {
-                if (!document.body.contains(this.#emoji)) break
+        gsap.set(this.#emoji, { transformOrigin: '50% 50%' })
 
-                if (previousFontClass) {
-                    this.#emoji.classList.remove(previousFontClass)
-                }
-
-                this.#emoji.classList.add(step.fontSize)
-                previousFontClass = step.fontSize
-                this.#emoji.innerHTML = step.emoji
-
-                const animation = this.#emoji.animate(
-                    [
-                        { transform: 'scale(0.8)', opacity: 0.4 },
-                        { transform: 'scale(1.15)', opacity: 1, offset: 0.6 },
-                        { transform: 'scale(1)', opacity: 1 }
-                    ],
-                    {
-                        duration: step.duration,
-                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-                        fill: 'forwards'
-                    }
-                )
-
-                // ensure the browser can garbage collect finished animations quickly
-                animation.finished.finally(() => animation.cancel())
-
-                await sleep(step.duration)
-            }
-        } finally {
+        const cleanup = () => {
             this.#animating = false
+            this.#levelTwoTimeline = null
         }
+
+        const timeline = gsap.timeline({
+            defaults: { ease: 'back.out(1.6)' },
+            onComplete: cleanup
+        })
+
+        this.#levelTwoTimeline = timeline
+
+        const updateEmoji = (fontSize, emoji) => {
+            if (!document.body.contains(this.#emoji)) {
+                timeline.kill()
+                cleanup()
+                return
+            }
+
+            if (previousFontClass) {
+                this.#emoji.classList.remove(previousFontClass)
+            }
+
+            this.#emoji.classList.add(fontSize)
+            previousFontClass = fontSize
+            this.#emoji.innerHTML = emoji
+        }
+
+        timeline
+            .call(updateEmoji, ['text-5xl', '⌛'])
+            .fromTo(
+                this.#emoji,
+                { scale: 1, opacity: 1.2},
+                { scale: 1, opacity: 1, duration: 0.30, overwrite: 'auto' }
+            )
+            .call(updateEmoji, ['text-xl', '✨'])
+            .fromTo(
+                this.#emoji,
+                { scale: 0.15, opacity: 0.5 },
+                { scale: 1.8, opacity: 1, duration: 0.75, overwrite: 'auto' }
+            )
+            .call(updateEmoji, ['text-5xl', '🔑'])
+            .fromTo(
+                this.#emoji,
+                { scale: 0.3, opacity: 0.6 },
+                { scale: 1, opacity: 1, duration: 0.30, overwrite: 'auto' }
+            )
+
+        timeline.play(0)
     }
 
     animateLevelThree = () => {
