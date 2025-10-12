@@ -48,16 +48,16 @@ export class NameElement extends HTMLElement {
         }
     }
 
-    loadAnimation = (span, index) => {
-        this.nameLetterClicked({ target: span }, true)
+    // loadAnimation = (span, index) => {
+    //     this.nameLetterClicked({ target: span }, true)
 
-        let count = span.getAttribute('data-loading-count')
-        if (count == 8) {
-            clearInterval(this.#intervals[index])
-        }
+    //     let count = span.getAttribute('data-loading-count')
+    //     if (count == 8) {
+    //         clearInterval(this.#intervals[index])
+    //     }
 
-        span.setAttribute('data-loading-count', ++count)
-    }
+    //     span.setAttribute('data-loading-count', ++count)
+    // }
 
     #ensureAudioLoaded () {
         if (this.#audioReadyPromise) {
@@ -127,7 +127,7 @@ export class NameElement extends HTMLElement {
             const span = document.createElement('span')
             span.classList.add('cursor-pointer', 'select-none', 'text-8xl')
             span.style.display = 'inline-block' // <-- key!
-            span.style.transform = 'translateY(0px)' // optional visual setup
+            // span.style.transform = 'translateY(200px)' // optional visual setup
             span.innerText = letter
 
             span.setAttribute('data-click-count', 0)
@@ -138,40 +138,28 @@ export class NameElement extends HTMLElement {
 
             this.appendChild(span)
 
+            // random rotation between -30 and +30 degrees
+            const rotateRandom = gsap.utils.random(-90, 90, 1)
+            // oppostie rotation direction for bounce
+            const oppositeRotate = rotateRandom * -1
+
             // timeline for each letter
             const letterTl = gsap.timeline({
-                delay: i * 0.12, // cascading
-                onComplete: () => {
-                    // lock in the final color when the animation ends
-                    this.nameLetterClicked({ target: span }, true)
-                }
+                delay: i * 0.18 // cascading
             })
 
             // first fall — starts above, hits “ground”
             letterTl.from(span, {
                 y: -200,
-                ease: 'power2.in',
-                duration: 0.35
-            })
-            // small upward recoil
-            letterTl.to(span, {
-                y: -10,
-                rotate: Math.random() * 40 - 10,
+                rotate: rotateRandom,
                 transformOrigin: 'center bottom',
-                ease: 'bounce.inOut',
-                duration: 0.25,
-                onComplete: this.nameLetterClicked({ target: span }, true)
-            })
-            // settle back to baseline with gentle bounce
-            letterTl.to(span, {
-                y: 0,
-                rotate: 0,
                 ease: 'bounce.out',
-                duration: 0.6,
-                onStart: this.nameLetterClicked({ target: span }, true),
+                duration: 0.8,
                 onUpdate: () => {
-                    // during the bounce, keep randomizing color
-                    if (Math.random() < 0.3) {
+                    // span._gsap.y is something like "-2.345px"
+                    const yValue = parseFloat(span._gsap.y) // convert to number (removes 'px')
+                    // check if it's roughly between -10px and 0px
+                    if (yValue >= -10 && yValue <= 0) {
                         this.nameLetterClicked({ target: span }, true)
                     }
                 }
@@ -216,7 +204,6 @@ export class NameElement extends HTMLElement {
 
             target.classList.remove('cursor-not-allowed')
             target.classList.add('cursor-copy')
-
         } else if (!loading) {
             this.#ensureAudioLoaded().then(() => this.#playAudio('error'))
 
