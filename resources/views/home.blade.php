@@ -26,7 +26,6 @@
 
     </div>
 
-    <script src="/js/home.js"></script>
     @if (app()->environment('production'))
         <script>
             gtag('event', 'page_view', {

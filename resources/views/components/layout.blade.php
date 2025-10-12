@@ -134,21 +134,26 @@
     <div class="flex flex-nowrap bg-gruvbox-orange text-revert-black"
         id="footer">
 
-        <div class="relative grow bg-gruvbox-yellow p-4">
-            <a href="{{ route('projects.index') }}">
-                <h2 class="skill inline cursor-pointer text-3xl md:text-5xl"
+        <footer-magnet-element class="relative grow bg-gruvbox-yellow">
+            <a class="relative block h-full w-full cursor-pointer p-4"
+                href="{{ route('projects.index') }}">
+                <h2 class="skill inline text-3xl font-bold md:text-5xl"
+                    data-footer-label
                     name="design">projects</h2>
             </a>
-        </div>
+        </footer-magnet-element>
 
-        <div class="relative grow bg-gruvbox-blue p-4">
-            <a href="mailto:trever@revertcreations.com">
-                <h2 class="skill cursor-pointer text-3xl md:text-5xl">contact</h2>
+        <footer-magnet-element class="relative grow bg-gruvbox-blue">
+            <a class="relative block h-full w-full cursor-pointer p-4"
+                href="mailto:trever@revertcreations.com">
+                <h2 class="skill inline text-3xl font-bold md:text-5xl"
+                    data-footer-label>email</h2>
             </a>
-        </div>
+        </footer-magnet-element>
 
     </div>
 
+    <script src="/js/home.js" defer></script>
     @stack('scripts')
 </body>
 
