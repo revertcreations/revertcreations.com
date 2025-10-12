@@ -478,7 +478,7 @@ export class FooterMagnetElement extends HTMLElement {
         const tl = gsap.timeline()
 
         tl.to(this.#letters, {
-            scale: 0.92,
+            scale: 0.70,
             duration: 0.12,
             ease: 'power2.out'
         })
@@ -519,7 +519,7 @@ export class FooterMagnetElement extends HTMLElement {
         })
 
         tl.to(this.#letters, {
-            scale: 1.05,
+            scale: 1.20,
             duration: 0.1,
             ease: 'back.out(2)'
         })

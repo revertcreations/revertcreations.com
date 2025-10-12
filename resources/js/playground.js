@@ -40,7 +40,9 @@ const Playground = {
         Playground.dropZoneRect = null;
 
         if (Playground.playground.id === "lead") {
+            const leadHeight = Playground.playground.offsetHeight;
             Playground.playground.innerHTML = "";
+            Playground.playground.style.minHeight = `${leadHeight}px`;
         } else {
             const leadContainer = document.getElementById("lead");
             if (leadContainer) leadContainer.innerHTML = "";
@@ -477,6 +479,17 @@ const Playground = {
                 "border",
                 "border-dashed",
                 "border-4",
+                "border-gruvbox-green"
+            );
+        if (Playground.homepageTag)
+            Playground.homepageTag.classList.remove("border-transparent");
+
+        if (Playground.homepageTag)
+            Playground.homepageTag.classList.add(
+                "border",
+                "border-4",
+                "border-dashed",
+                "border-gruvbox-green"
             );
 
         Playground.activeSkill = skill;
@@ -583,8 +596,10 @@ const Playground = {
             Playground.homepageTag.classList.remove(
                 "border",
                 "border-dashed",
-                "border-4",
+                "border-gruvbox-green"
             );
+        if (Playground.homepageTag)
+            Playground.homepageTag.classList.add("border-transparent");
 
         Playground.activeSkill = null;
         Playground.dropZoneRect = null;

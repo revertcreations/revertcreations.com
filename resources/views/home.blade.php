@@ -5,7 +5,7 @@
         <div class="self-top p-2 sm:p-4 md:p-6"
             id="title">
             <h1 class="text-5xl md:text-6xl">Hi. I'm</h1>
-            <name-element class="table"
+            <name-element class="inline-block min-h-24 border-4 border-transparent"
                 data-content="Trever"></name-element>
         </div>
 

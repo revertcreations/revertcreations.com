@@ -5,13 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible"
         content="ie=edge">
     <meta name="theme-color"
         content="#317EFB">
     <meta name="csrf-token"
         content="{{ csrf_token() }}">
+    <meta name="description"
+        content="Trever Hillis is a full-stack web developer crafting animated, interactive front-end experiences that fuse code, motion, and design for modern brands.">
     <title>
         @isset($title)
             {{ $title }} | REVERT CREATIONS
@@ -20,7 +22,10 @@
         @endisset
     </title>
 
-    <link href="/css/app.css"
+    @php
+        $appCssVersion = file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : time();
+    @endphp
+    <link href="{{ asset('css/app.css') }}?v={{ $appCssVersion }}"
         rel="stylesheet">
     @stack('styles')
 
@@ -45,10 +50,12 @@
 <body class="flex h-full flex-col overflow-hidden bg-gruvbox-black-hidden">
 
     <header id="main_header">
-        <div class="bg-gruvbox-blue"
+        <div class=""
             id="logo">
-            <a class="right-0 top-2 z-10 w-10/12"
-                href="{{ route('home') }}">
+            <a class="right-0 top-2 z-10 flex w-10/12 items-center"
+                href="{{ route('home') }}"
+                aria-label="Revert Creations home">
+                <span class="sr-only">Revert Creations home</span>
                 <svg xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 1600 158">
                     <defs>
@@ -135,7 +142,7 @@
         id="footer">
 
         <footer-magnet-element class="relative grow bg-gruvbox-yellow">
-            <a class="relative block h-full w-full cursor-pointer p-4"
+            <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
                 href="{{ route('projects.index') }}">
                 <h2 class="skill inline text-3xl font-bold md:text-5xl"
                     data-footer-label
@@ -144,7 +151,7 @@
         </footer-magnet-element>
 
         <footer-magnet-element class="relative grow bg-gruvbox-blue">
-            <a class="relative block h-full w-full cursor-pointer p-4"
+            <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
                 href="mailto:trever@revertcreations.com">
                 <h2 class="skill inline text-3xl font-bold md:text-5xl"
                     data-footer-label>email</h2>
@@ -153,7 +160,10 @@
 
     </div>
 
-    <script src="/js/home.js" defer></script>
+    @php
+        $homeJsVersion = file_exists(public_path('js/home.js')) ? filemtime(public_path('js/home.js')) : time();
+    @endphp
+    <script src="{{ asset('js/home.js') }}?v={{ $homeJsVersion }}" defer></script>
     @stack('scripts')
 </body>
 
