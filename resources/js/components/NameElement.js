@@ -36,7 +36,7 @@ export class NameElement extends HTMLElement {
         this.render()
     }
 
-    attributeChangedCallback (name, oldValue, newValue) {
+    attributeChangedCallback (oldValue) {
         if (oldValue === null) {
             return
         } else {
@@ -47,17 +47,6 @@ export class NameElement extends HTMLElement {
             this.render()
         }
     }
-
-    // loadAnimation = (span, index) => {
-    //     this.nameLetterClicked({ target: span }, true)
-
-    //     let count = span.getAttribute('data-loading-count')
-    //     if (count == 8) {
-    //         clearInterval(this.#intervals[index])
-    //     }
-
-    //     span.setAttribute('data-loading-count', ++count)
-    // }
 
     #ensureAudioLoaded () {
         if (this.#audioReadyPromise) {
@@ -125,7 +114,7 @@ export class NameElement extends HTMLElement {
 
         this.dataset.content.split('').forEach((letter, i) => {
             const span = document.createElement('span')
-            span.classList.add('cursor-pointer', 'select-none', 'text-8xl')
+            span.classList.add('cursor-pointer', 'select-none', 'text-5xl', 'md:text-8xl')
             span.style.display = 'inline-block' // <-- key!
             // span.style.transform = 'translateY(200px)' // optional visual setup
             span.innerText = letter

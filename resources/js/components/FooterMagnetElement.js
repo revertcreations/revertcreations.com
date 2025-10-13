@@ -22,6 +22,7 @@ export class FooterMagnetElement extends HTMLElement {
     #lastPointer = null
     #wordBounds = { minX: 0, maxX: 0, minY: 0, maxY: 0 }
     #wordOffset = { x: 0, y: 0 }
+    #hasInitialPlacement = false
     #pressTimeline = null
     #releaseTimeline = null
     #config = {
@@ -52,12 +53,13 @@ export class FooterMagnetElement extends HTMLElement {
 
         this.#applyLayoutStyles()
 
+        this.#wordOffset = { x: 0, y: 0 }
+        this.#hasInitialPlacement = false
         this.#updateMetrics()
         this.#adjustLayoutDimensions()
         this.#initializeTweens()
         this.#resetLettersToAnchors({ immediate: true })
         this.#lastPointer = null
-        this.#wordOffset = { x: 0, y: 0 }
         console.log('[FooterMagnetElement] connected', {
             usingPointerEvents: this.#usingPointerEvents,
             hasLabel: Boolean(this.#label),
@@ -460,8 +462,19 @@ export class FooterMagnetElement extends HTMLElement {
         const minTranslateY = -minY
         const maxTranslateY = boundsHeight - maxY
 
-        this.#wordOffset.x = clamp(this.#wordOffset.x, minTranslateX, maxTranslateX)
-        this.#wordOffset.y = clamp(this.#wordOffset.y, minTranslateY, maxTranslateY)
+        if (!this.#hasInitialPlacement) {
+            const wordWidth = Math.max(0, maxX - minX)
+            const wordHeight = Math.max(0, maxY - minY)
+            const desiredLeft = Math.max(0, (boundsWidth - wordWidth) / 2)
+            const desiredTop = Math.max(0, (boundsHeight - wordHeight) / 2)
+
+            this.#wordOffset.x = clamp(desiredLeft - minX, minTranslateX, maxTranslateX)
+            this.#wordOffset.y = clamp(desiredTop - minY, minTranslateY, maxTranslateY)
+            this.#hasInitialPlacement = true
+        } else {
+            this.#wordOffset.x = clamp(this.#wordOffset.x, minTranslateX, maxTranslateX)
+            this.#wordOffset.y = clamp(this.#wordOffset.y, minTranslateY, maxTranslateY)
+        }
     }
 
     #adjustLayoutDimensions () {
