@@ -25,6 +25,424 @@ const SECRET_WORDS = ["hire", "reset"];
 
 const DRAG_STATE = new WeakMap();
 
+const LETTER_STATE = new Map();
+const SPATIAL_HASH = new Map();
+const STATE_CELL_SIZE = 48;
+
+const computeCellsForBounds = (x, y, width, height) => {
+    const minX = Math.floor(x / STATE_CELL_SIZE);
+    const minY = Math.floor(y / STATE_CELL_SIZE);
+    const maxX = Math.floor((x + width) / STATE_CELL_SIZE);
+    const maxY = Math.floor((y + height) / STATE_CELL_SIZE);
+    const cells = [];
+
+    for (let cx = minX; cx <= maxX; cx++) {
+        for (let cy = minY; cy <= maxY; cy++) {
+            cells.push(`${cx}:${cy}`);
+        }
+    }
+
+    return cells;
+};
+
+const unindexLetterState = (state) => {
+    if (!state || !state.cells) return;
+    state.cells.forEach((key) => {
+        const bucket = SPATIAL_HASH.get(key);
+        if (!bucket) return;
+        bucket.delete(state);
+        if (!bucket.size) {
+            SPATIAL_HASH.delete(key);
+        }
+    });
+    state.cells = [];
+};
+
+const indexLetterState = (state) => {
+    const rect = getStateRect(state);
+    const cells = computeCellsForBounds(rect.x, rect.y, rect.width, rect.height);
+    state.cells = cells;
+    cells.forEach((key) => {
+        let bucket = SPATIAL_HASH.get(key);
+        if (!bucket) {
+            bucket = new Set();
+            SPATIAL_HASH.set(key, bucket);
+        }
+        bucket.add(state);
+    });
+};
+
+const registerLetterState = ({
+    element,
+    baseX,
+    baseY,
+    width,
+    height,
+    collisionTopInset,
+    collisionBottomInset,
+    collisionLeftInset,
+    collisionRightInset,
+}) => {
+    const state = {
+        element,
+        baseX,
+        baseY,
+        offsetX: 0,
+        offsetY: 0,
+        width,
+        height,
+        collisionTopInset,
+        collisionBottomInset,
+        collisionLeftInset,
+        collisionRightInset,
+        cells: [],
+    };
+    LETTER_STATE.set(element, state);
+    indexLetterState(state);
+};
+
+const updateLetterStateBase = (element, baseX, baseY, offsetX, offsetY) => {
+    const state = LETTER_STATE.get(element);
+    if (!state) return;
+    unindexLetterState(state);
+    state.baseX = baseX;
+    state.baseY = baseY;
+    state.offsetX = offsetX;
+    state.offsetY = offsetY;
+    indexLetterState(state);
+};
+
+const updateLetterStateOffsets = (element, offsetX, offsetY) => {
+    const state = LETTER_STATE.get(element);
+    if (!state) return;
+    unindexLetterState(state);
+    state.offsetX = offsetX;
+    state.offsetY = offsetY;
+    indexLetterState(state);
+};
+
+const getLetterState = (element) => LETTER_STATE.get(element);
+
+const resetLetterState = () => {
+    LETTER_STATE.clear();
+    SPATIAL_HASH.clear();
+};
+
+const containerBounds = {
+    width: 0,
+    height: 0,
+};
+
+const updateContainerBounds = () => {
+    if (!leadContainer) {
+        containerBounds.width = 0;
+        containerBounds.height = 0;
+        return;
+    }
+    containerBounds.width = leadContainer.clientWidth || 0;
+    containerBounds.height = leadContainer.clientHeight || 0;
+};
+
+const CONTACT_EPSILON = 0.5;
+const AXIS_OVERLAP_EPSILON = 0.5;
+const MAX_PROPAGATED_PUSH = 1.2;
+
+const getStateRect = (state) => {
+    const left =
+        state.baseX +
+        state.offsetX +
+        (state.collisionLeftInset ?? 0);
+    const top =
+        state.baseY +
+        state.offsetY +
+        (state.collisionTopInset ?? 0);
+    const right =
+        state.baseX +
+        state.offsetX +
+        state.width -
+        (state.collisionRightInset ?? 0);
+    const bottom =
+        state.baseY +
+        state.offsetY +
+        state.height -
+        (state.collisionBottomInset ?? 0);
+    return {
+        x: left,
+        y: top,
+        right,
+        bottom,
+        width: Math.max(0, right - left),
+        height: Math.max(0, bottom - top),
+    };
+};
+
+const gatherNearbyStates = (state) => {
+    const rect = getStateRect(state);
+    const padding = 0.5;
+    const cells = computeCellsForBounds(
+        rect.x - padding,
+        rect.y - padding,
+        rect.width + padding * 2,
+        rect.height + padding * 2,
+    );
+    const candidates = new Set();
+    cells.forEach((key) => {
+        const bucket = SPATIAL_HASH.get(key);
+        if (!bucket) return;
+        bucket.forEach((candidate) => {
+            if (candidate !== state) candidates.add(candidate);
+        });
+    });
+    return Array.from(candidates);
+};
+
+const clampAxisOffset = (state, axis, offset) => {
+    if (!leadContainer) return offset;
+    const boundsSize = axis === "x" ? containerBounds.width : containerBounds.height;
+    if (!boundsSize) return offset;
+
+    const base = axis === "x" ? state.baseX : state.baseY;
+    const size = axis === "x" ? state.width : state.height;
+    const insetStart =
+        axis === "x"
+            ? state.collisionLeftInset ?? 0
+            : state.collisionTopInset ?? 0;
+    const insetEnd =
+        axis === "x"
+            ? state.collisionRightInset ?? 0
+            : state.collisionBottomInset ?? 0;
+    const minOffset = -(base + insetStart);
+    const maxOffset = boundsSize - (base + size - insetEnd);
+    if (maxOffset < minOffset) return minOffset;
+    if (offset < minOffset) return minOffset;
+    if (offset > maxOffset) return maxOffset;
+    return offset;
+};
+
+const clampOffsetsForState = (state, offsetX, offsetY) => ({
+    offsetX: clampAxisOffset(state, "x", offsetX),
+    offsetY: clampAxisOffset(state, "y", offsetY),
+});
+
+const applyOffsetsToState = (state, offsetX, offsetY) => {
+    const clamped = clampOffsetsForState(state, offsetX, offsetY);
+    if (clamped.offsetX === state.offsetX && clamped.offsetY === state.offsetY) {
+        return clamped;
+    }
+    state.element.style.transform = `translate3d(${clamped.offsetX}px, ${clamped.offsetY}px, 0)`;
+    updateLetterStateOffsets(state.element, clamped.offsetX, clamped.offsetY);
+    return clamped;
+};
+
+const applyAxisMove = (state, axis, delta) => {
+    if (!delta) return;
+    const newOffsetX =
+        axis === "x" ? state.offsetX + delta : state.offsetX;
+    const newOffsetY =
+        axis === "y" ? state.offsetY + delta : state.offsetY;
+    applyOffsetsToState(state, newOffsetX, newOffsetY);
+};
+
+const getAxisLimits = (state, axis) => {
+    if (!leadContainer) {
+        return { min: -Infinity, max: Infinity };
+    }
+    const boundsSize = axis === "x" ? containerBounds.width : containerBounds.height;
+    if (!boundsSize) {
+        return { min: -Infinity, max: Infinity };
+    }
+    const base = axis === "x" ? state.baseX : state.baseY;
+    const size = axis === "x" ? state.width : state.height;
+    const insetStart =
+        axis === "x"
+            ? state.collisionLeftInset ?? 0
+            : state.collisionTopInset ?? 0;
+    const insetEnd =
+        axis === "x"
+            ? state.collisionRightInset ?? 0
+            : state.collisionBottomInset ?? 0;
+    const min = -(base + insetStart);
+    const max = boundsSize - (base + size - insetEnd);
+    return { min, max };
+};
+
+const limitMoveByBounds = (state, axis, amount) => {
+    const direction = Math.sign(amount);
+    if (!direction) {
+        return { move: 0, leftover: 0 };
+    }
+    const current = axis === "x" ? state.offsetX : state.offsetY;
+    const { min, max } = getAxisLimits(state, axis);
+    let target = current + amount;
+    if (target < min) target = min;
+    if (target > max) target = max;
+    const move = target - current;
+    return {
+        move,
+        leftover: amount - move,
+    };
+};
+
+const findNearestNeighbor = (state, axis, direction) => {
+    if (!direction) return null;
+    const originRect = getStateRect(state);
+    const candidates = gatherNearbyStates(state);
+    let closest = null;
+    let closestDistance = Infinity;
+
+    candidates.forEach((candidate) => {
+        const rect = getStateRect(candidate);
+        if (axis === "x") {
+            const verticalOverlap =
+                Math.min(originRect.bottom, rect.bottom) -
+                Math.max(originRect.y, rect.y);
+            if (verticalOverlap <= AXIS_OVERLAP_EPSILON) return;
+            const distance =
+                direction > 0
+                    ? rect.x - originRect.right
+                    : originRect.x - rect.right;
+            if (distance < -CONTACT_EPSILON) return;
+            const adjustedDistance = Math.max(0, distance);
+            if (adjustedDistance < closestDistance) {
+                closest = candidate;
+                closestDistance = adjustedDistance;
+            }
+        } else {
+            const horizontalOverlap =
+                Math.min(originRect.right, rect.right) -
+                Math.max(originRect.x, rect.x);
+            if (horizontalOverlap <= AXIS_OVERLAP_EPSILON) return;
+            const distance =
+                direction > 0
+                    ? rect.y - originRect.bottom
+                    : originRect.y - rect.bottom;
+            if (distance < -CONTACT_EPSILON) return;
+            const adjustedDistance = Math.max(0, distance);
+            if (adjustedDistance < closestDistance) {
+                closest = candidate;
+                closestDistance = adjustedDistance;
+            }
+        }
+    });
+
+    if (!closest || closestDistance === Infinity) return null;
+    return {
+        state: closest,
+        distance: Math.max(0, closestDistance),
+    };
+};
+
+const moveStateRecursively = (state, axis, amount, visited = new Set()) => {
+    const direction = Math.sign(amount);
+    if (!direction) return { applied: 0, leftover: 0 };
+    if (visited.has(state)) return { applied: 0, leftover: amount };
+
+    visited.add(state);
+    const { move: boundedMove, leftover: boundsLeftover } = limitMoveByBounds(
+        state,
+        axis,
+        amount,
+    );
+
+    if (Math.abs(boundedMove) <= CONTACT_EPSILON) {
+        visited.delete(state);
+        return { applied: 0, leftover: amount };
+    }
+
+    const neighborInfo = findNearestNeighbor(state, axis, direction);
+    if (!neighborInfo || neighborInfo.distance >= Math.abs(boundedMove)) {
+        applyAxisMove(state, axis, boundedMove);
+        visited.delete(state);
+        return { applied: boundedMove, leftover: boundsLeftover };
+    }
+
+    const distanceToNeighbor = Math.max(0, neighborInfo.distance);
+    let appliedMove = 0;
+    if (distanceToNeighbor > 0) {
+        const advance = direction * Math.min(Math.abs(boundedMove), distanceToNeighbor);
+        applyAxisMove(state, axis, advance);
+        appliedMove += advance;
+    }
+
+    const remaining = boundedMove - appliedMove;
+    const neighborResult = moveStateRecursively(
+        neighborInfo.state,
+        axis,
+        remaining,
+        visited,
+    );
+
+    const neighborApplied = remaining - neighborResult.leftover;
+    if (Math.abs(neighborApplied) > CONTACT_EPSILON) {
+        applyAxisMove(state, axis, neighborApplied);
+        appliedMove += neighborApplied;
+    }
+
+    visited.delete(state);
+    return {
+        applied: appliedMove,
+        leftover: boundsLeftover + neighborResult.leftover,
+    };
+};
+
+const moveStateAlongAxis = (state, delta, axis) => {
+    if (!delta) return;
+    moveStateRecursively(state, axis, delta, new Set());
+};
+
+const resolveOverlapPair = (firstState, secondState) => {
+    const firstRect = getStateRect(firstState);
+    const secondRect = getStateRect(secondState);
+    const overlapWidth =
+        Math.min(firstRect.right, secondRect.right) -
+        Math.max(firstRect.x, secondRect.x);
+    const overlapHeight =
+        Math.min(firstRect.bottom, secondRect.bottom) -
+        Math.max(firstRect.y, secondRect.y);
+    if (overlapWidth <= 0 || overlapHeight <= 0) return false;
+
+    if (overlapWidth < overlapHeight) {
+        const direction = firstRect.x < secondRect.x ? -1 : 1;
+        moveStateAlongAxis(firstState, direction * overlapWidth, "x");
+        moveStateAlongAxis(secondState, -direction * overlapWidth, "x");
+    } else {
+        const direction = firstRect.y < secondRect.y ? -1 : 1;
+        moveStateAlongAxis(firstState, direction * overlapHeight, "y");
+        moveStateAlongAxis(secondState, -direction * overlapHeight, "y");
+    }
+    return true;
+};
+
+const resolveAllOverlaps = () => {
+    const states = Array.from(LETTER_STATE.values());
+    let iterations = 0;
+    let anyResolved = false;
+
+    do {
+        anyResolved = false;
+        iterations += 1;
+        for (let i = 0; i < states.length; i++) {
+            const a = states[i];
+            if (!a) continue;
+            const rectA = getStateRect(a);
+            for (let j = i + 1; j < states.length; j++) {
+                const b = states[j];
+                if (!b) continue;
+                const rectB = getStateRect(b);
+                const overlapWidth =
+                    Math.min(rectA.right, rectB.right) -
+                    Math.max(rectA.x, rectB.x);
+                const overlapHeight =
+                    Math.min(rectA.bottom, rectB.bottom) -
+                    Math.max(rectA.y, rectB.y);
+                if (overlapWidth <= 0 || overlapHeight <= 0) continue;
+                const resolved = resolveOverlapPair(a, b);
+                if (resolved) anyResolved = true;
+            }
+        }
+    } while (anyResolved && iterations < 4);
+};
+
 let originalMarkup = null;
 let leadContainer = null;
 let pointerMoveListener = null;
@@ -68,9 +486,12 @@ const createLetterSpan = (char, rect, containerRect, computedStyle) => {
     span.textContent = char === "\n" ? "" : char;
     span.dataset.char = char;
 
+    const relativeLeft = rect.left - containerRect.left;
+    const relativeTop = rect.top - containerRect.top;
+
     span.style.position = "absolute";
-    span.style.left = `${rect.left - containerRect.left}px`;
-    span.style.top = `${rect.top - containerRect.top}px`;
+    span.style.left = `${relativeLeft}px`;
+    span.style.top = `${relativeTop}px`;
     span.style.width = `${rect.width}px`;
     span.style.height = `${rect.height}px`;
     span.style.display = "flex";
@@ -96,7 +517,24 @@ const createLetterSpan = (char, rect, containerRect, computedStyle) => {
     span.style.transform = "translate3d(0px, 0px, 0)";
     span.style.transition = "color 120ms ease";
 
-    return span;
+    const fontSizeValue = parseFloat(computedStyle.fontSize) || rect.height;
+    const collisionHeight = Math.min(rect.height, fontSizeValue);
+    const verticalInset = Math.max(
+        0,
+        Math.min(rect.height, (rect.height - collisionHeight) / 2),
+    );
+
+    return {
+        element: span,
+        baseX: relativeLeft,
+        baseY: relativeTop,
+        width: rect.width,
+        height: rect.height,
+        collisionTopInset: verticalInset,
+        collisionBottomInset: verticalInset,
+        collisionLeftInset: 0,
+        collisionRightInset: 0,
+    };
 };
 
 const letterizeNode = (node, containerRect, fragments, computedStyle) => {
@@ -106,7 +544,10 @@ const letterizeNode = (node, containerRect, fragments, computedStyle) => {
 
         for (let i = 0; i < text.length; i++) {
             const char = text[i];
-            if (char.trim() === "" && char !== " ") {
+            if (char === " " || char === "\u00A0") {
+                continue;
+            }
+            if (char.trim() === "") {
                 continue;
             }
 
@@ -116,13 +557,13 @@ const letterizeNode = (node, containerRect, fragments, computedStyle) => {
             if (!rects.length) continue;
 
             const rect = rects[0];
-            const letterSpan = createLetterSpan(
+            const descriptor = createLetterSpan(
                 char,
                 rect,
                 containerRect,
                 computedStyle,
             );
-            fragments.push(letterSpan);
+            fragments.push(descriptor);
         }
 
         range.detach();
@@ -147,12 +588,15 @@ const buildLetters = () => {
     const computedStyle = window.getComputedStyle(leadContainer);
     const fragments = [];
 
+    resetLetterState();
+
     Array.from(leadContainer.childNodes).forEach((child) =>
         letterizeNode(child, containerRect, fragments, computedStyle),
     );
 
     leadContainer.innerHTML = "";
-    fragments.forEach((fragment) => leadContainer.appendChild(fragment));
+    fragments.forEach(({ element }) => leadContainer.appendChild(element));
+    fragments.forEach((descriptor) => registerLetterState(descriptor));
 };
 
 const flattenInteractiveElements = (container) => {
@@ -263,10 +707,22 @@ const onPointerMove = (event) => {
 
         const deltaX = pointerX - state.startX;
         const deltaY = pointerY - state.startY;
-        const x = state.initialX + deltaX;
-        const y = state.initialY + deltaY;
+        const targetOffsetX = state.initialX + deltaX;
+        const targetOffsetY = state.initialY + deltaY;
 
-        activeLetter.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        const letterState = getLetterState(activeLetter);
+        if (!letterState) {
+            activeLetter.style.transform = `translate3d(${targetOffsetX}px, ${targetOffsetY}px, 0)`;
+            updateLetterStateOffsets(activeLetter, targetOffsetX, targetOffsetY);
+            return;
+        }
+
+        const moveX = targetOffsetX - letterState.offsetX;
+        const moveY = targetOffsetY - letterState.offsetY;
+
+        moveStateAlongAxis(letterState, moveX, "x");
+        moveStateAlongAxis(letterState, moveY, "y");
+        resolveAllOverlaps();
     });
 };
 
@@ -353,6 +809,7 @@ const restoreMarkup = () => {
     if (!leadContainer || originalMarkup === null) return;
 
     deactivateLetters();
+    resetLetterState();
     leadContainer.innerHTML = originalMarkup;
     leadContainer.classList.remove(ACTIVE_CLASS);
     leadContainer.style.height = "";
@@ -365,6 +822,7 @@ const restoreMarkup = () => {
 
     stopResizeObserver();
     leadContainer = null;
+    updateContainerBounds();
 };
 
 const handleHireSecret = () => {
@@ -611,26 +1069,18 @@ const initResizeObserver = () => {
             const rect = letter.getBoundingClientRect();
             const relativeLeft = rect.left - containerRect.left;
             const relativeTop = rect.top - containerRect.top;
-            const translate = letter.style.transform.match(
-                /translate3d\\((.+)\\)/,
-            );
-            let offsetX = 0;
-            let offsetY = 0;
-            if (translate && translate[1]) {
-                const parts = translate[1]
-                    .split(",")
-                    .map((value) => parseFloat(value) || 0);
-                offsetX = parts[0];
-                offsetY = parts[1];
-            }
+            const { x: offsetX, y: offsetY } = parseTranslate(letter);
             letter.style.left = `${relativeLeft}px`;
             letter.style.top = `${relativeTop}px`;
             letter.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
+            updateLetterStateBase(letter, relativeLeft, relativeTop, offsetX, offsetY);
         });
         if (DEBUG_MAGNET) {
             debugTimeEnd("resize-observer", resizeStart);
             debugLog("resize letters adjusted", letters.length);
         }
+        updateContainerBounds();
+        resolveAllOverlaps();
     });
 
     resizeObserver.observe(leadContainer);
@@ -650,8 +1100,11 @@ export const MagnetLetters = {
         leadContainer.style.height = `${rect.height}px`;
         leadContainer.style.position = "relative";
         leadContainer.style.userSelect = "none";
+        updateContainerBounds();
         flattenInteractiveElements(leadContainer);
         buildLetters();
+        updateContainerBounds();
+        resolveAllOverlaps();
         activateLetters();
         initResizeObserver();
         checkSecretWords();
