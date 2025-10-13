@@ -1,7 +1,5 @@
 import { gsap } from 'gsap'
 
-console.log('[FooterMagnetElement] module evaluated')
-
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
 
 export class FooterMagnetElement extends HTMLElement {
@@ -60,12 +58,6 @@ export class FooterMagnetElement extends HTMLElement {
         this.#initializeTweens()
         this.#resetLettersToAnchors({ immediate: true })
         this.#lastPointer = null
-        console.log('[FooterMagnetElement] connected', {
-            usingPointerEvents: this.#usingPointerEvents,
-            hasLabel: Boolean(this.#label),
-            hasLink: Boolean(this.#link),
-            letters: this.#letters.length
-        })
 
         if (this.#usingPointerEvents) {
             this.addEventListener('pointerenter', this.#handlePointerEnter)
@@ -246,18 +238,10 @@ export class FooterMagnetElement extends HTMLElement {
     }
 
     #handlePointerEnter = event => {
-        console.log('[FooterMagnetElement] pointerenter', {
-            pointerType: event.pointerType,
-            labelText: this.#label?.textContent
-        })
         this.#activate(event)
     }
 
     #handlePointerDown = event => {
-        console.log('[FooterMagnetElement] pointerdown', {
-            pointerType: event.pointerType,
-            labelText: this.#label?.textContent
-        })
         this.#activate(event)
         this.#startPressEffect()
     }
@@ -269,9 +253,6 @@ export class FooterMagnetElement extends HTMLElement {
     }
 
     #handlePointerLeave = () => {
-        console.log('[FooterMagnetElement] pointerleave', {
-            labelText: this.#label?.textContent
-        })
         this.#deactivate()
         this.#cancelPressEffect()
     }
@@ -279,10 +260,6 @@ export class FooterMagnetElement extends HTMLElement {
     #handlePointerUp = event => {
         this.#endPressEffect(true)
         if (event?.pointerType === 'touch' || event?.pointerType === 'pen') {
-            console.log('[FooterMagnetElement] pointerup (touch/pen)', {
-                pointerType: event.pointerType,
-                labelText: this.#label?.textContent
-            })
             this.#deactivate()
         }
     }
@@ -297,9 +274,6 @@ export class FooterMagnetElement extends HTMLElement {
     }
 
     #handleMouseLeave = () => {
-        console.log('[FooterMagnetElement] mouseleave', {
-            labelText: this.#label?.textContent
-        })
         this.#deactivate()
         this.#cancelPressEffect()
     }
@@ -516,7 +490,7 @@ export class FooterMagnetElement extends HTMLElement {
         const tl = gsap.timeline()
 
         tl.to(this.#letters, {
-            scale: 0.92,
+            scale: 0.70,
             duration: 0.12,
             ease: 'power2.out'
         })
@@ -557,7 +531,7 @@ export class FooterMagnetElement extends HTMLElement {
         })
 
         tl.to(this.#letters, {
-            scale: 1.05,
+            scale: 1.20,
             duration: 0.1,
             ease: 'back.out(2)'
         })
@@ -844,54 +818,4 @@ export class FooterMagnetElement extends HTMLElement {
 
 if (!customElements.get('footer-magnet-element')) {
     customElements.define('footer-magnet-element', FooterMagnetElement)
-    console.log('[FooterMagnetElement] defined custom element')
-} else {
-    console.warn(
-        '[FooterMagnetElement] custom element already defined, skipping redefine'
-    )
 }
-
-queueMicrotask(() => {
-    const instances = document.querySelectorAll('footer-magnet-element')
-    console.log(
-        '[FooterMagnetElement] instances present in DOM',
-        instances.length
-    )
-})
-
-document.addEventListener('DOMContentLoaded', () => {
-    const count = document.querySelectorAll('footer-magnet-element').length
-    console.log(
-        '[FooterMagnetElement] DOMContentLoaded instance count',
-        count
-    )
-})
-
-window.addEventListener('load', () => {
-    const count = document.querySelectorAll('footer-magnet-element').length
-    console.log('[FooterMagnetElement] window load instance count', count)
-})
-
-const footerMagnetObserver = new MutationObserver(mutations => {
-    for (const mutation of mutations) {
-        if (mutation.type === 'childList') {
-            const added = Array.from(mutation.addedNodes).filter(node =>
-                node.matches?.('footer-magnet-element')
-            )
-
-            if (added.length > 0) {
-                console.log(
-                    '[FooterMagnetElement] MutationObserver detected new instances',
-                    added.length
-                )
-            }
-        }
-    }
-})
-
-footerMagnetObserver.observe(document.documentElement, {
-    childList: true,
-    subtree: true
-})
-
-window.footerMagnetObserver = footerMagnetObserver
