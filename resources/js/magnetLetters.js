@@ -27,7 +27,7 @@ const DRAG_STATE = new WeakMap();
 
 const LETTER_STATE = new Map();
 const SPATIAL_HASH = new Map();
-const STATE_CELL_SIZE = 48;
+const STATE_CELL_SIZE = 24;
 
 const computeCellsForBounds = (x, y, width, height) => {
     const minX = Math.floor(x / STATE_CELL_SIZE);
@@ -178,7 +178,7 @@ const getStateRect = (state) => {
 
 const gatherNearbyStates = (state) => {
     const rect = getStateRect(state);
-    const padding = 0.5;
+    const padding = 0.25;
     const cells = computeCellsForBounds(
         rect.x - padding,
         rect.y - padding,
@@ -480,6 +480,40 @@ const parseTranslate = (element) => {
     return { x: parseFloat(match[1]) || 0, y: parseFloat(match[2]) || 0 };
 };
 
+let glyphMetricCanvas = null;
+let glyphMetricContext = null;
+
+const ensureGlyphMetricContext = (computedStyle) => {
+    if (!glyphMetricCanvas) {
+        glyphMetricCanvas = document.createElement("canvas");
+        glyphMetricContext = glyphMetricCanvas.getContext("2d");
+    }
+    const fontString = computedStyle.font
+        || `${computedStyle.fontStyle || ""} ${computedStyle.fontWeight || ""} ${computedStyle.fontSize || "16px"} ${computedStyle.fontFamily || "sans-serif"}`.trim();
+    glyphMetricContext.font = fontString;
+    glyphMetricContext.textBaseline = "alphabetic";
+    glyphMetricContext.textAlign = "left";
+    return glyphMetricContext;
+};
+
+const measureGlyphMetrics = (char, computedStyle) => {
+    const ctx = ensureGlyphMetricContext(computedStyle);
+    const safeChar = char === " " ? "\u00A0" : char;
+    const metrics = ctx.measureText(safeChar);
+    if (
+        typeof metrics.actualBoundingBoxAscent === "number" &&
+        typeof metrics.actualBoundingBoxDescent === "number"
+    ) {
+        return {
+            ascent: metrics.actualBoundingBoxAscent,
+            descent: metrics.actualBoundingBoxDescent,
+            width: metrics.width,
+        };
+    }
+    // Fallback: use the range rect height as before
+    return null;
+};
+
 const createLetterSpan = (char, rect, containerRect, computedStyle) => {
     const span = document.createElement("span");
     span.classList.add(LETTER_CLASS);
@@ -524,14 +558,39 @@ const createLetterSpan = (char, rect, containerRect, computedStyle) => {
         Math.min(rect.height, (rect.height - collisionHeight) / 2),
     );
 
+    const glyphMetrics = measureGlyphMetrics(char, computedStyle);
+
+    let collisionTopInset = 0;
+    let collisionBottomInset = 0;
+
+    if (glyphMetrics) {
+        const { ascent, descent } = glyphMetrics;
+        const glyphHeight = ascent + descent;
+        const lineHeight = rect.height;
+        // Split spare space between top and bottom
+        const spare = Math.max(0, lineHeight - glyphHeight);
+        collisionTopInset = spare * 0.5;
+        collisionBottomInset = spare - collisionTopInset;
+    } else {
+        // Fallback to old behavior if canvas metrics unavailable
+        const fontSizeValue = parseFloat(computedStyle.fontSize) || rect.height;
+        const collisionHeight = Math.min(rect.height, fontSizeValue);
+        const verticalInset = Math.max(
+            0,
+            Math.min(rect.height, (rect.height - collisionHeight) / 2),
+        );
+        collisionTopInset = verticalInset;
+        collisionBottomInset = verticalInset;
+    }
+
     return {
         element: span,
         baseX: relativeLeft,
         baseY: relativeTop,
         width: rect.width,
         height: rect.height,
-        collisionTopInset: verticalInset,
-        collisionBottomInset: verticalInset,
+        collisionTopInset,
+        collisionBottomInset,
         collisionLeftInset: 0,
         collisionRightInset: 0,
     };
