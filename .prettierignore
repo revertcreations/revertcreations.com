@@ -1,0 +1,8 @@
+node_modules
+vendor
+public
+storage
+bootstrap/cache
+resources/views/**/*.blade.php
+resources/views/**/*.php
+resources/**/*.php
