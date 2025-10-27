@@ -1,115 +1,311 @@
 <x-layout>
 
-    <div class="flex flex-col mx-auto">
-        <div class="flex flex-col mt-2">
-            <i class="mt-1 bg-black text-white text-4xl">Shorts</i>
-            <div class="flex flex-row">
+    <div class="visual-page mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 py-6 md:px-6 lg:px-8">
 
-                <iframe width="315" height="560"
-                    src="https://youtube.com/embed/jikZedWNWO4?si=d4NUNcjbJKjt4Acz"
-                    title="Charvel Jake E Lee"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
+        <section class="flex flex-col gap-6" data-visual-section>
+            <i class="mt-1 inline-block rounded bg-black px-3 py-1 text-xl font-semibold uppercase tracking-wide text-white md:text-3xl lg:text-4xl">Shorts</i>
 
-                <iframe width="315" height="560"
-                    src="https://youtube.com/embed/CiOJgVWf9pE?feature=share"
-                    title="1980 Gibson Firebrand"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen></iframe>
-
-                <iframe width="315" height="560"
-                    src="https://youtube.com/embed/xcynwkfcXaQ?feature=share"
-                title="2008 EVH Wolfgang USA"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
-            </div>
-        </div>
-
-        <div class="flex flex-col mt-2">
-            <i class="mt-1 bg-black text-white text-4xl">Photography</i>
-
-            <div id="thumbnail_wrap" class="flex flex-row flex-wrap justify-center my-10">
-                @foreach ($portfolio as $index => $image)
-                <div class="m-2 cursor-pointer">
-                    <img
-                        id="{{ $image->id }}"
-                        onclick="openImage(event)"
-                        class=""
-                        data-src="https://res.cloudinary.com/junkyardwatchdog/image/upload/{{ $image->public_id }}.{{ $image->extension }}"
-                        src="https://res.cloudinary.com/junkyardwatchdog/image/upload/w_400,c_scale,q_auto:low/{{ $image->public_id }}.{{ $image->extension }}"
-                        />
+            <div class="visual-shorts">
+                <div class="visual-short">
+                    <iframe class="visual-short__frame"
+                        src="https://youtube.com/embed/jikZedWNWO4?si=d4NUNcjbJKjt4Acz"
+                        title="Charvel Jake E Lee"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
                 </div>
+
+                <div class="visual-short">
+                    <iframe class="visual-short__frame"
+                        src="https://youtube.com/embed/CiOJgVWf9pE?feature=share"
+                        title="1980 Gibson Firebrand"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+                </div>
+
+                <div class="visual-short">
+                    <iframe class="visual-short__frame"
+                        src="https://youtube.com/embed/xcynwkfcXaQ?feature=share"
+                        title="2008 EVH Wolfgang USA"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section class="flex flex-col gap-6" data-visual-section>
+            <i class="mt-1 inline-block rounded bg-black px-3 py-1 text-xl font-semibold uppercase tracking-wide text-white md:text-3xl lg:text-4xl">Photography</i>
+
+            <div class="visual-thumbnail-grid" id="thumbnail_wrap">
+                @foreach ($portfolio as $index => $image)
+                    <button
+                        type="button"
+                        class="visual-thumbnail"
+                        data-visual-image
+                        data-full="https://res.cloudinary.com/junkyardwatchdog/image/upload/{{ $image->public_id }}.{{ $image->extension }}"
+                        data-alt="{{ $image->title ?? $image->description ?? 'Photography portfolio image' }}"
+                        aria-label="{{ $image->title ?? $image->description ?? 'Open portfolio image in full screen' }}">
+                        <img
+                            class="visual-thumbnail__image"
+                            loading="lazy"
+                            src="https://res.cloudinary.com/junkyardwatchdog/image/upload/w_400,c_scale,q_auto:low/{{ $image->public_id }}.{{ $image->extension }}"
+                            alt="{{ $image->title ?? $image->description ?? 'Photography portfolio image' }}">
+                    </button>
                 @endforeach
             </div>
 
-        </div>
+        </section>
 
+        <section class="flex flex-col gap-6" data-visual-section>
+            <i class="mt-1 inline-block rounded bg-black px-3 py-1 text-xl font-semibold uppercase tracking-wide text-white md:text-3xl lg:text-4xl">Show Reel</i>
+            <p class="text-lg text-gruvbox-white md:text-xl">Coming Soon...</p>
+        </section>
 
+    </div>
 
+    <div aria-hidden="true" class="visual-overlay" id="visual-overlay">
+        <button aria-label="Close full screen image" class="visual-overlay__close" id="visual-overlay-close" type="button">&times;</button>
+        <img alt="" class="visual-overlay__image" id="visual-overlay-image" loading="lazy">
+    </div>
 
-        <div class="flex flex-col mt-2">
-            <i class="mt-1 bg-black text-white text-4xl">Show Reel</i>
-            <p class="text-gruvbox-white">Coming Soon...</p>
-        </div>
-</div>
-    <script type="text/javascript">
+    @push('styles')
+        <style>
+            .visual-page {
+                width: 100%;
+            }
 
-        function openImage(e) {
+            .visual-shorts {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+            }
 
-            document.getElementById('thumbnail_wrap').style.display = 'none'
-            let close_button = document.createElement('div')
-            close_button.id = 'close_button'
-            close_button.classList.add('absolute', 'right-20', 'text-5xl', 'bg-black', 'text-white', 'hover:text-red-500', 'cursor-pointer');
-            close_button.addEventListener('click', closeImage)
-            close_button.innerHTML = '<span>X</span>'
+            @media (min-width: 768px) {
+                .visual-shorts {
+                    flex-direction: row;
+                    justify-content: center;
+                }
+            }
 
-            let body = document.body
-            let content = document.getElementById('content');
+            .visual-short {
+                display: flex;
+                justify-content: center;
+            }
 
-            content.appendChild(close_button)
-            content.style.backgroundImage = 'url('+e.target.dataset.src+')'
-            content.style.backgroundSize = 'contain'
-            content.style.backgroundRepeat = 'no-repeat'
-            content.style.backgroundPosition = 'center center'
+            .visual-short__frame {
+                aspect-ratio: 9 / 16;
+                width: min(90vw, 20rem);
+                border: 0;
+                border-radius: 0.75rem;
+                background-color: #000;
+                box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+            }
 
-            document.getElementById('app').classList.add('hidden');
+            @media (min-width: 1024px) {
+                .visual-short__frame {
+                    width: 19.5rem;
+                }
+            }
 
-        }
+            .visual-thumbnail-grid {
+                display: grid;
+                gap: 1rem;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                width: 100%;
+            }
 
-        function closeImage() {
+            @media (min-width: 640px) {
+                .visual-thumbnail-grid {
+                    gap: 1.25rem;
+                    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                }
+            }
 
-            let close_button = document.getElementById('close_button')
-            let thumbnail_wrap = document.getElementById('thumbnail_wrap')
-            thumbnail_wrap.style.display = 'flex'
+            @media (min-width: 1024px) {
+                .visual-thumbnail-grid {
+                    gap: 1.5rem;
+                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                }
+            }
 
-            close_button.remove()
-            let content = document.getElementById('content');
+            .visual-thumbnail {
+                background: none;
+                border: 0;
+                cursor: pointer;
+                display: block;
+                padding: 0;
+                position: relative;
+            }
 
-            content.style.backgroundImage = 'unset'
-            document.getElementById('app').classList.remove('hidden');
+            .visual-thumbnail:focus-visible {
+                outline: 3px solid #fabd2f;
+                outline-offset: 4px;
+            }
 
-        }
+            .visual-thumbnail__image {
+                width: 100%;
+                height: 100%;
+                border-radius: 0.75rem;
+                object-fit: cover;
+                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
 
-        function slideOut(el, direction) {
-            let xPos = window.innerWidth + el.offsetWidth + "px"
+            .visual-thumbnail:hover .visual-thumbnail__image,
+            .visual-thumbnail:focus-visible .visual-thumbnail__image {
+                transform: scale(1.03);
+                box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+            }
 
-            if(el.classList.contains('animate-translate'))
-                el.classList.remove('animate-translate')
+            .visual-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1.5rem;
+                background-color: rgba(0, 0, 0, 0.92);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+            }
 
-            el.style.setProperty('--translate-x', (direction == 'left' ? '-' : '')+xPos)
-            el.style.setProperty('--translate-origin', '0px')
-            el.classList.add('animate-translate')
-        }
+            .visual-overlay.is-open {
+                opacity: 1;
+                visibility: visible;
+            }
 
-        function slideBack(el, direction) {
+            .visual-overlay__image {
+                max-height: 90vh;
+                max-width: 100%;
+                object-fit: contain;
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            }
 
-            if(el.classList.contains('animate-translate'))
-                el.classList.remove('animate-translate')
+            .visual-overlay__close {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                background: rgba(0, 0, 0, 0.65);
+                border: 2px solid #fff;
+                border-radius: 9999px;
+                color: #fff;
+                cursor: pointer;
+                font-size: 1.75rem;
+                line-height: 1;
+                padding: 0.4rem 0.85rem 0.55rem;
+            }
 
-        }
+            .visual-overlay__close:hover,
+            .visual-overlay__close:focus-visible {
+                background: rgba(255, 255, 255, 0.18);
+                color: #fff;
+            }
 
-    </script>
+            body.visual-overlay-active {
+                overflow: hidden;
+            }
+        </style>
+    @endpush
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const overlay = document.getElementById('visual-overlay');
+                const overlayImage = document.getElementById('visual-overlay-image');
+                const closeButton = document.getElementById('visual-overlay-close');
+
+                if (!overlay || !overlayImage) {
+                    return;
+                }
+
+                const triggers = document.querySelectorAll('[data-visual-image]');
+                const body = document.body;
+                const sections = document.querySelectorAll('[data-visual-section]');
+                let activeTrigger = null;
+                let lastScrollY = 0;
+
+                function openImage(event) {
+                    const trigger = event.currentTarget;
+                    const fullSrc = trigger.dataset.full;
+
+                    if (!fullSrc) {
+                        return;
+                    }
+
+                    lastScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+
+                    overlayImage.src = fullSrc;
+                    overlayImage.alt = trigger.dataset.alt || 'Visual portfolio image';
+
+                    overlay.classList.add('is-open');
+                    overlay.setAttribute('aria-hidden', 'false');
+
+                    body.classList.add('visual-overlay-active');
+                    sections.forEach(function (section) {
+                        section.classList.add('hidden');
+                    });
+
+                    activeTrigger = trigger;
+
+                    if (closeButton) {
+                        requestAnimationFrame(function () {
+                            closeButton.focus();
+                        });
+                    }
+
+                    document.addEventListener('keydown', handleKeydown);
+                }
+
+                function closeImage() {
+                    overlay.classList.remove('is-open');
+                    overlay.setAttribute('aria-hidden', 'true');
+
+                    overlayImage.src = '';
+                    overlayImage.alt = '';
+
+                    body.classList.remove('visual-overlay-active');
+                    sections.forEach(function (section) {
+                        section.classList.remove('hidden');
+                    });
+
+                    document.removeEventListener('keydown', handleKeydown);
+
+                    if (activeTrigger) {
+                        activeTrigger.focus();
+                        activeTrigger = null;
+                    }
+
+                    window.requestAnimationFrame(function () {
+                        window.scrollTo(0, lastScrollY || 0);
+                    });
+                }
+
+                function handleKeydown(event) {
+                    if (event.key === 'Escape') {
+                        closeImage();
+                    }
+                }
+
+                triggers.forEach(function (trigger) {
+                    trigger.addEventListener('click', openImage);
+                });
+
+                if (closeButton) {
+                    closeButton.addEventListener('click', closeImage);
+                }
+
+                overlay.addEventListener('click', function (event) {
+                    if (event.target === overlay) {
+                        closeImage();
+                    }
+                });
+            });
+        </script>
+    @endpush
+
 </x-layout>
