@@ -12,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PuzzleSessionController;
 use App\Http\Controllers\SkillsController;
+use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
 
@@ -72,5 +73,10 @@ Route::domain($domain)->group(function () {
     Route::get('/about', function () {
         return view('about');
     })->name('about');
+
+    Route::get('/portfolio', function () {
+        $portfolio = PhotographyPortfolioImage::all();
+        return view('visual', compact('portfolio'));
+    })->name('visual');
 
 });
