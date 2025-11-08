@@ -130,7 +130,13 @@ class HiBidDriver implements AuctionDriverInterface
                     ? "{$this->baseUrl}/auctions"
                     : "{$this->baseUrl}/auctions?page={$page}";
 
-                $response = Http::timeout(30)->get($url);
+                $response = Http::timeout(30)
+                    ->withHeaders([
+                        'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+                        'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                        'Accept-Language' => 'en-US,en;q=0.5',
+                    ])
+                    ->get($url);
 
                 if (!$response->successful()) {
                     Log::warning("Failed to fetch auctions page", [
@@ -212,7 +218,13 @@ class HiBidDriver implements AuctionDriverInterface
         $listings = [];
 
         try {
-            $response = Http::timeout(30)->get("{$this->baseUrl}/catalog/{$auctionId}");
+            $response = Http::timeout(30)
+                ->withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                    'Accept-Language' => 'en-US,en;q=0.5',
+                ])
+                ->get("{$this->baseUrl}/catalog/{$auctionId}");
 
             if (!$response->successful()) {
                 Log::warning("Failed to fetch auction catalog", [
@@ -601,7 +613,11 @@ class HiBidDriver implements AuctionDriverInterface
     {
         try {
             // Test basic connectivity to HiBid
-            $response = Http::timeout(10)->get($this->baseUrl);
+            $response = Http::timeout(10)
+                ->withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+                ])
+                ->get($this->baseUrl);
             return $response->successful();
         } catch (\Exception $e) {
             Log::error("HiBid connection test failed", [
