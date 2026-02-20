@@ -1,7 +1,7 @@
 <x-layout>
 
     <div class="visual-page mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 py-6 md:px-6 lg:px-8">
-        <section class="flex flex-col gap-6" data-visual-section>
+        <section id="videos" class="flex flex-col gap-6" data-visual-section>
             <i class="mt-1 inline-block rounded bg-black px-3 py-1 text-xl font-semibold uppercase tracking-wide text-white md:text-3xl lg:text-4xl">Videos</i>
             <div class="visual-short">
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/MXbiPwPgKbY?si=2HXEymkjObm31A_A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -12,7 +12,7 @@
         </section>
 
 
-        <section class="flex flex-col gap-6" data-visual-section>
+        <section id="shorts" class="flex flex-col gap-6" data-visual-section>
             <i class="mt-1 inline-block rounded bg-black px-3 py-1 text-xl font-semibold uppercase tracking-wide text-white md:text-3xl lg:text-4xl">Shorts</i>
             <div class="visual-shorts">
                 <div class="visual-short">
@@ -44,7 +44,7 @@
             </div>
         </section>
 
-        <section class="flex flex-col gap-6" data-visual-section>
+        <section id="photography" class="flex flex-col gap-6" data-visual-section>
             <i class="mt-1 inline-block rounded bg-black px-3 py-1 text-xl font-semibold uppercase tracking-wide text-white md:text-3xl lg:text-4xl">Photography</i>
 
             <div class="visual-thumbnail-grid" id="thumbnail_wrap">
