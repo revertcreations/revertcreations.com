@@ -92,4 +92,8 @@ Route::domain($domain)->group(function () {
         return view('visual', compact('portfolio'));
     })->name('visual');
 
+    Route::get('/soundpure', function () {
+        return view('soundpure');
+    })->name('soundpure');
+
 });
