@@ -22,6 +22,9 @@ fi
 
 composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
 
+# Clear stale cache so migrations and DB check use fresh .env values
+php artisan config:clear
+
 # Verify MySQL is reachable before running migrations
 echo "Checking database connection..."
 for i in {1..15}; do
@@ -37,8 +40,6 @@ for i in {1..15}; do
     sleep 2
 done
 
-# Clear stale cache so migrations use fresh .env values
-php artisan config:clear
 php artisan migrate --force
 
 # Cache config/routes/views for production performance
