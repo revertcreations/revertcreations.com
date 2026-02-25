@@ -62,12 +62,16 @@ Route::domain($domain)->group(function () {
     Route::post('/puzzle/{puzzle_type_id}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
 
     Route::get('/resume', function () {
-        $resume = public_path('TreverHillisDeveloperResume2025.pdf');
-        $headers = [
-            'Content-Type' => 'application/pdf',
-        ];
-        return response()->download($resume, 'TreverHillisDeveloperResume.pdf', $headers);
+        return view('resume');
     })->name('resume');
+
+    Route::get('/resume/download', function () {
+        return response()->download(
+            public_path('TreverHillisResume2026.pdf'),
+            'TreverHillisDeveloperResume.pdf',
+            ['Content-Type' => 'application/pdf']
+        );
+    })->name('resume.download');
 
     Route::get('/developer', function () {
         $skills = Skill::all();
