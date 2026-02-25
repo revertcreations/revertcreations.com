@@ -171,7 +171,9 @@
 
     <div class="sp-comparison-grid">
         <div class="sp-compare-card">
-            <div class="sp-compare-label sp-label-before">Before: Standard Retail Post</div>
+            <div class="sp-compare-label sp-label-before">Before: Standard Retail <a class="sp-instagram-link"
+                    href="https://www.instagram.com/p/DTLNdtMjzco/?img_index=1"
+                    target="_blank">Post</a></div>
             <div class="sp-image-wrapper">
                 <img src="https://scontent-atl3-3.cdninstagram.com/v/t39.30808-6/612022737_1695989598424601_3085957118234037517_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ig_cache_key=MzgwNDE5MzUwNTk4NDYxNTc0Mg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjEwODB4MTM1MC5zZHIuQzMifQ%3D%3D&_nc_ohc=rkvLGSindewQ7kNvwEWnd3b&_nc_oc=Adks_yIA7aLTGrbZ22UlNlplmTbGNU4VU0UvWaNsHgi7aNyO6DLOzKakM2s4PZSQBcF7G4giftBTHomQ7R6-8ut2&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=IvQ2pnthwNmuOPZq55OHVg&oh=00_Afsj8t62c4L6Tx4tlbXMYS1krTiawr1gqeltCDyzQ_y_ew&oe=69A3EFBA"
                     alt="Original Instagram Post">
@@ -363,8 +365,8 @@
         flex-direction: column;
     }
 
-    .sp-compare-card:hover {
-        transform: translateY(-5px);
+    .sp-instagram-link {
+        color: #888;
     }
 
     /* VERTICAL STACK FOR WEB BANNER */

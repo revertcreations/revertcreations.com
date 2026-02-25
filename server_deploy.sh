@@ -22,13 +22,22 @@ fi
 
 composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
 
-# Clear stale cache so migrations and DB check use fresh .env values
+# Clear all stale caches immediately after pulling new code
 php artisan config:clear
+php artisan route:clear
+php artisan view:clear
 
 # Verify MySQL is reachable before running migrations
 echo "Checking database connection..."
 for i in {1..15}; do
-    if php artisan db:show > /dev/null 2>&1; then
+    if php -r "
+        \$env = parse_ini_file('.env');
+        new PDO(
+            'mysql:host=' . (\$env['DB_HOST'] ?? '127.0.0.1') . ';port=' . (\$env['DB_PORT'] ?? 3306) . ';dbname=' . \$env['DB_DATABASE'],
+            \$env['DB_USERNAME'],
+            \$env['DB_PASSWORD']
+        );
+    " 2>/dev/null; then
         echo "Database is available."
         break
     fi
