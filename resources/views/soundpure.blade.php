@@ -44,7 +44,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/a/guitar-and-drum-store-downtown-durham-nc/"
-                style="background-image: url('https://scontent-atl3-1.cdninstagram.com/v/t39.30808-6/641426740_1740054954018065_2782826029906820514_n.jpg?stp=c0.0.2047.1638a_dst-jpg_e35_s1080x1080_tt6&_nc_cat=103&ig_cache_key=MzgzOTE2NjI4MjY2NjY1ODU0MA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjIwNDh4MTYzOC5zZHIuQzMifQ%3D%3D&_nc_ohc=-UEvfKDTVx0Q7kNvwGs-zI7&_nc_oc=Adl-0yaV9kgNOugK3jkCw6igvoqKc_RgYZHzkUH_pM01oYQZs5uRkoKRxQjBT18ZIkTqtvpyYloW_f1eoiH13vXR&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_gid=diKJyFNrEL34-z-Yyh298w&oh=00_AfuxIrQChN3rHyqTcn9vpYOqRfuak1YsXOTEv-4sN9CZ6Q&oe=69A3D7B6');">
+                style="background-image: url('SoundPureAssets/boutiqueAcousticGuitars.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">The SoundPure Standard</span>
@@ -81,7 +81,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/swapout"
-                style="background-image: url('https://scontent-atl3-2.cdninstagram.com/v/t39.30808-6/617507439_1703218751035019_590073122444717872_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ig_cache_key=MzgxMDA5MjIwMTYwMzg0ODA4OQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE2Mzh4MjA0OC5zZHIuQzMifQ%3D%3D&_nc_ohc=-zkGkqt4_zEQ7kNvwFcfqOR&_nc_oc=AdlyVtJARN__m6Hos1b5BURXo6D1Y3OwhAQhXIYJuNqGxXGwTYa66Cec0KrNcCaiHJkS0tNkjb-qh1xpzZfSxa4M&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-2.cdninstagram.com&_nc_gid=IvQ2pnthwNmuOPZq55OHVg&oh=00_AfsQ2iw6keVwQWch_18plQSsE5fo44HMb7l14G3cTasJXA&oe=69A3EDD4');">
+                style="background-image: url('SoundPureAssets/swapOut.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">Asset Management</span>
@@ -99,7 +99,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/trybeforebuy"
-                style="background-image: url('https://scontent-atl3-3.cdninstagram.com/v/t51.82787-15/623367908_17990215880925544_4561284235825204584_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ig_cache_key=MzYzNDA1NzMxODgxNzE1MDA0MA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjEwODB4MTA4MC5zZHIuQzMifQ%3D%3D&_nc_ohc=mVzIzqNCvuYQ7kNvwFigOiF&_nc_oc=AdleKTtrx0Oy_DTjxQbltquVh-noS0NqhAIXqqI1QZ0-oBD-zLCk5rAnbrrKAb9CLnaaR2h_uQ3S4LB_qwkZ_P95&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=kIZfeP0PjNDxY8wmGtKnOw&oh=00_AfvX_SJSda_AkpUyGWNcSduXxOOjpXSDFTB8n0l71IoSPQ&oe=69A406E7');">
+                style="background-image: url('SoundPureAssets/tryBeforeBuy.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">Confidence Guaranteed</span>
@@ -135,7 +135,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/warranty"
-                style="background-image: url('https://scontent-atl3-1.cdninstagram.com/v/t39.30808-6/629469298_1723955778961316_3816517157045374297_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=MzgyNjcyMjkyNzA2NTEzMTk0Nw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjEwODB4MTM1MC5zZHIuQzMifQ%3D%3D&_nc_ohc=STk-UKr8bPUQ7kNvwHKY0d8&_nc_oc=Adk64zvWA7pE69_X6FYUm-EaZPIWbiXi4Gf6D5qJF0llGUmV2c9AWnIutj2auK_lbOYdnLk6xsNkq7SR-IUrQSn0&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_gid=diKJyFNrEL34-z-Yyh298w&oh=00_AfuTMnisRYfXRVMuuMBe0A6eTw2yz6Xr73xOaJRdXytHwg&oe=69A3D905');">
+                style="background-image: url('SoundPureAssets/warranty.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">The SoundPure Guarantee</span>
@@ -199,6 +199,192 @@
     </div>
 </section>
 
+<section class="sp-comparison-section sp-ad-audit-section"
+    style="margin-top: 80px;">
+    <div class="sp-comparison-header">
+        <h2 class="sp-section-title">Paid Ad Strategy</h2>
+        <p class="sp-section-subtitle">Elevating Ad Creative to Match Product Quality</p>
+    </div>
+
+    {{-- OPENING CONTEXT --}}
+    <div class="sp-audit-card sp-ad-context-card">
+        <div class="sp-audit-card-header sp-ad-header-context">
+            <span class="sp-audit-status-badge sp-status-critical">Ad Creative Review</span>
+            <h3>Instagram Ad Audit</h3>
+        </div>
+        <div class="sp-audit-card-body">
+            <p>These ads appeared in my Instagram feed after I browsed SoundPure's website and added several
+                guitars to my cart without completing the purchase. That means the <strong>retargeting
+                    pipeline is working</strong>&mdash;the Meta Pixel correctly identified me as an abandoned-cart
+                user and served me dynamic catalog ads for the exact items I viewed. That's a meaningful
+                technical win. The opportunity is in the <strong>ad template itself</strong>: the creative
+                and copy that wraps around those catalog items when they reach the feed.</p>
+        </div>
+    </div>
+
+    {{-- CURRENT AD EXAMPLES --}}
+    <div class="sp-ad-current-examples"
+        style="margin-top: 30px;">
+        <div class="sp-audit-card">
+            <div class="sp-ad-card-header sp-ad-header-soundpure">
+                <h4>Current Ad Creative</h4>
+                <span class="sp-ad-verdict sp-ad-verdict-warning">Opportunity for Improvement</span>
+            </div>
+            <div class="sp-ad-screenshot-row">
+                <div class="sp-ad-screenshot-wrapper">
+                    <img src="{{ asset('SoundPureAssets/IMG_2482.PNG') }}"
+                        alt="SoundPure Instagram Ad example">
+                </div>
+                <div class="sp-ad-screenshot-wrapper">
+                    <img src="{{ asset('SoundPureAssets/IMG_2486.PNG') }}"
+                        alt="SoundPure Instagram Ad example">
+                </div>
+                <div class="sp-ad-screenshot-wrapper">
+                    <img src="{{ asset('SoundPureAssets/IMG_2487.PNG') }}"
+                        alt="SoundPure Instagram Ad example">
+                </div>
+                <div class="sp-ad-screenshot-wrapper">
+                    <img src="{{ asset('SoundPureAssets/IMG_2489.PNG') }}"
+                        alt="SoundPure Instagram Ad example">
+                </div>
+            </div>
+            <div class="sp-ad-card-analysis">
+                <p>These are dynamic catalog ads&mdash;they're pulling directly from the product feed and
+                    being served to users who already viewed these items. The retargeting logic is sound.
+                    The template, however, dedicates roughly 30% of the vertical space to a branded footer,
+                    and every ad carries the same generic financing description regardless of the instrument.
+                    For a user who already showed purchase intent, this is a <strong>missed opportunity to
+                        close the sale</strong> with product-specific copy that reminds them why they were
+                    interested in the first place.</p>
+            </div>
+        </div>
+    </div>
+
+    {{-- SCORECARD --}}
+    <div class="sp-ad-scorecard-grid"
+        style="margin-top: 40px;">
+        <div class="sp-audit-card">
+            <div class="sp-audit-card-header sp-ad-header-right">
+                <h3>What's Working</h3>
+            </div>
+            <div class="sp-audit-card-body">
+                <div class="sp-audit-finding">
+                    <h4>Retargeting Pipeline</h4>
+                    <p>The ads are reaching the right people. The Pixel correctly identified an abandoned cart
+                        and served dynamic catalog ads for the specific items viewed. This is the hardest
+                        part of the funnel to get right, and it's functional.</p>
+                </div>
+                <div class="sp-audit-finding">
+                    <h4>Inventory Quality</h4>
+                    <p>The guitars themselves (Suhr, Eastman, etc.) are genuinely top-tier. The "raw material"
+                        for compelling ad creative is already there&mdash;these instruments photograph
+                        beautifully.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sp-audit-card">
+            <div class="sp-audit-card-header sp-ad-header-opportunity">
+                <h3>Growth Opportunities</h3>
+            </div>
+            <div class="sp-audit-card-body">
+                <div class="sp-audit-finding">
+                    <h4>Image Real Estate</h4>
+                    <p>The branded footer occupies roughly 30% of the ad's vertical space. Reclaiming this area
+                        for the product image would give the instrument more visual presence and allow it to
+                        <strong>compete with full-bleed ads</strong> from larger retailers.
+                    </p>
+                </div>
+                <div class="sp-audit-finding">
+                    <h4>Financing Personalization</h4>
+                    <p>The same generic financing line appears on every listing. Tailoring the description to
+                        each instrument&mdash;even one sentence&mdash;creates a more personal connection. A
+                        $1,400 Eastman and a $6,000 boutique build appeal to different buyers.</p>
+                </div>
+                <div class="sp-audit-finding">
+                    <h4>Logo Placement</h4>
+                    <p>On platforms like Instagram, the account handle already provides brand attribution. Moving
+                        the logo off the product image allows the <strong>craftsmanship and finish to be the
+                            focal point</strong>&mdash;which is what high-end buyers are evaluating. A
+                        potential customer coming across a Tuttle or a Suhr in their feed should be drawn
+                        in by the instrument's prestige, and this should be the star of the show.</p>
+                </div>
+                <div class="sp-audit-finding">
+                    <h4>Background & Framing</h4>
+                    <p>The current white-background framing is functional but neutral. SoundPure has a
+                        world-class studio environment that could serve as a <strong>natural lifestyle
+                            backdrop</strong>, instantly communicating professional credibility.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- STRATEGIC RECOMMENDATIONS --}}
+    <div class="sp-audit-card"
+        style="margin-top: 40px;">
+        <div class="sp-audit-card-header sp-ad-header-recommendations">
+            <h3>Recommended Adjustments</h3>
+        </div>
+        <div class="sp-audit-card-body">
+            <div class="sp-ad-recommendation">
+                <div class="sp-ad-rec-number">1</div>
+                <div class="sp-ad-rec-content">
+                    <h4>Adopt a "Full-Bleed" Image Standard</h4>
+                    <p>Use the entire <strong>1080&times;1350 vertical canvas</strong> for high-resolution
+                        product photography. Move branding to the Account Handle and the platform's native
+                        "Shop Now" button. If a logo is still desired, a subtle 10% opacity watermark in an
+                        unobtrusive corner preserves attribution without competing with the product.</p>
+                </div>
+            </div>
+            <div class="sp-ad-recommendation">
+                <div class="sp-ad-rec-number">2</div>
+                <div class="sp-ad-rec-content">
+                    <h4>Item-Specific "Micro-Copy"</h4>
+                    <p>The current ad description is identical across every listing&mdash;just a
+                        financing notice. Replace it with the instrument's name, a brief description that
+                        reflects its character, and a nod to SoundPure's curation. The financing detail
+                        still belongs, but it should come after the product has had a chance to speak.</p>
+                    <div class="sp-ad-copy-compare">
+                        <div class="sp-ad-copy-before">
+                            <span class="sp-ad-copy-label">Current</span>
+                            <p>"0% Interest Free Financing Options Available"</p>
+                        </div>
+                        <div class="sp-ad-copy-after">
+                            <span class="sp-ad-copy-label">Proposed</span>
+                            <p>"Eastman DM1 Gypsy Jazz Guitar &mdash; Solid spruce top with a percussive,
+                                cutting voice built for Django-style runs. Hand-selected by the SoundPure
+                                team. Explore our full collection of boutique acoustics &mdash; 0% financing
+                                available."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sp-ad-recommendation">
+                <div class="sp-ad-rec-number">3</div>
+                <div class="sp-ad-rec-content">
+                    <h4>Leverage the Studio Environment</h4>
+                    <p>SoundPure has something most competitors don't: a <strong>world-class recording
+                            studio</strong>. Photographing instruments in that environment&mdash;on a stand
+                        next to a Neve console or positioned near a high-end condenser mic&mdash;adds
+                        implicit value. It tells the buyer: <em>"This is professional-grade gear, in a
+                            professional-grade space."</em></p>
+                </div>
+            </div>
+            <div class="sp-ad-recommendation">
+                <div class="sp-ad-rec-number">4</div>
+                <div class="sp-ad-rec-content">
+                    <h4>Dynamic "Smart" Creative</h4>
+                    <p>Rather than permanently compositing a logo into each product JPEG, a <strong>Dynamic
+                            Image Overlay</strong> system can apply branding, pricing, and promotional text
+                        programmatically based on the platform. This keeps original photography assets
+                        clean and high-resolution, enables A/B testing of different overlay treatments,
+                        and allows instant adaptation across Instagram, Facebook, and Google Shopping.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="sp-comparison-section"
     style="margin-top: 80px;">
     <div class="sp-comparison-header">
@@ -233,8 +419,8 @@
                     alt="Optimized Custom Thumbnail">
             </div>
             <div style="padding: 15px 20px; background: #fff3cd; border-bottom: 1px solid #ffeeba;">
-                <p style="margin: 0; font-weight: 700; font-size: 0.9rem; color: #856404;">Title: Michael Tuttle RT
-                    Special Demo | Boutique T-Style Tone Test</p>
+                <p style="margin: 0; font-weight: 700; font-size: 0.9rem; color: #856404;">Title: The Greatest Boutique
+                    T-Style Tone? Michael Tuttle RT Special</p>
                 <p style="margin: 5px 0 0 0; font-size: 0.8rem; color: #28a745; font-weight: 600;">Fix: Direct "Buy
                     Now" Link in First Line of Description</p>
             </div>
@@ -293,8 +479,8 @@
                             the Product Name or Price</strong>.</p>
                 </div>
                 <div class="sp-audit-impact">
-                    <strong>Impact:</strong> Todd cannot see his true ROI. He might spend $1,000 on ads and get a $5,000
-                    sale, but Google Analytics will report <strong>$0 in revenue</strong>.
+                    <strong>Impact:</strong> SoundPure cannot see its true ROI. It might spend $1,000 on ads and get a
+                    $5,000 sale, but Google Analytics will report <strong>$0 in revenue</strong>.
                 </div>
             </div>
         </div>
@@ -493,7 +679,7 @@ window.dataLayer.push({
                             <li><strong>Smart Remarketing:</strong> Deploy ads that follow high-value buyers (e.g.,
                                 someone who added a matched pair of Neumann KM 184s) with the specific inventory they
                                 viewed.</li>
-                            <li><strong>ROI Dashboard:</strong> Provide Todd with a clear view of exactly which
+                            <li><strong>ROI Dashboard:</strong> Provide a clear view of exactly which
                                 marketing channels (YouTube, Instagram, Search) are driving the most revenue.</li>
                         </ul>
                     </div>
@@ -1335,6 +1521,208 @@ window.dataLayer.push({
         border-left: 5px solid var(--sp-yellow);
     }
 
+    /* --- PAID AD AUDIT SECTION --- */
+    .sp-ad-audit-section .sp-audit-card {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .sp-ad-header-context {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: #fff;
+    }
+
+    .sp-ad-header-soundpure {
+        background: linear-gradient(135deg, var(--sp-blue), #1a2d4a);
+        color: #fff;
+    }
+
+    .sp-ad-header-right {
+        background: linear-gradient(135deg, #1e8449, #27ae60);
+        color: #fff;
+    }
+
+    .sp-ad-header-opportunity {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: #fff;
+    }
+
+    .sp-ad-header-recommendations {
+        background: var(--sp-yellow);
+        color: var(--sp-blue);
+    }
+
+    .sp-ad-card-header {
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .sp-ad-card-header h4 {
+        margin: 0;
+        font-weight: 900;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .sp-ad-verdict {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .sp-ad-verdict-warning {
+        background: rgba(255, 207, 6, 0.3);
+        color: #fff;
+        border: 1px solid rgba(255, 207, 6, 0.5);
+    }
+
+    /* SCREENSHOT DISPLAY */
+    .sp-ad-screenshot-row {
+        display: flex;
+        gap: 12px;
+        padding: 20px;
+        background: #f0f0f0;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .sp-ad-screenshot-wrapper {
+        min-width: 0;
+    }
+
+    .sp-ad-screenshot-wrapper img {
+        height: 420px;
+        width: auto;
+        display: block;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .sp-ad-card-analysis {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .sp-ad-card-analysis p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: #444;
+    }
+
+    /* SCORECARD GRID */
+    .sp-ad-scorecard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    /* STRATEGIC RECOMMENDATIONS */
+    .sp-ad-recommendation {
+        display: flex;
+        gap: 20px;
+        padding: 20px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .sp-ad-recommendation:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .sp-ad-rec-number {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 50%;
+        background: var(--sp-blue);
+        color: var(--sp-yellow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1rem;
+        border: 3px solid #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .sp-ad-rec-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .sp-ad-rec-content h4 {
+        margin: 0 0 8px 0;
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--sp-blue);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .sp-ad-rec-content p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.7;
+        color: #444;
+    }
+
+    /* MICRO-COPY BEFORE/AFTER */
+    .sp-ad-copy-compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 12px;
+    }
+
+    .sp-ad-copy-before,
+    .sp-ad-copy-after {
+        padding: 14px;
+        border-radius: 6px;
+        font-size: 0.88rem;
+        line-height: 1.5;
+    }
+
+    .sp-ad-copy-before {
+        background: #fdecea;
+        border-left: 3px solid #dc3545;
+    }
+
+    .sp-ad-copy-after {
+        background: #e8f5e9;
+        border-left: 3px solid #28a745;
+    }
+
+    .sp-ad-copy-label {
+        display: block;
+        font-weight: 800;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+        color: #888;
+    }
+
+    .sp-ad-copy-before p,
+    .sp-ad-copy-after p {
+        margin: 0;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        color: #333;
+        font-style: italic;
+    }
+
     /* GLOBAL OVERFLOW PROTECTION */
     .sp-comparison-section,
     .sp-audit-section {
@@ -1491,6 +1879,72 @@ window.dataLayer.push({
         /* Compare card full width fix */
         .sp-compare-card-full {
             max-width: 100%;
+        }
+
+        /* Ad audit mobile */
+        .sp-ad-scorecard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .sp-ad-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 14px 16px;
+        }
+
+        .sp-ad-card-header h4 {
+            font-size: 0.95rem;
+        }
+
+        .sp-ad-screenshot-row {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .sp-ad-screenshot-wrapper img {
+            height: auto;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .sp-ad-card-analysis {
+            padding: 15px;
+        }
+
+        .sp-ad-card-analysis p {
+            font-size: 0.85rem;
+        }
+
+        .sp-ad-recommendation {
+            gap: 14px;
+            padding: 15px 0;
+        }
+
+        .sp-ad-rec-number {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            font-size: 0.85rem;
+        }
+
+        .sp-ad-rec-content h4 {
+            font-size: 0.9rem;
+        }
+
+        .sp-ad-rec-content p {
+            font-size: 0.85rem;
+        }
+
+        .sp-ad-copy-compare {
+            grid-template-columns: 1fr;
+        }
+
+        .sp-ad-copy-before p,
+        .sp-ad-copy-after p {
+            font-size: 0.82rem;
         }
     }
 </style>

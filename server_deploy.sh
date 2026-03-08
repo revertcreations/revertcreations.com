@@ -28,19 +28,19 @@ php artisan route:clear
 php artisan view:clear
 
 # Verify MySQL is reachable before running migrations
-echo "Checking database connection..."
-for i in {1..15}; do
-    if php artisan db:show > /dev/null 2>&1; then
-        echo "Database is available."
-        break
-    fi
-    if [ "$i" -eq 15 ]; then
-        echo "Database not available after 30 seconds. Is MySQL running?" >&2
-        exit 1
-    fi
-    echo "Waiting for database... attempt $i/15"
-    sleep 2
-done
+# echo "Checking database connection..."
+# for i in {1..15}; do
+#     if php artisan db:show > /dev/null 2>&1; then
+#         echo "Database is available."
+#         break
+#     fi
+#     if [ "$i" -eq 15 ]; then
+#         echo "Database not available after 30 seconds. Is MySQL running?" >&2
+#         exit 1
+#     fi
+#     echo "Waiting for database... attempt $i/15"
+#     sleep 2
+# done
 
 php artisan migrate --force
 
