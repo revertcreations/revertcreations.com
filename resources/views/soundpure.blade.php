@@ -175,7 +175,7 @@
                     href="https://www.instagram.com/p/DTLNdtMjzco/?img_index=1"
                     target="_blank">Post</a></div>
             <div class="sp-image-wrapper">
-                <img src="https://scontent-atl3-3.cdninstagram.com/v/t39.30808-6/612022737_1695989598424601_3085957118234037517_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ig_cache_key=MzgwNDE5MzUwNTk4NDYxNTc0Mg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjEwODB4MTM1MC5zZHIuQzMifQ%3D%3D&_nc_ohc=rkvLGSindewQ7kNvwEWnd3b&_nc_oc=Adks_yIA7aLTGrbZ22UlNlplmTbGNU4VU0UvWaNsHgi7aNyO6DLOzKakM2s4PZSQBcF7G4giftBTHomQ7R6-8ut2&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent-atl3-3.cdninstagram.com&_nc_gid=IvQ2pnthwNmuOPZq55OHVg&oh=00_Afsj8t62c4L6Tx4tlbXMYS1krTiawr1gqeltCDyzQ_y_ew&oe=69A3EFBA"
+                <img src="{{ asset('OGInstagramPost.jpg') }}"
                     alt="Original Instagram Post">
             </div>
             <p class="sp-compare-caption">Analysis: This post acts as a visual inventory log rather than a top-of-funnel
@@ -243,6 +243,287 @@
                 the click. The SEO-optimized title ensures the video reaches active buyers. Finally, placing a trackable
                 purchase link at the very top of the description seamlessly bridges the gap between content consumption
                 and checkout.</p>
+        </div>
+    </div>
+</section>
+
+<section class="sp-comparison-section sp-audit-section"
+    style="margin-top: 80px;">
+    <div class="sp-comparison-header">
+        <h2 class="sp-section-title">Tracking & Data Audit</h2>
+        <p class="sp-section-subtitle">Identifying "Data Leakage" Between Inventory and Digital Performance</p>
+    </div>
+
+    <div class="sp-audit-executive-summary">
+        <div class="sp-audit-card">
+            <div class="sp-audit-card-header sp-audit-header-critical">
+                <span class="sp-audit-status-badge sp-status-critical">Executive Summary</span>
+                <h3>The Data Gap</h3>
+            </div>
+            <div class="sp-audit-card-body">
+                <p>SoundPure currently suffers from a <strong>Technical Disconnect</strong>. While the physical
+                    inventory is world-class, the digital "plumbing" is outdated and fragmented. This leads to
+                    <strong>"Dark Data"</strong>&mdash;where sales happen, but the marketing platforms (Google/Meta)
+                    cannot see them or optimize for them.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="sp-audit-diagnostics-grid">
+        <div class="sp-audit-card">
+            <div class="sp-audit-card-header sp-audit-header-google">
+                <span class="sp-audit-status-badge sp-status-critical">Critical Failure</span>
+                <h3>Google Analytics (GA4) Diagnostics</h3>
+            </div>
+            <div class="sp-audit-card-body">
+                <div class="sp-audit-finding">
+                    <h4>Legacy Code Conflict</h4>
+                    <p>The site is using "Universal Analytics" syntax&mdash;a language Google <strong>officially retired
+                            in 2023</strong>&mdash;to communicate with a modern GA4 account.</p>
+                </div>
+                <div class="sp-audit-finding">
+                    <h4>Data Dropping</h4>
+                    <p>Critical events (like "Buy Now" clicks) are being <strong>rejected by Google</strong> because
+                        they are formatted incorrectly.</p>
+                </div>
+                <div class="sp-audit-finding">
+                    <h4>The "Item Blackout"</h4>
+                    <p>The current code sends a notification that something was clicked, but it <strong>fails to send
+                            the Product Name or Price</strong>.</p>
+                </div>
+                <div class="sp-audit-impact">
+                    <strong>Impact:</strong> Todd cannot see his true ROI. He might spend $1,000 on ads and get a $5,000
+                    sale, but Google Analytics will report <strong>$0 in revenue</strong>.
+                </div>
+            </div>
+        </div>
+
+        <div class="sp-audit-card">
+            <div class="sp-audit-card-header sp-audit-header-meta">
+                <span class="sp-audit-status-badge sp-status-warning">Functional but Fragile</span>
+                <h3>Meta (Facebook/Instagram) Diagnostics</h3>
+            </div>
+            <div class="sp-audit-card-body">
+                <div class="sp-audit-finding">
+                    <h4>Pixel Success</h4>
+                    <p>Unlike Google, the Meta Pixel <strong>is successfully capturing</strong> product values and IDs.
+                    </p>
+                </div>
+                <div class="sp-audit-finding">
+                    <h4>Browser-Only Dependency</h4>
+                    <p>The tracking is "Hard-Coded" into the browser. It is <strong>100% vulnerable</strong> to
+                        ad-blockers and iOS privacy restrictions.</p>
+                </div>
+                <div class="sp-audit-finding">
+                    <h4>Missing Event IDs</h4>
+                    <p>The site lacks the "Event IDs" required for the <strong>Conversions API (CAPI)</strong>.</p>
+                </div>
+                <div class="sp-audit-impact">
+                    <strong>Impact:</strong> SoundPure is likely losing <strong>20&ndash;30% of its attribution
+                        data</strong>. Meta's AI is only learning from 70% of the buyers, making ads more expensive and
+                    less efficient than they should be.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sp-audit-card"
+        style="margin-top: 40px;">
+        <div class="sp-audit-card-header sp-audit-header-compare">
+            <h3>Comparative Analysis</h3>
+        </div>
+        <div class="sp-audit-card-body sp-audit-table-wrap">
+            <table class="sp-audit-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th class="sp-col-legacy">Current State (Legacy)</th>
+                        <th class="sp-col-proposed">Modern Standard (Proposed)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Tracking Method</strong></td>
+                        <td>Hard-coded into HTML</td>
+                        <td>Managed via a Unified Data Layer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Google Accuracy</strong></td>
+                        <td class="sp-cell-bad">~0% (UA tags are dead)</td>
+                        <td class="sp-cell-good">100% GA4 E-commerce</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Meta Fidelity</strong></td>
+                        <td class="sp-cell-bad">~70% (Blocked by browsers)</td>
+                        <td class="sp-cell-good">99% (Browser + Server-Side CAPI)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Audience Insight</strong></td>
+                        <td>Generic / "Window Shoppers"</td>
+                        <td>Precision / "High-Intent Buyers"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="sp-audit-snapshot"
+        style="margin-top: 40px;">
+        <div class="sp-audit-card">
+            <div class="sp-audit-card-header sp-audit-header-snapshot">
+                <h3>Technical Snapshot: The "Buy Now" Data Flow</h3>
+            </div>
+            <div class="sp-audit-card-body">
+                <div class="sp-audit-code-comparison">
+                    <div class="sp-audit-code-block sp-code-legacy">
+                        <div class="sp-code-label sp-label-before">Current State (Legacy Implementation)</div>
+                        <pre><code>&lt;button onclick="
+    fbq('track', 'AddToCart', {
+        content_name: 'Sennheiser E609 Microphone',
+        content_ids: ['2269'],
+        value: 99.95,
+        currency: 'USD'
+    });
+    <span class="sp-code-danger">ga('send', 'event', 'Checkout', 'Add to cart', 'Buy now');</span>
+"&gt;Buy Now&lt;/button&gt;</code></pre>
+                        <div class="sp-code-annotations">
+                            <div class="sp-annotation sp-annotation-critical">
+                                <strong>Universal Analytics (ga):</strong> This command sends data to a system Google
+                                retired in 2023. The data is effectively "dropped" and never reaches your reports.
+                            </div>
+                            <div class="sp-annotation sp-annotation-warning">
+                                <strong>Missing Event ID:</strong> No unique ID to bridge this event to a server-side
+                                Conversions API.
+                            </div>
+                            <div class="sp-annotation sp-annotation-warning">
+                                <strong>Hard-Coded Risk:</strong> Any tracking change requires a developer to edit the
+                                site's core HTML templates.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sp-audit-code-block sp-code-modern">
+                        <div class="sp-code-label sp-label-after">Proposed State (Modern Data Layer)</div>
+                        <pre><code><span class="sp-code-comment">/* PROPOSED CLEAN IMPLEMENTATION */</span>
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+  <span class="sp-code-success">'event': 'add_to_cart',</span>
+  'ecommerce': {
+    'currency': 'USD',
+    'value': 99.95,
+    <span class="sp-code-success">'items': [{
+      'item_id': '2269',
+      'item_name': 'Sennheiser E609 Microphone',
+      'price': 99.95,
+      'item_category': 'Recording Gear'
+    }]</span>
+  },
+  <span class="sp-code-success">'event_id': 'u45k-89zq-2269'</span> <span class="sp-code-comment">// Vital for Server-Side CAPI</span>
+});</code></pre>
+                        <div class="sp-code-annotations">
+                            <div class="sp-annotation sp-annotation-success">
+                                <strong>Full GA4 Integration:</strong> Uses the specific <code>add_to_cart</code> name
+                                and <code>items</code> array required for Google's most advanced e-commerce AI and ROI
+                                reporting.
+                            </div>
+                            <div class="sp-annotation sp-annotation-success">
+                                <strong>Conversion Fidelity:</strong> The <code>event_id</code> enables Meta CAPI,
+                                capturing sales even when users have ad-blockers or iOS privacy settings enabled.
+                            </div>
+                            <div class="sp-annotation sp-annotation-success">
+                                <strong>Agility:</strong> Once this Data Layer is in place, new marketing tools or
+                                tracking pixels can be added in minutes without touching the site's code.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sp-audit-card"
+        style="margin-top: 40px;">
+        <div class="sp-audit-card-header sp-audit-header-roadmap">
+            <h3>The 90-Day Roadmap</h3>
+        </div>
+        <div class="sp-audit-card-body">
+            <div class="sp-audit-roadmap">
+                <div class="sp-roadmap-phase">
+                    <div class="sp-phase-marker">
+                        <span class="sp-phase-number">1</span>
+                        <span class="sp-phase-label">Days 1&ndash;30</span>
+                    </div>
+                    <div class="sp-phase-content">
+                        <h4>The Data Foundation</h4>
+                        <ul>
+                            <li><strong>Eliminate Zombie Code:</strong> Remove all Universal Analytics remnants.</li>
+                            <li><strong>Implement a Unified Data Layer:</strong> Move tracking out of the "hard-coded"
+                                HTML and into a modern, manageable container.</li>
+                            <li><strong>Standardize Events:</strong> Fix <code>add_to_cart</code> naming to ensure
+                                products and prices are reported to Google.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="sp-roadmap-phase">
+                    <div class="sp-phase-marker">
+                        <span class="sp-phase-number">2</span>
+                        <span class="sp-phase-label">Days 31&ndash;60</span>
+                    </div>
+                    <div class="sp-phase-content">
+                        <h4>Conversion Optimization</h4>
+                        <ul>
+                            <li><strong>Server-Side Tracking (CAPI):</strong> Implement Meta CAPI to recover the
+                                20&ndash;30% of "lost" sales data from ad-blockers.</li>
+                            <li><strong>Audience Segmentation:</strong> Use the new clean data to target guitar players
+                                and recording engineers with dynamic, personalized content.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="sp-roadmap-phase">
+                    <div class="sp-phase-marker">
+                        <span class="sp-phase-number">3</span>
+                        <span class="sp-phase-label">Days 61&ndash;90</span>
+                    </div>
+                    <div class="sp-phase-content">
+                        <h4>Growth Scaling</h4>
+                        <ul>
+                            <li><strong>Smart Remarketing:</strong> Deploy ads that follow high-value buyers (e.g.,
+                                someone who added a matched pair of Neumann KM 184s) with the specific inventory they
+                                viewed.</li>
+                            <li><strong>ROI Dashboard:</strong> Provide Todd with a clear view of exactly which
+                                marketing channels (YouTube, Instagram, Search) are driving the most revenue.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sp-audit-card sp-audit-bottom-line"
+        style="margin-top: 40px;">
+        <div class="sp-audit-card-header sp-audit-header-pitch">
+            <h3>Why This Matters</h3>
+        </div>
+        <div class="sp-audit-card-body">
+            <div class="sp-audit-bottom-line-grid">
+                <div class="sp-bottom-line-item">
+                    <h4>Stop Flying Blind</h4>
+                    <p>Move from "guessing" which ads work to seeing every dollar tracked to a specific product.</p>
+                </div>
+                <div class="sp-bottom-line-item">
+                    <h4>30% Data Recovery</h4>
+                    <p>Implementing CAPI effectively recovers up to 30% of "lost" attribution data caused by modern
+                        browsers.</p>
+                </div>
+                <div class="sp-bottom-line-item">
+                    <h4>Algorithmic Power</h4>
+                    <p>By feeding Google and Meta "High-Fidelity" data, their AIs get smarter at finding buyers who will
+                        spend $4,000+ instead of just browsing.</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -646,5 +927,570 @@
         display: block;
         aspect-ratio: 16/9;
         object-fit: cover;
+    }
+
+    /* --- TRACKING AUDIT SECTION --- */
+    .sp-audit-section .sp-audit-card {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .sp-audit-card-header {
+        padding: 20px 25px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .sp-audit-card-header h3 {
+        margin: 0;
+        font-weight: 900;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .sp-audit-header-critical {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: #fff;
+    }
+
+    .sp-audit-header-google {
+        background: linear-gradient(135deg, #c0392b, #e74c3c);
+        color: #fff;
+    }
+
+    .sp-audit-header-meta {
+        background: linear-gradient(135deg, #1877f2, #42a5f5);
+        color: #fff;
+    }
+
+    .sp-audit-header-compare {
+        background: var(--sp-blue);
+        color: #fff;
+    }
+
+    .sp-audit-header-snapshot {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: #fff;
+    }
+
+    .sp-audit-header-roadmap {
+        background: linear-gradient(135deg, #1a5276, #2980b9);
+        color: #fff;
+    }
+
+    .sp-audit-header-pitch {
+        background: var(--sp-yellow);
+        color: var(--sp-blue);
+    }
+
+    .sp-audit-status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        white-space: nowrap;
+    }
+
+    .sp-status-critical {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .sp-status-warning {
+        background: rgba(255, 207, 6, 0.25);
+        color: #fff;
+        border: 1px solid rgba(255, 207, 6, 0.4);
+    }
+
+    .sp-audit-card-body {
+        padding: 25px;
+    }
+
+    .sp-audit-card-body p {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #444;
+        margin: 0;
+    }
+
+    .sp-audit-diagnostics-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .sp-audit-finding {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .sp-audit-finding:last-of-type {
+        border-bottom: none;
+    }
+
+    .sp-audit-finding h4 {
+        margin: 0 0 6px 0;
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .sp-audit-finding p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .sp-audit-impact {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-left: 4px solid #dc3545;
+        border-radius: 0 4px 4px 0;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    .sp-audit-header-meta+.sp-audit-card-body .sp-audit-impact {
+        border-left-color: #f0ad4e;
+    }
+
+    /* COMPARISON TABLE */
+    .sp-audit-table-wrap {
+        overflow-x: auto;
+    }
+
+    .sp-audit-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    .sp-audit-table th,
+    .sp-audit-table td {
+        padding: 14px 18px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .sp-audit-table thead th {
+        background: #f8f9fa;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        color: #555;
+    }
+
+    .sp-col-legacy {
+        color: #c0392b !important;
+    }
+
+    .sp-col-proposed {
+        color: #27ae60 !important;
+    }
+
+    .sp-cell-bad {
+        color: #c0392b;
+        font-weight: 700;
+    }
+
+    .sp-cell-good {
+        color: #27ae60;
+        font-weight: 700;
+    }
+
+    /* CODE COMPARISON */
+    .sp-audit-code-comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    .sp-audit-code-block {
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .sp-audit-code-block .sp-code-label {
+        padding: 12px 15px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+
+    .sp-audit-code-block pre {
+        margin: 0;
+        padding: 20px;
+        background: #1e1e2e;
+        overflow-x: auto;
+    }
+
+    .sp-audit-code-block code {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.8rem;
+        line-height: 1.6;
+        color: #cdd6f4;
+        white-space: pre;
+    }
+
+    .sp-code-danger {
+        color: #f38ba8;
+        text-decoration: line-through;
+        text-decoration-color: rgba(243, 139, 168, 0.5);
+    }
+
+    .sp-code-success {
+        color: #a6e3a1;
+        font-weight: 700;
+    }
+
+    .sp-code-comment {
+        color: #6c7086;
+        font-style: italic;
+    }
+
+    .sp-code-annotations {
+        padding: 15px;
+        background: #f8f9fa;
+    }
+
+    .sp-annotation {
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        border-radius: 4px;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: #333;
+    }
+
+    .sp-annotation:last-child {
+        margin-bottom: 0;
+    }
+
+    .sp-annotation-critical {
+        background: #fdecea;
+        border-left: 3px solid #dc3545;
+    }
+
+    .sp-annotation-warning {
+        background: #fff8e1;
+        border-left: 3px solid #f0ad4e;
+    }
+
+    .sp-annotation-success {
+        background: #e8f5e9;
+        border-left: 3px solid #28a745;
+    }
+
+    /* ROADMAP */
+    .sp-audit-roadmap {
+        position: relative;
+        padding-left: 100px;
+    }
+
+    .sp-roadmap-phase {
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .sp-roadmap-phase:last-child {
+        margin-bottom: 0;
+    }
+
+    .sp-phase-marker {
+        position: absolute;
+        left: -100px;
+        top: 0;
+        width: 90px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .sp-phase-number {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--sp-blue);
+        color: var(--sp-yellow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 0.9rem;
+        position: relative;
+        z-index: 2;
+        border: 3px solid #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .sp-phase-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .sp-phase-content {
+        padding-left: 0;
+    }
+
+    .sp-phase-content h4 {
+        margin: 0 0 10px 0;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--sp-blue);
+        text-transform: uppercase;
+    }
+
+    .sp-phase-content ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sp-phase-content li {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #444;
+        margin-bottom: 6px;
+        padding-left: 20px;
+        position: relative;
+    }
+
+    .sp-phase-content li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 10px;
+        width: 10px;
+        height: 2px;
+        background: var(--sp-yellow);
+    }
+
+    .sp-phase-content li code {
+        background: #eef;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 0.85rem;
+    }
+
+    /* BOTTOM LINE / PITCH */
+    .sp-audit-bottom-line-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+        margin-bottom: 25px;
+    }
+
+    .sp-bottom-line-item {
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        border-top: 3px solid var(--sp-yellow);
+    }
+
+    .sp-bottom-line-item h4 {
+        margin: 0 0 8px 0;
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--sp-blue);
+        text-transform: uppercase;
+    }
+
+    .sp-bottom-line-item p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #555;
+    }
+
+    .sp-audit-pitch-quote {
+        margin: 0;
+        padding: 25px 30px;
+        background: var(--sp-blue);
+        color: #fff;
+        border-radius: 6px;
+        font-size: 1rem;
+        line-height: 1.7;
+        font-style: italic;
+        border-left: 5px solid var(--sp-yellow);
+    }
+
+    /* GLOBAL OVERFLOW PROTECTION */
+    .sp-comparison-section,
+    .sp-audit-section {
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .sp-audit-section *,
+    .sp-comparison-section * {
+        box-sizing: border-box;
+    }
+
+    /* AUDIT RESPONSIVE */
+    @media (max-width: 768px) {
+        .sp-comparison-section {
+            padding: 0 15px;
+            margin: 40px auto;
+        }
+
+        .sp-audit-diagnostics-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .sp-audit-code-comparison {
+            grid-template-columns: 1fr;
+        }
+
+        .sp-audit-bottom-line-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .sp-audit-card-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 15px 18px;
+        }
+
+        .sp-audit-card-header h3 {
+            font-size: 1rem;
+        }
+
+        .sp-audit-card-body {
+            padding: 18px 15px;
+        }
+
+        /* Roadmap mobile: switch to inline layout, no absolute positioning */
+        .sp-audit-roadmap {
+            padding-left: 0;
+        }
+
+        .sp-audit-roadmap::before {
+            display: none;
+        }
+
+        .sp-roadmap-phase {
+            position: static;
+            margin-bottom: 30px;
+            padding-left: 0;
+            border-left: 3px solid var(--sp-blue);
+            padding: 15px 15px 15px 18px;
+            background: #f8f9fa;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .sp-phase-marker {
+            position: static;
+            width: auto;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .sp-phase-number {
+            width: 30px;
+            height: 30px;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            border: 2px solid #fff;
+        }
+
+        .sp-phase-label {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        .sp-phase-content {
+            padding-left: 0;
+        }
+
+        .sp-phase-content h4 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .sp-phase-content li {
+            font-size: 0.85rem;
+        }
+
+        /* Code blocks mobile */
+        .sp-audit-code-block pre {
+            padding: 15px;
+        }
+
+        .sp-audit-code-block code {
+            font-size: 0.7rem;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .sp-code-annotations {
+            padding: 12px;
+        }
+
+        .sp-annotation {
+            font-size: 0.78rem;
+            padding: 8px 10px;
+        }
+
+        /* Table mobile */
+        .sp-audit-table {
+            font-size: 0.78rem;
+        }
+
+        .sp-audit-table th,
+        .sp-audit-table td {
+            padding: 10px 10px;
+        }
+
+        /* Pitch quote mobile */
+        .sp-audit-pitch-quote {
+            padding: 18px 20px;
+            font-size: 0.9rem;
+        }
+
+        .sp-bottom-line-item {
+            padding: 15px;
+        }
+
+        .sp-bottom-line-item h4 {
+            font-size: 0.9rem;
+        }
+
+        .sp-bottom-line-item p {
+            font-size: 0.85rem;
+        }
+
+        /* Carousel mobile overflow fix */
+        .sp-carousel-container {
+            max-width: 100%;
+        }
+
+        /* Compare card full width fix */
+        .sp-compare-card-full {
+            max-width: 100%;
+        }
     }
 </style>

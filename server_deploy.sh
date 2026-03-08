@@ -30,14 +30,7 @@ php artisan view:clear
 # Verify MySQL is reachable before running migrations
 echo "Checking database connection..."
 for i in {1..15}; do
-    if php -r "
-        \$env = parse_ini_file('.env');
-        new PDO(
-            'mysql:host=' . (\$env['DB_HOST'] ?? '127.0.0.1') . ';port=' . (\$env['DB_PORT'] ?? 3306) . ';dbname=' . \$env['DB_DATABASE'],
-            \$env['DB_USERNAME'],
-            \$env['DB_PASSWORD']
-        );
-    " 2>/dev/null; then
+    if php artisan db:show > /dev/null 2>&1; then
         echo "Database is available."
         break
     fi
