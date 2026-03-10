@@ -289,11 +289,11 @@
             <div class="sp-ad-card-analysis">
                 <p>These ads from other retailers in the same space illustrate two of the key
                     recommendations above in action. Most use <strong>full-bleed product
-                    photography</strong>&mdash;the instrument fills the entire frame, letting the finish
+                        photography</strong>&mdash;the instrument fills the entire frame, letting the finish
                     and craftsmanship do the selling. Notice how the platform's native interface (account
                     name, "Shop Now" button) handles all the branding, freeing the image to be purely
                     aspirational. One ad takes it further with a <strong>natural lifestyle
-                    backdrop</strong>&mdash;the instrument photographed in a real environment rather than
+                        backdrop</strong>&mdash;the instrument photographed in a real environment rather than
                     on a white background&mdash;which immediately communicates context and personality
                     that a catalog-style shot cannot.</p>
             </div>
@@ -311,8 +311,7 @@
                 <div class="sp-audit-finding">
                     <h4>Retargeting Pipeline</h4>
                     <p>The ads are reaching the right people. The Pixel correctly identified an abandoned cart
-                        and served dynamic catalog ads for the specific items viewed. This is the hardest
-                        part of the funnel to get right, and it's functional.</p>
+                        and served dynamic catalog ads for the specific items viewed.</p>
                 </div>
                 <div class="sp-audit-finding">
                     <h4>Inventory Quality</h4>
