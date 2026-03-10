@@ -44,7 +44,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/a/guitar-and-drum-store-downtown-durham-nc/"
-                style="background-image: url('Sound PureAssets/boutiqueAcousticGuitars.jpg');">
+                style="background-image: url('SoundPureAssets/boutiqueAcousticGuitars.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">The Sound Pure Standard</span>
@@ -81,7 +81,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/swapout"
-                style="background-image: url('Sound PureAssets/swapOut.jpg');">
+                style="background-image: url('SoundPureAssets/swapOut.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">Asset Management</span>
@@ -99,7 +99,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/trybeforebuy"
-                style="background-image: url('Sound PureAssets/tryBeforeBuy.jpg');">
+                style="background-image: url('SoundPureAssets/tryBeforeBuy.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">Confidence Guaranteed</span>
@@ -135,7 +135,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/warranty"
-                style="background-image: url('Sound PureAssets/warranty.jpg');">
+                style="background-image: url('SoundPureAssets/warranty.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">The Sound Pure Guarantee</span>
