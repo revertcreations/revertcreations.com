@@ -392,8 +392,8 @@
                             <span class="sp-ad-copy-label">Proposed</span>
                             <p>"Eastman DM1 Gypsy Jazz Guitar &mdash; Solid spruce top with a percussive,
                                 cutting voice built for Django-style runs. Hand-selected by the Sound Pure
-                                team. Explore our full collection of boutique acoustics &mdash; 0% financing
-                                available."</p>
+                                team. Explore our full collection of boutique acoustics &mdash; 0% interest-free
+                                financing options available."</p>
                         </div>
                     </div>
                 </div>
