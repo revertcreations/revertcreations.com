@@ -260,6 +260,46 @@
         </div>
     </div>
 
+    {{-- COMPETITOR AD EXAMPLES --}}
+    <div class="sp-ad-current-examples"
+        style="margin-top: 30px;">
+        <div class="sp-audit-card">
+            <div class="sp-ad-card-header sp-ad-header-competitor">
+                <h4>Competitor Ad Creative</h4>
+                <span class="sp-ad-verdict sp-ad-verdict-benchmark">Industry Benchmark</span>
+            </div>
+            <div class="sp-ad-screenshot-row">
+                <div class="sp-ad-screenshot-wrapper">
+                    <img src="{{ asset('SoundPureAssets/IMG_2494.PNG') }}"
+                        alt="Competitor Instagram Ad - full bleed product photography">
+                </div>
+                <div class="sp-ad-screenshot-wrapper">
+                    <img src="{{ asset('SoundPureAssets/IMG_2495.PNG') }}"
+                        alt="Competitor Instagram Ad - full bleed product photography">
+                </div>
+                <div class="sp-ad-screenshot-wrapper">
+                    <img src="{{ asset('SoundPureAssets/IMG_2497.PNG') }}"
+                        alt="Competitor Instagram Ad - lifestyle studio backdrop">
+                </div>
+                <div class="sp-ad-screenshot-wrapper">
+                    <img src="{{ asset('SoundPureAssets/IMG_2498.PNG') }}"
+                        alt="Competitor Instagram Ad - full bleed product photography">
+                </div>
+            </div>
+            <div class="sp-ad-card-analysis">
+                <p>These ads from other retailers in the same space illustrate two of the key
+                    recommendations above in action. Most use <strong>full-bleed product
+                    photography</strong>&mdash;the instrument fills the entire frame, letting the finish
+                    and craftsmanship do the selling. Notice how the platform's native interface (account
+                    name, "Shop Now" button) handles all the branding, freeing the image to be purely
+                    aspirational. One ad takes it further with a <strong>natural lifestyle
+                    backdrop</strong>&mdash;the instrument photographed in a real environment rather than
+                    on a white background&mdash;which immediately communicates context and personality
+                    that a catalog-style shot cannot.</p>
+            </div>
+        </div>
+    </div>
+
     {{-- SCORECARD --}}
     <div class="sp-ad-scorecard-grid"
         style="margin-top: 40px;">
@@ -1549,9 +1589,20 @@ window.dataLayer.push({
         color: #fff;
     }
 
+    .sp-ad-header-competitor {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: #fff;
+    }
+
     .sp-ad-header-recommendations {
         background: var(--sp-yellow);
         color: var(--sp-blue);
+    }
+
+    .sp-ad-verdict-benchmark {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .sp-ad-card-header {
