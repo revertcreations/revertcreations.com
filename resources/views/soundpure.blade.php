@@ -8,7 +8,7 @@
         <div class="sp-compare-label sp-label-before">Before: Legacy Static Banner</div>
         <div class="sp-image-wrapper-full">
             <img src="https://www.soundpure.com/resources/org.apache.wicket.Application/banner?id=2616e076-dc13-4021-b8d4-a390893068e7.webp"
-                alt="Legacy SoundPure Banner">
+                alt="Legacy Sound Pure Banner">
         </div>
         <p class="sp-compare-caption">Analysis: Embedding text into a heavily compressed image file creates visible
             artifacting and pixelation around the typography, instantly degrading the premium feel of the brand on
@@ -44,10 +44,10 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/a/guitar-and-drum-store-downtown-durham-nc/"
-                style="background-image: url('SoundPureAssets/boutiqueAcousticGuitars.jpg');">
+                style="background-image: url('Sound PureAssets/boutiqueAcousticGuitars.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
-                        <span class="sp-badge">The SoundPure Standard</span>
+                        <span class="sp-badge">The Sound Pure Standard</span>
                         <h1 class="sp-headline">Boutique Selection: Vetted & Ready</h1>
                         <ul class="sp-deal-list">
                             <li>Hand-Voiced Acoustic Guitars</li>
@@ -81,7 +81,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/swapout"
-                style="background-image: url('SoundPureAssets/swapOut.jpg');">
+                style="background-image: url('Sound PureAssets/swapOut.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">Asset Management</span>
@@ -99,7 +99,7 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/trybeforebuy"
-                style="background-image: url('SoundPureAssets/tryBeforeBuy.jpg');">
+                style="background-image: url('Sound PureAssets/tryBeforeBuy.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
                         <span class="sp-badge">Confidence Guaranteed</span>
@@ -135,10 +135,10 @@
 
             <section class="sp-slide"
                 data-link="https://www.soundpure.com/warranty"
-                style="background-image: url('SoundPureAssets/warranty.jpg');">
+                style="background-image: url('Sound PureAssets/warranty.jpg');">
                 <div class="sp-gradient-overlay">
                     <div class="sp-content">
-                        <span class="sp-badge">The SoundPure Guarantee</span>
+                        <span class="sp-badge">The Sound Pure Guarantee</span>
                         <h1 class="sp-headline">Free 3-Year Warranty</h1>
                         <ul class="sp-deal-list">
                             <li>Comprehensive Gear Protection</li>
@@ -180,7 +180,7 @@
             </div>
             <p class="sp-compare-caption">Analysis: This post acts as a visual inventory log rather than a top-of-funnel
                 marketing asset. By presenting elite gear against a plain wall with zero context, it suffers from the
-                "Curse of Knowledge"—assuming the viewer already knows SoundPure's premium reputation. To a new organic
+                "Curse of Knowledge"—assuming the viewer already knows Sound Pure's premium reputation. To a new organic
                 prospect on the Explore page, it lacks a focal point, conveys no brand identity, and fails to provide a
                 compelling reason to stop scrolling.</p>
         </div>
@@ -191,7 +191,7 @@
                     alt="Redesigned Instagram Post">
             </div>
             <p class="sp-compare-caption">Analysis: This redesign shifts from passive inventory display to active
-                top-of-funnel marketing. The legacy approach assumed the viewer already knew SoundPure's identity. By
+                top-of-funnel marketing. The legacy approach assumed the viewer already knew Sound Pure's identity. By
                 pairing your high-quality photography with high-contrast brand elements and a clear swipe
                 directive, we instantly communicate your premium niche to new, organic viewers on the Explore page,
                 while simultaneously increasing dwell time to trigger the algorithm.</p>
@@ -213,7 +213,7 @@
             <h3>Instagram Ad Audit</h3>
         </div>
         <div class="sp-audit-card-body">
-            <p>These ads appeared in my Instagram feed after I browsed SoundPure's website and added several
+            <p>These ads appeared in my Instagram feed after I browsed Sound Pure's website and added several
                 guitars to my cart without completing the purchase. That means the <strong>retargeting
                     pipeline is working</strong>&mdash;the Meta Pixel correctly identified me as an abandoned-cart
                 user and served me dynamic catalog ads for the exact items I viewed. That's a meaningful
@@ -233,19 +233,19 @@
             <div class="sp-ad-screenshot-row">
                 <div class="sp-ad-screenshot-wrapper">
                     <img src="{{ asset('SoundPureAssets/IMG_2482.PNG') }}"
-                        alt="SoundPure Instagram Ad example">
+                        alt="Sound Pure Instagram Ad example">
                 </div>
                 <div class="sp-ad-screenshot-wrapper">
                     <img src="{{ asset('SoundPureAssets/IMG_2486.PNG') }}"
-                        alt="SoundPure Instagram Ad example">
+                        alt="Sound Pure Instagram Ad example">
                 </div>
                 <div class="sp-ad-screenshot-wrapper">
                     <img src="{{ asset('SoundPureAssets/IMG_2487.PNG') }}"
-                        alt="SoundPure Instagram Ad example">
+                        alt="Sound Pure Instagram Ad example">
                 </div>
                 <div class="sp-ad-screenshot-wrapper">
                     <img src="{{ asset('SoundPureAssets/IMG_2489.PNG') }}"
-                        alt="SoundPure Instagram Ad example">
+                        alt="Sound Pure Instagram Ad example">
                 </div>
             </div>
             <div class="sp-ad-card-analysis">
@@ -311,7 +311,7 @@
                 </div>
                 <div class="sp-audit-finding">
                     <h4>Background & Framing</h4>
-                    <p>The current white-background framing is functional but neutral. SoundPure has a
+                    <p>The current white-background framing is functional but neutral. Sound Pure has a
                         world-class studio environment that could serve as a <strong>natural lifestyle
                             backdrop</strong>, instantly communicating professional credibility.</p>
                 </div>
@@ -342,7 +342,7 @@
                     <h4>Item-Specific "Micro-Copy"</h4>
                     <p>The current ad description is identical across every listing&mdash;just a
                         financing notice. Replace it with the instrument's name, a brief description that
-                        reflects its character, and a nod to SoundPure's curation. The financing detail
+                        reflects its character, and a nod to Sound Pure's curation. The financing detail
                         still belongs, but it should come after the product has had a chance to speak.</p>
                     <div class="sp-ad-copy-compare">
                         <div class="sp-ad-copy-before">
@@ -352,7 +352,7 @@
                         <div class="sp-ad-copy-after">
                             <span class="sp-ad-copy-label">Proposed</span>
                             <p>"Eastman DM1 Gypsy Jazz Guitar &mdash; Solid spruce top with a percussive,
-                                cutting voice built for Django-style runs. Hand-selected by the SoundPure
+                                cutting voice built for Django-style runs. Hand-selected by the Sound Pure
                                 team. Explore our full collection of boutique acoustics &mdash; 0% financing
                                 available."</p>
                         </div>
@@ -363,7 +363,7 @@
                 <div class="sp-ad-rec-number">3</div>
                 <div class="sp-ad-rec-content">
                     <h4>Leverage the Studio Environment</h4>
-                    <p>SoundPure has something most competitors don't: a <strong>world-class recording
+                    <p>Sound Pure has something most competitors don't: a <strong>world-class recording
                             studio</strong>. Photographing instruments in that environment&mdash;on a stand
                         next to a Neve console or positioned near a high-end condenser mic&mdash;adds
                         implicit value. It tells the buyer: <em>"This is professional-grade gear, in a
@@ -447,7 +447,7 @@
                 <h3>The Data Gap</h3>
             </div>
             <div class="sp-audit-card-body">
-                <p>SoundPure currently suffers from a <strong>Technical Disconnect</strong>. While the physical
+                <p>Sound Pure currently suffers from a <strong>Technical Disconnect</strong>. While the physical
                     inventory is world-class, the digital "plumbing" is outdated and fragmented. This leads to
                     <strong>"Dark Data"</strong>&mdash;where sales happen, but the marketing platforms (Google/Meta)
                     cannot see them or optimize for them.
@@ -479,7 +479,7 @@
                             the Product Name or Price</strong>.</p>
                 </div>
                 <div class="sp-audit-impact">
-                    <strong>Impact:</strong> SoundPure cannot see its true ROI. It might spend $1,000 on ads and get a
+                    <strong>Impact:</strong> Sound Pure cannot see its true ROI. It might spend $1,000 on ads and get a
                     $5,000 sale, but Google Analytics will report <strong>$0 in revenue</strong>.
                 </div>
             </div>
@@ -506,7 +506,7 @@
                     <p>The site lacks the "Event IDs" required for the <strong>Conversions API (CAPI)</strong>.</p>
                 </div>
                 <div class="sp-audit-impact">
-                    <strong>Impact:</strong> SoundPure is likely losing <strong>20&ndash;30% of its attribution
+                    <strong>Impact:</strong> Sound Pure is likely losing <strong>20&ndash;30% of its attribution
                         data</strong>. Meta's AI is only learning from 70% of the buyers, making ads more expensive and
                     less efficient than they should be.
                 </div>

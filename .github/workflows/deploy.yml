@@ -2,7 +2,7 @@ name: CD Digital Ocean RevertCreations
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   deploy:
@@ -11,29 +11,44 @@ jobs:
       GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_DEPLOY_TOKEN }}
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Node
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20.x'
-    - run: npm ci
-    - run: npm run prod
-    - name: Commit built assets
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "Github Action"
-        git checkout -B deploy
-        git add -f public/
-        git commit -m "Github action build front-end assets"
-        git push -f origin deploy
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.x"
+      - run: npm ci
+      - run: npm run prod
+      - name: Commit built assets
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Github Action"
+          git checkout -B deploy
+          git add -f public/
+          git commit -m "Github action build front-end assets"
+          git push -f origin deploy
 
-    - name: Deploy to Digital Ocean
-      uses: appleboy/ssh-action@master
-      with:
-        username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
-        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
-        password: ${{ secrets.DIGITAL_OCEAN_PASSWORD }}
-        key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
-        passphrase: ${{ secrets.DIGITAL_OCEAN_KEY_PASSPRHASE }}
-        envs: GITHUB_DEPLOY_TOKEN
-        script: 'cd /var/www/revertcreations.com && chmod +x server_deploy.sh && ./server_deploy.sh'
+      - name: Deploy to Digital Ocean
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          password: ${{ secrets.DIGITAL_OCEAN_PASSWORD }}
+          key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
+          passphrase: ${{ secrets.DIGITAL_OCEAN_KEY_PASSPRHASE }}
+          envs: GITHUB_DEPLOY_TOKEN
+          script: |
+            cd /var/www/revertcreations.com
+            php artisan down || true
+            if git fetch origin deploy; then
+                git reset --hard origin/deploy
+            elif [ -n "$GITHUB_DEPLOY_TOKEN" ]; then
+                echo "SSH fetch failed; attempting HTTPS fetch with deploy token."
+                git fetch "https://oauth2:${GITHUB_DEPLOY_TOKEN}@github.com/revertcreations/revertcreations.com.git" deploy
+                git reset --hard FETCH_HEAD
+            else
+                echo "Unable to fetch deployment branch." >&2
+                php artisan up
+                exit 1
+            fi
+            chmod +x server_deploy.sh
+            ./server_deploy.sh
