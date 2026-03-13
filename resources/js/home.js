@@ -3,5 +3,5 @@ import './components/HintElement.js';
 import './components/TreasureElement.js';
 import './components/ContentElement.js';
 import './components/InteractiveElement.js';
-import './components/FooterMagnetElement.js';
+import './components/FancyButtonElement.js';
 import "./playground.js";

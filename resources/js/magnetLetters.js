@@ -21,8 +21,6 @@ const ACTIVE_CLASS = "magnet-active";
 const LETTER_HORIZONTAL_TOLERANCE = 15;
 const LETTER_VERTICAL_TOLERANCE = 15;
 const OVERLAP_TOLERANCE = 5;
-const SECRET_WORDS = ["hire", "reset"];
-
 const DRAG_STATE = new WeakMap();
 
 const LETTER_STATE = new Map();
@@ -900,9 +898,10 @@ const handleHireSecret = () => {
     }
 };
 
-const SECRET_HANDLERS = {
+const SECRET_WORDS = {
     hire: handleHireSecret,
     reset: restoreMarkup,
+    resume: "/resume"
 };
 
 const calculateLetterPositions = () => {
@@ -934,9 +933,16 @@ const triggerSecretWord = (word) => {
     if (word === "hire" && leadContainer?.dataset?.hireModalShown === "true") {
         return true;
     }
-    const handler = SECRET_HANDLERS[word];
+    
+    const handler = SECRET_WORDS[word];
     if (!handler) return false;
-    handler();
+    
+    if (typeof handler === "function") {
+        handler();
+    } else if (typeof handler === "string") {
+        window.location.href = handler;
+    }
+    
     if (word === "hire" && leadContainer) {
         leadContainer.dataset.hireModalShown = "true";
     }
@@ -1002,7 +1008,7 @@ const detectWord = (targetWord) => {
 };
 
 const checkSecretWords = () => {
-    for (const word of SECRET_WORDS) {
+    for (const word of Object.keys(SECRET_WORDS)) {
         if (detectWord(word)) {
             triggerSecretWord(word);
             return true;
@@ -1092,7 +1098,7 @@ const evaluateLetterDrop = (letterElement) => {
     }
 
     const normalized = logLetterGroup(group);
-    const matchedWord = SECRET_WORDS.find((word) =>
+    const matchedWord = Object.keys(SECRET_WORDS).find((word) =>
         normalized.includes(word),
     );
     if (matchedWord) {

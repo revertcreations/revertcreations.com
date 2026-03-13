@@ -1,1 +1,188 @@
-(()=>{var e;e=function(){var e=document.querySelector("[data-project-detail]");if(e){var t=document.body,a=null,d=null,n=function(){var e=(arguments.length>0&&void 0!==arguments[0]?arguments[0]:{}).preserveThumb,n=void 0!==e&&e;d&&(document.removeEventListener("keydown",i),d.remove(),d=null,t.classList.remove("hire-modal-open"),!n&&a&&(a.classList.remove("is-active"),a=null))},i=function(e){"Escape"===e.key&&n()},r=function(e){var a=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},r=a.preserveThumb,l=void 0!==r&&r,o=a.variant,s=void 0===o?"default":o;n({preserveThumb:l}),(d=document.createElement("div")).classList.add("hire-modal-overlay"),"media"===s&&d.classList.add("hire-modal-overlay--media"),d.setAttribute("role","dialog"),d.setAttribute("aria-modal","true"),d.addEventListener("click",function(e){e.target===d&&n({preserveThumb:l})});var c=document.createElement("div");c.classList.add("hire-modal"),"media"===s&&c.classList.add("hire-modal--media"),d.appendChild(c);var m=document.createElement("button");if(m.type="button",m.classList.add("hire-modal-close"),"media"===s&&m.classList.add("hire-modal-close--media"),m.setAttribute("aria-label","Close dialog"),m.innerHTML="&times;",m.addEventListener("click",function(){return n({preserveThumb:l})}),c.appendChild(m),"media"===s)c.appendChild(e);else{var u=document.createElement("div");u.classList.add("hire-modal-header"),c.insertBefore(u,m),u.appendChild(m);var v=document.createElement("div");v.classList.add("hire-modal-body","project-modal-body"),c.appendChild(v),v.appendChild(e)}t.appendChild(d),t.classList.add("hire-modal-open"),document.addEventListener("keydown",i),"function"==typeof m.focus&&requestAnimationFrame(function(){m.focus({preventScroll:!0})})};e.querySelectorAll("[data-featured-thumb]").forEach(function(e){e.addEventListener("click",function(){a&&a!==e&&a.classList.remove("is-active"),e.classList.add("is-active"),a=e,function(e){var t=e.dataset.assetType,a=e.dataset.assetUrl;if(t&&a){var d=e.dataset.assetTitle,n=e.dataset.assetCaption;if("image"===t){var i=document.createElement("img");return i.src=a,i.alt=d||"Project asset",i.loading="lazy",void r(i,{preserveThumb:!0,variant:"media"})}var l=document.createElement("div");if(l.classList.add("project-modal-content"),d&&"image"!==t){var o=document.createElement("h2");o.textContent=d,l.appendChild(o)}var s=document.createElement("figure");if(s.classList.add("project-modal-asset"),"video"===t){var c=document.createElement("iframe");c.src=a,c.title=d||"Project video",c.setAttribute("allowfullscreen",""),c.loading="lazy",s.appendChild(c)}else{var m=document.createElement("a");m.href=a,m.target="_blank",m.rel="noopener",m.classList.add("terminal-link"),m.textContent=d||a,s.appendChild(m)}if(n){var u=document.createElement("figcaption");u.textContent=n,s.appendChild(u)}l.appendChild(s),r(l,{preserveThumb:!0})}}(e)})}),e.querySelectorAll("[data-update-trigger]").forEach(function(e){e.addEventListener("click",function(){var t=e.dataset.updateTrigger,a=t?document.getElementById(t):null;if(a){var d=a.content.cloneNode(!0),n=d.querySelector(".project-modal-content")||d.firstElementChild;n&&r(n)}})})}},"loading"===document.readyState?document.addEventListener("DOMContentLoaded",e):e()})();
+/******/ (() => { // webpackBootstrap
+/*!***************************************!*\
+  !*** ./resources/js/projectDetail.js ***!
+  \***************************************/
+(function () {
+  var init = function init() {
+    var projectRoot = document.querySelector('[data-project-detail]');
+    if (!projectRoot) {
+      return;
+    }
+    var body = document.body;
+    var activeThumb = null;
+    var modalOverlay = null;
+    var closeModal = function closeModal() {
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref$preserveThumb = _ref.preserveThumb,
+        preserveThumb = _ref$preserveThumb === void 0 ? false : _ref$preserveThumb;
+      if (!modalOverlay) {
+        return;
+      }
+      document.removeEventListener('keydown', handleEscape);
+      modalOverlay.remove();
+      modalOverlay = null;
+      body.classList.remove('hire-modal-open');
+      if (!preserveThumb && activeThumb) {
+        activeThumb.classList.remove('is-active');
+        activeThumb = null;
+      }
+    };
+    var handleEscape = function handleEscape(event) {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    };
+    var openModal = function openModal(content) {
+      var _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref2$preserveThumb = _ref2.preserveThumb,
+        preserveThumb = _ref2$preserveThumb === void 0 ? false : _ref2$preserveThumb,
+        _ref2$variant = _ref2.variant,
+        variant = _ref2$variant === void 0 ? 'default' : _ref2$variant;
+      closeModal({
+        preserveThumb: preserveThumb
+      });
+      modalOverlay = document.createElement('div');
+      modalOverlay.classList.add('hire-modal-overlay');
+      if (variant === 'media') {
+        modalOverlay.classList.add('hire-modal-overlay--media');
+      }
+      modalOverlay.setAttribute('role', 'dialog');
+      modalOverlay.setAttribute('aria-modal', 'true');
+      modalOverlay.addEventListener('click', function (event) {
+        if (event.target === modalOverlay) {
+          closeModal({
+            preserveThumb: preserveThumb
+          });
+        }
+      });
+      var modal = document.createElement('div');
+      modal.classList.add('hire-modal');
+      if (variant === 'media') {
+        modal.classList.add('hire-modal--media');
+      }
+      modalOverlay.appendChild(modal);
+      var closeButton = document.createElement('button');
+      closeButton.type = 'button';
+      closeButton.classList.add('hire-modal-close');
+      if (variant === 'media') {
+        closeButton.classList.add('hire-modal-close--media');
+      }
+      closeButton.setAttribute('aria-label', 'Close dialog');
+      closeButton.innerHTML = '&times;';
+      closeButton.addEventListener('click', function () {
+        return closeModal({
+          preserveThumb: preserveThumb
+        });
+      });
+      modal.appendChild(closeButton);
+      if (variant === 'media') {
+        modal.appendChild(content);
+      } else {
+        var header = document.createElement('div');
+        header.classList.add('hire-modal-header');
+        modal.insertBefore(header, closeButton);
+        header.appendChild(closeButton);
+        var modalBody = document.createElement('div');
+        modalBody.classList.add('hire-modal-body', 'project-modal-body');
+        modal.appendChild(modalBody);
+        modalBody.appendChild(content);
+      }
+      body.appendChild(modalOverlay);
+      body.classList.add('hire-modal-open');
+      document.addEventListener('keydown', handleEscape);
+      if (typeof closeButton.focus === 'function') {
+        requestAnimationFrame(function () {
+          closeButton.focus({
+            preventScroll: true
+          });
+        });
+      }
+    };
+    var renderFeaturedAsset = function renderFeaturedAsset(button) {
+      var type = button.dataset.assetType;
+      var url = button.dataset.assetUrl;
+      if (!type || !url) {
+        return;
+      }
+      var title = button.dataset.assetTitle;
+      var caption = button.dataset.assetCaption;
+      if (type === 'image') {
+        var img = document.createElement('img');
+        img.src = url;
+        img.alt = title || 'Project asset';
+        img.loading = 'lazy';
+        openModal(img, {
+          preserveThumb: true,
+          variant: 'media'
+        });
+        return;
+      }
+      var content = document.createElement('div');
+      content.classList.add('project-modal-content');
+      if (title && type !== 'image') {
+        var heading = document.createElement('h2');
+        heading.textContent = title;
+        content.appendChild(heading);
+      }
+      var figure = document.createElement('figure');
+      figure.classList.add('project-modal-asset');
+      if (type === 'video') {
+        var iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.title = title || 'Project video';
+        iframe.setAttribute('allowfullscreen', '');
+        iframe.loading = 'lazy';
+        figure.appendChild(iframe);
+      } else {
+        var link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.classList.add('terminal-link');
+        link.textContent = title || url;
+        figure.appendChild(link);
+      }
+      if (caption) {
+        var figcaption = document.createElement('figcaption');
+        figcaption.textContent = caption;
+        figure.appendChild(figcaption);
+      }
+      content.appendChild(figure);
+      openModal(content, {
+        preserveThumb: true
+      });
+    };
+    projectRoot.querySelectorAll('[data-featured-thumb]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        if (activeThumb && activeThumb !== button) {
+          activeThumb.classList.remove('is-active');
+        }
+        button.classList.add('is-active');
+        activeThumb = button;
+        renderFeaturedAsset(button);
+      });
+    });
+    projectRoot.querySelectorAll('[data-update-trigger]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var templateId = button.dataset.updateTrigger;
+        var template = templateId ? document.getElementById(templateId) : null;
+        if (!template) {
+          return;
+        }
+        var fragment = template.content.cloneNode(true);
+        var modalContent = fragment.querySelector('.project-modal-content') || fragment.firstElementChild;
+        if (!modalContent) {
+          return;
+        }
+        openModal(modalContent);
+      });
+    });
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+/******/ })()
+;

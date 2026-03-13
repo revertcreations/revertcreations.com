@@ -25,6 +25,9 @@
     @php
         $appCssVersion = file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : time();
     @endphp
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}?v={{ $appCssVersion }}"
         rel="stylesheet">
     @stack('styles')
@@ -52,9 +55,10 @@
     <header id="main_header">
         <div class=""
             id="logo">
-            <a class="right-0 top-2 z-10 flex w-full items-center"
-                href="{{ route('home') }}"
-                aria-label="Revert Creations home">
+            <fancy-button-element class="block pointer-events-auto">
+                <a class="right-0 top-2 z-10 flex w-full items-center"
+                    href="{{ route('home') }}"
+                    aria-label="Revert Creations home">
                 <span class="sr-only">Revert Creations home</span>
                 <svg xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 1600 158">
@@ -76,7 +80,8 @@
                             height="158" />
                     </g>
                     <g id="REVERT_CREATIONS"
-                        data-name="REVERT CREATIONS">
+                        data-name="REVERT CREATIONS"
+                        data-fancy-letters="true">
                         <path class="cls-2"
                             id="R"
                             d="M127.68,58.81c-2.1,14.94-11.66,26-23.51,30.74l18.26,40.94h-32.85l-12.93-38.38h-13.46l-5.4,38.38h-30l14.76-105h57.84c17.45,0,30.23,13.24,27.29,33.31h0ZM90.83,67.61c3.74,0,8.28-3.1,9.08-8.79.82-5.59-2.86-8.72-6.62-8.72h-24.19l-2.46,17.51h24.19Z" />
@@ -129,7 +134,8 @@
                             d="M1581.94,37.07l-18.05,18.58c-5.8-4.95-12.85-6.9-21.55-6.9-7.35,0-12.9,1.35-13.95,7.2-.75,4.35,1.95,6.15,14.4,9.6,15.15,4.2,36.45,10.2,32.55,34.8-3.9,25.05-27.9,32.25-45.6,32.25s-34.65-6.9-42.31-18.95l18.92-16.77c4.19,6.18,13.19,10.38,24.3,10.38s13.63-3.9,14.23-7.95c.75-5.25-2.7-6.45-13.5-9.75-23.1-7.05-36.75-11.4-33.6-33,3.6-24.15,23.4-33.15,46.05-33.15,17.4,0,29.85,5.25,38.1,13.67Z" />
                     </g>
                 </svg>
-            </a>
+                </a>
+            </fancy-button-element>
         </div>
     </header>
 
@@ -141,22 +147,22 @@
     <div class="flex flex-nowrap bg-gruvbox-orange text-revert-black"
         id="footer">
 
-        <footer-magnet-element class="relative grow bg-gruvbox-yellow">
+        <fancy-button-element class="relative grow bg-gruvbox-yellow">
             <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
                 href="{{ route('projects.index') }}">
                 <h2 class="skill inline text-3xl font-bold md:text-5xl"
-                    data-footer-label
+                    data-fancy-label
                     name="design">projects</h2>
             </a>
-        </footer-magnet-element>
+        </fancy-button-element>
 
-        <footer-magnet-element class="relative grow bg-gruvbox-blue">
+        <fancy-button-element class="relative grow bg-gruvbox-blue">
             <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
                 href="mailto:trever@revertcreations.com">
                 <h2 class="skill inline text-3xl font-bold md:text-5xl"
-                    data-footer-label>email</h2>
+                    data-fancy-label>email</h2>
             </a>
-        </footer-magnet-element>
+        </fancy-button-element>
 
     </div>
 

@@ -17,11 +17,9 @@ export class HintElement extends HTMLElement {
     #glimmerHintTimeout = null
     #treasureElement = null
     #gemOverlay = null
-    #gemStates = []
-    #gemAnimationFrame = null
-    #lastGemFrameTime = null
-    #gemGravity = 1800 // pixels per second squared
     #levelTwoTimeline = null
+    #isAnimatingReturn = false
+    #dragHintText = null
 
     constructor () {
         super()
@@ -40,6 +38,19 @@ export class HintElement extends HTMLElement {
         }, 500)
     }
 
+    disconnectedCallback () {
+        this.removeEventListeners()
+    }
+
+    // Global dragover handler to prevent the browser from doing the 300ms 
+    // "ghost snap-back" animation on unhandled drops, which delays dragend.
+    #globalDragOverHandler = e => {
+        e.preventDefault()
+        if (e.dataTransfer) {
+            e.dataTransfer.dropEffect = 'none'
+        }
+    }
+
     loadEventListeners = () => {
         this.addEventListener('mousedown', this.handleMouseDown)
         this.addEventListener('mouseup', this.handleMouseUp)
@@ -52,6 +63,9 @@ export class HintElement extends HTMLElement {
         this.addEventListener('touchend', this.handleDragEnd, { passive: true })
         this.addEventListener('drag', this.handleDrag)
         this.addEventListener('touchmove', this.handleDrag, { passive: true })
+        document.addEventListener('dragenter', this.#globalDragOverHandler)
+        document.addEventListener('dragover', this.#globalDragOverHandler)
+        document.addEventListener('drop', this.#globalDragOverHandler)
     }
 
     removeEventListeners = () => {
@@ -64,11 +78,15 @@ export class HintElement extends HTMLElement {
         this.removeEventListener('touchstart', this.handleDragStart)
         this.removeEventListener('touchend', this.handleDragEnd)
         this.removeEventListener('touchmove', this.handleDrag)
+        document.removeEventListener('dragenter', this.#globalDragOverHandler)
+        document.removeEventListener('dragover', this.#globalDragOverHandler)
+        document.removeEventListener('drop', this.#globalDragOverHandler)
     }
 
     handleMouseDown = e => {
         let target = e.target
         target.setAttribute('draggable', true)
+        target.classList.replace('cursor-pointer', 'cursor-grab')
         target.classList.add('shadow-outer', 'text-gruvbox-gray')
     }
 
@@ -77,7 +95,9 @@ export class HintElement extends HTMLElement {
         target.classList.remove(
             'text-gruvbox-gray',
             'shadow-outer',
-            'cursor-grabbing'
+            'cursor-grab',
+            'cursor-grabbing',
+            'cursor-progress'
         )
         target.classList.add('cursor-pointer')
         target.setAttribute('draggable', false)
@@ -103,13 +123,28 @@ export class HintElement extends HTMLElement {
 
         this.levelUp()
 
+        gsap.killTweensOf(this.#emoji)
+        gsap.set(this.#emoji, { clearProps: "all" })
+        
         this.#emoji.innerHTML = '🧭'
-        this.#emoji.classList.add('absolute', 'z-50', 'text-5xl')
+        this.#emoji.className = 'absolute z-50 text-5xl pointer-events-none m-0'
+        this.#emoji.style.position = 'absolute'
+        
+        const startX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches.length > 0 ? e.touches[0].clientX : 0)
+        const startY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches.length > 0 ? e.touches[0].clientY : 0)
+        
+        this.#emoji.style.left = `${startX - 45}px`
+        this.#emoji.style.top = `${startY - 45}px`
         this.#emoji.id = 'emoji'
         body.appendChild(this.#emoji)
 
-        target.classList.remove('cursor-pointer', 'shadow-outer')
+        target.classList.remove('cursor-grab', 'cursor-pointer', 'shadow-outer')
         target.classList.add('cursor-grabbing')
+
+        this.#dragHintText = document.getElementById('drag-hint-text')
+        if (this.#dragHintText) {
+            this.#dragHintText.textContent = '❌ marks the spot'
+        }
     }
 
     handleDrag = e => {
@@ -118,14 +153,19 @@ export class HintElement extends HTMLElement {
             e.clientX !== undefined ? e.clientX : e.touches[0].clientX
         const clientY =
             e.clientY !== undefined ? e.clientY : e.touches[0].clientY
-        const emojiOffset = clientX == 0 && clientY == 0 ? 200 : 45
+            
+        if (clientX === 0 && clientY === 0) {
+            // Start the return animation identically to when the mouse is let go
+            if (!this.#isAnimatingReturn) {
+                this.executeReturnAnimation(target, 'drag(0,0)')
+            }
+            return
+        }
+
+        const emojiOffset = 45
 
         this.#emoji.style.left = `${clientX - emojiOffset}px`
         this.#emoji.style.top = `${clientY - emojiOffset}px`
-
-        if (clientX == 0 && clientY == 0) {
-            return
-        }
 
         let distanceToTreasure = this.rotateKeyAndReturnDistanceToTarget(
             clientX,
@@ -133,20 +173,21 @@ export class HintElement extends HTMLElement {
         )
 
         if (this.isInTarget(clientX, clientY)) {
+            if (!this._wasInTarget) {
+                this._wasInTarget = true
+            }
             this.#emoji.style.transform = 'none'
             target.classList.remove('cursor-grabbing')
             target.classList.add('cursor-progress')
 
-            if (this.#held === null) {
-                this.#held = new Date()
-                this.#held = this.#held.setSeconds(
-                    this.#held.getSeconds() + 2.0
-                )
-            } else if (this.#held < new Date().getTime()) {
+            if (!this.#held) {
+                const duration = parseInt(this.dataset.holdDuration) || 1000
+                this.#held = Date.now() + duration
+            } else if (this.#held < Date.now()) {
                 target.classList.remove('cursor-progress')
                 this.levelUp()
                 if (this.#level == 2) {
-                    target.classList.add('cursor-pointer')
+                    target.classList.add('cursor-grabbing')
                     this.animateLevelTwo()
                 } else {
                     this.animateLevelThree()
@@ -157,7 +198,10 @@ export class HintElement extends HTMLElement {
                     : (this.#emoji.innerHTML = '🔐')
             }
         } else {
-            this.#held = null
+            if (this._wasInTarget) {
+                this._wasInTarget = false
+            }
+            this.#held = false
             if (this.isInTreasureElement(clientX, clientY)) {
                 if (this.#level < 2) this.#disableRotateEmoji = true
                 this.#emoji.style.transform = 'none'
@@ -180,15 +224,25 @@ export class HintElement extends HTMLElement {
     }
 
     handleDragEnd = e => {
+        const target = e.target
+        
+        if (!this.#isAnimatingReturn) {
+            this.executeReturnAnimation(target, 'dragend')
+        }
+        
+        // Reset the animating lock for the next interaction
+        this.#isAnimatingReturn = false
+    }
+
+    executeReturnAnimation = (target, sourceEvent) => {
+        this.#isAnimatingReturn = true
+
         clearTimeout(this.#glimmerHintTimeout)
         this.#glimmerHintTimeout = setTimeout(() => {
             this.glimmerHint()
         }, this.#hintEvery)
 
-        const target = e.target
-        const body = document.querySelector('body')
-        if (document.getElementById('emoji'))
-            body.removeChild(document.getElementById('emoji'))
+        const emojiEl = document.getElementById('emoji')
 
         this.#level = 0
 
@@ -196,10 +250,68 @@ export class HintElement extends HTMLElement {
         target.classList.remove(
             'text-gruvbox-gray',
             'shadow-outer',
-            'cursor-grabbing'
+            'cursor-grab',
+            'cursor-grabbing',
+            'cursor-progress'
         )
         target.classList.add('cursor-pointer')
-        target.setAttribute('draggable', false)
+
+        if (this.#dragHintText) {
+            this.#dragHintText.textContent = 'Drag me!'
+        }
+
+        if (emojiEl) {
+            // Record where the emoji currently is visually on screen before we swap it
+            const emojiRect = emojiEl.getBoundingClientRect()
+            
+            // Get the final destination of the inline text
+            const rect = target.getBoundingClientRect()
+            
+            // Swap the flying emoji out for the actual word
+            emojiEl.innerHTML = this.dataset.content
+            
+            // Optimize the swap to prevent DOM repaint lag. 
+            // We manually assign the exact classes it needs instead of copying the target's entire classList
+            emojiEl.className = 'absolute z-50 pointer-events-none m-0 text-gruvbox-gray select-none text-lg leading-[3rem] md:text-xl md:leading-[3.5rem] lg:text-2xl lg:leading-[4.5rem]'
+            
+            // Instantly snap the element's actual position to the destination using left/top (which are slow to animate)
+            emojiEl.style.left = `${rect.left + window.scrollX}px`
+            emojiEl.style.top = `${rect.top + window.scrollY}px`
+            
+            // Hide the actual inline text temporarily so we don't see double
+            target.style.opacity = '0'
+
+            // Calculate the delta distance
+            const deltaX = emojiRect.left - rect.left
+            const deltaY = emojiRect.top - rect.top
+
+            // Look up what angle the compass had at the moment it was dropped
+            let currentRotation = 0
+            if (emojiEl.style.transform && emojiEl.style.transform.includes('rotate')) {
+                const match = emojiEl.style.transform.match(/rotate\(([-\d.]+)deg\)/)
+                if (match) currentRotation = parseFloat(match[1])
+            }
+
+            // Magnetically pull the flying text back into the sentence using hardware-accelerated transforms (x/y)
+            gsap.fromTo(emojiEl, {
+                x: deltaX,
+                y: deltaY,
+                rotation: currentRotation
+            }, {
+                x: 0,
+                y: 0,
+                rotation: 0,
+                duration: 0.35,
+                ease: "power2.out",
+                onComplete: () => {
+                    if (emojiEl.parentNode) {
+                        emojiEl.parentNode.removeChild(emojiEl)
+                    }
+                    // Restore visibility seamlessly
+                    target.style.opacity = '1'
+                }
+            })
+        }
     }
 
     glimmerHint = () => {
@@ -255,9 +367,9 @@ export class HintElement extends HTMLElement {
         // adjusting the initial rotation of the emojis
         let rotate = 0
         if (!this.#disableRotateEmoji) {
-            if (this.#level == 1 && this.#held === null) {
+            if (this.#level == 1 && !this.#held) {
                 rotate = angle + 45
-            } else if (this.#level == 2 && this.#held === null) {
+            } else if (this.#level == 2 && !this.#held) {
                 rotate = angle + 225
             }
 
@@ -391,11 +503,31 @@ export class HintElement extends HTMLElement {
         return distanceToTreasure <= 400 && this.#level == 2
     }
 
+    calculateLocalScore = (hintCount, solveTimeSeconds) => {
+        const minScore = 1
+        const hintScale = 0.01
+        const timeScale = 0.01
+
+        const hintScore = Math.max(1 - (hintCount * hintScale), 0)
+        const timeScore = Math.max(1 - (solveTimeSeconds * timeScale), 0)
+
+        const rawScore = minScore + hintScore + timeScore
+        const finalScore = Math.max(rawScore, minScore)
+
+        return Math.round(finalScore * 1000)
+    }
+
     analyticsTreasure = detail => {
         this.#animating = false
         if (!this.#scoring) {
             this.#scoring = true
             this.removeEventListeners()
+
+            // Calculate score locally and fire the visual gem explosion INSTANTLY 
+            // instead of waiting 90ms for the two API network requests to round-trip.
+            const localScore = this.calculateLocalScore(detail.hintCount, detail.time)
+            this.populateGems(localScore)
+
             const csrfToken = document.querySelector(
                 'meta[name="csrf-token"]'
             )?.content
@@ -449,7 +581,8 @@ export class HintElement extends HTMLElement {
                                 return
                             }
 
-                            this.reset()
+                            // Keep the visual gems falling even though we reset the interactive state mechanics 
+                            this.reset({ preserveGems: true })
                             this.renderCelebration(json)
                         })
                 })
@@ -466,8 +599,7 @@ export class HintElement extends HTMLElement {
             return
         }
 
-        this.populateGems(result?.score ?? 0)
-
+        // Gems are now handled instantly; we only render the HTML leaderboard frame here.
         lead.innerHTML = ''
 
         const leaderboard = document.createElement('div')
@@ -482,149 +614,97 @@ export class HintElement extends HTMLElement {
         if (!content || !lead) return
 
         this.stopGemAnimation()
-        this.#gemStates = []
 
         let gemOverlay = document.getElementById('puzzle-gem-overlay')
         if (!gemOverlay) {
             gemOverlay = document.createElement('div')
             gemOverlay.id = 'puzzle-gem-overlay'
-            content.appendChild(gemOverlay)
+            document.body.appendChild(gemOverlay)
         }
 
         gemOverlay.innerHTML = ''
-
+        Object.assign(gemOverlay.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            zIndex: '9999'
+        })
+        
         const leadRect = lead.getBoundingClientRect()
-        const contentRect = content.getBoundingClientRect()
-        const overlayTop = leadRect.top - contentRect.top
-        gemOverlay.style.top = `${overlayTop}px`
-        gemOverlay.style.height = `${leadRect.height}px`
 
-        const usedPositions = []
-        const fragment = document.createDocumentFragment()
-        const now =
-            typeof performance !== 'undefined' ? performance.now() : Date.now()
+        let gemsProcessed = 0
+        const CHUNK_SIZE = 50
 
-        for (let i = 0; i < score; i++) {
-            const gem = document.createElement('span')
-            gem.classList.add('puzzle-gem')
-            gem.textContent = '💎'
+        // Process gems in batches using requestAnimationFrame 
+        // to prevent GSAP from locking the main thread parsing 3,000 tweens synchronously.
+        const processChunk = () => {
+            const fragment = document.createDocumentFragment()
+            const currentBatch = []
+            
+            const processCount = Math.min(CHUNK_SIZE, score - gemsProcessed)
+            
+            for (let i = 0; i < processCount; i++) {
+                const gem = document.createElement('span')
+                gem.classList.add('puzzle-gem')
+                gem.textContent = '💎'
 
-            const sizeRem = 1.3 + Math.random() * 1.2
-            gem.style.fontSize = `${sizeRem}rem`
+                const sizeRem = 1.3 + Math.random() * 1.2
+                gem.style.fontSize = `${sizeRem}rem`
 
-            const gemPx = sizeRem * 16
-            const maxLeft = Math.max(leadRect.width - gemPx, 0)
-            let left = 0
-            let attempts = 0
-            const minGap = gemPx + 12
+                const maxLeft = Math.max(leadRect.width - (sizeRem * 16), 0)
+                const startX = leadRect.left + (Math.random() * maxLeft)
+                const startY = -(Math.random() * (window.innerHeight * 0.5) + (sizeRem * 16))
+                
+                gem.style.left = `${startX}px`
+                gem.style.transform = `translateY(${startY}px)`
+                gem.style.opacity = '1'
 
-            do {
-                left = maxLeft > 0 ? Math.random() * maxLeft : 0
-                attempts++
-            } while (
-                attempts < 25 &&
-                usedPositions.some(
-                    position => Math.abs(position - left) < minGap
-                )
-            )
+                fragment.appendChild(gem)
+                currentBatch.push(gem)
+            }
 
-            usedPositions.push(left)
-
-            const settleTop = Math.max(leadRect.height - gemPx - 12, 0)
-            const startY = -(Math.random() * leadRect.height * 0.6 + gemPx)
-
-            gem.style.left = `${left}px`
-            gem.style.transform = `translate(${left}px, ${startY}px)`
-            gem.style.opacity = '1'
-
-            fragment.appendChild(gem)
-
-            this.#gemStates.push({
-                element: gem,
-                x: left,
-                y: startY,
-                vy: 0,
-                settleY: settleTop,
-                startAt: now + Math.random() * 800,
-                done: false,
-                removed: false
+            gemOverlay.appendChild(fragment)
+            
+            gsap.to(currentBatch, {
+                y: window.innerHeight + 100,
+                duration: () => 1.5 + Math.random() * 2.5,
+                delay: () => Math.random() * 2, // Keeps visuals chaotic even when batched
+                ease: "none",
+                onComplete: function() {
+                    const target = this.targets()[0]
+                    if (target) {
+                        target.remove()
+                    }
+                }
             })
+
+            gemsProcessed += processCount
+            
+            if (gemsProcessed < score) {
+                // If there are more gems, defer the next batch to the next frame
+                // This keeps the user's browser perfectly smooth while the explosion builds.
+                requestAnimationFrame(processChunk)
+            }
         }
 
-        gemOverlay.appendChild(fragment)
-
+        // Start processing the very first chunk instantly
+        processChunk()
         this.#gemOverlay = gemOverlay
-        this.startGemAnimation()
-    }
-
-    startGemAnimation = () => {
-        if (this.#gemAnimationFrame) {
-            cancelAnimationFrame(this.#gemAnimationFrame)
-        }
-
-        const step = time => {
-            if (!this.#gemStates.length) {
-                this.stopGemAnimation()
-                return
-            }
-
-            if (this.#lastGemFrameTime === null) {
-                this.#lastGemFrameTime = time
-            }
-
-            const delta = Math.min((time - this.#lastGemFrameTime) / 1000, 0.05)
-            this.#lastGemFrameTime = time
-
-            let anyActive = false
-
-            this.#gemStates.forEach(state => {
-                if (state.removed || state.done) {
-                    return
-                }
-
-                if (time < state.startAt) {
-                    anyActive = true
-                    return
-                }
-
-                state.vy += this.#gemGravity * delta
-                state.y += state.vy * delta
-
-                if (state.y >= state.settleY) {
-                    state.y = state.settleY
-                    state.done = true
-                    state.element.style.opacity = '0'
-                    setTimeout(() => {
-                        state.element.remove()
-                        state.removed = true
-                    }, 250)
-                } else {
-                    state.element.style.transform = `translate(${state.x}px, ${state.y}px)`
-                    anyActive = true
-                }
-            })
-
-            this.#gemStates = this.#gemStates.filter(state => !state.removed)
-
-            if (anyActive) {
-                this.#gemAnimationFrame = requestAnimationFrame(step)
-            } else {
-                this.stopGemAnimation()
-            }
-        }
-
-        this.#lastGemFrameTime = null
-        this.#gemAnimationFrame = requestAnimationFrame(step)
     }
 
     stopGemAnimation = () => {
-        if (this.#gemAnimationFrame) {
-            cancelAnimationFrame(this.#gemAnimationFrame)
-            this.#gemAnimationFrame = null
+        if (this.#gemOverlay) {
+            // Kill any active GSAP tweens on gems if the component is resetting
+            const activeGems = this.#gemOverlay.querySelectorAll('.puzzle-gem')
+            if (activeGems.length) {
+                gsap.killTweensOf(activeGems)
+                activeGems.forEach(gem => gem.remove())
+            }
+            this.#gemOverlay.innerHTML = ''
         }
-
-        this.#lastGemFrameTime = null
-        this.#gemStates = []
     }
 
     buildLeaderboard = (container, result) => {
@@ -710,7 +790,7 @@ export class HintElement extends HTMLElement {
         container.appendChild(list)
     }
 
-    reset = () => {
+    reset = (options = {}) => {
         this.#time = new Date()
         this.#level = 0
         this.#hintCount = 0
@@ -726,12 +806,14 @@ export class HintElement extends HTMLElement {
         if (document.getElementById('emoji'))
             body.removeChild(document.getElementById('emoji'))
 
-        if (this.#gemOverlay) {
-            this.#gemOverlay.remove()
-            this.#gemOverlay = null
+        // Only destroy the visual celebration overlay if explicitly clearing
+        if (!options.preserveGems) {
+            if (this.#gemOverlay) {
+                this.#gemOverlay.remove()
+                this.#gemOverlay = null
+            }
+            this.stopGemAnimation()
         }
-
-        this.stopGemAnimation()
 
         this.loadEventListeners()
         return

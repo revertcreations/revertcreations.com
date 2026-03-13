@@ -114,7 +114,7 @@ export class NameElement extends HTMLElement {
 
         this.dataset.content.split('').forEach((letter, i) => {
             const span = document.createElement('span')
-            span.classList.add('cursor-pointer', 'select-none', 'text-5xl', 'md:text-8xl')
+            span.classList.add('cursor-pointer', 'select-none', 'text-8xl')
             span.style.display = 'inline-block' // <-- key!
             // span.style.transform = 'translateY(200px)' // optional visual setup
             span.innerText = letter

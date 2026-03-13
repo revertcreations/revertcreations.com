@@ -118,7 +118,7 @@ export class InteractiveElement extends HTMLElement {
         this.#baseSpan.textContent = text;
         this.#overlay.innerHTML = "";
 
-        this.ensureBadge();
+        // this.ensureBadge();
         const measurements = this.measureCharacters(text);
         this.style.setProperty("--interactive-base-width", `${measurements.totalWidth}px`);
         this.style.setProperty("--interactive-base-height", `${measurements.height}px`);
@@ -253,7 +253,7 @@ export class InteractiveElement extends HTMLElement {
         this.#baseSpan.textContent = text;
         this.#overlay.innerHTML = "";
 
-        this.ensureBadge();
+        // this.ensureBadge();
         const measurements = this.measureCharacters(text);
         this.style.setProperty("--interactive-base-width", `${measurements.totalWidth}px`);
         this.style.setProperty("--interactive-base-height", `${measurements.height}px`);
@@ -278,8 +278,8 @@ export class InteractiveElement extends HTMLElement {
     handleClickHint = (event) => {
         if (this.#hasActivated) return;
         if (event.detail > 1) return;
-        this.ensureBadge();
-        this.showBadge();
+        // this.ensureBadge();
+        // this.showBadge();
     };
 
     handleDoubleClick = (event) => {
@@ -330,10 +330,10 @@ export class InteractiveElement extends HTMLElement {
 
     showBadge() {
         if (this.dataset.badgeDismissed === "true") return;
-        const badge = this.ensureBadge();
-        if (!badge) return;
+        // const badge = this.ensureBadge();
+        // if (!badge) return;
 
-        badge.classList.add("is-visible");
+        // badge.classList.add("is-visible");
         if (this.#badgeTimeout) window.clearTimeout(this.#badgeTimeout);
         this.#badgeTimeout = window.setTimeout(() => {
             this.hideBadge();

@@ -15,6 +15,9 @@ module.exports = {
                 'text-7xl': '5rem',
                 'text-8xl': '6rem',
             },
+            fontFamily: {
+                'handwriting': ['Caveat', 'cursive'],
+            },
             spacing: {
                 'small-square-full': '150px',
                 'small-square-half': '75px',
@@ -44,6 +47,7 @@ module.exports = {
                 'gruvbox-purple': '#b16286',
                 'gruvbox-black': '#282828',
                 'gruvbox-black-hidden': '#32302f',
+                'gruvbox-hint': '#458588',
                 'gruvbox-white': '#fbf1c7',
                 'hmt-green': '#b9cc33',
                 'motorsportreg-red': '#f13a44',

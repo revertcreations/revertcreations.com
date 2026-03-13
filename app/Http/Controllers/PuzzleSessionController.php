@@ -106,7 +106,7 @@ class PuzzleSessionController extends Controller
             return $score->id === $puzzle_score->id;
         });
 
-        $leaderboard = $scores->take(10)->values()->map(function ($score, $index) use ($puzzle_score) {
+        $leaderboard = $scores->values()->map(function ($score, $index) use ($puzzle_score) {
             return [
                 'rank' => $index + 1,
                 'score' => (int) $score->score,
