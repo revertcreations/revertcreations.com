@@ -11,7 +11,7 @@
     <meta name="keywords" content="revert creations, revertcreations, admin">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 
@@ -134,7 +134,6 @@
 
         {{ $slot }}
 
-        <script src="{{ asset('js/app.js') }}"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const toggleButton = document.getElementById('mobile-menu-button');

@@ -49,11 +49,9 @@
 
 @include('projects._styles')
 
-@once
-    @push('scripts')
-        <script src="{{ asset('js/projectDetail.js') }}" defer></script>
-    @endpush
-@endonce
+@pushOnce('scripts')
+    @vite('resources/js/projectDetail.js')
+@endPushOnce
 
 <x-layout>
     <x-slot name="title">{{ $project->name }}</x-slot>

@@ -22,14 +22,10 @@
         @endisset
     </title>
 
-    @php
-        $appCssVersion = file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : time();
-    @endphp
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}?v={{ $appCssVersion }}"
-        rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/home.js'])
     @stack('styles')
 
     @if (app()->environment() == 'production')
@@ -166,10 +162,6 @@
 
     </div>
 
-    @php
-        $homeJsVersion = file_exists(public_path('js/home.js')) ? filemtime(public_path('js/home.js')) : time();
-    @endphp
-    <script src="{{ asset('js/home.js') }}?v={{ $homeJsVersion }}" defer></script>
     @stack('scripts')
 </body>
 
