@@ -15,7 +15,7 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->enum('type',['contact', 'billable'])->default('contact');
+            $table->enum('type', ['contact', 'billable'])->default('contact');
             $table->string('organization')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();

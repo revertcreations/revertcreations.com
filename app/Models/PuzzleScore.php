@@ -10,11 +10,15 @@ class PuzzleScore extends Model
     use HasFactory;
 
     public const MIN_SCORE = 80;
+
     public const MAX_SCORE = 1000;
 
     protected const HUNT_CEILING = 12;
+
     protected const TIME_CEILING_SECONDS = 180;
+
     protected const HUNT_WEIGHT = 0.35;
+
     protected const TIME_WEIGHT = 0.7;
 
     protected $fillable = [
@@ -23,11 +27,13 @@ class PuzzleScore extends Model
         'solve_time_in_seconds',
     ];
 
-    public function puzzle() {
+    public function puzzle()
+    {
         return $this->belongsTo(PuzzleSession::class, 'puzzle_session_id');
     }
 
-    public function puzzleType() {
+    public function puzzleType()
+    {
         return $this->hasOne(PuzzleType::class);
     }
 
@@ -79,7 +85,8 @@ class PuzzleScore extends Model
         return $this->calculateScore();
     }
 
-    public function calculateScore() {
+    public function calculateScore()
+    {
         return self::calculateScoreFromMetrics(
             $this->hunt_count,
             $this->solve_time_in_seconds

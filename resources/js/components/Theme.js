@@ -1,4 +1,3 @@
 export class Theme {
-    setColors(currentTheme = 'gruvbox') {
-    }
+    setColors(currentTheme = "gruvbox") {}
 }

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\PuzzleScore;
 use App\Models\PuzzleSession;
 use App\Models\PuzzleToken;
-use App\Models\PuzzleScore;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class PuzzleSessionController extends Controller
 {
-
     public function check($puzzle_type_id, Request $request)
     {
         $session_id = $request->session()->getId();
@@ -18,7 +17,7 @@ class PuzzleSessionController extends Controller
             ->where('puzzle_type_id', $puzzle_type_id)
             ->first();
 
-        if (!$puzzle_session) {
+        if (! $puzzle_session) {
             return response()->json([
                 'error' => 'session expired',
             ], 419);
@@ -42,7 +41,7 @@ class PuzzleSessionController extends Controller
             ->where('puzzle_type_id', $puzzle_type_id)
             ->first();
 
-        if (!$puzzle_session) {
+        if (! $puzzle_session) {
             return response()->json([
                 'error' => 'session expired',
             ], 419);
@@ -51,7 +50,7 @@ class PuzzleSessionController extends Controller
         $puzzle_token = new PuzzleToken;
         $token_is_valid = $puzzle_token->valid($puzzle_session->id, $token);
 
-        if (!$token_is_valid) {
+        if (! $token_is_valid) {
             return response()->json([
                 'error' => 'token invalid',
             ], 422);
@@ -62,9 +61,9 @@ class PuzzleSessionController extends Controller
 
         $content = json_decode($request->getContent());
 
-        if (!is_object($content) ||
-            !property_exists($content, 'huntCount') ||
-            !property_exists($content, 'time')
+        if (! is_object($content) ||
+            ! property_exists($content, 'huntCount') ||
+            ! property_exists($content, 'time')
         ) {
             return response()->json([
                 'error' => 'invalid payload',
@@ -79,7 +78,7 @@ class PuzzleSessionController extends Controller
             )
         ) {
             return response()->json([
-                'error' => "Hmmm you trying to cheat over there?",
+                'error' => 'Hmmm you trying to cheat over there?',
             ], 422);
         }
 
@@ -118,7 +117,7 @@ class PuzzleSessionController extends Controller
         });
 
         return response()->json([
-            'success' => 'You did it, your score is: ' . $finalScore,
+            'success' => 'You did it, your score is: '.$finalScore,
             'score' => $finalScore,
             'huntCount' => $puzzle_score->hunt_count,
             'time' => $puzzle_score->solve_time_in_seconds,
@@ -128,5 +127,4 @@ class PuzzleSessionController extends Controller
             'scoreId' => $puzzle_score->id,
         ]);
     }
-
 }

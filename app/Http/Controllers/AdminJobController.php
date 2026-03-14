@@ -35,7 +35,7 @@ class AdminJobController extends Controller
 
         $query = JobListing::query()
             ->with('jobSource')
-            ->when(!$filters['archived'], fn ($q) => $q->where('is_archived', false))
+            ->when(! $filters['archived'], fn ($q) => $q->where('is_archived', false))
             ->when($filters['status'] && $filters['status'] !== 'all', function ($q) use ($filters) {
                 return $q->where('status', $filters['status']);
             })
@@ -46,6 +46,7 @@ class AdminJobController extends Controller
             })
             ->when($filters['search'], function ($q) use ($filters) {
                 $term = '%'.Str::lower($filters['search']).'%';
+
                 return $q->where(function ($inner) use ($term) {
                     $inner->whereRaw('LOWER(title) LIKE ?', [$term])
                         ->orWhereRaw('LOWER(company) LIKE ?', [$term])
@@ -54,7 +55,7 @@ class AdminJobController extends Controller
                         ->orWhereRaw('LOWER(tags) LIKE ?', [$term]);
                 });
             })
-            ->when(!is_null($filters['match']), function ($q) use ($filters) {
+            ->when(! is_null($filters['match']), function ($q) use ($filters) {
                 return $q->where('match_score', '>=', $filters['match']);
             })
             ->when($filters['remote_only'], function ($q) {
@@ -70,8 +71,7 @@ class AdminJobController extends Controller
                 return $q->where(function ($inner) use ($location) {
                     $inner->whereRaw('LOWER(location) LIKE ?', ['%'.$location.'%']);
                 });
-            })
-        ;
+            });
 
         switch ($filters['sort']) {
             case 'title':
@@ -98,7 +98,7 @@ class AdminJobController extends Controller
                 break;
         }
 
-        if (!in_array($filters['sort'], ['collected_at', 'created_at'], true)) {
+        if (! in_array($filters['sort'], ['collected_at', 'created_at'], true)) {
             $query->orderBy('collected_at', 'desc')->orderBy('created_at', 'desc');
         }
 
@@ -188,7 +188,7 @@ class AdminJobController extends Controller
 
         $jobSourceId = $validated['job_source_id'] ?? null;
 
-        if (!$jobSourceId) {
+        if (! $jobSourceId) {
             $slug = Str::slug($validated['new_source_slug'] ?? $validated['new_source_name']);
             $baseSlug = $slug ?: Str::slug($validated['new_source_name']);
             $counter = 1;
@@ -342,7 +342,7 @@ class AdminJobController extends Controller
                 : null;
         }
 
-        if (empty($validated['job_source_id']) && !empty($validated['new_source_name'])) {
+        if (empty($validated['job_source_id']) && ! empty($validated['new_source_name'])) {
             $slug = Str::slug($validated['new_source_slug'] ?? $validated['new_source_name']);
             $baseSlug = $slug ?: Str::slug($validated['new_source_name']);
             $counter = 1;

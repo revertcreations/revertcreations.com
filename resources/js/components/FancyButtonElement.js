@@ -327,7 +327,7 @@ export class FancyButtonElement extends HTMLElement {
                 rotationZ: () => gsap.utils.random(-30, 30),
                 scale: () => gsap.utils.random(1.1, 1.3),
                 color: "#b16286", // High contrast accent color
-                fill: "#b16286",  // Used for SVG paths
+                fill: "#b16286", // Used for SVG paths
                 duration: this.#config.duration * 0.5, // Fast pop-up
                 ease: "power2.out",
             });

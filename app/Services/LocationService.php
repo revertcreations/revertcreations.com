@@ -2,24 +2,24 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
-
 class LocationService
 {
     /**
      * User's base location (Carrboro, NC)
      */
     protected const BASE_LAT = 35.9101;
+
     protected const BASE_LNG = -79.0753;
+
     protected const BASE_ZIP = '27510';
 
     /**
      * Calculate distance between two points using Haversine formula
      *
-     * @param float $lat1 Latitude of first point
-     * @param float $lng1 Longitude of first point
-     * @param float $lat2 Latitude of second point
-     * @param float $lng2 Longitude of second point
+     * @param  float  $lat1  Latitude of first point
+     * @param  float  $lng1  Longitude of first point
+     * @param  float  $lat2  Latitude of second point
+     * @param  float  $lng2  Longitude of second point
      * @return int Distance in miles
      */
     public function calculateDistance(float $lat1, float $lng1, float $lat2, float $lng2): int
@@ -43,8 +43,8 @@ class LocationService
     /**
      * Calculate distance from user's base location (Carrboro, NC)
      *
-     * @param float $lat Target latitude
-     * @param float $lng Target longitude
+     * @param  float  $lat  Target latitude
+     * @param  float  $lng  Target longitude
      * @return int Distance in miles
      */
     public function calculateDistanceFromBase(float $lat, float $lng): int
@@ -55,7 +55,7 @@ class LocationService
     /**
      * Estimate distance from ZIP code (rough approximation)
      *
-     * @param string $zip Target ZIP code
+     * @param  string  $zip  Target ZIP code
      * @return int|null Estimated distance in miles, or null if can't estimate
      */
     public function estimateDistanceFromZip(string $zip): ?int
@@ -97,13 +97,11 @@ class LocationService
     /**
      * Estimate distance from city and state
      *
-     * @param string|null $city
-     * @param string|null $state
      * @return int|null Estimated distance in miles
      */
     public function estimateDistanceFromCityState(?string $city, ?string $state): ?int
     {
-        if (!$state) {
+        if (! $state) {
             return null;
         }
 
@@ -148,12 +146,12 @@ class LocationService
     /**
      * Parse location string and estimate distance
      *
-     * @param string|null $locationString Location string like "City, State ZIP"
+     * @param  string|null  $locationString  Location string like "City, State ZIP"
      * @return int|null Estimated distance in miles
      */
     public function estimateDistanceFromString(?string $locationString): ?int
     {
-        if (!$locationString) {
+        if (! $locationString) {
             return null;
         }
 
@@ -185,9 +183,7 @@ class LocationService
     /**
      * Check if location is within driving distance
      *
-     * @param int|null $distanceMiles
-     * @param int $maxDrivingDistance Default 8 hours driving (~500 miles)
-     * @return bool
+     * @param  int  $maxDrivingDistance  Default 8 hours driving (~500 miles)
      */
     public function isWithinDrivingDistance(?int $distanceMiles, int $maxDrivingDistance = 500): bool
     {
@@ -201,8 +197,7 @@ class LocationService
     /**
      * Get driving time estimate in hours
      *
-     * @param int $distanceMiles
-     * @param int $avgSpeedMph Average speed (default 60mph)
+     * @param  int  $avgSpeedMph  Average speed (default 60mph)
      * @return float Hours of driving
      */
     public function estimateDrivingTime(int $distanceMiles, int $avgSpeedMph = 60): float

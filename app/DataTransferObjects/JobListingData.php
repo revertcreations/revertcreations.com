@@ -25,8 +25,7 @@ class JobListingData
         public readonly array $tags,
         public readonly ?CarbonInterface $postedAt,
         public readonly CarbonInterface $collectedAt
-    ) {
-    }
+    ) {}
 
     public static function make(array $payload): self
     {

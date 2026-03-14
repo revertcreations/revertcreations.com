@@ -7,12 +7,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminLoginController extends Controller
 {
-
     public function login()
     {
         return view('admin.login');
     }
-
 
     public function authenticate(Request $request)
     {

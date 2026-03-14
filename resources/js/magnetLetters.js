@@ -1,3 +1,5 @@
+import { track } from "./analytics";
+
 const palette = [
     "#fb3934", // gruvbox-light-red
     "#cc241d", // gruvbox-red
@@ -146,24 +148,10 @@ const AXIS_OVERLAP_EPSILON = 0.5;
 const MAX_PROPAGATED_PUSH = 1.2;
 
 const getStateRect = (state) => {
-    const left =
-        state.baseX +
-        state.offsetX +
-        (state.collisionLeftInset ?? 0);
-    const top =
-        state.baseY +
-        state.offsetY +
-        (state.collisionTopInset ?? 0);
-    const right =
-        state.baseX +
-        state.offsetX +
-        state.width -
-        (state.collisionRightInset ?? 0);
-    const bottom =
-        state.baseY +
-        state.offsetY +
-        state.height -
-        (state.collisionBottomInset ?? 0);
+    const left = state.baseX + state.offsetX + (state.collisionLeftInset ?? 0);
+    const top = state.baseY + state.offsetY + (state.collisionTopInset ?? 0);
+    const right = state.baseX + state.offsetX + state.width - (state.collisionRightInset ?? 0);
+    const bottom = state.baseY + state.offsetY + state.height - (state.collisionBottomInset ?? 0);
     return {
         x: left,
         y: top,
@@ -202,13 +190,9 @@ const clampAxisOffset = (state, axis, offset) => {
     const base = axis === "x" ? state.baseX : state.baseY;
     const size = axis === "x" ? state.width : state.height;
     const insetStart =
-        axis === "x"
-            ? state.collisionLeftInset ?? 0
-            : state.collisionTopInset ?? 0;
+        axis === "x" ? (state.collisionLeftInset ?? 0) : (state.collisionTopInset ?? 0);
     const insetEnd =
-        axis === "x"
-            ? state.collisionRightInset ?? 0
-            : state.collisionBottomInset ?? 0;
+        axis === "x" ? (state.collisionRightInset ?? 0) : (state.collisionBottomInset ?? 0);
     const minOffset = -(base + insetStart);
     const maxOffset = boundsSize - (base + size - insetEnd);
     if (maxOffset < minOffset) return minOffset;
@@ -234,10 +218,8 @@ const applyOffsetsToState = (state, offsetX, offsetY) => {
 
 const applyAxisMove = (state, axis, delta) => {
     if (!delta) return;
-    const newOffsetX =
-        axis === "x" ? state.offsetX + delta : state.offsetX;
-    const newOffsetY =
-        axis === "y" ? state.offsetY + delta : state.offsetY;
+    const newOffsetX = axis === "x" ? state.offsetX + delta : state.offsetX;
+    const newOffsetY = axis === "y" ? state.offsetY + delta : state.offsetY;
     applyOffsetsToState(state, newOffsetX, newOffsetY);
 };
 
@@ -252,13 +234,9 @@ const getAxisLimits = (state, axis) => {
     const base = axis === "x" ? state.baseX : state.baseY;
     const size = axis === "x" ? state.width : state.height;
     const insetStart =
-        axis === "x"
-            ? state.collisionLeftInset ?? 0
-            : state.collisionTopInset ?? 0;
+        axis === "x" ? (state.collisionLeftInset ?? 0) : (state.collisionTopInset ?? 0);
     const insetEnd =
-        axis === "x"
-            ? state.collisionRightInset ?? 0
-            : state.collisionBottomInset ?? 0;
+        axis === "x" ? (state.collisionRightInset ?? 0) : (state.collisionBottomInset ?? 0);
     const min = -(base + insetStart);
     const max = boundsSize - (base + size - insetEnd);
     return { min, max };
@@ -292,13 +270,9 @@ const findNearestNeighbor = (state, axis, direction) => {
         const rect = getStateRect(candidate);
         if (axis === "x") {
             const verticalOverlap =
-                Math.min(originRect.bottom, rect.bottom) -
-                Math.max(originRect.y, rect.y);
+                Math.min(originRect.bottom, rect.bottom) - Math.max(originRect.y, rect.y);
             if (verticalOverlap <= AXIS_OVERLAP_EPSILON) return;
-            const distance =
-                direction > 0
-                    ? rect.x - originRect.right
-                    : originRect.x - rect.right;
+            const distance = direction > 0 ? rect.x - originRect.right : originRect.x - rect.right;
             if (distance < -CONTACT_EPSILON) return;
             const adjustedDistance = Math.max(0, distance);
             if (adjustedDistance < closestDistance) {
@@ -307,13 +281,10 @@ const findNearestNeighbor = (state, axis, direction) => {
             }
         } else {
             const horizontalOverlap =
-                Math.min(originRect.right, rect.right) -
-                Math.max(originRect.x, rect.x);
+                Math.min(originRect.right, rect.right) - Math.max(originRect.x, rect.x);
             if (horizontalOverlap <= AXIS_OVERLAP_EPSILON) return;
             const distance =
-                direction > 0
-                    ? rect.y - originRect.bottom
-                    : originRect.y - rect.bottom;
+                direction > 0 ? rect.y - originRect.bottom : originRect.y - rect.bottom;
             if (distance < -CONTACT_EPSILON) return;
             const adjustedDistance = Math.max(0, distance);
             if (adjustedDistance < closestDistance) {
@@ -336,11 +307,7 @@ const moveStateRecursively = (state, axis, amount, visited = new Set()) => {
     if (visited.has(state)) return { applied: 0, leftover: amount };
 
     visited.add(state);
-    const { move: boundedMove, leftover: boundsLeftover } = limitMoveByBounds(
-        state,
-        axis,
-        amount,
-    );
+    const { move: boundedMove, leftover: boundsLeftover } = limitMoveByBounds(state, axis, amount);
 
     if (Math.abs(boundedMove) <= CONTACT_EPSILON) {
         visited.delete(state);
@@ -363,12 +330,7 @@ const moveStateRecursively = (state, axis, amount, visited = new Set()) => {
     }
 
     const remaining = boundedMove - appliedMove;
-    const neighborResult = moveStateRecursively(
-        neighborInfo.state,
-        axis,
-        remaining,
-        visited,
-    );
+    const neighborResult = moveStateRecursively(neighborInfo.state, axis, remaining, visited);
 
     const neighborApplied = remaining - neighborResult.leftover;
     if (Math.abs(neighborApplied) > CONTACT_EPSILON) {
@@ -392,11 +354,9 @@ const resolveOverlapPair = (firstState, secondState) => {
     const firstRect = getStateRect(firstState);
     const secondRect = getStateRect(secondState);
     const overlapWidth =
-        Math.min(firstRect.right, secondRect.right) -
-        Math.max(firstRect.x, secondRect.x);
+        Math.min(firstRect.right, secondRect.right) - Math.max(firstRect.x, secondRect.x);
     const overlapHeight =
-        Math.min(firstRect.bottom, secondRect.bottom) -
-        Math.max(firstRect.y, secondRect.y);
+        Math.min(firstRect.bottom, secondRect.bottom) - Math.max(firstRect.y, secondRect.y);
     if (overlapWidth <= 0 || overlapHeight <= 0) return false;
 
     if (overlapWidth < overlapHeight) {
@@ -428,11 +388,9 @@ const resolveAllOverlaps = () => {
                 if (!b) continue;
                 const rectB = getStateRect(b);
                 const overlapWidth =
-                    Math.min(rectA.right, rectB.right) -
-                    Math.max(rectA.x, rectB.x);
+                    Math.min(rectA.right, rectB.right) - Math.max(rectA.x, rectB.x);
                 const overlapHeight =
-                    Math.min(rectA.bottom, rectB.bottom) -
-                    Math.max(rectA.y, rectB.y);
+                    Math.min(rectA.bottom, rectB.bottom) - Math.max(rectA.y, rectB.y);
                 if (overlapWidth <= 0 || overlapHeight <= 0) continue;
                 const resolved = resolveOverlapPair(a, b);
                 if (resolved) anyResolved = true;
@@ -467,8 +425,7 @@ const debugTimeEnd = (label, start) => {
     console.log("[Magnet]", `${label} ${Math.round((performance.now() - start) * 1000) / 1000}ms`);
 };
 
-const randomFromPalette = () =>
-    palette[Math.floor(Math.random() * palette.length)];
+const randomFromPalette = () => palette[Math.floor(Math.random() * palette.length)];
 
 const parseTranslate = (element) => {
     const transform = element.style.transform;
@@ -486,8 +443,9 @@ const ensureGlyphMetricContext = (computedStyle) => {
         glyphMetricCanvas = document.createElement("canvas");
         glyphMetricContext = glyphMetricCanvas.getContext("2d");
     }
-    const fontString = computedStyle.font
-        || `${computedStyle.fontStyle || ""} ${computedStyle.fontWeight || ""} ${computedStyle.fontSize || "16px"} ${computedStyle.fontFamily || "sans-serif"}`.trim();
+    const fontString =
+        computedStyle.font ||
+        `${computedStyle.fontStyle || ""} ${computedStyle.fontWeight || ""} ${computedStyle.fontSize || "16px"} ${computedStyle.fontFamily || "sans-serif"}`.trim();
     glyphMetricContext.font = fontString;
     glyphMetricContext.textBaseline = "alphabetic";
     glyphMetricContext.textAlign = "left";
@@ -540,9 +498,7 @@ const createLetterSpan = (char, rect, containerRect, computedStyle) => {
         span.style.fontWeight = computedStyle.fontWeight;
     }
     span.style.lineHeight =
-        computedStyle.lineHeight === "normal"
-            ? computedStyle.fontSize
-            : computedStyle.lineHeight;
+        computedStyle.lineHeight === "normal" ? computedStyle.fontSize : computedStyle.lineHeight;
     span.style.letterSpacing = computedStyle.letterSpacing;
     span.style.color = randomFromPalette();
     span.style.textTransform = "none";
@@ -551,10 +507,7 @@ const createLetterSpan = (char, rect, containerRect, computedStyle) => {
 
     const fontSizeValue = parseFloat(computedStyle.fontSize) || rect.height;
     const collisionHeight = Math.min(rect.height, fontSizeValue);
-    const verticalInset = Math.max(
-        0,
-        Math.min(rect.height, (rect.height - collisionHeight) / 2),
-    );
+    const verticalInset = Math.max(0, Math.min(rect.height, (rect.height - collisionHeight) / 2));
 
     const glyphMetrics = measureGlyphMetrics(char, computedStyle);
 
@@ -614,12 +567,7 @@ const letterizeNode = (node, containerRect, fragments, computedStyle) => {
             if (!rects.length) continue;
 
             const rect = rects[0];
-            const descriptor = createLetterSpan(
-                char,
-                rect,
-                containerRect,
-                computedStyle,
-            );
+            const descriptor = createLetterSpan(char, rect, containerRect, computedStyle);
             fragments.push(descriptor);
         }
 
@@ -663,8 +611,7 @@ const flattenInteractiveElements = (container) => {
         const span = document.createElement("span");
         span.textContent = text;
         if (node.className) span.className = node.className;
-        if (node.hasAttribute("style"))
-            span.setAttribute("style", node.getAttribute("style"));
+        if (node.hasAttribute("style")) span.setAttribute("style", node.getAttribute("style"));
         node.replaceWith(span);
     });
 };
@@ -673,10 +620,7 @@ const snapshotInteractiveElement = (node) => {
     const replacement = document.createElement("interactive-element");
 
     const originalText =
-        node.dataset?.original ||
-        node.getAttribute("data-original") ||
-        node.textContent ||
-        "";
+        node.dataset?.original || node.getAttribute("data-original") || node.textContent || "";
 
     Array.from(node.attributes).forEach((attr) => {
         const { name, value } = attr;
@@ -687,10 +631,7 @@ const snapshotInteractiveElement = (node) => {
                 .split(/\s+/)
                 .map((cls) => cls.trim())
                 .filter(
-                    (cls) =>
-                        cls &&
-                        cls !== "interactive-element" &&
-                        cls !== "interactive-cycling",
+                    (cls) => cls && cls !== "interactive-element" && cls !== "interactive-cycling",
                 );
             if (filtered.length) {
                 replacement.className = filtered.join(" ");
@@ -757,10 +698,8 @@ const onPointerMove = (event) => {
             return;
         }
 
-        const pointerX =
-            lastPointerEvent.clientX ?? lastPointerEvent.touches?.[0]?.clientX ?? 0;
-        const pointerY =
-            lastPointerEvent.clientY ?? lastPointerEvent.touches?.[0]?.clientY ?? 0;
+        const pointerX = lastPointerEvent.clientX ?? lastPointerEvent.touches?.[0]?.clientX ?? 0;
+        const pointerY = lastPointerEvent.clientY ?? lastPointerEvent.touches?.[0]?.clientY ?? 0;
 
         const deltaX = pointerX - state.startX;
         const deltaY = pointerY - state.startY;
@@ -876,7 +815,7 @@ const restoreMarkup = () => {
         delete leadContainer.dataset.hireModalShown;
     }
     originalMarkup = null;
-
+    track("magnet_mode_deactivated");
     stopResizeObserver();
     leadContainer = null;
     updateContainerBounds();
@@ -901,15 +840,13 @@ const handleHireSecret = () => {
 const SECRET_WORDS = {
     hire: handleHireSecret,
     reset: restoreMarkup,
-    resume: "/resume"
+    resume: "/resume",
 };
 
 const calculateLetterPositions = () => {
     if (!leadContainer) return [];
     const start = DEBUG_MAGNET ? performance.now() : 0;
-    const positions = Array.from(
-        leadContainer.querySelectorAll(`.${LETTER_CLASS}`),
-    ).map(
+    const positions = Array.from(leadContainer.querySelectorAll(`.${LETTER_CLASS}`)).map(
         (letter) => {
             const rect = letter.getBoundingClientRect();
             return {
@@ -933,16 +870,18 @@ const triggerSecretWord = (word) => {
     if (word === "hire" && leadContainer?.dataset?.hireModalShown === "true") {
         return true;
     }
-    
+
     const handler = SECRET_WORDS[word];
     if (!handler) return false;
-    
+
+    track("magnet_secret_word", { word });
+
     if (typeof handler === "function") {
         handler();
     } else if (typeof handler === "string") {
         window.location.href = handler;
     }
-    
+
     if (word === "hire" && leadContainer) {
         leadContainer.dataset.hireModalShown = "true";
     }
@@ -981,10 +920,7 @@ const detectWord = (targetWord) => {
                 break;
             }
 
-            if (
-                Math.abs(slice[j].top - slice[0].top) >
-                LETTER_VERTICAL_TOLERANCE
-            ) {
+            if (Math.abs(slice[j].top - slice[0].top) > LETTER_VERTICAL_TOLERANCE) {
                 isSequence = false;
                 break;
             }
@@ -1043,10 +979,7 @@ const buildGroupAround = (letters, letterElement) => {
 
     const anchor = letters[index];
     const sameRow = letters
-        .filter(
-            (letter) =>
-                Math.abs(letter.top - anchor.top) <= LETTER_VERTICAL_TOLERANCE,
-        )
+        .filter((letter) => Math.abs(letter.top - anchor.top) <= LETTER_VERTICAL_TOLERANCE)
         .sort((a, b) => a.left - b.left);
 
     const rowIndex = sameRow.findIndex((item) => item.element === letterElement);
@@ -1098,9 +1031,7 @@ const evaluateLetterDrop = (letterElement) => {
     }
 
     const normalized = logLetterGroup(group);
-    const matchedWord = Object.keys(SECRET_WORDS).find((word) =>
-        normalized.includes(word),
-    );
+    const matchedWord = Object.keys(SECRET_WORDS).find((word) => normalized.includes(word));
     if (matchedWord) {
         triggerSecretWord(matchedWord);
         return;
@@ -1124,9 +1055,7 @@ const initResizeObserver = () => {
         if (!entry || !leadContainer) return;
 
         const node = entry.target;
-        const letters = Array.from(
-            node.querySelectorAll(`.${LETTER_CLASS}`),
-        );
+        const letters = Array.from(node.querySelectorAll(`.${LETTER_CLASS}`));
         if (!letters.length) return;
 
         const containerRect = leadContainer.getBoundingClientRect();
@@ -1157,6 +1086,8 @@ export const MagnetLetters = {
 
         leadContainer = document.getElementById("lead");
         if (!leadContainer) return;
+
+        track("magnet_mode_activated");
 
         const rect = leadContainer.getBoundingClientRect();
         leadContainer.dataset.hireModalShown = "false";

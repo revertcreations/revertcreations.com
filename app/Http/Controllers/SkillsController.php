@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Skill;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SkillsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -22,7 +23,7 @@ class SkillsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -32,8 +33,7 @@ class SkillsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -52,8 +52,7 @@ class SkillsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Skill  $skill
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Skill $skill)
     {
@@ -63,8 +62,7 @@ class SkillsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Skill  $skill
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Skill $skill)
     {
@@ -74,16 +72,14 @@ class SkillsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Skill  $skill
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, Skill $skill)
     {
         $skill->update([
             'name' => $request->name,
             'experience' => $request->experience,
-            'excerpt' => $request->excerpt
+            'excerpt' => $request->excerpt,
         ]);
 
         return redirect()->route('admin.skills.index');
@@ -92,8 +88,7 @@ class SkillsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Skill  $skill
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Skill $skill)
     {

@@ -10,6 +10,6 @@ class AddressClient extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $table = 'address_client';
 
+    protected $table = 'address_client';
 }

@@ -15,5 +15,4 @@ class PhotoshootImage extends Model
     {
         return $this->belongsTo(Photoshoot::class);
     }
-
 }

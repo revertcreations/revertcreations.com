@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      GITHUB_DEPLOY_TOKEN: ${{ secrets.GITHUB_DEPLOY_TOKEN }}
+      GITHUB_DEPLOY_TOKEN: ${{ github.token }}
 
     steps:
       - uses: actions/checkout@v4

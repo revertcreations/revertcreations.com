@@ -38,8 +38,6 @@ class CollectAuctionListingsJob implements ShouldQueue
 
     /**
      * The auction source to collect from.
-     *
-     * @var AuctionSource
      */
     protected AuctionSource $source;
 
@@ -57,7 +55,7 @@ class CollectAuctionListingsJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Log::info("Starting auction collection", [
+            Log::info('Starting auction collection', [
                 'source_id' => $this->source->id,
                 'source_name' => $this->source->name,
                 'driver' => $this->source->driver,
@@ -69,20 +67,21 @@ class CollectAuctionListingsJob implements ShouldQueue
             // Get the appropriate driver for this source
             $driver = $this->getDriver();
 
-            if (!$driver) {
-                Log::error("No driver available for source", [
+            if (! $driver) {
+                Log::error('No driver available for source', [
                     'source_id' => $this->source->id,
                     'driver' => $this->source->driver,
                 ]);
 
                 $this->source->markCollectionCompleted(0, 0);
+
                 return;
             }
 
             // Collect listings from the source
             $listings = $driver->collect();
 
-            Log::info("Collection completed", [
+            Log::info('Collection completed', [
                 'source_id' => $this->source->id,
                 'total_listings' => count($listings),
             ]);
@@ -100,7 +99,7 @@ class CollectAuctionListingsJob implements ShouldQueue
                     if ($existing) {
                         // Update existing listing
                         $existing->update($listingData);
-                        Log::debug("Updated existing listing", [
+                        Log::debug('Updated existing listing', [
                             'listing_id' => $existing->id,
                             'external_id' => $listingData['external_id'],
                         ]);
@@ -109,7 +108,7 @@ class CollectAuctionListingsJob implements ShouldQueue
                         $listing = $this->source->listings()->create($listingData);
                         $newCount++;
 
-                        Log::info("Created new listing", [
+                        Log::info('Created new listing', [
                             'listing_id' => $listing->id,
                             'external_id' => $listingData['external_id'],
                             'title' => $listing->title,
@@ -119,11 +118,12 @@ class CollectAuctionListingsJob implements ShouldQueue
                         EnrichWithEbayDataJob::dispatch($listing)->delay(now()->addSeconds(5 * $newCount));
                     }
                 } catch (\Exception $e) {
-                    Log::error("Error processing listing", [
+                    Log::error('Error processing listing', [
                         'source_id' => $this->source->id,
                         'external_id' => $listingData['external_id'] ?? 'unknown',
                         'error' => $e->getMessage(),
                     ]);
+
                     // Continue with next listing
                     continue;
                 }
@@ -132,20 +132,20 @@ class CollectAuctionListingsJob implements ShouldQueue
             // Mark collection as completed
             $this->source->markCollectionCompleted(count($listings), $newCount);
 
-            Log::info("Collection job completed successfully", [
+            Log::info('Collection job completed successfully', [
                 'source_id' => $this->source->id,
                 'total' => count($listings),
                 'new' => $newCount,
             ]);
         } catch (\Exception $e) {
-            Log::error("Collection job failed", [
+            Log::error('Collection job failed', [
                 'source_id' => $this->source->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
 
             $this->source->update([
-                'last_status' => 'failed: ' . $e->getMessage(),
+                'last_status' => 'failed: '.$e->getMessage(),
             ]);
 
             throw $e; // Re-throw to trigger retry logic
@@ -159,7 +159,7 @@ class CollectAuctionListingsJob implements ShouldQueue
     {
         $driverClass = config("auction.drivers.{$this->source->driver}");
 
-        if (!$driverClass || !class_exists($driverClass)) {
+        if (! $driverClass || ! class_exists($driverClass)) {
             return null;
         }
 
@@ -171,13 +171,13 @@ class CollectAuctionListingsJob implements ShouldQueue
      */
     public function failed(\Throwable $exception): void
     {
-        Log::error("CollectAuctionListingsJob failed after all retries", [
+        Log::error('CollectAuctionListingsJob failed after all retries', [
             'source_id' => $this->source->id,
             'error' => $exception->getMessage(),
         ]);
 
         $this->source->update([
-            'last_status' => 'failed: ' . $exception->getMessage(),
+            'last_status' => 'failed: '.$exception->getMessage(),
         ]);
     }
 }

@@ -1,6 +1,6 @@
 (() => {
     const init = () => {
-        const projectRoot = document.querySelector('[data-project-detail]');
+        const projectRoot = document.querySelector("[data-project-detail]");
         if (!projectRoot) {
             return;
         }
@@ -14,76 +14,76 @@
                 return;
             }
 
-            document.removeEventListener('keydown', handleEscape);
+            document.removeEventListener("keydown", handleEscape);
             modalOverlay.remove();
             modalOverlay = null;
-            body.classList.remove('hire-modal-open');
+            body.classList.remove("hire-modal-open");
 
             if (!preserveThumb && activeThumb) {
-                activeThumb.classList.remove('is-active');
+                activeThumb.classList.remove("is-active");
                 activeThumb = null;
             }
         };
 
         const handleEscape = (event) => {
-            if (event.key === 'Escape') {
+            if (event.key === "Escape") {
                 closeModal();
             }
         };
 
-        const openModal = (content, { preserveThumb = false, variant = 'default' } = {}) => {
+        const openModal = (content, { preserveThumb = false, variant = "default" } = {}) => {
             closeModal({ preserveThumb });
 
-            modalOverlay = document.createElement('div');
-            modalOverlay.classList.add('hire-modal-overlay');
-            if (variant === 'media') {
-                modalOverlay.classList.add('hire-modal-overlay--media');
+            modalOverlay = document.createElement("div");
+            modalOverlay.classList.add("hire-modal-overlay");
+            if (variant === "media") {
+                modalOverlay.classList.add("hire-modal-overlay--media");
             }
-            modalOverlay.setAttribute('role', 'dialog');
-            modalOverlay.setAttribute('aria-modal', 'true');
-            modalOverlay.addEventListener('click', (event) => {
+            modalOverlay.setAttribute("role", "dialog");
+            modalOverlay.setAttribute("aria-modal", "true");
+            modalOverlay.addEventListener("click", (event) => {
                 if (event.target === modalOverlay) {
                     closeModal({ preserveThumb });
                 }
             });
 
-            const modal = document.createElement('div');
-            modal.classList.add('hire-modal');
-            if (variant === 'media') {
-                modal.classList.add('hire-modal--media');
+            const modal = document.createElement("div");
+            modal.classList.add("hire-modal");
+            if (variant === "media") {
+                modal.classList.add("hire-modal--media");
             }
             modalOverlay.appendChild(modal);
 
-            const closeButton = document.createElement('button');
-            closeButton.type = 'button';
-            closeButton.classList.add('hire-modal-close');
-            if (variant === 'media') {
-                closeButton.classList.add('hire-modal-close--media');
+            const closeButton = document.createElement("button");
+            closeButton.type = "button";
+            closeButton.classList.add("hire-modal-close");
+            if (variant === "media") {
+                closeButton.classList.add("hire-modal-close--media");
             }
-            closeButton.setAttribute('aria-label', 'Close dialog');
-            closeButton.innerHTML = '&times;';
-            closeButton.addEventListener('click', () => closeModal({ preserveThumb }));
+            closeButton.setAttribute("aria-label", "Close dialog");
+            closeButton.innerHTML = "&times;";
+            closeButton.addEventListener("click", () => closeModal({ preserveThumb }));
             modal.appendChild(closeButton);
 
-            if (variant === 'media') {
+            if (variant === "media") {
                 modal.appendChild(content);
             } else {
-                const header = document.createElement('div');
-                header.classList.add('hire-modal-header');
+                const header = document.createElement("div");
+                header.classList.add("hire-modal-header");
                 modal.insertBefore(header, closeButton);
                 header.appendChild(closeButton);
 
-                const modalBody = document.createElement('div');
-                modalBody.classList.add('hire-modal-body', 'project-modal-body');
+                const modalBody = document.createElement("div");
+                modalBody.classList.add("hire-modal-body", "project-modal-body");
                 modal.appendChild(modalBody);
                 modalBody.appendChild(content);
             }
 
             body.appendChild(modalOverlay);
-            body.classList.add('hire-modal-open');
-            document.addEventListener('keydown', handleEscape);
+            body.classList.add("hire-modal-open");
+            document.addEventListener("keydown", handleEscape);
 
-            if (typeof closeButton.focus === 'function') {
+            if (typeof closeButton.focus === "function") {
                 requestAnimationFrame(() => {
                     closeButton.focus({ preventScroll: true });
                 });
@@ -101,47 +101,47 @@
             const title = button.dataset.assetTitle;
             const caption = button.dataset.assetCaption;
 
-            if (type === 'image') {
-                const img = document.createElement('img');
+            if (type === "image") {
+                const img = document.createElement("img");
                 img.src = url;
-                img.alt = title || 'Project asset';
-                img.loading = 'lazy';
+                img.alt = title || "Project asset";
+                img.loading = "lazy";
 
-                openModal(img, { preserveThumb: true, variant: 'media' });
+                openModal(img, { preserveThumb: true, variant: "media" });
                 return;
             }
 
-            const content = document.createElement('div');
-            content.classList.add('project-modal-content');
+            const content = document.createElement("div");
+            content.classList.add("project-modal-content");
 
-            if (title && type !== 'image') {
-                const heading = document.createElement('h2');
+            if (title && type !== "image") {
+                const heading = document.createElement("h2");
                 heading.textContent = title;
                 content.appendChild(heading);
             }
 
-            const figure = document.createElement('figure');
-            figure.classList.add('project-modal-asset');
+            const figure = document.createElement("figure");
+            figure.classList.add("project-modal-asset");
 
-            if (type === 'video') {
-                const iframe = document.createElement('iframe');
+            if (type === "video") {
+                const iframe = document.createElement("iframe");
                 iframe.src = url;
-                iframe.title = title || 'Project video';
-                iframe.setAttribute('allowfullscreen', '');
-                iframe.loading = 'lazy';
+                iframe.title = title || "Project video";
+                iframe.setAttribute("allowfullscreen", "");
+                iframe.loading = "lazy";
                 figure.appendChild(iframe);
             } else {
-                const link = document.createElement('a');
+                const link = document.createElement("a");
                 link.href = url;
-                link.target = '_blank';
-                link.rel = 'noopener';
-                link.classList.add('terminal-link');
+                link.target = "_blank";
+                link.rel = "noopener";
+                link.classList.add("terminal-link");
                 link.textContent = title || url;
                 figure.appendChild(link);
             }
 
             if (caption) {
-                const figcaption = document.createElement('figcaption');
+                const figcaption = document.createElement("figcaption");
                 figcaption.textContent = caption;
                 figure.appendChild(figcaption);
             }
@@ -150,20 +150,20 @@
             openModal(content, { preserveThumb: true });
         };
 
-        projectRoot.querySelectorAll('[data-featured-thumb]').forEach((button) => {
-            button.addEventListener('click', () => {
+        projectRoot.querySelectorAll("[data-featured-thumb]").forEach((button) => {
+            button.addEventListener("click", () => {
                 if (activeThumb && activeThumb !== button) {
-                    activeThumb.classList.remove('is-active');
+                    activeThumb.classList.remove("is-active");
                 }
 
-                button.classList.add('is-active');
+                button.classList.add("is-active");
                 activeThumb = button;
                 renderFeaturedAsset(button);
             });
         });
 
-        projectRoot.querySelectorAll('[data-update-trigger]').forEach((button) => {
-            button.addEventListener('click', () => {
+        projectRoot.querySelectorAll("[data-update-trigger]").forEach((button) => {
+            button.addEventListener("click", () => {
                 const templateId = button.dataset.updateTrigger;
                 const template = templateId ? document.getElementById(templateId) : null;
 
@@ -172,7 +172,8 @@
                 }
 
                 const fragment = template.content.cloneNode(true);
-                const modalContent = fragment.querySelector('.project-modal-content') || fragment.firstElementChild;
+                const modalContent =
+                    fragment.querySelector(".project-modal-content") || fragment.firstElementChild;
 
                 if (!modalContent) {
                     return;
@@ -181,11 +182,10 @@
                 openModal(modalContent);
             });
         });
-
     };
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
     } else {
         init();
     }

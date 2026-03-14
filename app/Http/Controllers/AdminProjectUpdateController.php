@@ -129,13 +129,13 @@ class AdminProjectUpdateController extends Controller
 
         $data['is_pinned'] = $request->boolean('is_pinned');
 
-        if (!empty($data['body'])) {
+        if (! empty($data['body'])) {
             $data['rendered_body'] = Str::markdown($data['body']);
         }
 
         if (($data['status'] ?? null) !== 'published') {
             $data['published_at'] = null;
-        } elseif (!empty($data['published_at'])) {
+        } elseif (! empty($data['published_at'])) {
             $data['published_at'] = Carbon::parse($data['published_at']);
         } elseif ($update && $update->published_at) {
             $data['published_at'] = $update->published_at;

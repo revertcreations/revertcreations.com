@@ -1,6 +1,8 @@
 import { gsap } from "gsap";
+import { notifySourceUnlock } from "../view-source/stateSignals";
+import { track } from "../analytics";
 
-export class HintElement extends HTMLElement {
+export class HuntElement extends HTMLElement {
     #time = new Date();
     #level = 0;
     #huntCount = 0;
@@ -19,6 +21,8 @@ export class HintElement extends HTMLElement {
     #dragHintText = null;
     #dragHintArrow = null;
     #huntTrackedForCurrentDrag = false;
+    #sourceUnlockBroadcasted = false;
+    #puzzleStartTracked = false;
 
     constructor() {
         super();
@@ -115,6 +119,11 @@ export class HintElement extends HTMLElement {
         this.#rngY = Math.random() * (maxHeight - minHeight) + minHeight;
 
         this.levelUp();
+
+        if (!this.#puzzleStartTracked) {
+            this.#puzzleStartTracked = true;
+            track("treasure_puzzle_started");
+        }
 
         gsap.killTweensOf(this.#emoji);
         gsap.set(this.#emoji, { clearProps: "all" });
@@ -375,9 +384,6 @@ export class HintElement extends HTMLElement {
         );
     };
 
-    animateLevelTwoTryAgain = () => {
-        const animation = Animation();
-    };
     animateLevelTwo = () => {
         if (this.#animating) return;
         if (!document.body.contains(this.#emoji)) return;
@@ -484,6 +490,10 @@ export class HintElement extends HTMLElement {
         } else {
             this.#targetPosition = null;
         }
+
+        if (this.#level === 2) {
+            track("treasure_puzzle_key_obtained");
+        }
     };
 
     inRangeOfTreasureHintAndOfLevel = (distanceToTreasure) => {
@@ -519,7 +529,16 @@ export class HintElement extends HTMLElement {
             // Calculate score locally and fire the visual gem explosion INSTANTLY
             // instead of waiting 90ms for the two API network requests to round-trip.
             const localScore = this.calculateLocalScore(detail.huntCount, detail.time);
+            track("treasure_puzzle_solved", {
+                hunt_count: detail.huntCount,
+                solve_time_seconds: Math.round(detail.time),
+                score: localScore,
+            });
             this.populateGems(localScore);
+            if (!this.#sourceUnlockBroadcasted) {
+                notifySourceUnlock("hunt-element", { score: localScore });
+                this.#sourceUnlockBroadcasted = true;
+            }
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
             const checkUrl = new URL("/puzzle/1/check", window.location.origin);
@@ -792,4 +811,4 @@ export class HintElement extends HTMLElement {
     };
 }
 
-customElements.define("hint-element", HintElement);
+customElements.define("hunt-element", HuntElement);

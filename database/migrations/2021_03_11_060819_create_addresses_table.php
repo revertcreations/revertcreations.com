@@ -25,14 +25,14 @@ class CreateAddressesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('address_client', function(Blueprint $table) {
+        Schema::create('address_client', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients');
             $table->foreignId('address_id')->constrained('addresses');
             $table->timestamps();
         });
 
-        Schema::create('address_photoshoot', function(Blueprint $table){
+        Schema::create('address_photoshoot', function (Blueprint $table) {
             $table->foreignId('photoshoot_id')->constrained('photoshoots');
             $table->foreignId('address_id')->contrained('addresses');
         });

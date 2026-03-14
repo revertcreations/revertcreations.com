@@ -14,11 +14,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PuzzleSessionController;
 use App\Http\Controllers\SkillsController;
+use App\Http\Controllers\SourceCodeController;
 use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
 
-$domain = preg_replace("(^https?://)", "", config('app.url'));
+$domain = preg_replace('(^https?://)', '', config('app.url'));
 
 Route::domain('admin.'.$domain)->name('admin.')->group(function () {
     Route::get('/', AdminDashboardController::class)->name('dashboard')->middleware('auth');
@@ -58,6 +59,9 @@ Route::domain('blog.'.$domain)->group(function () {
 Route::domain($domain)->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/source-code/{state}', SourceCodeController::class)
+        ->name('source-code.show')
+        ->whereIn('state', array_keys(config('sourceviewer.states', [])));
     Route::get('/puzzle/{puzzle_type_id}/check', [PuzzleSessionController::class, 'check'])->name('puzzle-check');
     Route::post('/puzzle/{puzzle_type_id}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
 
@@ -73,26 +77,29 @@ Route::domain($domain)->group(function () {
         );
     })->name('resume.download');
 
-    Route::get('/developer', function () {
-        $skills = Skill::all();
-        return view('developer', compact('skills'));
-    })->name('developer');
+    // Route::get('/developer', function () {
+    //     $skills = Skill::all();
+
+    //     return view('developer', compact('skills'));
+    // })->name('developer');
     Route::post('/developer', [ClientController::class, 'hire'])->name('hire-me');
 
     Route::get('/skills', function () {
         $skills = Skill::all();
+
         return compact('skills');
     })->name('skills');
 
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
 
-    Route::get('/about', function () {
-        return view('about');
-    })->name('about');
+    // Route::get('/about', function () {
+    //     return view('about');
+    // })->name('about');
 
     Route::get('/portfolio', function () {
         $portfolio = PhotographyPortfolioImage::all();
+
         return view('visual', compact('portfolio'));
     })->name('visual');
 

@@ -17,7 +17,9 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.7",
-    "gsap": "^3.13.0"
+    "gsap": "^3.13.0",
+    "prism-blade": "^0.0.10",
+    "prismjs": "^1.30.0"
   },
   "overrides": {
     "ajv": "^8.18.0",

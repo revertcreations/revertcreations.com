@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\CollectAuctionListingsJob;
 use App\Models\AuctionSource;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use App\Jobs\CollectAuctionListingsJob;
 
 class AdminAuctionSourceController extends Controller
 {
@@ -52,7 +52,7 @@ class AdminAuctionSourceController extends Controller
         ]);
 
         // Auto-generate slug if not provided
-        if (!isset($validated['slug'])) {
+        if (! isset($validated['slug'])) {
             $validated['slug'] = Str::slug($validated['name']);
         }
 
@@ -143,6 +143,6 @@ class AdminAuctionSourceController extends Controller
 
         return redirect()
             ->route('admin.auction-sources.index')
-            ->with('status', 'Collection started for ' . $auctionSource->name);
+            ->with('status', 'Collection started for '.$auctionSource->name);
     }
 }

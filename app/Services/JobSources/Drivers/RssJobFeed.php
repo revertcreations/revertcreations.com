@@ -33,7 +33,7 @@ class RssJobFeed implements JobFeed
             return collect();
         }
 
-        if (!$xml) {
+        if (! $xml) {
             return collect();
         }
 

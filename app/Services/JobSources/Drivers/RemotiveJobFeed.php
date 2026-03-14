@@ -32,9 +32,9 @@ class RemotiveJobFeed implements JobFeed
                 $salaryMin = null;
                 $salaryMax = null;
 
-                if (!empty($item['salary'])) {
+                if (! empty($item['salary'])) {
                     preg_match_all('/(\d[\d,]*)/u', $item['salary'], $matches);
-                    if (!empty($matches[1])) {
+                    if (! empty($matches[1])) {
                         $numbers = array_map(static fn ($value) => (int) str_replace(',', '', $value), $matches[1]);
                         $salaryMin = $numbers[0] ?? null;
                         $salaryMax = $numbers[count($numbers) - 1] ?? $salaryMin;

@@ -9,11 +9,13 @@ class PuzzleType extends Model
 {
     use HasFactory;
 
-    public function scores() {
+    public function scores()
+    {
         return $this->hasMany(PuzzleScore::class);
     }
 
-    public function sessions() {
+    public function sessions()
+    {
         return $this->hasMany(PuzzleSession::class);
     }
 }

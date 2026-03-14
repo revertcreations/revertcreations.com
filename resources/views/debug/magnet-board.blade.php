@@ -16,8 +16,8 @@
                 <content-element>
                     Double-click any <interactive-element>interactive</interactive-element> element to toggle magnet
                     mode. The
-                    refactor should keep nearby content like this <hint-element data-content="sandbox hint">
-                        hint-element</hint-element> intact so you can compare behaviour against production.
+                    refactor should keep nearby content like this <hunt-element data-content="sandbox hint">
+                        hunt-element</hunt-element> intact so you can compare behaviour against production.
                 </content-element>
                 <p>
                     Add more test text or components here to stress the board. Mix in <strong>bold</strong>,

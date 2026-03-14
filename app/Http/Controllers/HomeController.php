@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Log;
 use App\Models\PuzzleSession;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
 
         $session_id = $request->session()->getId();
         $ipAddress = $request->ip();
@@ -22,7 +23,7 @@ class HomeController extends Controller
                 ->where('puzzle_type_id', 1)
                 ->first();
 
-            if (!$analytics_treasure) {
+            if (! $analytics_treasure) {
                 PuzzleSession::create([
                     'session_id' => $session_id,
                     'puzzle_type_id' => 1,
@@ -54,7 +55,7 @@ class HomeController extends Controller
 
     protected function truncateUserAgent(?string $userAgent): ?string
     {
-        if (!$userAgent) {
+        if (! $userAgent) {
             return null;
         }
 
@@ -70,7 +71,7 @@ class HomeController extends Controller
 
         $internalUserAgents = config('analytics.internal_user_agents', []);
 
-        if ($userAgent && !empty($internalUserAgents)) {
+        if ($userAgent && ! empty($internalUserAgents)) {
             $lowerAgent = strtolower($userAgent);
             foreach ($internalUserAgents as $fragment) {
                 $fragment = strtolower($fragment);

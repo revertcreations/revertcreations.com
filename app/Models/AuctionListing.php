@@ -14,12 +14,19 @@ class AuctionListing extends Model
 
     // Status constants
     public const STATUS_NEW = 'new';
+
     public const STATUS_ANALYZING = 'analyzing';
+
     public const STATUS_WATCHING = 'watching';
+
     public const STATUS_BIDDING = 'bidding';
+
     public const STATUS_WON = 'won';
+
     public const STATUS_LOST = 'lost';
+
     public const STATUS_PASSED = 'passed';
+
     public const STATUS_ARCHIVED = 'archived';
 
     protected $fillable = [
@@ -129,7 +136,7 @@ class AuctionListing extends Model
     public function scopeHighValue($query, float $minRoi = 40.0, float $minSellThrough = 0.6)
     {
         return $query->where('roi_percent', '>=', $minRoi)
-                     ->where('ebay_sell_through_rate', '>=', $minSellThrough);
+            ->where('ebay_sell_through_rate', '>=', $minSellThrough);
     }
 
     /**
@@ -138,7 +145,7 @@ class AuctionListing extends Model
     public function scopeWithinDistance($query, int $maxMiles = 500)
     {
         return $query->where('distance_miles', '<=', $maxMiles)
-                     ->orWhere('shipping_available', true);
+            ->orWhere('shipping_available', true);
     }
 
     /**
@@ -156,7 +163,7 @@ class AuctionListing extends Model
     {
         return $query->where(function ($q) use ($maxDrivingMiles) {
             $q->where('shipping_available', true)
-              ->orWhere('distance_miles', '<=', $maxDrivingMiles);
+                ->orWhere('distance_miles', '<=', $maxDrivingMiles);
         });
     }
 
@@ -166,8 +173,8 @@ class AuctionListing extends Model
     public function scopeEndingSoon($query, int $hours = 24)
     {
         return $query->where('auction_end', '>', now())
-                     ->where('auction_end', '<=', now()->addHours($hours))
-                     ->orderBy('auction_end');
+            ->where('auction_end', '<=', now()->addHours($hours))
+            ->orderBy('auction_end');
     }
 
     /**
@@ -176,10 +183,10 @@ class AuctionListing extends Model
     public function scopeActiveAuctions($query)
     {
         return $query->where('auction_end', '>', now())
-                     ->where(function ($q) {
-                         $q->whereNull('auction_start')
-                           ->orWhere('auction_start', '<=', now());
-                     });
+            ->where(function ($q) {
+                $q->whereNull('auction_start')
+                    ->orWhere('auction_start', '<=', now());
+            });
     }
 
     /**
@@ -187,7 +194,7 @@ class AuctionListing extends Model
      */
     public function isActive(): bool
     {
-        if (!$this->auction_end) {
+        if (! $this->auction_end) {
             return false;
         }
 
@@ -203,7 +210,7 @@ class AuctionListing extends Model
      */
     public function isEndingSoon(int $hours = 24): bool
     {
-        if (!$this->isActive()) {
+        if (! $this->isActive()) {
             return false;
         }
 
@@ -215,7 +222,7 @@ class AuctionListing extends Model
      */
     public function getTimeRemainingAttribute(): ?string
     {
-        if (!$this->auction_end) {
+        if (! $this->auction_end) {
             return null;
         }
 
@@ -232,7 +239,8 @@ class AuctionListing extends Model
     public function getPrimaryImageAttribute(): ?string
     {
         $images = $this->images ?? [];
-        return !empty($images) ? $images[0] : null;
+
+        return ! empty($images) ? $images[0] : null;
     }
 
     /**
@@ -257,6 +265,7 @@ class AuctionListing extends Model
         }
 
         $tags = $this->tagCollection();
+
         return $tags->isNotEmpty() ? (string) $tags->first() : null;
     }
 
@@ -278,7 +287,7 @@ class AuctionListing extends Model
      */
     public function calculateExpectedProfit(?float $bidAmount = null): float
     {
-        if (!$this->ebay_median_price) {
+        if (! $this->ebay_median_price) {
             return 0;
         }
 
@@ -301,6 +310,7 @@ class AuctionListing extends Model
         }
 
         $profit = $this->calculateExpectedProfit($bidAmount);
+
         return ($profit / $totalCost) * 100;
     }
 
@@ -326,7 +336,7 @@ class AuctionListing extends Model
      */
     public function getStatusColorAttribute(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             self::STATUS_NEW => 'gray',
             self::STATUS_ANALYZING => 'blue',
             self::STATUS_WATCHING => 'sky',

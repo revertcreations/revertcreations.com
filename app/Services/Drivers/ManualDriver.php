@@ -15,8 +15,6 @@ class ManualDriver implements AuctionDriverInterface
 
     /**
      * Manual entries don't have automatic collection.
-     *
-     * @return array
      */
     public function collect(): array
     {
@@ -26,8 +24,6 @@ class ManualDriver implements AuctionDriverInterface
 
     /**
      * Manual driver is always available.
-     *
-     * @return bool
      */
     public function test(): bool
     {

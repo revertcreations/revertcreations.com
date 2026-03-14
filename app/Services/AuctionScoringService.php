@@ -33,7 +33,7 @@ class AuctionScoringService
      */
     protected function calculateRoiScore(AuctionListing $listing): float
     {
-        if (!$listing->roi_percent || $listing->roi_percent <= 0) {
+        if (! $listing->roi_percent || $listing->roi_percent <= 0) {
             return 0;
         }
 
@@ -49,7 +49,7 @@ class AuctionScoringService
      */
     protected function calculateSellThroughScore(AuctionListing $listing): float
     {
-        if (!$listing->ebay_sell_through_rate) {
+        if (! $listing->ebay_sell_through_rate) {
             return 0;
         }
 

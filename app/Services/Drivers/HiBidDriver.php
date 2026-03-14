@@ -4,6 +4,7 @@ namespace App\Services\Drivers;
 
 use App\Models\AuctionSource;
 use App\Services\LocationService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -12,6 +13,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class HiBidDriver implements AuctionDriverInterface
 {
     protected AuctionSource $source;
+
     protected LocationService $locationService;
 
     /**
@@ -33,7 +35,7 @@ class HiBidDriver implements AuctionDriverInterface
     public function __construct(AuctionSource $source)
     {
         $this->source = $source;
-        $this->locationService = new LocationService();
+        $this->locationService = new LocationService;
     }
 
     /**
@@ -41,8 +43,6 @@ class HiBidDriver implements AuctionDriverInterface
      *
      * Strategy: Since HiBid uses client-side JS rendering, we'll scrape the rendered HTML
      * using a headless browser approach or parse their category pages.
-     *
-     * @return array
      */
     public function collect(): array
     {
@@ -55,7 +55,7 @@ class HiBidDriver implements AuctionDriverInterface
             $maxPages = $filters['max_pages'] ?? 150;
             $minBid = $filters['min_bid'] ?? 0;
 
-            Log::info("Starting HiBid collection", [
+            Log::info('Starting HiBid collection', [
                 'source_id' => $this->source->id,
                 'max_auctions' => $maxAuctions,
                 'max_pages' => $maxPages,
@@ -64,7 +64,7 @@ class HiBidDriver implements AuctionDriverInterface
             // Strategy: Scrape the main auctions page with pagination
             $auctionIds = $this->scrapeAuctionList($maxAuctions, $maxPages);
 
-            Log::info("Found auction IDs", [
+            Log::info('Found auction IDs', [
                 'count' => count($auctionIds),
             ]);
 
@@ -82,20 +82,21 @@ class HiBidDriver implements AuctionDriverInterface
                     // Rate limiting
                     sleep(2); // 2 seconds between auctions
                 } catch (\Exception $e) {
-                    Log::warning("Failed to scrape auction", [
+                    Log::warning('Failed to scrape auction', [
                         'auction_id' => $auctionId,
                         'error' => $e->getMessage(),
                     ]);
+
                     continue;
                 }
             }
 
-            Log::info("HiBid collection completed", [
+            Log::info('HiBid collection completed', [
                 'source_id' => $this->source->id,
                 'total_listings' => count($listings),
             ]);
         } catch (\Exception $e) {
-            Log::error("HiBid collection failed", [
+            Log::error('HiBid collection failed', [
                 'source_id' => $this->source->id,
                 'error' => $e->getMessage(),
             ]);
@@ -109,8 +110,7 @@ class HiBidDriver implements AuctionDriverInterface
     /**
      * Scrape the auctions list page to get auction IDs across all pages.
      *
-     * @param int $maxAuctions
-     * @param int $maxPages Maximum number of pages to scrape (default 150)
+     * @param  int  $maxPages  Maximum number of pages to scrape (default 150)
      * @return array Array of auction IDs
      */
     protected function scrapeAuctionList(int $maxAuctions = 50, int $maxPages = 150): array
@@ -119,7 +119,7 @@ class HiBidDriver implements AuctionDriverInterface
         $page = 1;
 
         try {
-            Log::info("Starting HiBid auction list scraping", [
+            Log::info('Starting HiBid auction list scraping', [
                 'max_auctions' => $maxAuctions,
                 'max_pages' => $maxPages,
             ]);
@@ -138,8 +138,8 @@ class HiBidDriver implements AuctionDriverInterface
                     ])
                     ->get($url);
 
-                if (!$response->successful()) {
-                    Log::warning("Failed to fetch auctions page", [
+                if (! $response->successful()) {
+                    Log::warning('Failed to fetch auctions page', [
                         'page' => $page,
                         'status' => $response->status(),
                     ]);
@@ -160,14 +160,14 @@ class HiBidDriver implements AuctionDriverInterface
                     // Extract auction ID from URL like /catalog/478924/auction-name
                     if (preg_match('#/catalog/(\d+)/#', $href, $matches)) {
                         $auctionId = $matches[1];
-                        if (!in_array($auctionId, $auctionIds)) {
+                        if (! in_array($auctionId, $auctionIds)) {
                             $auctionIds[] = $auctionId;
                             $foundOnPage++;
                         }
                     }
                 });
 
-                Log::info("Scraped auction page", [
+                Log::info('Scraped auction page', [
                     'page' => $page,
                     'found_on_page' => $foundOnPage,
                     'total_found' => count($auctionIds),
@@ -175,7 +175,7 @@ class HiBidDriver implements AuctionDriverInterface
 
                 // If we found no auctions on this page, we've reached the end
                 if ($foundOnPage === 0) {
-                    Log::info("No more auctions found, stopping pagination", [
+                    Log::info('No more auctions found, stopping pagination', [
                         'last_page' => $page,
                     ]);
                     break;
@@ -187,14 +187,14 @@ class HiBidDriver implements AuctionDriverInterface
                 sleep(1);
             }
 
-            Log::info("Completed auction list scraping", [
+            Log::info('Completed auction list scraping', [
                 'total_auctions' => count($auctionIds),
                 'pages_scraped' => $page,
             ]);
 
             return array_slice($auctionIds, 0, $maxAuctions);
         } catch (\Exception $e) {
-            Log::error("Failed to scrape auction list", [
+            Log::error('Failed to scrape auction list', [
                 'error' => $e->getMessage(),
                 'page' => $page,
             ]);
@@ -210,7 +210,6 @@ class HiBidDriver implements AuctionDriverInterface
      * unless the page has server-rendered content. If this fails, we'll need
      * to use a headless browser (Puppeteer) or find their GraphQL endpoint.
      *
-     * @param string $auctionId
      * @return array Array of listing data
      */
     protected function scrapeAuctionCatalog(string $auctionId): array
@@ -226,11 +225,12 @@ class HiBidDriver implements AuctionDriverInterface
                 ])
                 ->get("{$this->baseUrl}/catalog/{$auctionId}");
 
-            if (!$response->successful()) {
-                Log::warning("Failed to fetch auction catalog", [
+            if (! $response->successful()) {
+                Log::warning('Failed to fetch auction catalog', [
                     'auction_id' => $auctionId,
                     'status' => $response->status(),
                 ]);
+
                 return [];
             }
 
@@ -247,13 +247,13 @@ class HiBidDriver implements AuctionDriverInterface
 
             // Fallback: Try to find lot cards in the HTML
             // (This likely won't work due to JS rendering, but worth a try)
-            Log::warning("No Apollo state found for auction, may need headless browser", [
+            Log::warning('No Apollo state found for auction, may need headless browser', [
                 'auction_id' => $auctionId,
             ]);
 
             return [];
         } catch (\Exception $e) {
-            Log::error("Failed to scrape auction catalog", [
+            Log::error('Failed to scrape auction catalog', [
                 'auction_id' => $auctionId,
                 'error' => $e->getMessage(),
             ]);
@@ -264,9 +264,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Extract Apollo GraphQL state from the HTML.
-     *
-     * @param string $html
-     * @return array|null
      */
     protected function extractApolloState(string $html): ?array
     {
@@ -275,11 +272,12 @@ class HiBidDriver implements AuctionDriverInterface
             try {
                 $jsonData = json_decode($matches[1], true);
                 if (isset($jsonData['apollo.state'])) {
-                    Log::info("Found Apollo state in hibid-state script tag");
+                    Log::info('Found Apollo state in hibid-state script tag');
+
                     return $jsonData['apollo.state'];
                 }
             } catch (\Exception $e) {
-                Log::warning("Failed to parse hibid-state JSON", [
+                Log::warning('Failed to parse hibid-state JSON', [
                     'error' => $e->getMessage(),
                 ]);
             }
@@ -290,7 +288,7 @@ class HiBidDriver implements AuctionDriverInterface
             try {
                 return json_decode($matches[1], true);
             } catch (\Exception $e) {
-                Log::warning("Failed to parse Apollo state JSON", [
+                Log::warning('Failed to parse Apollo state JSON', [
                     'error' => $e->getMessage(),
                 ]);
             }
@@ -301,10 +299,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Parse Apollo state data to extract lot listings.
-     *
-     * @param array $apolloState
-     * @param string $auctionId
-     * @return array
      */
     protected function parseApolloStateForLots(array $apolloState, string $auctionId): array
     {
@@ -315,7 +309,7 @@ class HiBidDriver implements AuctionDriverInterface
 
         // Apollo state structure has objects with keys like "Lot:123456"
         foreach ($apolloState as $key => $value) {
-            if (!is_array($value)) {
+            if (! is_array($value)) {
                 continue;
             }
 
@@ -324,20 +318,21 @@ class HiBidDriver implements AuctionDriverInterface
                 try {
                     // Only include lots that are not archived
                     $isArchived = $value['lotState']['isArchived'] ?? false;
-                    if (!$isArchived) {
+                    if (! $isArchived) {
                         $listings[] = $this->transformApolloLot($value, $auctionId, $auctionData);
                     }
                 } catch (\Exception $e) {
-                    Log::debug("Failed to transform Apollo lot", [
+                    Log::debug('Failed to transform Apollo lot', [
                         'error' => $e->getMessage(),
                         'lot_key' => $key,
                     ]);
+
                     continue;
                 }
             }
         }
 
-        Log::info("Parsed Apollo lots", [
+        Log::info('Parsed Apollo lots', [
             'total_lots' => count($listings),
             'auction_id' => $auctionId,
         ]);
@@ -347,10 +342,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Extract auction data from Apollo state.
-     *
-     * @param array $apolloState
-     * @param string $auctionId
-     * @return array|null
      */
     protected function extractAuctionData(array $apolloState, string $auctionId): ?array
     {
@@ -373,11 +364,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Transform an Apollo lot object into our listing format.
-     *
-     * @param array $lot
-     * @param string $auctionId
-     * @param array|null $auctionData
-     * @return array
      */
     protected function transformApolloLot(array $lot, string $auctionId, ?array $auctionData = null): array
     {
@@ -386,7 +372,7 @@ class HiBidDriver implements AuctionDriverInterface
 
         // Extract category name from category array
         $categoryName = null;
-        if (isset($lot['category']) && is_array($lot['category']) && !empty($lot['category'])) {
+        if (isset($lot['category']) && is_array($lot['category']) && ! empty($lot['category'])) {
             $categoryName = $lot['category'][0]['categoryName'] ?? null;
         }
 
@@ -422,8 +408,8 @@ class HiBidDriver implements AuctionDriverInterface
             'buy_now_price' => isset($lotState['buyNow']) && $lotState['buyNow'] > 0 ? (float) $lotState['buyNow'] : null,
             'shipping_cost' => null, // Not available in lot-level Apollo state
             'shipping_available' => $shippingAvailable,
-            'local_pickup_only' => !$shippingAvailable,
-            'local_pickup_required' => !$shippingAvailable,
+            'local_pickup_only' => ! $shippingAvailable,
+            'local_pickup_required' => ! $shippingAvailable,
             'images' => $this->extractImagesFromApollo($lot),
             'tags' => $this->extractTagsFromApollo($lot),
             'buyer_premium_percent' => $this->source->buyer_premium_percent ?? 10.0,
@@ -435,10 +421,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Transform a HiBid lot into our auction listing format.
-     *
-     * @param array $lot
-     * @param array $auction
-     * @return array
      */
     protected function transformListing(array $lot, array $auction): array
     {
@@ -471,9 +453,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Extract image URLs from Apollo lot data.
-     *
-     * @param array $lot
-     * @return array
      */
     protected function extractImagesFromApollo(array $lot): array
     {
@@ -502,9 +481,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Extract image URLs from lot data (generic fallback).
-     *
-     * @param array $lot
-     * @return array
      */
     protected function extractImages(array $lot): array
     {
@@ -530,9 +506,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Extract tags from Apollo lot data.
-     *
-     * @param array $lot
-     * @return array
      */
     protected function extractTagsFromApollo(array $lot): array
     {
@@ -557,10 +530,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Extract tags from lot and auction data (generic fallback).
-     *
-     * @param array $lot
-     * @param array $auction
-     * @return array
      */
     protected function extractTags(array $lot, array $auction): array
     {
@@ -591,14 +560,11 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Parse date string into Carbon instance.
-     *
-     * @param string $date
-     * @return \Illuminate\Support\Carbon|null
      */
     protected function parseDate(string $date): ?\Illuminate\Support\Carbon
     {
         try {
-            return \Carbon\Carbon::parse($date);
+            return Carbon::parse($date);
         } catch (\Exception $e) {
             return null;
         }
@@ -606,8 +572,6 @@ class HiBidDriver implements AuctionDriverInterface
 
     /**
      * Test the HiBid connection.
-     *
-     * @return bool
      */
     public function test(): bool
     {
@@ -618,9 +582,10 @@ class HiBidDriver implements AuctionDriverInterface
                     'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
                 ])
                 ->get($this->baseUrl);
+
             return $response->successful();
         } catch (\Exception $e) {
-            Log::error("HiBid connection test failed", [
+            Log::error('HiBid connection test failed', [
                 'error' => $e->getMessage(),
             ]);
 
@@ -628,4 +593,3 @@ class HiBidDriver implements AuctionDriverInterface
         }
     }
 }
-

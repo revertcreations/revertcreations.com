@@ -37,7 +37,7 @@ class CollectAuctionsCommand extends Command
 
         if ($sourceSlug = $this->option('source')) {
             $query->where('slug', $sourceSlug);
-        } else if (!$this->option('force')) {
+        } elseif (! $this->option('force')) {
             // Only collect from sources that are due
             $query->whereRaw('
                 last_ran_at IS NULL
@@ -49,6 +49,7 @@ class CollectAuctionsCommand extends Command
 
         if ($sources->isEmpty()) {
             $this->warn('No sources found to collect from.');
+
             return Command::SUCCESS;
         }
 
@@ -58,8 +59,9 @@ class CollectAuctionsCommand extends Command
             $this->line("  - {$source->name} ({$source->slug})");
         }
 
-        if (!$this->confirm('Proceed with collection?', true)) {
+        if (! $this->confirm('Proceed with collection?', true)) {
             $this->info('Collection cancelled.');
+
             return Command::SUCCESS;
         }
 
@@ -88,7 +90,7 @@ class CollectAuctionsCommand extends Command
 
         $this->info('Collection process completed!');
 
-        if (!$this->option('sync')) {
+        if (! $this->option('sync')) {
             $this->line('Jobs have been dispatched to the queue.');
             $this->line('Run "sail artisan queue:work" to process them.');
         }

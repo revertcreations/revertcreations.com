@@ -1,5 +1,11 @@
 <?php
 
+use App\Services\Drivers\AuctionNinjaDriver;
+use App\Services\Drivers\CTbidsDriver;
+use App\Services\Drivers\EbayDriver;
+use App\Services\Drivers\HiBidDriver;
+use App\Services\Drivers\ManualDriver;
+
 return [
 
     /*
@@ -13,11 +19,11 @@ return [
     */
 
     'drivers' => [
-        'hibid' => \App\Services\Drivers\HiBidDriver::class,
-        'ctbids' => \App\Services\Drivers\CTbidsDriver::class,
-        'auctionninja' => \App\Services\Drivers\AuctionNinjaDriver::class,
-        'ebay' => \App\Services\Drivers\EbayDriver::class,
-        'manual' => \App\Services\Drivers\ManualDriver::class,
+        'hibid' => HiBidDriver::class,
+        'ctbids' => CTbidsDriver::class,
+        'auctionninja' => AuctionNinjaDriver::class,
+        'ebay' => EbayDriver::class,
+        'manual' => ManualDriver::class,
     ],
 
     /*
