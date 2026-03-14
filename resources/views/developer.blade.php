@@ -2,25 +2,23 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <input
-        type="hidden"
-        class="
-            text-gruvbox-red
-            text-gruvbox-green
-            text-gruvbox-purple
-            text-gruvbox-black
-            text-gruvbox-black-hidden
-            text-gruvbox-white
-            text-hmt-green
-            text-gruvbox-orange
+    <div class="hidden" aria-hidden="true">
+        <span class="text-gruvbox-red"></span>
+        <span class="text-gruvbox-green"></span>
+        <span class="text-gruvbox-purple"></span>
+        <span class="text-gruvbox-black"></span>
+        <span class="text-gruvbox-black-hidden"></span>
+        <span class="text-gruvbox-white"></span>
+        <span class="text-hmt-green"></span>
+        <span class="text-gruvbox-orange"></span>
 
-            bg-gruvbox-red
-            bg-gruvbox-green
-            bg-gruvbox-purple
-            bg-gruvbox-black
-            bg-gruvbox-white
-            bg-hmt-green
-        ">
+        <span class="bg-gruvbox-red"></span>
+        <span class="bg-gruvbox-green"></span>
+        <span class="bg-gruvbox-purple"></span>
+        <span class="bg-gruvbox-black"></span>
+        <span class="bg-gruvbox-white"></span>
+        <span class="bg-hmt-green"></span>
+    </div>
 
     <span class="relative" style="bottom: -1px;">
         <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl italic w-min">Web Development</i>

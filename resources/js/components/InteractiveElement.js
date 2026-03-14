@@ -1,4 +1,4 @@
-import { MagnetLetters } from "../MagnetLetters.js";
+import { MagnetLetters } from "../magnetLetters.js";
 import { notifySourceOverride } from "../view-source/stateSignals";
 
 export class InteractiveElement extends HTMLElement {

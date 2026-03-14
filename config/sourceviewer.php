@@ -44,13 +44,13 @@ return [
         ],
         'magnet' => [
             'label' => 'Magnet Class Internals',
-            'description' => 'Magnet mode internals: MagnetLetters.js manages tokenized text/letter behavior and MagnetBoard.js handles board physics, drag interactions, and rendering orchestration.',
-            'badge_hint' => 'MagnetLetters.js + MagnetBoard.js',
+            'description' => 'Magnet mode internals: magnetLetters.js manages tokenized text/letter behavior and MagnetBoard.js handles board physics, drag interactions, and rendering orchestration.',
+            'badge_hint' => 'magnetLetters.js + MagnetBoard.js',
             'order' => 4,
             'files' => [
                 [
-                    'display_name' => 'resources/js/MagnetLetters.js',
-                    'path' => resource_path('js/MagnetLetters.js'),
+                    'display_name' => 'resources/js/magnetLetters.js',
+                    'path' => resource_path('js/magnetLetters.js'),
                     'language' => 'javascript',
                 ],
                 [

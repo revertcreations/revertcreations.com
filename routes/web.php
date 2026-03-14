@@ -77,11 +77,11 @@ Route::domain($domain)->group(function () {
         );
     })->name('resume.download');
 
-    Route::get('/developer', function () {
-        $skills = Skill::all();
+    // Route::get('/developer', function () {
+    //     $skills = Skill::all();
 
-        return view('developer', compact('skills'));
-    })->name('developer');
+    //     return view('developer', compact('skills'));
+    // })->name('developer');
     Route::post('/developer', [ClientController::class, 'hire'])->name('hire-me');
 
     Route::get('/skills', function () {
@@ -93,9 +93,9 @@ Route::domain($domain)->group(function () {
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
 
-    Route::get('/about', function () {
-        return view('about');
-    })->name('about');
+    // Route::get('/about', function () {
+    //     return view('about');
+    // })->name('about');
 
     Route::get('/portfolio', function () {
         $portfolio = PhotographyPortfolioImage::all();
