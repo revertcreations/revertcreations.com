@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\PuzzleType;
+use Illuminate\Database\Seeder;
 
 class PuzzleTypeSeeder extends Seeder
 {
@@ -16,7 +15,7 @@ class PuzzleTypeSeeder extends Seeder
         $puzzle_types = collect([
             ['name' => 'analytics_treasure', 'path' => 'home'],
             ['name' => 'developer', 'path' => 'home'],
-            ['name' => 'designer', 'path' => 'home']
+            ['name' => 'designer', 'path' => 'home'],
         ]);
 
         foreach ($puzzle_types as $puzzle_type) {

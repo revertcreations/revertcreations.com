@@ -21,15 +21,18 @@ class PuzzleSession extends Model
         'is_internal' => 'boolean',
     ];
 
-    public function token() {
+    public function token()
+    {
         return $this->hasOne(PuzzleToken::class, 'puzzle_session_id');
     }
 
-    public function scores() {
+    public function scores()
+    {
         return $this->hasMany(PuzzleScore::class);
     }
 
-    public function puzzleType() {
+    public function puzzleType()
+    {
         return $this->belongsTo(PuzzleType::class, 'puzzle_type_id');
     }
 }

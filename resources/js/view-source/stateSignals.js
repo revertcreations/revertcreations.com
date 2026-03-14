@@ -1,8 +1,8 @@
-const SOURCE_UNLOCK_EVENT = 'sourceviewer:unlock';
-const SOURCE_OVERRIDE_EVENT = 'sourceviewer:override';
+const SOURCE_UNLOCK_EVENT = "sourceviewer:unlock";
+const SOURCE_OVERRIDE_EVENT = "sourceviewer:override";
 
 const dispatch = (type, detail = {}) => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     window.dispatchEvent(
         new CustomEvent(type, {
             detail,

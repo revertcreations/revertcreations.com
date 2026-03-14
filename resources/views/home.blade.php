@@ -6,8 +6,8 @@
             id="title">
             <h1 class="text-4xl md:text-6xl">Hi. I'm</h1>
             <div class="relative inline-block w-full max-w-max">
-                <name-element class="relative z-10 table"
-                    data-content="Trever"></name-element>
+                <text-puzzle-element class="relative z-10 table"
+                    data-content="Trever"></text-puzzle-element>
                 <div class="pointer-events-none relative left-[90%] z-0 ml-4 flex -translate-y-32 rotate-[-30deg] flex-row items-center whitespace-nowrap font-handwriting text-2xl text-gruvbox-hint"
                     id="name-hint-text">
                     <svg class="mr-2 h-10 w-10 text-gruvbox-hint"
@@ -37,10 +37,12 @@
                                 'description' => $state['description'] ?? null,
                                 'order' => $state['order'] ?? null,
                                 'files' => collect($state['files'] ?? [])
-                                    ->map(fn ($file) => [
-                                        'display_name' => $file['display_name'] ?? '',
-                                        'language' => $file['language'] ?? 'text',
-                                    ])
+                                    ->map(
+                                        fn($file) => [
+                                            'display_name' => $file['display_name'] ?? '',
+                                            'language' => $file['language'] ?? 'text',
+                                        ],
+                                    )
                                     ->all(),
                             ],
                         ];
@@ -51,10 +53,6 @@
 
         <div class="relative w-full flex-1"
             id="lead-shell">
-            <div class="pointer-events-none absolute right-2 top-2 z-30"
-                id="source-viewer-root"
-                data-source-viewer='@json($sourceViewerConfig)'></div>
-
             <div class="w-full flex-1 p-2 text-gruvbox-gray sm:p-4 md:p-6"
                 id="lead">
 
@@ -62,14 +60,15 @@
                     class="m-auto block w-2/3 select-none text-lg leading-[3rem] md:text-xl md:leading-[4.5rem] lg:text-2xl lg:leading-[5.5rem]">
                     I'm a full-stack web <span class="text-xl font-bold text-gruvbox-green md:text-3xl"
                         id="developer">developer</span>.
-                    Lately I've been even focusing on building
+                    Lately I've been focusing on building
                     <span class="group relative inline-block cursor-pointer">
                         <interactive-element class="relative z-10">interactive</interactive-element>
                         <div
                             class="pointer-events-none absolute bottom-full left-1/2 z-0 flex -translate-x-1/2 translate-y-4 rotate-[-4deg] flex-row items-center whitespace-nowrap font-handwriting text-xl text-gruvbox-hint md:text-2xl">
                             <div class="relative pb-2">
                                 <span class="transition-all duration-300 group-hover:hidden">Hover over me!</span>
-                                <span class="hidden transition-all duration-300 group-hover:inline">Double click me!</span>
+                                <span class="hidden transition-all duration-300 group-hover:inline">Double click
+                                    me!</span>
                             </div>
                             <svg class="h-8 w-8 translate-y-2 text-gruvbox-hint"
                                 viewBox="0 0 40 40"
@@ -83,15 +82,15 @@
                             </svg>
                         </div>
                     </span>
-                    user experiences. I love the challenge of turning design into code that users can truly
+                    user experiences. I love the challenge of turning my designs into code that users can truly
                     <span class="relative inline-block">
                         <treasure-element class="relative z-10"
                             data-name="treasure">treasure</treasure-element>
                     </span>.
                     Hope you find some
                     <span class="relative inline-block">
-                        <hint-element class="relative z-10"
-                            data-content="hidden"></hint-element>
+                        <hunt-element class="relative z-10"
+                            data-content="hidden"></hunt-element>
                         <div
                             class="pointer-events-none absolute bottom-full left-1/2 z-0 flex -translate-x-1/2 translate-y-4 rotate-[-6deg] flex-row items-center whitespace-nowrap font-handwriting text-xl text-gruvbox-hint md:text-2xl">
                             <div class="relative pb-2">
@@ -128,5 +127,10 @@
             });
         </script>
     @endif
+
+    @push('body-overlays')
+        <div id="source-viewer-root"
+            data-source-viewer='@json($sourceViewerConfig)'></div>
+    @endpush
 
 </x-layout>

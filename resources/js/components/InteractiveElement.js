@@ -1,4 +1,4 @@
-import { MagnetLetters } from "../magnetLetters.js";
+import { MagnetLetters } from "../MagnetLetters.js";
 import { notifySourceOverride } from "../view-source/stateSignals";
 
 export class InteractiveElement extends HTMLElement {
@@ -176,7 +176,9 @@ export class InteractiveElement extends HTMLElement {
         this.#tick = 0;
         this.tickCharacters();
 
-        const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+        const prefersReducedMotion = window.matchMedia?.(
+            "(prefers-reduced-motion: reduce)",
+        )?.matches;
         if (prefersReducedMotion) return;
 
         this.#cycleInterval = window.setInterval(() => {
@@ -274,7 +276,7 @@ export class InteractiveElement extends HTMLElement {
             this.#overlay.appendChild(span);
             this.#characters.push(span);
         });
-    };
+    }
 
     handleClickHint = (event) => {
         if (this.#hasActivated) return;

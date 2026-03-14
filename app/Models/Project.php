@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -14,9 +14,13 @@ class Project extends Model
     use SoftDeletes;
 
     public const STATUS_PLANNING = 'planning';
+
     public const STATUS_IN_PROGRESS = 'in_progress';
+
     public const STATUS_LAUNCHED = 'launched';
+
     public const STATUS_MAINTENANCE = 'maintenance';
+
     public const STATUS_ARCHIVED = 'archived';
 
     protected $fillable = [

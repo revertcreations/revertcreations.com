@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-//use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use DOMDocument;
-
+// use Illuminate\Http\Request;
 use App\Models\Post;
+use DOMDocument;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
     public function index()
     {
         $posts = Post::where('published', true)->get()->sortByDesc('published_at');
+
         return view('blog.index', compact('posts'));
     }
 
@@ -33,15 +33,16 @@ class BlogController extends Controller
         libxml_clear_errors();
         libxml_use_internal_errors($previousUseErrors);
 
-        foreach($dom->getElementsByTagName('p') as $paragraph) {
+        foreach ($dom->getElementsByTagName('p') as $paragraph) {
             $paragraph->setAttribute('class', 'py-4 text-gruvbox-white');
         }
 
-        foreach($dom->getElementsByTagName('h2') as $h2) {
+        foreach ($dom->getElementsByTagName('h2') as $h2) {
             $h2->setAttribute('class', 'text-gruvbox-blue text-3xl');
         }
 
         $post->html = $dom->saveHTML();
+
         return view('blog.show', compact('post'));
     }
 }

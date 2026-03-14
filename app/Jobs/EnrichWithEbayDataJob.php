@@ -33,8 +33,6 @@ class EnrichWithEbayDataJob implements ShouldQueue
 
     /**
      * The auction listing to enrich.
-     *
-     * @var AuctionListing
      */
     protected AuctionListing $auction;
 
@@ -55,7 +53,7 @@ class EnrichWithEbayDataJob implements ShouldQueue
         AuctionScoringService $scoringService
     ): void {
         try {
-            Log::info("Enriching auction listing with eBay data", [
+            Log::info('Enriching auction listing with eBay data', [
                 'auction_id' => $this->auction->id,
                 'title' => $this->auction->title,
             ]);
@@ -66,13 +64,14 @@ class EnrichWithEbayDataJob implements ShouldQueue
             // Fetch eBay market data
             $success = $ebayService->enrichListing($this->auction);
 
-            if (!$success) {
-                Log::warning("Failed to enrich auction with eBay data", [
+            if (! $success) {
+                Log::warning('Failed to enrich auction with eBay data', [
                     'auction_id' => $this->auction->id,
                 ]);
 
                 // Reset status back to new if enrichment failed
                 $this->auction->update(['status' => AuctionListing::STATUS_NEW]);
+
                 return;
             }
 
@@ -85,13 +84,13 @@ class EnrichWithEbayDataJob implements ShouldQueue
             // Update status back to new (or keep as analyzing if we want manual review)
             $this->auction->update(['status' => AuctionListing::STATUS_NEW]);
 
-            Log::info("Successfully enriched auction listing", [
+            Log::info('Successfully enriched auction listing', [
                 'auction_id' => $this->auction->id,
                 'match_score' => $this->auction->match_score,
                 'roi_percent' => $this->auction->roi_percent,
             ]);
         } catch (\Exception $e) {
-            Log::error("Error enriching auction with eBay data", [
+            Log::error('Error enriching auction with eBay data', [
                 'auction_id' => $this->auction->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -106,7 +105,7 @@ class EnrichWithEbayDataJob implements ShouldQueue
      */
     public function failed(\Throwable $exception): void
     {
-        Log::error("EnrichWithEbayDataJob failed after all retries", [
+        Log::error('EnrichWithEbayDataJob failed after all retries', [
             'auction_id' => $this->auction->id,
             'error' => $exception->getMessage(),
         ]);

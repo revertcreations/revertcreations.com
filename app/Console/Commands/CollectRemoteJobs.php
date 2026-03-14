@@ -55,8 +55,9 @@ class CollectRemoteJobs extends Command
         }
 
         foreach ($sources as $source) {
-            if (!$force && $this->shouldSkipSource($source)) {
+            if (! $force && $this->shouldSkipSource($source)) {
                 $this->line("Skipping {$source->name} — collected recently.");
+
                 continue;
             }
 

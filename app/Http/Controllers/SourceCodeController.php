@@ -13,7 +13,7 @@ class SourceCodeController extends Controller
     {
         $states = config('sourceviewer.states', []);
 
-        if (!array_key_exists($state, $states)) {
+        if (! array_key_exists($state, $states)) {
             abort(Response::HTTP_NOT_FOUND);
         }
 
@@ -28,16 +28,16 @@ class SourceCodeController extends Controller
 
         foreach ($files as $file) {
             $path = $file['path'] ?? null;
-            if (!$path) {
+            if (! $path) {
                 continue;
             }
 
             $realPath = realpath($path);
-            if (!$realPath || !Str::startsWith($realPath, base_path())) {
+            if (! $realPath || ! Str::startsWith($realPath, base_path())) {
                 abort(Response::HTTP_FORBIDDEN);
             }
 
-            if (!File::isFile($realPath)) {
+            if (! File::isFile($realPath)) {
                 abort(Response::HTTP_NOT_FOUND);
             }
 

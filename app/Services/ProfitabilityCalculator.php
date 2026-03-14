@@ -9,8 +9,7 @@ class ProfitabilityCalculator
     /**
      * Calculate profitability metrics for an auction listing at a given bid amount
      *
-     * @param AuctionListing $listing
-     * @param float|null $bidAmount If null, uses current_bid from listing
+     * @param  float|null  $bidAmount  If null, uses current_bid from listing
      * @return array{total_cost: float, expected_revenue: float, expected_profit: float, roi_percent: float}
      */
     public function calculate(AuctionListing $listing, ?float $bidAmount = null): array
@@ -56,13 +55,12 @@ class ProfitabilityCalculator
     /**
      * Calculate the maximum bid you should place to achieve a target ROI
      *
-     * @param AuctionListing $listing
-     * @param float $targetRoiPercent Desired ROI percentage (e.g., 40.0 for 40%)
+     * @param  float  $targetRoiPercent  Desired ROI percentage (e.g., 40.0 for 40%)
      * @return float|null Maximum bid amount, or null if calculation not possible
      */
     public function calculateMaxBid(AuctionListing $listing, float $targetRoiPercent): ?float
     {
-        if (!$listing->ebay_median_price || $listing->ebay_median_price <= 0) {
+        if (! $listing->ebay_median_price || $listing->ebay_median_price <= 0) {
             return null;
         }
 
@@ -98,11 +96,11 @@ class ProfitabilityCalculator
         $minRoi = config('auction.profitability.min_roi_percent', 40.0);
         $minSellThrough = config('auction.profitability.min_sell_through_rate', 0.6);
 
-        if (!$listing->roi_percent || $listing->roi_percent < $minRoi) {
+        if (! $listing->roi_percent || $listing->roi_percent < $minRoi) {
             return false;
         }
 
-        if (!$listing->ebay_sell_through_rate || $listing->ebay_sell_through_rate < $minSellThrough) {
+        if (! $listing->ebay_sell_through_rate || $listing->ebay_sell_through_rate < $minSellThrough) {
             return false;
         }
 

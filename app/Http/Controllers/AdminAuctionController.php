@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\AuctionListing;
 use App\Models\AuctionSource;
+use App\Services\AuctionScoringService;
 use App\Services\EbayMarketResearchService;
 use App\Services\ProfitabilityCalculator;
-use App\Services\AuctionScoringService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -51,7 +51,7 @@ class AdminAuctionController extends Controller
         // Build query
         $query = AuctionListing::query()
             ->with('auctionSource')
-            ->when(!$filters['archived'], fn ($q) => $q->where('is_archived', false))
+            ->when(! $filters['archived'], fn ($q) => $q->where('is_archived', false))
             ->when($filters['status'] && $filters['status'] !== 'all', function ($q) use ($filters) {
                 return $q->where('status', $filters['status']);
             })
@@ -62,6 +62,7 @@ class AdminAuctionController extends Controller
             })
             ->when($filters['category'], function ($q) use ($filters) {
                 $category = Str::lower($filters['category']);
+
                 return $q->where(function ($inner) use ($category) {
                     $inner->whereRaw('LOWER(category) LIKE ?', ['%'.$category.'%'])
                         ->orWhereRaw('LOWER(subcategory) LIKE ?', ['%'.$category.'%']);
@@ -69,6 +70,7 @@ class AdminAuctionController extends Controller
             })
             ->when($filters['search'], function ($q) use ($filters) {
                 $term = '%'.Str::lower($filters['search']).'%';
+
                 return $q->where(function ($inner) use ($term) {
                     $inner->whereRaw('LOWER(title) LIKE ?', [$term])
                         ->orWhereRaw('LOWER(description) LIKE ?', [$term])
@@ -76,13 +78,13 @@ class AdminAuctionController extends Controller
                         ->orWhereRaw('LOWER(tags) LIKE ?', [$term]);
                 });
             })
-            ->when(!is_null($filters['min_roi']), function ($q) use ($filters) {
+            ->when(! is_null($filters['min_roi']), function ($q) use ($filters) {
                 return $q->where('roi_percent', '>=', $filters['min_roi']);
             })
-            ->when(!is_null($filters['max_roi']), function ($q) use ($filters) {
+            ->when(! is_null($filters['max_roi']), function ($q) use ($filters) {
                 return $q->where('roi_percent', '<=', $filters['max_roi']);
             })
-            ->when(!is_null($filters['min_sell_through']), function ($q) use ($filters) {
+            ->when(! is_null($filters['min_sell_through']), function ($q) use ($filters) {
                 return $q->where('ebay_sell_through_rate', '>=', $filters['min_sell_through']);
             })
             ->when($filters['ending_soon'], function ($q) {
@@ -90,7 +92,7 @@ class AdminAuctionController extends Controller
                     ->where('auction_end', '<=', now()->addHours(24))
                     ->orderBy('auction_end');
             })
-            ->when(!is_null($filters['local_pickup_only']), function ($q) use ($filters) {
+            ->when(! is_null($filters['local_pickup_only']), function ($q) use ($filters) {
                 return $q->where('local_pickup_only', $filters['local_pickup_only']);
             });
 
@@ -118,7 +120,7 @@ class AdminAuctionController extends Controller
         }
 
         // Secondary sort
-        if (!in_array($filters['sort'], ['created_at'], true)) {
+        if (! in_array($filters['sort'], ['created_at'], true)) {
             $query->orderBy('created_at', 'desc');
         }
 

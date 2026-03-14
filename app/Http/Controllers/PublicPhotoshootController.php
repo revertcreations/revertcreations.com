@@ -4,18 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PublicPhotoshootContractAcceptsRequest;
 use App\Http\Requests\PublicPhotoshootStoreRequest;
-use App\Models\PhotographyContract;
 use App\Models\Address;
 use App\Models\AddressClient;
 use App\Models\Client;
-use App\Models\PhotographyContractAddress;
+use App\Models\PhotographyContract;
 use App\Models\Photoshoot;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class PublicPhotoshootController extends Controller
 {
-
     public function create()
     {
         return view('photography.photoshoot.create');
@@ -23,17 +19,18 @@ class PublicPhotoshootController extends Controller
 
     public function store(PublicPhotoshootStoreRequest $request)
     {
-        //do validation
+        // do validation
         $validated = $request->validated();
 
         // dd($validated);
-        //do client stuff
+        // do client stuff
         $client = Client::where('email', $request->email)->get();
-        if (!isset($client->id)) {
+        if (! isset($client->id)) {
             $client = Client::create($this->validatedClient($validated));
 
-            if (!$client)
+            if (! $client) {
                 return back();
+            }
         }
 
         $validated['client_id'] = $client->id;
@@ -42,11 +39,11 @@ class PublicPhotoshootController extends Controller
         return redirect()->route('public.photoshoot.success', compact('photoshoot'));
     }
 
-
     public function show(Photoshoot $photoshoot, $token)
     {
-        if(base64_decode($token) !== $photoshoot->public_token)
+        if (base64_decode($token) !== $photoshoot->public_token) {
             return redirect()->route('home');
+        }
 
         return view('photography.photoshoot.show', compact('photoshoot'));
     }
@@ -54,8 +51,9 @@ class PublicPhotoshootController extends Controller
     public function edit(Photoshoot $photoshoot, $token)
     {
 
-        if(base64_decode($token) !== $photoshoot->public_token)
+        if (base64_decode($token) !== $photoshoot->public_token) {
             return redirect()->route('home');
+        }
 
         return view('photography.photoshoot.edit', compact('photoshoot'));
     }
@@ -71,9 +69,11 @@ class PublicPhotoshootController extends Controller
         $validated = $request->validated();
 
         $client_updated = false;
-        foreach($photoshoot->contract->getAttributes() as $key => $value)
-            if($request[$key] && $request[$key] != $value)
+        foreach ($photoshoot->contract->getAttributes() as $key => $value) {
+            if ($request[$key] && $request[$key] != $value) {
                 $client_updated = true;
+            }
+        }
 
         if ($client_updated) {
             $client_contract = PhotographyContract::create([
@@ -93,7 +93,7 @@ class PublicPhotoshootController extends Controller
             $photoshoot->update([
                 'photography_contract_id' => $client_contract->id,
                 'title' => $validated['title'],
-                'description' => $validated['description']
+                'description' => $validated['description'],
             ]);
 
         } else {
@@ -101,19 +101,19 @@ class PublicPhotoshootController extends Controller
             $photoshoot->contract->update(['status' => 'client_approved']);
 
             $photoshoot->update([
-                'status' => 'approved'
+                'status' => 'approved',
             ]);
         }
 
         $photoshoot->client->update($this->validatedClient($validated));
 
-        if(!empty($photoshoot->client->addresses()->first())) {
+        if (! empty($photoshoot->client->addresses()->first())) {
             $photoshoot->client->addresses()->first()->update($this->validatedClientAddress($validated));
         } else {
             $client_address = Address::create($this->validatedClientAddress($validated));
             AddressClient::create([
                 'client_id' => $photoshoot->client->id,
-                'address_id' => $client_address->id
+                'address_id' => $client_address->id,
             ]);
         }
 
@@ -122,7 +122,7 @@ class PublicPhotoshootController extends Controller
 
     public function download(PhotographyContract $contract)
     {
-        //PDF file is stored under project/public/download/info.pdf
+        // PDF file is stored under project/public/download/info.pdf
         // $file= public_path(). "/download/info.pdf";
 
         // $headers = array(
@@ -132,7 +132,7 @@ class PublicPhotoshootController extends Controller
         // return Response::download($file, 'filename.pdf', $headers);
     }
 
-    protected function validatedClient($validated=[])
+    protected function validatedClient($validated = [])
     {
         return [
             'organization' => $validated['organization'],
@@ -140,11 +140,11 @@ class PublicPhotoshootController extends Controller
             'phone' => $validated['phone'],
             'email' => $validated['email'],
             'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name']
+            'last_name' => $validated['last_name'],
         ];
     }
 
-    protected function validatedClientAddress($validated=[])
+    protected function validatedClientAddress($validated = [])
     {
         return [
             'street_address' => $validated['street_address'],
@@ -152,11 +152,11 @@ class PublicPhotoshootController extends Controller
             'city' => $validated['city'],
             'state_code' => $validated['state_code'],
             'postal_code' => $validated['postal_code'],
-            'country_code' => $validated['country_code']
+            'country_code' => $validated['country_code'],
         ];
     }
 
-    protected function validatedPhotoshoot($validated=[])
+    protected function validatedPhotoshoot($validated = [])
     {
         return [
             'client_id' => $validated['client_id'],
@@ -165,5 +165,4 @@ class PublicPhotoshootController extends Controller
             'event_date' => $validated['event_date'],
         ];
     }
-
 }

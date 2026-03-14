@@ -1,5 +1,4 @@
 export class Animation {
-
     init() {
         this.loadHandlers();
     }

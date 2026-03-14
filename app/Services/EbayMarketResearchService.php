@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Log;
 class EbayMarketResearchService
 {
     protected string $appId;
+
     protected string $apiUrl;
+
     protected int $cacheTtl;
 
     public function __construct()
@@ -27,12 +29,12 @@ class EbayMarketResearchService
     {
         $searchQuery = $this->buildSearchQuery($listing);
 
-        if (!$searchQuery) {
+        if (! $searchQuery) {
             return null;
         }
 
         // Try cache first
-        $cacheKey = 'ebay_market_' . md5($searchQuery);
+        $cacheKey = 'ebay_market_'.md5($searchQuery);
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($searchQuery) {
             try {
@@ -58,7 +60,7 @@ class EbayMarketResearchService
     {
         $marketData = $this->getMarketData($listing);
 
-        if (!$marketData) {
+        if (! $marketData) {
             return false;
         }
 
@@ -144,8 +146,8 @@ class EbayMarketResearchService
 
         $response = Http::timeout(30)->get($this->apiUrl, $queryParams);
 
-        if (!$response->successful()) {
-            throw new \Exception('eBay API request failed: ' . $response->status());
+        if (! $response->successful()) {
+            throw new \Exception('eBay API request failed: '.$response->status());
         }
 
         return $response->json();
@@ -159,7 +161,7 @@ class EbayMarketResearchService
         $items = [];
 
         // Navigate the nested eBay response structure
-        if (!isset($response['findCompletedItemsResponse']) && !isset($response['findItemsAdvancedResponse'])) {
+        if (! isset($response['findCompletedItemsResponse']) && ! isset($response['findItemsAdvancedResponse'])) {
             return $items;
         }
 
@@ -169,7 +171,7 @@ class EbayMarketResearchService
 
         $searchResult = $response[$responseKey][0]['searchResult'][0] ?? null;
 
-        if (!$searchResult || $searchResult['@count'] == 0) {
+        if (! $searchResult || $searchResult['@count'] == 0) {
             return $items;
         }
 
@@ -269,7 +271,7 @@ class EbayMarketResearchService
 
         // Category-specific search
         if ($listing->category) {
-            $suggestions[] = $listing->category . ' ' . $this->buildSearchQuery($listing);
+            $suggestions[] = $listing->category.' '.$this->buildSearchQuery($listing);
         }
 
         // Tag-based searches

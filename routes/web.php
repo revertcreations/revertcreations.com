@@ -19,7 +19,7 @@ use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
 
-$domain = preg_replace("(^https?://)", "", config('app.url'));
+$domain = preg_replace('(^https?://)', '', config('app.url'));
 
 Route::domain('admin.'.$domain)->name('admin.')->group(function () {
     Route::get('/', AdminDashboardController::class)->name('dashboard')->middleware('auth');
@@ -79,12 +79,14 @@ Route::domain($domain)->group(function () {
 
     Route::get('/developer', function () {
         $skills = Skill::all();
+
         return view('developer', compact('skills'));
     })->name('developer');
     Route::post('/developer', [ClientController::class, 'hire'])->name('hire-me');
 
     Route::get('/skills', function () {
         $skills = Skill::all();
+
         return compact('skills');
     })->name('skills');
 
@@ -97,6 +99,7 @@ Route::domain($domain)->group(function () {
 
     Route::get('/portfolio', function () {
         $portfolio = PhotographyPortfolioImage::all();
+
         return view('visual', compact('portfolio'));
     })->name('visual');
 

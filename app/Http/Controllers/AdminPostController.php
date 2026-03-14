@@ -159,7 +159,7 @@ class AdminPostController extends Controller
 
     private function resolveExcerpt(?string $excerpt, string $content): string
     {
-        if (!blank($excerpt)) {
+        if (! blank($excerpt)) {
             return $excerpt;
         }
 

@@ -15,7 +15,7 @@ class ProjectController extends Controller
         $canPreview = $this->canPreview($request);
 
         $projects = Project::query()
-            ->when(!$canPreview, fn ($query) => $query->whereNotNull('published_at'))
+            ->when(! $canPreview, fn ($query) => $query->whereNotNull('published_at'))
             ->orderBy('display_order')
             ->orderByDesc('published_at')
             ->withCount([
@@ -30,13 +30,13 @@ class ProjectController extends Controller
     {
         $canPreview = $this->canPreview($request);
 
-        if (!$canPreview && !$project->published_at) {
+        if (! $canPreview && ! $project->published_at) {
             abort(404);
         }
 
         $updatesCollection = $project->updates()
             ->with(['assets' => fn ($query) => $query->orderBy('display_order')])
-            ->when(!$canPreview, fn ($query) => $query->published())
+            ->when(! $canPreview, fn ($query) => $query->published())
             ->orderByDesc('published_at')
             ->orderByDesc('created_at')
             ->get();

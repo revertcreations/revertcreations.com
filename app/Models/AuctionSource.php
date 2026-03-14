@@ -82,7 +82,7 @@ class AuctionSource extends Model
         $counter = 1;
 
         while (static::where('slug', $slug)->where('id', '!=', $this->id ?? null)->exists()) {
-            $slug = $originalSlug . '-' . $counter++;
+            $slug = $originalSlug.'-'.$counter++;
         }
 
         return $slug;
@@ -93,11 +93,11 @@ class AuctionSource extends Model
      */
     public function isDueForCollection(): bool
     {
-        if (!$this->enabled) {
+        if (! $this->enabled) {
             return false;
         }
 
-        if (!$this->last_ran_at) {
+        if (! $this->last_ran_at) {
             return true;
         }
 
@@ -121,7 +121,7 @@ class AuctionSource extends Model
     public function markCollectionCompleted(int $count, int $newCount = 0): void
     {
         $this->update([
-            'last_status' => "Collected {$count} listings" . ($newCount > 0 ? " ({$newCount} new)" : ''),
+            'last_status' => "Collected {$count} listings".($newCount > 0 ? " ({$newCount} new)" : ''),
         ]);
     }
 
@@ -131,7 +131,7 @@ class AuctionSource extends Model
     public function markCollectionFailed(string $error): void
     {
         $this->update([
-            'last_status' => 'Error: ' . Str::limit($error, 200),
+            'last_status' => 'Error: '.Str::limit($error, 200),
         ]);
     }
 }

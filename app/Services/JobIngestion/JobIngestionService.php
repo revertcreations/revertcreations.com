@@ -17,6 +17,7 @@ class JobIngestionService
     private const ARCHIVE_THRESHOLD = 15;
 
     private ?Collection $skillKeywords = null;
+
     /**
      * Technologies Trever is strongest in for extra weighting.
      *
@@ -109,8 +110,7 @@ class JobIngestionService
 
     public function __construct(
         private readonly JobFeedManager $feedManager
-    ) {
-    }
+    ) {}
 
     public function ingest(JobSource $source): array
     {
@@ -226,7 +226,7 @@ class JobIngestionService
         }
 
         // Encourage postings that explicitly mention remote US-based even when location blank.
-        if (!$locationBonusApplied && Str::contains($searchText, 'us based')) {
+        if (! $locationBonusApplied && Str::contains($searchText, 'us based')) {
             $score += 6;
             $possibleWeight += 6;
         }
@@ -239,7 +239,7 @@ class JobIngestionService
         }
 
         // Multi-country listings usually mean global.
-        if (!$locationBonusApplied && substr_count($location, ',') >= 3) {
+        if (! $locationBonusApplied && substr_count($location, ',') >= 3) {
             $penalty += 6;
         }
 

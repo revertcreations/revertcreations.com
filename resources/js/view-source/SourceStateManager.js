@@ -1,6 +1,6 @@
-import { SOURCE_OVERRIDE_EVENT, SOURCE_UNLOCK_EVENT } from './stateSignals';
+import { SOURCE_OVERRIDE_EVENT, SOURCE_UNLOCK_EVENT } from "./stateSignals";
 
-const STATE_CHANGED_EVENT = 'sourceviewer:state-changed';
+const STATE_CHANGED_EVENT = "sourceviewer:state-changed";
 
 export class SourceStateManager {
     constructor(config = {}) {
@@ -18,7 +18,7 @@ export class SourceStateManager {
         this.handleUnlock = this.handleUnlock.bind(this);
         this.handleOverride = this.handleOverride.bind(this);
 
-        if (typeof window !== 'undefined') {
+        if (typeof window !== "undefined") {
             window.addEventListener(SOURCE_UNLOCK_EVENT, this.handleUnlock);
             window.addEventListener(SOURCE_OVERRIDE_EVENT, this.handleOverride);
         }
@@ -27,14 +27,14 @@ export class SourceStateManager {
     }
 
     destroy() {
-        if (typeof window === 'undefined') return;
+        if (typeof window === "undefined") return;
         window.removeEventListener(SOURCE_UNLOCK_EVENT, this.handleUnlock);
         window.removeEventListener(SOURCE_OVERRIDE_EVENT, this.handleOverride);
     }
 
     getStateOrder(state) {
         const meta = this.statesMeta[state] || {};
-        if (typeof meta.order === 'number') {
+        if (typeof meta.order === "number") {
             return meta.order;
         }
         return Number.MAX_SAFE_INTEGER;
@@ -44,7 +44,9 @@ export class SourceStateManager {
         if (!this.unlockedStates.size) {
             return this.defaultState;
         }
-        return Array.from(this.unlockedStates).sort((a, b) => this.getStateOrder(a) - this.getStateOrder(b)).pop();
+        return Array.from(this.unlockedStates)
+            .sort((a, b) => this.getStateOrder(a) - this.getStateOrder(b))
+            .pop();
     }
 
     getActiveState() {
@@ -74,7 +76,7 @@ export class SourceStateManager {
     }
 
     dispatchStateChanged() {
-        if (typeof window === 'undefined') return;
+        if (typeof window === "undefined") return;
         const detail = {
             state: this.getActiveState(),
             unlocked: Array.from(this.unlockedStates),

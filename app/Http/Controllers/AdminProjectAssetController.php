@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectAssetRequest;
@@ -6,9 +7,9 @@ use App\Models\Project;
 use App\Models\ProjectAsset;
 use App\Models\ProjectUpdate;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class AdminProjectAssetController extends Controller
@@ -186,7 +187,7 @@ class AdminProjectAssetController extends Controller
                 ->where('project_id', $data['project_id'])
                 ->first();
 
-            if (!$update) {
+            if (! $update) {
                 $data['project_update_id'] = null;
             }
         }

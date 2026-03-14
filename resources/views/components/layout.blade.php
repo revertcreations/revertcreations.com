@@ -145,7 +145,8 @@
 
         <fancy-button-element class="relative grow bg-gruvbox-yellow">
             <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
-                href="{{ route('projects.index') }}">
+                href="{{ route('projects.index') }}"
+                onclick="typeof gtag === 'function' && gtag('event', 'projects_link_clicked');">
                 <h2 class="skill inline text-3xl font-bold md:text-5xl"
                     data-fancy-label
                     name="design">projects</h2>
@@ -154,13 +155,16 @@
 
         <fancy-button-element class="relative grow bg-gruvbox-blue">
             <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
-                href="mailto:trever@revertcreations.com">
+                href="mailto:trever@revertcreations.com"
+                onclick="typeof gtag === 'function' && gtag('event', 'email_cta_clicked');">
                 <h2 class="skill inline text-3xl font-bold md:text-5xl"
                     data-fancy-label>email</h2>
             </a>
         </fancy-button-element>
 
     </div>
+
+    @stack('body-overlays')
 
     @stack('scripts')
 </body>

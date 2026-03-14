@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\Models\PhotographyContract as PhotographyContractModel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -35,5 +34,4 @@ class PhotographyContract extends Mailable
         return $this->from('trever@revertcreations.com')
             ->markdown('admin.emails.photography.contract');
     }
-
 }

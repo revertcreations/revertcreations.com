@@ -4,8 +4,8 @@ namespace App\Services\JobSources;
 
 use App\Models\JobSource;
 use App\Services\JobSources\Contracts\JobFeed;
-use App\Services\JobSources\Drivers\RemotiveJobFeed;
 use App\Services\JobSources\Drivers\RemoteOkJobFeed;
+use App\Services\JobSources\Drivers\RemotiveJobFeed;
 use App\Services\JobSources\Drivers\RssJobFeed;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Collection;
@@ -38,7 +38,7 @@ class JobFeedManager
 
         $driverClass = $this->drivers[$driverName] ?? $this->drivers['rss'] ?? null;
 
-        if (!$driverClass) {
+        if (! $driverClass) {
             throw new InvalidArgumentException("No job feed driver registered for [{$driverName}].");
         }
 

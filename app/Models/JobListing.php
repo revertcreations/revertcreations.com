@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -15,11 +15,17 @@ class JobListing extends Model
     use SoftDeletes;
 
     public const STATUS_NEW = 'new';
+
     public const STATUS_INTERESTED = 'interested';
+
     public const STATUS_APPLIED = 'applied';
+
     public const STATUS_INTERVIEWING = 'interviewing';
+
     public const STATUS_DENIED = 'denied';
+
     public const STATUS_ACCEPTED = 'accepted';
+
     public const STATUS_ARCHIVED = 'archived';
 
     /**

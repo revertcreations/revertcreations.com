@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PublicPhotoshootStoreRequest extends FormRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,14 +22,14 @@ class PublicPhotoshootStoreRequest extends FormRequest
             'phone' => 'nullable|numeric',
             'email' => 'required|email',
             'first_name' => 'required',
-            'last_name' => 'required'
+            'last_name' => 'required',
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'event_date' => (!empty($this->arrival_at) ? date('Y-m-d H:i:s', strtotime($this->event_starts)) : null),
+            'event_date' => (! empty($this->arrival_at) ? date('Y-m-d H:i:s', strtotime($this->event_starts)) : null),
         ]);
     }
 }

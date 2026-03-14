@@ -124,7 +124,7 @@ class AdminProjectController extends Controller
         $data['links'] = $this->parseLinks(Arr::get($data, 'links'));
         $data['tech_stack'] = $this->parseTechStack(Arr::get($data, 'tech_stack'));
 
-        if (!empty($data['published_at'])) {
+        if (! empty($data['published_at'])) {
             $data['published_at'] = Carbon::parse($data['published_at']);
         }
 
@@ -132,7 +132,6 @@ class AdminProjectController extends Controller
     }
 
     /**
-     * @param string|null $linksInput
      * @return array<int, array<string, string>>
      */
     private function parseLinks(?string $linksInput): array

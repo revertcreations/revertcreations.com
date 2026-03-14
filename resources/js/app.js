@@ -1,30 +1,29 @@
-(function(){
-    const skills = document.getElementsByClassName('skill')
+(function () {
+    const skills = document.getElementsByClassName("skill");
 
     for (let i = 0; i < skills.length; i++) {
         const skill = skills[i];
-        skill.addEventListener('mouseover', disiplineTargeted, { passive: true })
-        skill.addEventListener('touchstart', disiplineTargeted, { passive: true })
+        skill.addEventListener("mouseover", disiplineTargeted, { passive: true });
+        skill.addEventListener("touchstart", disiplineTargeted, { passive: true });
     }
 
     function disiplineTargeted(e) {
-        let target_disipline = e.target.innerText.toLowerCase()
-
+        let target_disipline = e.target.innerText.toLowerCase();
 
         switch (target_disipline) {
-            case 'design':
+            case "design":
                 var iframe = document.getElementsByTagName("iframe")[0].contentWindow;
                 iframe.exportRoot.triangle.play();
                 break;
-            case 'code':
+            case "code":
                 var iframe = document.getElementsByTagName("iframe")[1].contentWindow;
-                iframe.exportRoot.code.play()
+                iframe.exportRoot.code.play();
                 break;
-            case 'photo':
+            case "photo":
                 var iframe = document.getElementsByTagName("iframe")[2].contentWindow;
-                iframe.exportRoot.photo.play()
-                document.getElementById('photo_skill_svg').style.zIndex = 10
-                                break;
+                iframe.exportRoot.photo.play();
+                document.getElementById("photo_skill_svg").style.zIndex = 10;
+                break;
         }
         // let blurb = e.target.nextElementSibling;
         // let blurbVisible = blurb.classList.contains('hidden')
@@ -42,13 +41,11 @@
         // toggleBlurb(blurb, blurbVisible)
     }
 
-
     function toggleBlurb(blurb, blurbVisible) {
-        if(blurbVisible) {
-            blurb.classList.remove('hidden');
+        if (blurbVisible) {
+            blurb.classList.remove("hidden");
         } else {
-            blurb.classList.add('hidden')
+            blurb.classList.add("hidden");
         }
     }
-
 })();

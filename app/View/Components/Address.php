@@ -8,12 +8,19 @@ use Illuminate\View\Component;
 class Address extends Component
 {
     public string $countryCode;
+
     public ?string $stateCode;
+
     public Collection $countries;
+
     public Collection $states;
+
     public ?string $streetAddress;
+
     public ?string $streetAddress2;
+
     public ?string $city;
+
     public ?string $postalCode;
 
     public function __construct(

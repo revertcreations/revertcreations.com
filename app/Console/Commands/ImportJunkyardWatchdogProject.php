@@ -87,6 +87,7 @@ class ImportJunkyardWatchdogProject extends Command
 
             if (! preg_match('/^(\d{4}-\d{2}-\d{2})-(.+)$/', $filename, $matches)) {
                 $this->warn("Skipping {$file->getFilename()} (unrecognised filename format).");
+
                 continue;
             }
 
@@ -119,7 +120,7 @@ class ImportJunkyardWatchdogProject extends Command
                 'published_at' => $publishedAt,
             ];
 
-            /** @var \App\Models\ProjectUpdate $update */
+            /** @var ProjectUpdate $update */
             $update = ProjectUpdate::query()
                 ->where('project_id', $project->id)
                 ->where('slug', $slug)
