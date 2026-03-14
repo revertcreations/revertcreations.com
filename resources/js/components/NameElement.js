@@ -1,10 +1,12 @@
 import { gsap } from "gsap";
+import { notifySourceUnlock } from "../view-source/stateSignals";
 
 export class NameElement extends HTMLElement {
     static observedAttributes = ["data-content"];
 
     #intervals = [];
     #cursorTimeout;
+    #sourceUnlockBroadcasted = false;
 
     #audioContext = null;
     #audioBuffers = {
@@ -222,6 +224,10 @@ export class NameElement extends HTMLElement {
             let unlockType = "green";
             this.#ensureAudioLoaded().then(() => this.#playAudio("unlock"));
             this.loadPlayground();
+            if (!this.#sourceUnlockBroadcasted) {
+                notifySourceUnlock("name-element", { trigger: "name-complete" });
+                this.#sourceUnlockBroadcasted = true;
+            }
         }
     };
 

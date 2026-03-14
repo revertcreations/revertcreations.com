@@ -1,4 +1,5 @@
 import { MagnetLetters } from "../magnetLetters.js";
+import { notifySourceOverride } from "../view-source/stateSignals";
 
 export class InteractiveElement extends HTMLElement {
     #cycleInterval = null;
@@ -358,10 +359,12 @@ export class InteractiveElement extends HTMLElement {
         if (MagnetLetters.isActive()) {
             MagnetLetters.deactivate();
             this.hideBadge(true);
+            notifySourceOverride(null, { trigger: "magnet-off" });
             return;
         }
 
         this.hideBadge(true);
+        notifySourceOverride("magnet", { trigger: "magnet-on" });
         MagnetLetters.activate();
         this.#hasActivated = true;
     }

@@ -1,4 +1,5 @@
 import { gsap } from "gsap";
+import { notifySourceUnlock } from "../view-source/stateSignals";
 
 export class HintElement extends HTMLElement {
     #time = new Date();
@@ -19,6 +20,7 @@ export class HintElement extends HTMLElement {
     #dragHintText = null;
     #dragHintArrow = null;
     #huntTrackedForCurrentDrag = false;
+    #sourceUnlockBroadcasted = false;
 
     constructor() {
         super();
@@ -520,6 +522,10 @@ export class HintElement extends HTMLElement {
             // instead of waiting 90ms for the two API network requests to round-trip.
             const localScore = this.calculateLocalScore(detail.huntCount, detail.time);
             this.populateGems(localScore);
+            if (!this.#sourceUnlockBroadcasted) {
+                notifySourceUnlock("hint-element", { score: localScore });
+                this.#sourceUnlockBroadcasted = true;
+            }
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
             const checkUrl = new URL("/puzzle/1/check", window.location.origin);

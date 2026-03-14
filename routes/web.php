@@ -14,6 +14,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PuzzleSessionController;
 use App\Http\Controllers\SkillsController;
+use App\Http\Controllers\SourceCodeController;
 use App\Models\PhotographyPortfolioImage;
 use App\Models\Skill;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,9 @@ Route::domain('blog.'.$domain)->group(function () {
 Route::domain($domain)->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/source-code/{state}', SourceCodeController::class)
+        ->name('source-code.show')
+        ->whereIn('state', array_keys(config('sourceviewer.states', [])));
     Route::get('/puzzle/{puzzle_type_id}/check', [PuzzleSessionController::class, 'check'])->name('puzzle-check');
     Route::post('/puzzle/{puzzle_type_id}/solved/{token}', [PuzzleSessionController::class, 'solved'])->name('puzzle-solved');
 

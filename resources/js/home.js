@@ -5,3 +5,4 @@ import './components/ContentElement.js';
 import './components/InteractiveElement.js';
 import './components/FancyButtonElement.js';
 import "./playground.js";
+import "./view-source/SourceViewer.js";
