@@ -1,8 +1,10 @@
 <x-layout>
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token"
+        content="{{ csrf_token() }}">
 
-    <div class="hidden" aria-hidden="true">
+    <div class="hidden"
+        aria-hidden="true">
         <span class="text-gruvbox-red"></span>
         <span class="text-gruvbox-green"></span>
         <span class="text-gruvbox-purple"></span>
@@ -20,14 +22,16 @@
         <span class="bg-hmt-green"></span>
     </div>
 
-    <span class="relative" style="bottom: -1px;">
-        <i class="mt-1 bg-gruvbox-black text-gruvbox-green text-4xl italic w-min">Web Development</i>
+    <span class="relative"
+        style="bottom: -1px;">
+        <i class="mt-1 w-min bg-gruvbox-black text-4xl italic text-gruvbox-green">Web Development</i>
     </span>
 
-    <div class="flex flex-col flex-1">
+    <div class="flex flex-1 flex-col">
 
-        <div class="flex flex-col md:flex-row flex-grow">
-            <div id="playground" class="flex-grow bg-gruvbox-black relative touch-action-none"></div>
+        <div class="flex flex-grow flex-col md:flex-row">
+            <div class="touch-action-none relative flex-grow bg-gruvbox-black"
+                id="playground"></div>
         </div>
 
     </div>
@@ -35,12 +39,11 @@
     @push('scripts')
         @vite('resources/js/playground.js')
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 const data = JSON.parse('@json($skills)');
                 Playground.init(data);
             });
         </script>
     @endpush
-
 
 </x-layout>
