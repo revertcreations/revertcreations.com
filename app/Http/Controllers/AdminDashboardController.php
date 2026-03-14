@@ -54,7 +54,7 @@ class AdminDashboardController extends Controller
         $topExternalScores = PuzzleScore::with(['puzzle.puzzleType'])
             ->whereHas('puzzle', fn ($query) => $query->where('is_internal', false))
             ->orderByDesc('score')
-            ->orderBy('hint_count')
+            ->orderBy('hunt_count')
             ->orderBy('solve_time_in_seconds')
             ->orderBy('created_at')
             ->limit(5)

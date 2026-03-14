@@ -141,7 +141,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Score</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Hints</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Hunts</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Time (s)</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Puzzle</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Achieved</th>
@@ -154,7 +154,7 @@
                                             {{ number_format((int) $score->score) }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-700">
-                                            {{ $score->hint_count }}
+                                            {{ $score->hunt_count }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-700">
                                             {{ number_format((float) $score->solve_time_in_seconds, 1) }}

@@ -63,7 +63,7 @@ class PuzzleSessionController extends Controller
         $content = json_decode($request->getContent());
 
         if (!is_object($content) ||
-            !property_exists($content, 'hintCount') ||
+            !property_exists($content, 'huntCount') ||
             !property_exists($content, 'time')
         ) {
             return response()->json([
@@ -74,7 +74,7 @@ class PuzzleSessionController extends Controller
         if (
             $puzzle_session->puzzle_type_id == 1 &&
             (
-                $content->hintCount == 0 ||
+                $content->huntCount == 0 ||
                 $content->time <= 3.4
             )
         ) {
@@ -85,7 +85,7 @@ class PuzzleSessionController extends Controller
 
         $puzzle_score = new PuzzleScore;
         $puzzle_score->puzzle_session_id = $puzzle_session->id;
-        $puzzle_score->hint_count = $content->hintCount;
+        $puzzle_score->hunt_count = $content->huntCount;
         $puzzle_score->solve_time_in_seconds = $content->time;
 
         $finalScore = $puzzle_score->calculateScore();
@@ -97,10 +97,10 @@ class PuzzleSessionController extends Controller
             $query->where('puzzle_type_id', $puzzle_type_id);
         })
             ->orderByDesc('score')
-            ->orderBy('hint_count')
+            ->orderBy('hunt_count')
             ->orderBy('solve_time_in_seconds')
             ->orderBy('created_at')
-            ->get(['id', 'score', 'hint_count', 'solve_time_in_seconds', 'created_at']);
+            ->get(['id', 'score', 'hunt_count', 'solve_time_in_seconds', 'created_at']);
 
         $rankIndex = $scores->search(function ($score) use ($puzzle_score) {
             return $score->id === $puzzle_score->id;
@@ -110,7 +110,7 @@ class PuzzleSessionController extends Controller
             return [
                 'rank' => $index + 1,
                 'score' => (int) $score->score,
-                'hint_count' => (int) $score->hint_count,
+                'hunt_count' => (int) $score->hunt_count,
                 'time' => (float) $score->solve_time_in_seconds,
                 'achieved_at' => optional($score->created_at)->toIso8601String(),
                 'is_current' => $score->id === $puzzle_score->id,
@@ -120,7 +120,7 @@ class PuzzleSessionController extends Controller
         return response()->json([
             'success' => 'You did it, your score is: ' . $finalScore,
             'score' => $finalScore,
-            'hintCount' => $puzzle_score->hint_count,
+            'huntCount' => $puzzle_score->hunt_count,
             'time' => $puzzle_score->solve_time_in_seconds,
             'leaderboard' => $leaderboard,
             'rank' => $rankIndex === false ? null : (int) ($rankIndex + 1),
