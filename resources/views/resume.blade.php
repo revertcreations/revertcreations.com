@@ -37,7 +37,7 @@
                 const canvas = document.createElement('canvas');
                 canvas.width = renderViewport.width;
                 canvas.height = renderViewport.height;
-                canvas.style.cssText = `position:absolute;top:0;left:0;`;
+                canvas.style.cssText = `position:absolute;top:0;left:0;width:${displayViewport.width}px;`;
 
                 pageWrapper.appendChild(canvas);
                 container.appendChild(pageWrapper);
