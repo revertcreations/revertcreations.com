@@ -48,10 +48,39 @@
                 </div>
             </form>
 
+            {{-- Bulk actions bar (hidden until a checkbox is ticked) --}}
+            <form method="POST"
+                  action="{{ route('admin.project-updates.bulk-status') }}"
+                  id="bulk-form"
+                  class="hidden flex-wrap items-center gap-3 rounded-lg border border-indigo-200 bg-indigo-50 p-4 shadow-sm">
+                @csrf
+                <span id="bulk-count" class="text-sm font-medium text-indigo-800"></span>
+                <button type="button" id="bulk-clear" class="text-sm text-indigo-600 hover:text-indigo-800 underline">
+                    Clear selection
+                </button>
+                <div class="ml-auto flex items-center gap-3">
+                    <label for="bulk-status" class="text-sm font-medium text-indigo-800">Set status to:</label>
+                    <select name="status" id="bulk-status"
+                            class="rounded-md border-gray-300 bg-white py-1.5 pl-3 pr-8 text-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                    <button type="submit"
+                            class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Apply
+                    </button>
+                </div>
+            </form>
+
             <div class="overflow-hidden bg-white shadow sm:rounded-lg">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
+                            <th class="w-12 px-4 py-3">
+                                <input type="checkbox" id="select-all"
+                                       class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                            </th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Project</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Title</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">Status</th>
@@ -61,7 +90,14 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200 bg-white">
                         @forelse($updates as $update)
-                            <tr>
+                            <tr id="row-{{ $update->id }}">
+                                <td class="w-12 px-4 py-4">
+                                    <input type="checkbox"
+                                           class="row-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                           name="ids[]"
+                                           value="{{ $update->id }}"
+                                           form="bulk-form">
+                                </td>
                                 <td class="px-6 py-4 text-sm text-gray-700">
                                     {{ optional($update->project)->name ?? '—' }}
                                 </td>
@@ -92,7 +128,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">
+                                <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">
                                     No updates yet. Start chronicling progress to keep stakeholders in the loop.
                                 </td>
                             </tr>
@@ -106,4 +142,75 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectAll = document.getElementById('select-all');
+            const bulkForm = document.getElementById('bulk-form');
+            const bulkCount = document.getElementById('bulk-count');
+            const bulkClear = document.getElementById('bulk-clear');
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+
+            function getCheckedCount() {
+                let count = 0;
+                checkboxes.forEach(function (cb) { if (cb.checked) count++; });
+                return count;
+            }
+
+            function syncUI() {
+                const count = getCheckedCount();
+
+                // Show/hide bulk bar
+                if (count > 0) {
+                    bulkForm.classList.remove('hidden');
+                    bulkForm.classList.add('flex');
+                } else {
+                    bulkForm.classList.add('hidden');
+                    bulkForm.classList.remove('flex');
+                }
+
+                bulkCount.textContent = count + ' selected';
+
+                // Highlight selected rows
+                checkboxes.forEach(function (cb) {
+                    var row = cb.closest('tr');
+                    if (cb.checked) {
+                        row.classList.add('bg-indigo-50');
+                    } else {
+                        row.classList.remove('bg-indigo-50');
+                    }
+                });
+
+                // Update select-all state
+                if (checkboxes.length === 0) return;
+                if (count === checkboxes.length) {
+                    selectAll.checked = true;
+                    selectAll.indeterminate = false;
+                } else if (count > 0) {
+                    selectAll.checked = false;
+                    selectAll.indeterminate = true;
+                } else {
+                    selectAll.checked = false;
+                    selectAll.indeterminate = false;
+                }
+            }
+
+            selectAll.addEventListener('change', function () {
+                checkboxes.forEach(function (cb) {
+                    cb.checked = selectAll.checked;
+                });
+                syncUI();
+            });
+
+            checkboxes.forEach(function (cb) {
+                cb.addEventListener('change', syncUI);
+            });
+
+            bulkClear.addEventListener('click', function () {
+                selectAll.checked = false;
+                checkboxes.forEach(function (cb) { cb.checked = false; });
+                syncUI();
+            });
+        });
+    </script>
 </x-admin-layout>

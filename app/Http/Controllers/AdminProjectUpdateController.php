@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\ProjectUpdate;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
@@ -94,6 +95,47 @@ class AdminProjectUpdateController extends Controller
         return redirect()
             ->route('admin.project-updates.edit', $projectUpdate)
             ->with('status', 'Project update saved.');
+    }
+
+    /**
+     * Bulk update the status for selected project updates.
+     */
+    public function bulkUpdateStatus(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:project_updates,id'],
+            'status' => ['required', 'in:draft,published,archived'],
+        ]);
+
+        $status = $validated['status'];
+        $now = now();
+
+        $query = ProjectUpdate::whereIn('id', $validated['ids']);
+
+        if ($status === 'published') {
+            // Set published_at for any that don't already have one
+            $query->whereNull('published_at')->update([
+                'status' => $status,
+                'published_at' => $now,
+            ]);
+            ProjectUpdate::whereIn('id', $validated['ids'])
+                ->whereNotNull('published_at')
+                ->update(['status' => $status]);
+        } elseif ($status === 'draft') {
+            $query->update([
+                'status' => $status,
+                'published_at' => null,
+            ]);
+        } else {
+            $query->update(['status' => $status]);
+        }
+
+        $count = count($validated['ids']);
+
+        return redirect()
+            ->back()
+            ->with('status', "Updated {$count} ".Str::plural('update', $count)." to {$status}.");
     }
 
     /**

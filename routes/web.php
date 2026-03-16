@@ -31,6 +31,7 @@ Route::domain('admin.'.$domain)->name('admin.')->group(function () {
     Route::resource('client', ClientController::class)->middleware('auth');
     Route::resource('skills', SkillsController::class)->middleware('auth');
     Route::resource('projects', AdminProjectController::class)->middleware('auth');
+    Route::post('project-updates/bulk-status', [AdminProjectUpdateController::class, 'bulkUpdateStatus'])->middleware('auth')->name('project-updates.bulk-status');
     Route::resource('project-updates', AdminProjectUpdateController::class)->middleware('auth');
     Route::post('project-assets/upload', [AdminProjectAssetController::class, 'upload'])->middleware('auth')->name('project-assets.upload');
     Route::resource('project-assets', AdminProjectAssetController::class)->middleware('auth');
