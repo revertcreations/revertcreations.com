@@ -613,6 +613,10 @@ const buildLetters = () => {
     fragments.forEach((descriptor) => registerLetterState(descriptor));
 };
 
+const removeExcludedElements = (container) => {
+    container.querySelectorAll("[data-magnet-exclude]").forEach((el) => el.remove());
+};
+
 const flattenInteractiveElements = (container) => {
     const interactiveNodes = container.querySelectorAll("interactive-element");
     interactiveNodes.forEach((node) => {
@@ -1189,6 +1193,7 @@ export const MagnetLetters = {
         leadContainer.style.position = "relative";
         leadContainer.style.userSelect = "none";
         updateContainerBounds();
+        removeExcludedElements(leadContainer);
         flattenInteractiveElements(leadContainer);
         buildLetters();
         updateContainerBounds();

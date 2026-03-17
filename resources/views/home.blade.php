@@ -63,7 +63,7 @@
                     Lately I've been focusing on building
                     <span class="group relative inline-block cursor-pointer">
                         <interactive-element class="relative z-10">interactive</interactive-element>
-                        <div
+                        <div data-magnet-exclude
                             class="pointer-events-none absolute bottom-full left-1/2 z-0 flex -translate-x-1/2 translate-y-4 rotate-[-4deg] flex-row items-center whitespace-nowrap font-handwriting text-xl text-gruvbox-hint md:text-2xl">
                             <div class="relative pb-2">
                                 <span class="transition-all duration-300 group-hover:hidden">Hover over me!</span>
@@ -91,7 +91,7 @@
                     <span class="relative inline-block">
                         <hunt-element class="relative z-10"
                             data-content="hidden"></hunt-element>
-                        <div
+                        <div data-magnet-exclude
                             class="pointer-events-none absolute bottom-full left-1/2 z-0 flex -translate-x-1/2 translate-y-4 rotate-[-6deg] flex-row items-center whitespace-nowrap font-handwriting text-xl text-gruvbox-hint md:text-2xl">
                             <div class="relative pb-2">
                                 <span id="drag-hint-text">Drag me!</span>
