@@ -4,9 +4,9 @@ After the Tamagui experiment, I put the UI back on Paper and went hunting for th
 
 ```ts
 const { data = placeholder, isFetching } = useQuery({
-  queryKey: ['inventory', filters],
-  queryFn: fetchInventory,
-  placeholderData: keepPreviousData,
+    queryKey: ["inventory", filters],
+    queryFn: fetchInventory,
+    placeholderData: keepPreviousData,
 });
 ```
 

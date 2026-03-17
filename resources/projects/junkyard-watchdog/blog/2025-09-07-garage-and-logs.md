@@ -7,8 +7,8 @@ On the ops side, I finally wired client-side errors into the backend so when Exp
 ```ts
 const originalError = console.error;
 console.error = (...args) => {
-  sendClientLog('error', args);
-  originalError(...args);
+    sendClientLog("error", args);
+    originalError(...args);
 };
 ```
 

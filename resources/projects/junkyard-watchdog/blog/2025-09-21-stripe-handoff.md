@@ -16,7 +16,7 @@ Once that page was live, I started worrying about forgetting to test it next wee
 
 ```ts
 const returnPage = await request.get(
-  `/billing/return?target=${encodeURIComponent(APP_SUCCESS_URL)}`
+    `/billing/return?target=${encodeURIComponent(APP_SUCCESS_URL)}`,
 );
 expect(returnPage.ok()).toBeTruthy();
 ```

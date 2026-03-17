@@ -6,16 +6,16 @@ I threw together an `UncontrolledTextInput` that just… leaves people alone whi
 
 ```ts
 useImperativeHandle(ref, () => ({
-  getValue: () => valueRef.current,
-  setValue: (value: string) => {
-    valueRef.current = value;
-    setNativeText(value);
-    onValueChange?.(value);
-  },
-  clear: () => {
-    valueRef.current = '';
-    setNativeText('');
-  },
+    getValue: () => valueRef.current,
+    setValue: (value: string) => {
+        valueRef.current = value;
+        setNativeText(value);
+        onValueChange?.(value);
+    },
+    clear: () => {
+        valueRef.current = "";
+        setNativeText("");
+    },
 }));
 ```
 

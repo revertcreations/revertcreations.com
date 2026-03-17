@@ -23,7 +23,16 @@ const ACTIVE_CLASS = "magnet-active";
 const LETTER_HORIZONTAL_TOLERANCE = 15;
 const LETTER_VERTICAL_TOLERANCE = 15;
 const OVERLAP_TOLERANCE = 5;
+const MAX_WORD_LENGTH = 7;
 const DRAG_STATE = new WeakMap();
+
+/**
+ * Activation mode for keyword triggers.
+ * "instant" - trigger immediately on detection
+ * "delayed" - show feedback, then trigger after KEYWORD_DELAY_MS
+ */
+const KEYWORD_ACTIVATION_MODE = "delayed";
+const KEYWORD_DELAY_MS = 1500;
 
 const LETTER_STATE = new Map();
 const SPATIAL_HASH = new Map();
@@ -804,6 +813,11 @@ const deactivateLetters = () => {
 const restoreMarkup = () => {
     if (!leadContainer || originalMarkup === null) return;
 
+    if (keywordDelayTimer) {
+        clearTimeout(keywordDelayTimer);
+        keywordDelayTimer = null;
+    }
+
     deactivateLetters();
     resetLetterState();
     leadContainer.innerHTML = originalMarkup;
@@ -819,9 +833,14 @@ const restoreMarkup = () => {
     stopResizeObserver();
     leadContainer = null;
     updateContainerBounds();
+
+    const nameElement = getNameElement();
+    if (nameElement && typeof nameElement.restoreDefault === "function") {
+        nameElement.restoreDefault();
+    }
 };
 
-const handleHireSecret = () => {
+const handleHireKeyword = () => {
     const scheduleHireForm = () => {
         if (typeof window === "undefined") return;
         const playground = window.Playground;
@@ -837,11 +856,24 @@ const handleHireSecret = () => {
     }
 };
 
-const SECRET_WORDS = {
-    hire: handleHireSecret,
-    reset: restoreMarkup,
-    resume: "/resume",
+/**
+ * Keyword registry for magnet mode secret words.
+ *
+ * Each entry defines:
+ *   type     - "navigate" (redirect) | "function" (call handler)
+ *   action   - URL string for navigate, function for function type
+ *   feedback - "unlock" to play unlock sound, null for silent
+ *
+ * To add new keywords, add an entry here.
+ */
+const KEYWORD_REGISTRY = {
+    hired: { type: "function", action: handleHireKeyword, feedback: "unlock" },
+    reset: { type: "function", action: restoreMarkup, feedback: null },
+    resume: { type: "navigate", action: "/resume", feedback: "unlock" },
+    projects: { type: "navigate", action: "/projects", feedback: "unlock" },
 };
+
+let keywordDelayTimer = null;
 
 const calculateLetterPositions = () => {
     if (!leadContainer) return [];
@@ -866,25 +898,52 @@ const calculateLetterPositions = () => {
     return positions;
 };
 
-const triggerSecretWord = (word) => {
-    if (word === "hire" && leadContainer?.dataset?.hireModalShown === "true") {
+const getNameElement = () => document.querySelector("text-puzzle-element");
+
+const executeKeyword = (word, entry) => {
+    track("magnet_secret_word", { word });
+
+    if (entry.type === "function" && typeof entry.action === "function") {
+        entry.action();
+    } else if (entry.type === "navigate" && typeof entry.action === "string") {
+        window.location.href = entry.action;
+    }
+
+    if (word === "hired" && leadContainer) {
+        leadContainer.dataset.hireModalShown = "true";
+    }
+};
+
+const triggerKeyword = (word) => {
+    if (word === "hired" && leadContainer?.dataset?.hireModalShown === "true") {
         return true;
     }
 
-    const handler = SECRET_WORDS[word];
-    if (!handler) return false;
+    const entry = KEYWORD_REGISTRY[word];
+    if (!entry) return false;
 
-    track("magnet_secret_word", { word });
-
-    if (typeof handler === "function") {
-        handler();
-    } else if (typeof handler === "string") {
-        window.location.href = handler;
+    if (keywordDelayTimer) {
+        clearTimeout(keywordDelayTimer);
+        keywordDelayTimer = null;
     }
 
-    if (word === "hire" && leadContainer) {
-        leadContainer.dataset.hireModalShown = "true";
+    const nameElement = getNameElement();
+
+    if (KEYWORD_ACTIVATION_MODE === "delayed" && entry.feedback) {
+        if (nameElement && typeof nameElement.celebrateKeyword === "function") {
+            nameElement.celebrateKeyword().then(() => {
+                executeKeyword(word, entry);
+            });
+        } else {
+            keywordDelayTimer = setTimeout(() => {
+                keywordDelayTimer = null;
+                executeKeyword(word, entry);
+            }, KEYWORD_DELAY_MS);
+        }
+    } else {
+        executeKeyword(word, entry);
     }
+
     return true;
 };
 
@@ -943,27 +1002,28 @@ const detectWord = (targetWord) => {
     return false;
 };
 
-const checkSecretWords = () => {
-    for (const word of Object.keys(SECRET_WORDS)) {
+const checkKeywords = () => {
+    for (const word of Object.keys(KEYWORD_REGISTRY)) {
         if (detectWord(word)) {
-            triggerSecretWord(word);
+            triggerKeyword(word);
             return true;
         }
     }
     return false;
 };
 
-const logLetterGroup = (group) => {
+const normalizeLetterGroup = (group) => {
     const text = group.map((item) => item.char ?? "").join("");
     const compact = text.replace(/\s+/g, "");
-    const positions = group.map((item) => ({
-        char: item.char,
-        left: Math.round(item.left),
-        top: Math.round(item.top),
-        width: Math.round(item.width),
-    }));
-    // eslint-disable-next-line no-console
-    console.log("Magnet groups:", compact || "(space)", positions);
+    if (DEBUG_MAGNET) {
+        const positions = group.map((item) => ({
+            char: item.char,
+            left: Math.round(item.left),
+            top: Math.round(item.top),
+            width: Math.round(item.width),
+        }));
+        debugLog("group:", compact || "(space)", positions);
+    }
     return compact.toLowerCase();
 };
 
@@ -1015,6 +1075,23 @@ const buildGroupAround = (letters, letterElement) => {
     return group;
 };
 
+const updateNameElementFromGroup = (normalized) => {
+    const nameElement = getNameElement();
+    if (!nameElement || typeof nameElement.setDisplayText !== "function") return;
+
+    if (!normalized || normalized.length === 0) {
+        nameElement.restoreDefault();
+        return;
+    }
+
+    if (normalized.length > MAX_WORD_LENGTH) {
+        nameElement.setDisplayText(normalized.slice(0, MAX_WORD_LENGTH));
+        return;
+    }
+
+    nameElement.setDisplayText(normalized);
+};
+
 const evaluateLetterDrop = (letterElement) => {
     if (!leadContainer || !letterElement) return;
 
@@ -1026,17 +1103,32 @@ const evaluateLetterDrop = (letterElement) => {
     const group = buildGroupAround(letters, letterElement);
 
     if (!group.length) {
-        checkSecretWords();
+        updateNameElementFromGroup("");
+        checkKeywords();
         return;
     }
 
-    const normalized = logLetterGroup(group);
-    const matchedWord = Object.keys(SECRET_WORDS).find((word) => normalized.includes(word));
+    const normalized = normalizeLetterGroup(group);
+
+    // Check for keyword match first so we can place the final letter
+    // instantly (no bounce-in) and go straight to the celebrate animation.
+    const matchedWord = Object.keys(KEYWORD_REGISTRY).find((word) => normalized.includes(word));
     if (matchedWord) {
-        triggerSecretWord(matchedWord);
+        const nameElement = getNameElement();
+        if (nameElement && typeof nameElement.setDisplayText === "function") {
+            const display =
+                normalized.length > MAX_WORD_LENGTH
+                    ? normalized.slice(0, MAX_WORD_LENGTH)
+                    : normalized;
+            nameElement.setDisplayText(display, { skipAnimation: true });
+        }
+        triggerKeyword(matchedWord);
         return;
     }
-    checkSecretWords();
+
+    if (checkKeywords()) return;
+
+    updateNameElementFromGroup(normalized);
 };
 
 const stopResizeObserver = () => {
@@ -1103,7 +1195,7 @@ export const MagnetLetters = {
         resolveAllOverlaps();
         activateLetters();
         initResizeObserver();
-        checkSecretWords();
+        checkKeywords();
     },
 
     deactivate: restoreMarkup,

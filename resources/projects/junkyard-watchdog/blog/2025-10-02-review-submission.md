@@ -4,6 +4,7 @@ Wrapped up the last blockers and finally shipped the 1.0 build off to App Review
 
 ```markdown
 ## Contact Info
+
 - **Purpose:** Account management & support
 - **Linked:** Yes
 - **Tracking:** No

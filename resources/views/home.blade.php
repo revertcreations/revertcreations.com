@@ -2,7 +2,7 @@
 
     <div class="flex w-full flex-1 flex-col text-gruvbox-gray">
 
-        <div class="self-top relative p-2 sm:p-4 md:p-6"
+        <div class="relative shrink-0 p-2 sm:p-4 md:p-6"
             id="title">
             <h1 class="text-4xl md:text-6xl">Hi. I'm</h1>
             <div class="relative inline-block w-full max-w-max">
@@ -51,7 +51,7 @@
             ];
         @endphp
 
-        <div class="relative w-full flex-1"
+        <div class="relative min-h-0 w-full flex-1 overflow-y-auto"
             id="lead-shell">
             <div class="w-full flex-1 p-2 text-gruvbox-gray sm:p-4 md:p-6"
                 id="lead">

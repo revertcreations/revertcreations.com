@@ -19,6 +19,9 @@ export class TextPuzzleElement extends HTMLElement {
     };
     #audioReadyPromise = null;
 
+    #displayMode = "puzzle"; // "puzzle" | "magnet"
+    #defaultContent = "";
+
     #textColors = [
         "text-gruvbox-light-yellow",
         "text-gruvbox-yellow",
@@ -38,6 +41,7 @@ export class TextPuzzleElement extends HTMLElement {
 
     connectedCallback() {
         this.#ensureAudioLoaded();
+        this.#defaultContent = this.dataset.content || "Trever";
         this.render();
     }
 
@@ -253,6 +257,142 @@ export class TextPuzzleElement extends HTMLElement {
             });
         }
     };
+
+    /**
+     * Update the displayed text with bounce-in animations for new letters.
+     * Used by magnet mode to show the word being spelled.
+     * Existing letters that match in position are kept; only new
+     * trailing letters receive the bounce-in animation.
+     * @param {string} text - The text to display
+     * @param {object} [options]
+     * @param {boolean} [options.skipAnimation] - Place new letters instantly
+     *   (used when a keyword match follows immediately with celebrateKeyword)
+     */
+    setDisplayText(text, options = {}) {
+        if (!text || !text.trim()) {
+            this.restoreDefault();
+            return;
+        }
+
+        this.#displayMode = "magnet";
+        const letters = text.split("");
+        const currentSpans = Array.from(this.querySelectorAll("span"));
+        const skipAnimation = options.skipAnimation === true;
+
+        // Find how many leading letters already match
+        let matchCount = 0;
+        for (let i = 0; i < Math.min(letters.length, currentSpans.length); i++) {
+            if (currentSpans[i].innerText === letters[i]) {
+                matchCount++;
+            } else {
+                break;
+            }
+        }
+
+        // Remove excess spans (letters that were removed or changed)
+        while (this.children.length > matchCount) {
+            this.removeChild(this.lastElementChild);
+        }
+
+        // Append new letters
+        for (let i = matchCount; i < letters.length; i++) {
+            const span = document.createElement("span");
+            span.classList.add("cursor-default", "select-none", "text-8xl");
+            span.style.display = "inline-block";
+            span.innerText = letters[i];
+            this.appendChild(span);
+
+            if (skipAnimation) {
+                // Place instantly with a random color, no animation
+                const randomIndex = Math.floor(Math.random() * this.#textColors.length);
+                span.classList.add(this.#textColors[randomIndex]);
+                continue;
+            }
+
+            const rotateRandom = gsap.utils.random(-90, 90, 1);
+
+            const letterTl = gsap.timeline({
+                delay: (i - matchCount) * 0.18,
+            });
+
+            letterTl.from(span, {
+                y: -200,
+                rotate: rotateRandom,
+                transformOrigin: "center bottom",
+                ease: "bounce.out",
+                duration: 0.8,
+                onUpdate: () => {
+                    const yValue = parseFloat(span._gsap.y);
+                    if (yValue >= -10 && yValue <= 0) {
+                        // Assign a random color on bounce, same as render()
+                        const randomIndex = Math.floor(Math.random() * this.#textColors.length);
+                        span.classList.remove(...this.#textColors);
+                        span.classList.add(this.#textColors[randomIndex]);
+                    }
+                },
+            });
+        }
+    }
+
+    /**
+     * Celebrate a keyword match by sequentially turning each letter green
+     * with the correct-color hop animation (same as puzzle correct click).
+     * Returns a promise that resolves when the full animation completes.
+     * @returns {Promise<void>}
+     */
+    celebrateKeyword() {
+        return new Promise((resolve) => {
+            const spans = Array.from(this.querySelectorAll("span"));
+            if (!spans.length) {
+                resolve();
+                return;
+            }
+
+            // Kill any in-flight animations (e.g. bounce-in from setDisplayText)
+            // and settle each letter to its resting position
+            spans.forEach((span) => {
+                gsap.killTweensOf(span);
+                gsap.set(span, { y: 0, rotate: 0 });
+            });
+
+            spans.forEach((span, i) => {
+                const delay = i * 0.15;
+
+                gsap.delayedCall(delay, () => {
+                    span.classList.remove(...this.#textColors);
+                    span.classList.add("text-gruvbox-green");
+
+                    this.#ensureAudioLoaded().then(() => this.#playAudio("success"));
+
+                    const hopTl = gsap.timeline();
+                    hopTl.to(span, {
+                        y: -4,
+                        duration: 0.1,
+                        ease: "power1.out",
+                    });
+                    hopTl.to(span, {
+                        y: 0,
+                        duration: 0.3,
+                        ease: "bounce.out",
+                    });
+                });
+            });
+
+            const totalDuration = spans.length * 0.15 + 0.4;
+            gsap.delayedCall(totalDuration, resolve);
+        });
+    }
+
+    /**
+     * Restore the NameElement back to its default puzzle state.
+     */
+    restoreDefault() {
+        if (this.#displayMode === "puzzle") return;
+        this.#displayMode = "puzzle";
+        this.dataset.content = this.#defaultContent;
+        this.innerHTML = "";
+        this.render();
+    }
 
     async loadPlayground() {
         const nameHintText = document.getElementById("name-hint-text");

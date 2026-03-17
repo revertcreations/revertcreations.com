@@ -4,9 +4,9 @@ Spent the day sanding down the last rough edges on watchlist and garage cards. T
 
 ```json
 {
-  "scripts": {
-    "lint": "vendor/bin/pint --test"
-  }
+    "scripts": {
+        "lint": "vendor/bin/pint --test"
+    }
 }
 ```
 

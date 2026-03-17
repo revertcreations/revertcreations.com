@@ -4,9 +4,7 @@ I couldn’t resist seeing what Tamagui felt like in the app, so I took a hard l
 
 ```tsx
 <TamaguiProvider config={config}>
-  <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
-    {children}
-  </Theme>
+    <Theme name={colorScheme === "dark" ? "dark" : "light"}>{children}</Theme>
 </TamaguiProvider>
 ```
 

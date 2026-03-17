@@ -52,17 +52,9 @@ const Playground = {
         Playground.playground.style.overflow = "visible";
         Playground.attachResizeListener();
 
-        const header = document.getElementById("main_header");
-        const footer = document.getElementById("footer");
-        const viewportHeight = window.innerHeight;
-        const contentPaddingTop = 0;
-        const availableHeight = Math.max(
-            viewportHeight -
-                (header ? header.offsetHeight : 0) -
-                (footer ? footer.offsetHeight : 0) -
-                contentPaddingTop,
-            420,
-        );
+        const leadShell = document.getElementById("lead-shell");
+        const shellHeight = leadShell ? leadShell.clientHeight : 420;
+        const availableHeight = Math.max(shellHeight, 420);
         Playground.playground.style.height = `${availableHeight}px`;
 
         const computedStyle = getComputedStyle(Playground.playground);
