@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Throwable;
 
 class CommercialReferralController extends Controller
@@ -25,6 +26,13 @@ class CommercialReferralController extends Controller
         ]));
     }
 
+    public function template(Request $request): View
+    {
+        $this->record($request, 'benchcue_template', 'page_view');
+
+        return view('shopify-production-sheet-template');
+    }
+
     public function evidence(): JsonResponse
     {
         try {
@@ -37,6 +45,7 @@ class CommercialReferralController extends Controller
                 'aggregateOnly' => true,
                 'measurement' => 'outbound referral request counts, not unique people',
                 'benchcueClicks' => (int) $rows->where('destination', 'benchcue')->sum('total'),
+                'templateViews' => (int) $rows->where('destination', 'benchcue_template')->sum('total'),
                 'sources' => $rows->where('destination', 'benchcue')
                     ->pluck('total', 'source')
                     ->map(fn ($total) => (int) $total),
@@ -52,7 +61,11 @@ class CommercialReferralController extends Controller
     private function record(Request $request, string $destination, string $source): void
     {
         $userAgent = (string) $request->userAgent();
-        if (str_contains($userAgent, 'RevertInternal') || str_contains($userAgent, 'HeadlessChrome')) {
+        if (
+            str_contains($userAgent, 'RevertInternal')
+            || str_contains($userAgent, 'HeadlessChrome')
+            || preg_match('/bot|spider|crawler|slurp|bingpreview/i', $userAgent)
+        ) {
             return;
         }
 

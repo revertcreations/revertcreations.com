@@ -198,12 +198,21 @@ class CharacterPassTest extends TestCase
 
     public function test_free_production_sheet_template_is_private_printable_and_routes_to_benchcue(): void
     {
-        $this->get('/tools/shopify-production-sheet-template')
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/tools/shopify-production-sheet-template')
             ->assertOk()
             ->assertSee('Free Shopify production sheet template')
             ->assertSee('Nothing you type is sent to Revert Creations')
             ->assertSee('window.print()', false)
             ->assertSee('contenteditable="true"', false)
             ->assertSee('source=shopify_production_sheet_template_cta', false);
+
+        $this->withHeader('User-Agent', 'Googlebot/2.1')
+            ->get('/tools/shopify-production-sheet-template')
+            ->assertOk();
+
+        $this->get('/commercial/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('templateViews', 1);
     }
 }
