@@ -104,6 +104,9 @@ Route::domain($domain)->group(function () {
         return view('visual', compact('portfolio'));
     })->name('visual');
 
+    Route::view('/character-pass', 'character-pass')->name('character-pass');
+    Route::view('/character-pass/thanks', 'character-pass-thanks')->name('character-pass.thanks');
+
     // Route::get('/soundpure', function () {
     //    return view('soundpure');
     // })->name('soundpure');
