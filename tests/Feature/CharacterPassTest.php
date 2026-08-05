@@ -2,10 +2,24 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class CharacterPassTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Schema::dropIfExists('character_pass_metrics');
+        Schema::create('character_pass_metrics', function (Blueprint $table) {
+            $table->date('day');
+            $table->string('event', 40);
+            $table->unsignedBigInteger('count')->default(0);
+            $table->primary(['day', 'event']);
+        });
+    }
+
     public function test_character_pass_has_a_real_checkout_and_bounded_scope(): void
     {
         $this->get('/character-pass')
@@ -13,7 +27,8 @@ class CharacterPassTest extends TestCase
             ->assertSee('$275')
             ->assertSee('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01', false)
             ->assertSee('application/ld+json', false)
-            ->assertSee('character_pass_checkout_clicked', false)
+            ->assertSee(route('character-pass.checkout'))
+            ->assertDontSee('googletagmanager.com', false)
             ->assertSee(route('character-pass.sample'))
             ->assertSee('No implementation')
             ->assertSee('One revision', false);
@@ -32,7 +47,7 @@ class CharacterPassTest extends TestCase
             ->assertOk()
             ->assertSee('Visual diagnosis')
             ->assertSee('Focused concept')
-            ->assertSee('character_pass_sample_cta_clicked', false)
+            ->assertDontSee('googletagmanager.com', false)
             ->assertSee('Prioritized edit plan')
             ->assertSee('does not prove that the proposed direction will sell more');
     }
@@ -42,6 +57,25 @@ class CharacterPassTest extends TestCase
         $this->get('/')
             ->assertOk()
             ->assertSee(route('character-pass'));
+    }
+
+    public function test_first_party_funnel_metrics_are_aggregate_and_internal_checks_are_excluded(): void
+    {
+        $this->withHeader('User-Agent', 'RevertInternal verifier')->get('/character-pass')->assertOk();
+        $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass')->assertOk();
+        $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass/sample')->assertOk();
+        $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass/checkout')
+            ->assertRedirect('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01');
+
+        $this->get('/character-pass/evidence.json')
+            ->assertOk()
+            ->assertExactJson([
+                'aggregateOnly' => true,
+                'measurement' => 'request counts, not unique people',
+                'offerViews' => 1,
+                'sampleViews' => 1,
+                'checkoutClicks' => 1,
+            ]);
     }
 
     public function test_search_discovery_files_include_character_pass(): void
