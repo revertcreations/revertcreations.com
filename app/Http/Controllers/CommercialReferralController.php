@@ -12,6 +12,7 @@ use Throwable;
 class CommercialReferralController extends Controller
 {
     private const BENCHCUE = 'https://maker-card.revertcreations.com/';
+    private const PACKING_SLIP_SETUP_CHECKOUT = 'https://buy.stripe.com/3cIfZhcjhgonePO2A187K02';
 
     public function benchcue(Request $request): RedirectResponse
     {
@@ -42,6 +43,24 @@ class CommercialReferralController extends Controller
         return view('shopify-packing-slip-properties-guide', ['acquisitionSource' => $source]);
     }
 
+    public function packingSlipSetup(Request $request): View
+    {
+        $source = $this->source($request);
+        $this->record($request, 'packing_slip_setup_offer', $source);
+
+        return view('shopify-packing-slip-setup', ['acquisitionSource' => $source]);
+    }
+
+    public function packingSlipSetupCheckout(Request $request): RedirectResponse
+    {
+        $source = $this->source($request);
+        $this->record($request, 'packing_slip_setup_checkout', $source);
+
+        return redirect()->away(self::PACKING_SLIP_SETUP_CHECKOUT.'?'.http_build_query([
+            'client_reference_id' => $source,
+        ]));
+    }
+
     public function evidence(): JsonResponse
     {
         try {
@@ -62,6 +81,13 @@ class CommercialReferralController extends Controller
                 'packingSlipGuideSources' => $rows->where('destination', 'packing_slip_guide')
                     ->pluck('total', 'source')
                     ->map(fn ($total) => (int) $total),
+                'packingSlipSetupOfferViews' => (int) $rows->where('destination', 'packing_slip_setup_offer')->sum('total'),
+                'packingSlipSetupCheckoutClicks' => (int) $rows->where('destination', 'packing_slip_setup_checkout')->sum('total'),
+                'packingSlipSetupSources' => $rows->whereIn('destination', ['packing_slip_setup_offer', 'packing_slip_setup_checkout'])
+                    ->groupBy('source')
+                    ->map(fn ($sourceRows) => $sourceRows->mapWithKeys(fn ($row) => [
+                        $row->destination === 'packing_slip_setup_offer' ? 'offer_view' : 'checkout_click' => (int) $row->total,
+                    ])),
                 'sources' => $rows->where('destination', 'benchcue')
                     ->pluck('total', 'source')
                     ->map(fn ($total) => (int) $total),

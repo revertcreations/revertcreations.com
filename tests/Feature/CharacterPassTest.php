@@ -167,6 +167,10 @@ class CharacterPassTest extends TestCase
             'https://revertcreations.com/guides/print-shopify-line-item-properties',
             file_get_contents(public_path('sitemap.xml')),
         );
+        $this->assertStringContainsString(
+            'https://revertcreations.com/shopify-packing-slip-setup',
+            file_get_contents(public_path('sitemap.xml')),
+        );
     }
 
     public function test_shopify_production_sheet_guide_is_useful_truthful_and_routes_to_benchcue(): void
@@ -238,5 +242,32 @@ class CharacterPassTest extends TestCase
             ->assertOk()
             ->assertJsonPath('packingSlipGuideViews', 1)
             ->assertJsonPath('packingSlipGuideSources.google', 1);
+    }
+
+    public function test_packing_slip_setup_is_bounded_buyable_and_source_attributed(): void
+    {
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/shopify-packing-slip-setup?source=packing-slip-guide')
+            ->assertOk()
+            ->assertSee('$149')
+            ->assertSee('No store login')
+            ->assertSee('one revision')
+            ->assertSee('source=packing-slip-guide', false);
+
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/shopify-packing-slip-setup/checkout?source=packing-slip-guide')
+            ->assertRedirect('https://buy.stripe.com/3cIfZhcjhgonePO2A187K02?client_reference_id=packing-slip-guide');
+
+        $this->get('/commercial/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('packingSlipSetupOfferViews', 1)
+            ->assertJsonPath('packingSlipSetupCheckoutClicks', 1)
+            ->assertJsonPath('packingSlipSetupSources.packing-slip-guide.offer_view', 1)
+            ->assertJsonPath('packingSlipSetupSources.packing-slip-guide.checkout_click', 1);
+
+        $this->get('/shopify-packing-slip-setup/thanks')
+            ->assertOk()
+            ->assertSee('Payment received')
+            ->assertSee('support@revertcreations.com');
     }
 }
