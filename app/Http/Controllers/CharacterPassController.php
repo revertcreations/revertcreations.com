@@ -37,9 +37,15 @@ class CharacterPassController extends Controller
 
     public function checkout(Request $request): RedirectResponse
     {
-        $this->record($request, 'checkout_click', $this->attribution($request));
+        $attribution = $this->attribution($request);
+        $this->record($request, 'checkout_click', $attribution);
 
-        return redirect()->away(self::CHECKOUT);
+        $checkout = self::CHECKOUT;
+        if (isset($attribution['utm_source'])) {
+            $checkout .= '?'.http_build_query(['client_reference_id' => $attribution['utm_source']]);
+        }
+
+        return redirect()->away($checkout);
     }
 
     public function evidence(): JsonResponse

@@ -125,7 +125,7 @@ class CharacterPassTest extends TestCase
             ->assertSee('utm_campaign=characterpasslaunch', false);
 
         $this->get(route('character-pass.checkout', $query))
-            ->assertRedirect('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01');
+            ->assertRedirect('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01?client_reference_id=finderslist');
 
         $this->get('/character-pass/evidence.json')
             ->assertOk()
