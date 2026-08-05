@@ -13,6 +13,7 @@ class CharacterPassTest extends TestCase
             ->assertSee('$275')
             ->assertSee('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01', false)
             ->assertSee('application/ld+json', false)
+            ->assertSee(route('character-pass.sample'))
             ->assertSee('No implementation')
             ->assertSee('One revision', false);
     }
@@ -22,6 +23,16 @@ class CharacterPassTest extends TestCase
         $this->get('/character-pass/thanks')
             ->assertOk()
             ->assertSee('Your page is in the queue.');
+    }
+
+    public function test_character_pass_sample_is_specific_and_truthful(): void
+    {
+        $this->get('/character-pass/sample')
+            ->assertOk()
+            ->assertSee('Visual diagnosis')
+            ->assertSee('Focused concept')
+            ->assertSee('Prioritized edit plan')
+            ->assertSee('does not prove that the proposed direction will sell more');
     }
 
     public function test_home_page_links_to_character_pass(): void

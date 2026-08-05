@@ -105,6 +105,7 @@ Route::domain($domain)->group(function () {
     })->name('visual');
 
     Route::view('/character-pass', 'character-pass')->name('character-pass');
+    Route::view('/character-pass/sample', 'character-pass-sample')->name('character-pass.sample');
     Route::view('/character-pass/thanks', 'character-pass-thanks')->name('character-pass.thanks');
 
     // Route::get('/soundpure', function () {
