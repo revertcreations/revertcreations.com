@@ -116,6 +116,7 @@ Route::domain($domain)->group(function () {
     Route::get('/shopify-packing-slip-setup/checkout', [CommercialReferralController::class, 'packingSlipSetupCheckout'])->name('packing-slip-setup.checkout');
     Route::view('/shopify-packing-slip-setup/thanks', 'shopify-packing-slip-setup-thanks')->name('packing-slip-setup.thanks');
     Route::get('/shopify-storefront-audit', [CommercialReferralController::class, 'storefrontAudit'])->name('storefront-audit');
+    Route::view('/shopify-storefront-audit/sample', 'shopify-storefront-audit-sample')->name('storefront-audit.sample');
     Route::get('/shopify-storefront-audit/checkout', [CommercialReferralController::class, 'storefrontAuditCheckout'])->name('storefront-audit.checkout');
     Route::view('/shopify-storefront-audit/thanks', 'shopify-storefront-audit-thanks')->name('storefront-audit.thanks');
     Route::get('/tools/shopify-production-sheet-template', [CommercialReferralController::class, 'template'])->name('benchcue.template');

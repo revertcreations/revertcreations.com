@@ -309,4 +309,14 @@ class CharacterPassTest extends TestCase
             ->assertSee('Your audit is queued')
             ->assertSee('support@revertcreations.com');
     }
+
+    public function test_storefront_audit_sample_is_transparent_and_routes_to_offer(): void
+    {
+        $this->get('/shopify-storefront-audit/sample')
+            ->assertOk()
+            ->assertSee('demonstration made from an invented storefront')
+            ->assertSee('not client work')
+            ->assertSee('Repair the purchase path')
+            ->assertSee('source=sample-report', false);
+    }
 }
