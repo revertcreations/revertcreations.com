@@ -159,6 +159,10 @@ class CharacterPassTest extends TestCase
             'https://revertcreations.com/guides/shopify-custom-order-production-sheet',
             file_get_contents(public_path('sitemap.xml')),
         );
+        $this->assertStringContainsString(
+            'https://revertcreations.com/tools/shopify-production-sheet-template',
+            file_get_contents(public_path('sitemap.xml')),
+        );
     }
 
     public function test_shopify_production_sheet_guide_is_useful_truthful_and_routes_to_benchcue(): void
@@ -190,5 +194,16 @@ class CharacterPassTest extends TestCase
             ->assertJsonPath('benchcueClicks', 1)
             ->assertJsonPath('sources.shopifyproductionsheetguidecta', 1)
             ->assertJsonMissingPath('sources.internal');
+    }
+
+    public function test_free_production_sheet_template_is_private_printable_and_routes_to_benchcue(): void
+    {
+        $this->get('/tools/shopify-production-sheet-template')
+            ->assertOk()
+            ->assertSee('Free Shopify production sheet template')
+            ->assertSee('Nothing you type is sent to Revert Creations')
+            ->assertSee('window.print()', false)
+            ->assertSee('contenteditable="true"', false)
+            ->assertSee('source=shopify_production_sheet_template_cta', false);
     }
 }
