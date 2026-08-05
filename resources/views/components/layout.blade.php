@@ -143,6 +143,15 @@
     <div class="flex flex-nowrap bg-gruvbox-orange text-revert-black"
         id="footer">
 
+        <fancy-button-element class="relative grow bg-gruvbox-green">
+            <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
+                href="{{ route('character-pass') }}"
+                onclick="typeof gtag === 'function' && gtag('event', 'character_pass_link_clicked');">
+                <h2 class="skill inline text-center text-3xl font-bold md:text-5xl"
+                    data-fancy-label>character pass</h2>
+            </a>
+        </fancy-button-element>
+
         <fancy-button-element class="relative grow bg-gruvbox-yellow">
             <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
                 href="{{ route('projects.index') }}"

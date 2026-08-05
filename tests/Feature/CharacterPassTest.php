@@ -22,4 +22,11 @@ class CharacterPassTest extends TestCase
             ->assertOk()
             ->assertSee('Your page is in the queue.');
     }
+
+    public function test_home_page_links_to_character_pass(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee(route('character-pass'));
+    }
 }
