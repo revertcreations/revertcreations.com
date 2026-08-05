@@ -70,6 +70,14 @@ class CommercialReferralController extends Controller
         return view('shopify-storefront-audit', ['acquisitionSource' => $source]);
     }
 
+    public function storefrontAuditSample(Request $request): View
+    {
+        $source = $this->source($request);
+        $this->record($request, 'shopify_storefront_audit_sample', $source);
+
+        return view('shopify-storefront-audit-sample', ['acquisitionSource' => $source]);
+    }
+
     public function storefrontAuditCheckout(Request $request): RedirectResponse
     {
         $source = $this->source($request);
@@ -109,6 +117,10 @@ class CommercialReferralController extends Controller
                     ])),
                 'storefrontAuditOfferViews' => (int) $rows->where('destination', 'shopify_storefront_audit_offer')->sum('total'),
                 'storefrontAuditCheckoutClicks' => (int) $rows->where('destination', 'shopify_storefront_audit_checkout')->sum('total'),
+                'storefrontAuditSampleViews' => (int) $rows->where('destination', 'shopify_storefront_audit_sample')->sum('total'),
+                'storefrontAuditSampleSources' => $rows->where('destination', 'shopify_storefront_audit_sample')
+                    ->pluck('total', 'source')
+                    ->map(fn ($total) => (int) $total),
                 'storefrontAuditSources' => $rows->whereIn('destination', ['shopify_storefront_audit_offer', 'shopify_storefront_audit_checkout'])
                     ->groupBy('source')
                     ->map(fn ($sourceRows) => $sourceRows->mapWithKeys(fn ($row) => [

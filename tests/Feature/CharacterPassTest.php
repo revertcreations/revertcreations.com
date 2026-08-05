@@ -312,11 +312,17 @@ class CharacterPassTest extends TestCase
 
     public function test_storefront_audit_sample_is_transparent_and_routes_to_offer(): void
     {
-        $this->get('/shopify-storefront-audit/sample')
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/shopify-storefront-audit/sample?source=shopify-community-ask-offer')
             ->assertOk()
             ->assertSee('demonstration made from an invented storefront')
             ->assertSee('not client work')
             ->assertSee('Repair the purchase path')
-            ->assertSee('source=sample-report', false);
+            ->assertSee('source=shopify-community-ask-offer', false);
+
+        $this->get('/commercial/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('storefrontAuditSampleViews', 1)
+            ->assertJsonPath('storefrontAuditSampleSources.shopify-community-ask-offer', 1);
     }
 }
