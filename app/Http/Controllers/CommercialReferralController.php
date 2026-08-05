@@ -34,6 +34,14 @@ class CommercialReferralController extends Controller
         return view('shopify-production-sheet-template', ['acquisitionSource' => $source]);
     }
 
+    public function packingSlipGuide(Request $request): View
+    {
+        $source = $this->source($request);
+        $this->record($request, 'packing_slip_guide', $source);
+
+        return view('shopify-packing-slip-properties-guide', ['acquisitionSource' => $source]);
+    }
+
     public function evidence(): JsonResponse
     {
         try {
@@ -48,6 +56,10 @@ class CommercialReferralController extends Controller
                 'benchcueClicks' => (int) $rows->where('destination', 'benchcue')->sum('total'),
                 'templateViews' => (int) $rows->where('destination', 'benchcue_template')->sum('total'),
                 'templateSources' => $rows->where('destination', 'benchcue_template')
+                    ->pluck('total', 'source')
+                    ->map(fn ($total) => (int) $total),
+                'packingSlipGuideViews' => (int) $rows->where('destination', 'packing_slip_guide')->sum('total'),
+                'packingSlipGuideSources' => $rows->where('destination', 'packing_slip_guide')
                     ->pluck('total', 'source')
                     ->map(fn ($total) => (int) $total),
                 'sources' => $rows->where('destination', 'benchcue')

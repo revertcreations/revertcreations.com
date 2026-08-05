@@ -111,6 +111,7 @@ Route::domain($domain)->group(function () {
     Route::get('/character-pass/sample', [CharacterPassController::class, 'sample'])->name('character-pass.sample');
     Route::get('/guides/how-to-critique-a-landing-page', [CharacterPassController::class, 'guide'])->name('character-pass.guide');
     Route::view('/guides/shopify-custom-order-production-sheet', 'shopify-custom-order-production-sheet-guide')->name('benchcue.guide');
+    Route::get('/guides/print-shopify-line-item-properties', [CommercialReferralController::class, 'packingSlipGuide'])->name('benchcue.packing-slip-guide');
     Route::get('/tools/shopify-production-sheet-template', [CommercialReferralController::class, 'template'])->name('benchcue.template');
     Route::get('/go/benchcue', [CommercialReferralController::class, 'benchcue'])->name('benchcue.referral');
     Route::get('/commercial/evidence.json', [CommercialReferralController::class, 'evidence'])->name('commercial.evidence');

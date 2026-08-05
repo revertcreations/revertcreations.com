@@ -163,6 +163,10 @@ class CharacterPassTest extends TestCase
             'https://revertcreations.com/tools/shopify-production-sheet-template',
             file_get_contents(public_path('sitemap.xml')),
         );
+        $this->assertStringContainsString(
+            'https://revertcreations.com/guides/print-shopify-line-item-properties',
+            file_get_contents(public_path('sitemap.xml')),
+        );
     }
 
     public function test_shopify_production_sheet_guide_is_useful_truthful_and_routes_to_benchcue(): void
@@ -215,5 +219,24 @@ class CharacterPassTest extends TestCase
             ->assertOk()
             ->assertJsonPath('templateViews', 1)
             ->assertJsonPath('templateSources.publictools', 1);
+    }
+
+    public function test_packing_slip_properties_guide_is_technical_truthful_and_attributed(): void
+    {
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/guides/print-shopify-line-item-properties?source=google')
+            ->assertOk()
+            ->assertSee('Print Shopify line-item properties')
+            ->assertSee('line_items_in_shipment', false)
+            ->assertSee('line_item.properties', false)
+            ->assertSee("property_first_character == '_'", false)
+            ->assertSee('source=packing_slip_properties_guide_google', false)
+            ->assertSee('not a production sheet')
+            ->assertSee('FAQPage', false);
+
+        $this->get('/commercial/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('packingSlipGuideViews', 1)
+            ->assertJsonPath('packingSlipGuideSources.google', 1);
     }
 }
