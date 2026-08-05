@@ -213,7 +213,8 @@ class CharacterPassTest extends TestCase
             ->assertSee('Nothing you type is sent to Revert Creations')
             ->assertSee('window.print()', false)
             ->assertSee('contenteditable="true"', false)
-            ->assertSee('source=shopify_production_sheet_template_publictools', false);
+            ->assertSee('source=shopify_production_sheet_template_publictools', false)
+            ->assertSee('source=production-sheet-template', false);
 
         $this->withHeader('User-Agent', 'Googlebot/2.1')
             ->get('/tools/shopify-production-sheet-template')

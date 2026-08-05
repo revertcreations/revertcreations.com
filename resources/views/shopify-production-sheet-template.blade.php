@@ -30,7 +30,7 @@
         <div class="field"><div class="label">Completed</div><div class="value" contenteditable="true">☐ Made &nbsp;&nbsp; ☐ Checked &nbsp;&nbsp; ☐ Returned to fulfillment</div></div>
         <div class="note">Do not copy customer email, phone, billing information, or shipping address onto a production sheet unless that specific bench task genuinely requires it.</div>
     </article>
-    <section class="pitch"><div><div class="eyebrow">When copying becomes the work</div><h2>BenchCue fills the sheet from Shopify.</h2><p>The free template is useful for occasional orders. BenchCue is the $7/month Shopify admin extension for repeatedly carrying item, quantity, SKU, and public customization choices to the bench. App Store review is pending.</p></div><a href="{{ route('benchcue.referral', ['source' => 'shopify_production_sheet_template_'.$acquisitionSource]) }}">See BenchCue →</a></section>
+    <section class="pitch"><div><div class="eyebrow">When copying becomes the work</div><h2>Choose the next smallest fix.</h2><p>If personalization belongs on the customer’s packing slip, the <a href="{{ route('packing-slip-setup', ['source' => 'production-sheet-template']) }}">$149 fixed-price setup</a> delivers tailored Liquid without a store login. For a separate maker-ready sheet, <a href="{{ route('benchcue.referral', ['source' => 'shopify_production_sheet_template_'.$acquisitionSource]) }}">BenchCue</a> is the $7/month Shopify app currently awaiting App Store review.</p></div><a href="{{ route('packing-slip-setup', ['source' => 'production-sheet-template']) }}">Fix my packing slip →</a></section>
 </main>
 <footer><span>© {{ date('Y') }} Revert Creations</span><span>support@revertcreations.com</span></footer>
 </body>
