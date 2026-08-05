@@ -234,6 +234,7 @@ class CharacterPassTest extends TestCase
             ->assertSee('Print Shopify line-item properties')
             ->assertSee('line_items_in_shipment', false)
             ->assertSee('line_item.properties', false)
+            ->assertSee('github.com/revertcreations/shopify-packing-slip-personalization', false)
             ->assertSee("property_first_character == '_'", false)
             ->assertSee('source=packing_slip_properties_guide_google', false)
             ->assertSee('not a production sheet')
