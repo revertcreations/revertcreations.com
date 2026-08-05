@@ -12,6 +12,7 @@ class CharacterPassTest extends TestCase
             ->assertOk()
             ->assertSee('$275')
             ->assertSee('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01', false)
+            ->assertSee('application/ld+json', false)
             ->assertSee('No implementation')
             ->assertSee('One revision', false);
     }
@@ -28,5 +29,17 @@ class CharacterPassTest extends TestCase
         $this->get('/')
             ->assertOk()
             ->assertSee(route('character-pass'));
+    }
+
+    public function test_search_discovery_files_include_character_pass(): void
+    {
+        $this->assertStringContainsString(
+            'https://revertcreations.com/character-pass',
+            file_get_contents(public_path('sitemap.xml')),
+        );
+        $this->assertStringContainsString(
+            'https://revertcreations.com/sitemap.xml',
+            file_get_contents(public_path('robots.txt')),
+        );
     }
 }
