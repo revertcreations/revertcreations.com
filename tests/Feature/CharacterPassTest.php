@@ -171,6 +171,10 @@ class CharacterPassTest extends TestCase
             'https://revertcreations.com/shopify-packing-slip-setup',
             file_get_contents(public_path('sitemap.xml')),
         );
+        $this->assertStringContainsString(
+            'https://revertcreations.com/shopify-storefront-audit',
+            file_get_contents(public_path('sitemap.xml')),
+        );
     }
 
     public function test_shopify_production_sheet_guide_is_useful_truthful_and_routes_to_benchcue(): void
@@ -273,6 +277,35 @@ class CharacterPassTest extends TestCase
         $this->get('/shopify-packing-slip-setup/thanks')
             ->assertOk()
             ->assertSee('Payment received')
+            ->assertSee('support@revertcreations.com');
+    }
+
+    public function test_shopify_storefront_audit_is_bounded_buyable_and_measured(): void
+    {
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/shopify-storefront-audit?source=merchant-directory')
+            ->assertOk()
+            ->assertSee('$250')
+            ->assertSee('Five public paths')
+            ->assertSee('No Shopify admin')
+            ->assertSee('Up to 12 prioritized findings')
+            ->assertSee('no fabricated analytics', false)
+            ->assertSee('source=merchant-directory', false);
+
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/shopify-storefront-audit/checkout?source=merchant-directory')
+            ->assertRedirect('https://buy.stripe.com/14A6oH3MLfkj6ji8Yp87K03?client_reference_id=merchant-directory');
+
+        $this->get('/commercial/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('storefrontAuditOfferViews', 1)
+            ->assertJsonPath('storefrontAuditCheckoutClicks', 1)
+            ->assertJsonPath('storefrontAuditSources.merchant-directory.offer_view', 1)
+            ->assertJsonPath('storefrontAuditSources.merchant-directory.checkout_click', 1);
+
+        $this->get('/shopify-storefront-audit/thanks')
+            ->assertOk()
+            ->assertSee('Your audit is queued')
             ->assertSee('support@revertcreations.com');
     }
 }

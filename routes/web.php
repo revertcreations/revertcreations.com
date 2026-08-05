@@ -115,6 +115,9 @@ Route::domain($domain)->group(function () {
     Route::get('/shopify-packing-slip-setup', [CommercialReferralController::class, 'packingSlipSetup'])->name('packing-slip-setup');
     Route::get('/shopify-packing-slip-setup/checkout', [CommercialReferralController::class, 'packingSlipSetupCheckout'])->name('packing-slip-setup.checkout');
     Route::view('/shopify-packing-slip-setup/thanks', 'shopify-packing-slip-setup-thanks')->name('packing-slip-setup.thanks');
+    Route::get('/shopify-storefront-audit', [CommercialReferralController::class, 'storefrontAudit'])->name('storefront-audit');
+    Route::get('/shopify-storefront-audit/checkout', [CommercialReferralController::class, 'storefrontAuditCheckout'])->name('storefront-audit.checkout');
+    Route::view('/shopify-storefront-audit/thanks', 'shopify-storefront-audit-thanks')->name('storefront-audit.thanks');
     Route::get('/tools/shopify-production-sheet-template', [CommercialReferralController::class, 'template'])->name('benchcue.template');
     Route::get('/go/benchcue', [CommercialReferralController::class, 'benchcue'])->name('benchcue.referral');
     Route::get('/commercial/evidence.json', [CommercialReferralController::class, 'evidence'])->name('commercial.evidence');

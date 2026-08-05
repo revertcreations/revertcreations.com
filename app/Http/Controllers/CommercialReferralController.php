@@ -13,6 +13,7 @@ class CommercialReferralController extends Controller
 {
     private const BENCHCUE = 'https://maker-card.revertcreations.com/';
     private const PACKING_SLIP_SETUP_CHECKOUT = 'https://buy.stripe.com/3cIfZhcjhgonePO2A187K02';
+    private const SHOPIFY_STOREFRONT_AUDIT_CHECKOUT = 'https://buy.stripe.com/14A6oH3MLfkj6ji8Yp87K03';
 
     public function benchcue(Request $request): RedirectResponse
     {
@@ -61,6 +62,24 @@ class CommercialReferralController extends Controller
         ]));
     }
 
+    public function storefrontAudit(Request $request): View
+    {
+        $source = $this->source($request);
+        $this->record($request, 'shopify_storefront_audit_offer', $source);
+
+        return view('shopify-storefront-audit', ['acquisitionSource' => $source]);
+    }
+
+    public function storefrontAuditCheckout(Request $request): RedirectResponse
+    {
+        $source = $this->source($request);
+        $this->record($request, 'shopify_storefront_audit_checkout', $source);
+
+        return redirect()->away(self::SHOPIFY_STOREFRONT_AUDIT_CHECKOUT.'?'.http_build_query([
+            'client_reference_id' => $source,
+        ]));
+    }
+
     public function evidence(): JsonResponse
     {
         try {
@@ -87,6 +106,13 @@ class CommercialReferralController extends Controller
                     ->groupBy('source')
                     ->map(fn ($sourceRows) => $sourceRows->mapWithKeys(fn ($row) => [
                         $row->destination === 'packing_slip_setup_offer' ? 'offer_view' : 'checkout_click' => (int) $row->total,
+                    ])),
+                'storefrontAuditOfferViews' => (int) $rows->where('destination', 'shopify_storefront_audit_offer')->sum('total'),
+                'storefrontAuditCheckoutClicks' => (int) $rows->where('destination', 'shopify_storefront_audit_checkout')->sum('total'),
+                'storefrontAuditSources' => $rows->whereIn('destination', ['shopify_storefront_audit_offer', 'shopify_storefront_audit_checkout'])
+                    ->groupBy('source')
+                    ->map(fn ($sourceRows) => $sourceRows->mapWithKeys(fn ($row) => [
+                        $row->destination === 'shopify_storefront_audit_offer' ? 'offer_view' : 'checkout_click' => (int) $row->total,
                     ])),
                 'sources' => $rows->where('destination', 'benchcue')
                     ->pluck('total', 'source')
