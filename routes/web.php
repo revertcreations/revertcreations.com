@@ -109,6 +109,7 @@ Route::domain($domain)->group(function () {
     Route::redirect('/character-pass', '/landing-page-design-audit', 301);
     Route::get('/character-pass/sample', [CharacterPassController::class, 'sample'])->name('character-pass.sample');
     Route::get('/guides/how-to-critique-a-landing-page', [CharacterPassController::class, 'guide'])->name('character-pass.guide');
+    Route::view('/guides/shopify-custom-order-production-sheet', 'shopify-custom-order-production-sheet-guide')->name('benchcue.guide');
     Route::get('/character-pass/checkout', [CharacterPassController::class, 'checkout'])->name('character-pass.checkout');
     Route::get('/character-pass/evidence.json', [CharacterPassController::class, 'evidence'])->name('character-pass.evidence');
     Route::view('/character-pass/thanks', 'character-pass-thanks')->name('character-pass.thanks');

@@ -147,5 +147,21 @@ class CharacterPassTest extends TestCase
             'https://revertcreations.com/guides/how-to-critique-a-landing-page',
             file_get_contents(public_path('sitemap.xml')),
         );
+        $this->assertStringContainsString(
+            'https://revertcreations.com/guides/shopify-custom-order-production-sheet',
+            file_get_contents(public_path('sitemap.xml')),
+        );
+    }
+
+    public function test_shopify_production_sheet_guide_is_useful_truthful_and_routes_to_benchcue(): void
+    {
+        $this->get('/guides/shopify-custom-order-production-sheet')
+            ->assertOk()
+            ->assertSee('Carry the customization')
+            ->assertSee('Shopify line-item properties')
+            ->assertSee('Do not print customer data by habit')
+            ->assertSee('Shopify App Store review is currently pending')
+            ->assertSee('utm_source=revertcreations', false)
+            ->assertSee('FAQPage', false);
     }
 }
