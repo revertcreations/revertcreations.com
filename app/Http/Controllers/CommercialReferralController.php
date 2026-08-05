@@ -28,9 +28,10 @@ class CommercialReferralController extends Controller
 
     public function template(Request $request): View
     {
-        $this->record($request, 'benchcue_template', 'page_view');
+        $source = $this->source($request);
+        $this->record($request, 'benchcue_template', $source);
 
-        return view('shopify-production-sheet-template');
+        return view('shopify-production-sheet-template', ['acquisitionSource' => $source]);
     }
 
     public function evidence(): JsonResponse
@@ -46,6 +47,9 @@ class CommercialReferralController extends Controller
                 'measurement' => 'outbound referral request counts, not unique people',
                 'benchcueClicks' => (int) $rows->where('destination', 'benchcue')->sum('total'),
                 'templateViews' => (int) $rows->where('destination', 'benchcue_template')->sum('total'),
+                'templateSources' => $rows->where('destination', 'benchcue_template')
+                    ->pluck('total', 'source')
+                    ->map(fn ($total) => (int) $total),
                 'sources' => $rows->where('destination', 'benchcue')
                     ->pluck('total', 'source')
                     ->map(fn ($total) => (int) $total),
