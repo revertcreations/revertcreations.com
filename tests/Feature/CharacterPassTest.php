@@ -12,11 +12,19 @@ class CharacterPassTest extends TestCase
     {
         parent::setUp();
         Schema::dropIfExists('character_pass_metrics');
+        Schema::dropIfExists('character_pass_attribution');
         Schema::create('character_pass_metrics', function (Blueprint $table) {
             $table->date('day');
             $table->string('event', 40);
             $table->unsignedBigInteger('count')->default(0);
             $table->primary(['day', 'event']);
+        });
+        Schema::create('character_pass_attribution', function (Blueprint $table) {
+            $table->date('day');
+            $table->string('source', 64);
+            $table->string('event', 40);
+            $table->unsignedBigInteger('count')->default(0);
+            $table->primary(['day', 'source', 'event']);
         });
     }
 
@@ -98,7 +106,31 @@ class CharacterPassTest extends TestCase
                 'sampleViews' => 1,
                 'guideViews' => 1,
                 'checkoutClicks' => 1,
+                'sources' => [],
             ]);
+    }
+
+    public function test_source_attribution_survives_offer_to_checkout_without_identifying_visitors(): void
+    {
+        $query = [
+            'utm_source' => 'FindersList',
+            'utm_medium' => 'directory',
+            'utm_campaign' => 'character pass launch',
+        ];
+
+        $offer = $this->get(route('character-pass', $query));
+        $offer->assertOk()
+            ->assertSee('utm_source=finderslist', false)
+            ->assertSee('utm_medium=directory', false)
+            ->assertSee('utm_campaign=characterpasslaunch', false);
+
+        $this->get(route('character-pass.checkout', $query))
+            ->assertRedirect('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01');
+
+        $this->get('/character-pass/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('sources.finderslist.offer_view', 1)
+            ->assertJsonPath('sources.finderslist.checkout_click', 1);
     }
 
     public function test_search_discovery_files_include_character_pass(): void
