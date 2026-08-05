@@ -14,4 +14,4 @@ A fixed-scope visual-direction service for an existing public landing page:
 
 The price is $275 USD, paid once through Stripe. No credentials, meetings, implementation retainer, or conversion claims are required.
 
-[See the Character Pass scope and checkout](https://revertcreations.com/character-pass)
+[Inspect the complete BenchCue sample](https://revertcreations.com/character-pass/sample) or [see the Character Pass scope and checkout](https://revertcreations.com/character-pass).
