@@ -30,8 +30,20 @@ class CharacterPassTest extends TestCase
             ->assertSee(route('character-pass.checkout'))
             ->assertDontSee('googletagmanager.com', false)
             ->assertSee(route('character-pass.sample'))
+            ->assertSee(route('character-pass.guide'))
             ->assertSee('No implementation')
             ->assertSee('One revision', false);
+    }
+
+    public function test_critique_guide_is_substantive_and_routes_to_the_paid_offer(): void
+    {
+        $this->get('/guides/how-to-critique-a-landing-page')
+            ->assertOk()
+            ->assertSee('The five-pass landing page critique')
+            ->assertSee('The five-second claim test')
+            ->assertSee('FAQPage', false)
+            ->assertSee(route('character-pass'))
+            ->assertSee(route('character-pass.sample'));
     }
 
     public function test_character_pass_thanks_page_is_available(): void
@@ -64,6 +76,7 @@ class CharacterPassTest extends TestCase
         $this->withHeader('User-Agent', 'RevertInternal verifier')->get('/character-pass')->assertOk();
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass')->assertOk();
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass/sample')->assertOk();
+        $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/guides/how-to-critique-a-landing-page')->assertOk();
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass/checkout')
             ->assertRedirect('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01');
 
@@ -74,6 +87,7 @@ class CharacterPassTest extends TestCase
                 'measurement' => 'request counts, not unique people',
                 'offerViews' => 1,
                 'sampleViews' => 1,
+                'guideViews' => 1,
                 'checkoutClicks' => 1,
             ]);
     }
@@ -87,6 +101,10 @@ class CharacterPassTest extends TestCase
         $this->assertStringContainsString(
             'https://revertcreations.com/sitemap.xml',
             file_get_contents(public_path('robots.txt')),
+        );
+        $this->assertStringContainsString(
+            'https://revertcreations.com/guides/how-to-critique-a-landing-page',
+            file_get_contents(public_path('sitemap.xml')),
         );
     }
 }

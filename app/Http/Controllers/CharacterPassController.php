@@ -27,6 +27,13 @@ class CharacterPassController extends Controller
         return view('character-pass-sample');
     }
 
+    public function guide(Request $request): View
+    {
+        $this->record($request, 'guide_view');
+
+        return view('landing-page-critique-guide');
+    }
+
     public function checkout(Request $request): RedirectResponse
     {
         $this->record($request, 'checkout_click');
@@ -47,6 +54,7 @@ class CharacterPassController extends Controller
                 'measurement' => 'request counts, not unique people',
                 'offerViews' => (int) ($totals['offer_view'] ?? 0),
                 'sampleViews' => (int) ($totals['sample_view'] ?? 0),
+                'guideViews' => (int) ($totals['guide_view'] ?? 0),
                 'checkoutClicks' => (int) ($totals['checkout_click'] ?? 0),
             ]);
         } catch (Throwable) {
