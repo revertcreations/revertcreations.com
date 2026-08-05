@@ -13,6 +13,7 @@ class CharacterPassTest extends TestCase
             ->assertSee('$275')
             ->assertSee('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01', false)
             ->assertSee('application/ld+json', false)
+            ->assertSee('character_pass_checkout_clicked', false)
             ->assertSee(route('character-pass.sample'))
             ->assertSee('No implementation')
             ->assertSee('One revision', false);
@@ -31,6 +32,7 @@ class CharacterPassTest extends TestCase
             ->assertOk()
             ->assertSee('Visual diagnosis')
             ->assertSee('Focused concept')
+            ->assertSee('character_pass_sample_cta_clicked', false)
             ->assertSee('Prioritized edit plan')
             ->assertSee('does not prove that the proposed direction will sell more');
     }
