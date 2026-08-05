@@ -67,7 +67,8 @@ class CharacterPassController extends Controller
 
     private function record(Request $request, string $event): void
     {
-        if (str_contains((string) $request->userAgent(), 'RevertInternal')) {
+        $userAgent = (string) $request->userAgent();
+        if (str_contains($userAgent, 'RevertInternal') || str_contains($userAgent, 'HeadlessChrome')) {
             return;
         }
 

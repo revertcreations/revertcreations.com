@@ -74,6 +74,7 @@ class CharacterPassTest extends TestCase
     public function test_first_party_funnel_metrics_are_aggregate_and_internal_checks_are_excluded(): void
     {
         $this->withHeader('User-Agent', 'RevertInternal verifier')->get('/character-pass')->assertOk();
+        $this->withHeader('User-Agent', 'HeadlessChrome visual verifier')->get('/guides/how-to-critique-a-landing-page')->assertOk();
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass')->assertOk();
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass/sample')->assertOk();
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/guides/how-to-critique-a-landing-page')->assertOk();
