@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminProjectAssetController;
 use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\AdminProjectUpdateController;
 use App\Http\Controllers\CharacterPassController;
+use App\Http\Controllers\CommercialReferralController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
@@ -110,6 +111,8 @@ Route::domain($domain)->group(function () {
     Route::get('/character-pass/sample', [CharacterPassController::class, 'sample'])->name('character-pass.sample');
     Route::get('/guides/how-to-critique-a-landing-page', [CharacterPassController::class, 'guide'])->name('character-pass.guide');
     Route::view('/guides/shopify-custom-order-production-sheet', 'shopify-custom-order-production-sheet-guide')->name('benchcue.guide');
+    Route::get('/go/benchcue', [CommercialReferralController::class, 'benchcue'])->name('benchcue.referral');
+    Route::get('/commercial/evidence.json', [CommercialReferralController::class, 'evidence'])->name('commercial.evidence');
     Route::get('/character-pass/checkout', [CharacterPassController::class, 'checkout'])->name('character-pass.checkout');
     Route::get('/character-pass/evidence.json', [CharacterPassController::class, 'evidence'])->name('character-pass.evidence');
     Route::view('/character-pass/thanks', 'character-pass-thanks')->name('character-pass.thanks');

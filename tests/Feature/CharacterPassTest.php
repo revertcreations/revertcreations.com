@@ -13,6 +13,7 @@ class CharacterPassTest extends TestCase
         parent::setUp();
         Schema::dropIfExists('character_pass_metrics');
         Schema::dropIfExists('character_pass_attribution');
+        Schema::dropIfExists('commercial_referral_metrics');
         Schema::create('character_pass_metrics', function (Blueprint $table) {
             $table->date('day');
             $table->string('event', 40);
@@ -25,6 +26,13 @@ class CharacterPassTest extends TestCase
             $table->string('event', 40);
             $table->unsignedBigInteger('count')->default(0);
             $table->primary(['day', 'source', 'event']);
+        });
+        Schema::create('commercial_referral_metrics', function (Blueprint $table) {
+            $table->date('day');
+            $table->string('destination', 40);
+            $table->string('source', 64);
+            $table->unsignedBigInteger('count')->default(0);
+            $table->primary(['day', 'destination', 'source']);
         });
     }
 
@@ -161,7 +169,26 @@ class CharacterPassTest extends TestCase
             ->assertSee('Shopify line-item properties')
             ->assertSee('Do not print customer data by habit')
             ->assertSee('Shopify App Store review is currently pending')
-            ->assertSee('utm_source=revertcreations', false)
+            ->assertSee('source=shopify_production_sheet_guide_header', false)
+            ->assertSee('source=shopify_production_sheet_guide_cta', false)
             ->assertSee('FAQPage', false);
+    }
+
+    public function test_benchcue_referrals_are_aggregate_source_attributed_and_privacy_minimized(): void
+    {
+        $this->withHeader('User-Agent', 'RevertInternal verifier')
+            ->get('/go/benchcue?source=internal')
+            ->assertRedirectContains('maker-card.revertcreations.com');
+
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/go/benchcue?source=Shopify Production Sheet Guide CTA!')
+            ->assertRedirect('https://maker-card.revertcreations.com/?utm_source=revertcreations&utm_medium=owned_content&utm_campaign=benchcue_launch&utm_content=shopifyproductionsheetguidecta');
+
+        $this->get('/commercial/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('aggregateOnly', true)
+            ->assertJsonPath('benchcueClicks', 1)
+            ->assertJsonPath('sources.shopifyproductionsheetguidecta', 1)
+            ->assertJsonMissingPath('sources.internal');
     }
 }
