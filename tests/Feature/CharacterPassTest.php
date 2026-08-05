@@ -261,6 +261,7 @@ class CharacterPassTest extends TestCase
             ->assertSee('Illustrative excerpt')
             ->assertSee('fictional fields')
             ->assertSee('Shopify packing-slip Liquid customization', false)
+            ->assertSee('/shopify-storefront-audit?source=packing-slip-offer', false)
             ->assertSee('source=packing-slip-guide', false);
 
         $this->withHeader('User-Agent', 'Merchant browser')
