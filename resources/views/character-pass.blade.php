@@ -3,17 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A focused visual-direction pass for an existing landing page. No calls, credentials, or open-ended engagement.">
+    <meta name="description" content="A fixed-price landing page design audit with visual diagnosis, one high-fidelity direction, and a prioritized edit plan. $275, asynchronous, three-day delivery.">
     <link rel="canonical" href="{{ route('character-pass') }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Landing Page Character Pass | Revert Creations">
+    <meta property="og:title" content="Landing Page Design Audit — Character Pass | Revert Creations">
     <meta property="og:description" content="One visual diagnosis, one high-fidelity direction, and one actionable edit plan for an existing landing page. $275 fixed price.">
     <meta property="og:url" content="{{ route('character-pass') }}">
-    <title>Landing Page Character Pass | Revert Creations</title>
+    <title>Landing Page Design Audit — Character Pass | Revert Creations</title>
     <script type="application/ld+json">{!! json_encode([
         '@context' => 'https://schema.org',
         '@type' => 'Service',
         'name' => 'Landing Page Character Pass',
+        'alternateName' => 'Landing Page Design Audit',
         'description' => 'A fixed-scope visual diagnosis, high-fidelity direction, and edit plan for one existing public landing page.',
         'provider' => ['@type' => 'Organization', 'name' => 'Revert Creations', 'url' => route('home')],
         'areaServed' => 'Worldwide',
@@ -28,7 +29,7 @@
     <header><a class="brand" href="{{ route('home') }}">REVERT CREATIONS</a><span class="small">Asynchronous · fixed scope · one page</span></header>
     <main>
         <section class="hero">
-            <div class="copy"><div><div class="eyebrow">For a real landing page that has the right information—but not yet its own voice</div><h1>Remove the template. Keep the truth.</h1></div><div class="lead"><p>A concentrated art-direction pass that finds the character already inside your page, then shows you how to make it visible.</p><a class="buy" href="#checkout"><span>See the scope</span><span>↓</span></a></div></div>
+            <div class="copy"><div><div class="eyebrow">A fixed-price landing page design audit for a real page that has the right information—but not yet its own voice</div><h1>Remove the template. Keep the truth.</h1></div><div class="lead"><p>A concentrated visual audit and art-direction pass that finds the character already inside your page, then shows you how to make it visible.</p><a class="buy" href="#checkout"><span>See the scope</span><span>↓</span></a></div></div>
             <div class="art" aria-hidden="true"><span>ONE PAGE.<br>ONE POINT<br>OF VIEW.</span></div>
         </section>
         <section class="facts"><div class="fact"><div class="value">$275</div><div class="detail">One-time · Stripe checkout</div></div><div class="fact"><div class="value">3 days</div><div class="detail">After usable intake</div></div><div class="fact"><div class="value">1 page</div><div class="detail">Existing public landing page</div></div><div class="fact"><div class="value">1 revision</div><div class="detail">One consolidated response</div></div></section>

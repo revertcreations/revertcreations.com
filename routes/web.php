@@ -105,7 +105,8 @@ Route::domain($domain)->group(function () {
         return view('visual', compact('portfolio'));
     })->name('visual');
 
-    Route::get('/character-pass', [CharacterPassController::class, 'show'])->name('character-pass');
+    Route::get('/landing-page-design-audit', [CharacterPassController::class, 'show'])->name('character-pass');
+    Route::redirect('/character-pass', '/landing-page-design-audit', 301);
     Route::get('/character-pass/sample', [CharacterPassController::class, 'sample'])->name('character-pass.sample');
     Route::get('/guides/how-to-critique-a-landing-page', [CharacterPassController::class, 'guide'])->name('character-pass.guide');
     Route::get('/character-pass/checkout', [CharacterPassController::class, 'checkout'])->name('character-pass.checkout');
