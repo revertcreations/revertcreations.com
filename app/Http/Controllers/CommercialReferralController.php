@@ -70,6 +70,14 @@ class CommercialReferralController extends Controller
         return view('shopify-storefront-audit', ['acquisitionSource' => $source]);
     }
 
+    public function storefrontAuditGuide(Request $request): View
+    {
+        $source = $this->source($request);
+        $this->record($request, 'holiday_guide', $source);
+
+        return view('pre-holiday-storefront-check-guide', ['acquisitionSource' => $source]);
+    }
+
     public function storefrontAuditSample(Request $request): View
     {
         $source = $this->source($request);
