@@ -26,7 +26,7 @@
 </head>
 <body>
 <div class="bar"><span>Revert Creations · field guide 01</span><span>Useful critique before decoration</span></div>
-<header><a class="brand" href="{{ route('home') }}">REVERT CREATIONS</a><a href="{{ route('character-pass') }}">Character Pass →</a></header>
+<header><a class="brand" href="{{ route('home') }}">REVERT CREATIONS</a><a href="{{ route('services') }}">Active services →</a></header>
 <main>
     <section class="hero"><div><div class="eyebrow">A practical method, not a scorecard</div><h1>The five-pass landing page critique.</h1><p class="intro">Most critiques become inventories of preferences: make the button brighter, shorten the headline, add testimonials. A useful critique does something harder. It identifies what the page is trying to make true, shows where the visual system obscures that truth, and orders the repairs.</p></div><aside class="aside">Use this on one public page. Take notes before changing anything. If every observation becomes an edit, you are decorating—not diagnosing.</aside></section>
     <section class="method">
@@ -38,7 +38,7 @@
     </section>
     <section class="exercise"><h2>A 20-minute critique you can run today.</h2><ol><li>Capture the page at desktop and mobile widths.</li><li>Write the five-second claim from memory.</li><li>Number the first five visual stops.</li><li>Draw a line from each major claim to its nearest proof.</li><li>Name one visual rule a competitor could not honestly inherit.</li><li>Choose only three edits: one clarity repair, one proof repair, and one character move.</li></ol></section>
     <section class="caution"><h2>Know what this cannot prove.</h2><p>A critique can reveal ambiguity, hierarchy, trust, repetition, and generic visual language. It cannot prove that an edit will increase conversion. That requires suitable traffic, behavioral evidence, and a valid comparison. Treat confident conversion promises made from a screenshot alone as sales language—not measurement. See a <a href="{{ route('character-pass.sample') }}"><strong>complete, explicitly limited sample critique</strong></a>.</p></section>
-    <section class="cta"><div><div class="eyebrow">Want the critique done with you?</div><h2>One page. One point of view.</h2><p>The $275 Character Pass applies this method to your existing public landing page, adds one high-fidelity early-page direction, and turns the findings into a prioritized edit plan.</p></div><a class="button" href="{{ route('character-pass') }}">See scope and sample →</a></section>
+    <section class="cta"><div><div class="eyebrow">An archived method</div><h2>Use the framework freely.</h2><p>This guide remains public, but the associated paid landing-page audit has been retired. Revert Creations currently sells only the clearly bounded Shopify services listed on the services page.</p></div><a class="button" href="{{ route('services') }}">See active services →</a></section>
 </main>
 <footer><span>© {{ date('Y') }} Revert Creations</span><span>support@revertcreations.com</span></footer>
 </body>

@@ -36,20 +36,17 @@ class CharacterPassTest extends TestCase
         });
     }
 
-    public function test_character_pass_has_a_real_checkout_and_bounded_scope(): void
+    public function test_retired_landing_page_offer_has_no_checkout(): void
     {
         $this->get('/landing-page-design-audit')
             ->assertOk()
-            ->assertSee('Landing Page Design Audit')
-            ->assertSee('$275')
-            ->assertSee('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01', false)
-            ->assertSee('application/ld+json', false)
-            ->assertSee(route('character-pass.checkout'))
-            ->assertDontSee('googletagmanager.com', false)
-            ->assertSee(route('character-pass.sample'))
-            ->assertSee(route('character-pass.guide'))
-            ->assertSee('No implementation')
-            ->assertSee('One revision', false);
+            ->assertSee('This service is not for sale')
+            ->assertSee(route('services'))
+            ->assertDontSee('$275')
+            ->assertDontSee('buy.stripe.com', false);
+
+        $this->get('/character-pass/checkout')
+            ->assertRedirect(route('character-pass'));
     }
 
     public function test_original_character_pass_url_redirects_permanently(): void
@@ -59,15 +56,15 @@ class CharacterPassTest extends TestCase
             ->assertStatus(301);
     }
 
-    public function test_critique_guide_is_substantive_and_routes_to_the_paid_offer(): void
+    public function test_critique_guide_is_substantive_and_discloses_retirement(): void
     {
         $this->get('/guides/how-to-critique-a-landing-page')
             ->assertOk()
             ->assertSee('The five-pass landing page critique')
             ->assertSee('The five-second claim test')
             ->assertSee('FAQPage', false)
-            ->assertSee(route('character-pass'))
-            ->assertSee(route('character-pass.sample'));
+            ->assertSee('associated paid landing-page audit has been retired')
+            ->assertSee(route('services'));
     }
 
     public function test_character_pass_thanks_page_is_available(): void
@@ -88,11 +85,21 @@ class CharacterPassTest extends TestCase
             ->assertSee('does not prove that the proposed direction will sell more');
     }
 
-    public function test_home_page_links_to_character_pass(): void
+    public function test_home_page_links_to_clear_services_page(): void
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee(route('character-pass'));
+            ->assertSee(route('services'))
+            ->assertDontSee('character pass', false);
+
+        $this->get('/services')
+            ->assertOk()
+            ->assertSee('Shopify Storefront Audit')
+            ->assertSee('Shopify Packing-Slip Personalization')
+            ->assertSee('$250')
+            ->assertSee('$149')
+            ->assertSee(route('storefront-audit'))
+            ->assertSee(route('packing-slip-setup'));
     }
 
     public function test_first_party_funnel_metrics_are_aggregate_and_internal_checks_are_excluded(): void
@@ -103,7 +110,7 @@ class CharacterPassTest extends TestCase
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass/sample')->assertOk();
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/guides/how-to-critique-a-landing-page')->assertOk();
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass/checkout')
-            ->assertRedirect('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01');
+            ->assertRedirect(route('character-pass'));
 
         $this->get('/character-pass/evidence.json')
             ->assertOk()
@@ -113,7 +120,7 @@ class CharacterPassTest extends TestCase
                 'offerViews' => 1,
                 'sampleViews' => 1,
                 'guideViews' => 1,
-                'checkoutClicks' => 1,
+                'checkoutClicks' => 0,
                 'sources' => [],
             ]);
     }
@@ -127,23 +134,24 @@ class CharacterPassTest extends TestCase
         ];
 
         $offer = $this->get(route('character-pass', $query));
-        $offer->assertOk()
-            ->assertSee('utm_source=finderslist', false)
-            ->assertSee('utm_medium=directory', false)
-            ->assertSee('utm_campaign=characterpasslaunch', false);
+        $offer->assertOk()->assertSee('This service is not for sale');
 
         $this->get(route('character-pass.checkout', $query))
-            ->assertRedirect('https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01?client_reference_id=finderslist');
+            ->assertRedirect(route('character-pass'));
 
         $this->get('/character-pass/evidence.json')
             ->assertOk()
             ->assertJsonPath('sources.finderslist.offer_view', 1)
-            ->assertJsonPath('sources.finderslist.checkout_click', 1);
+            ->assertJsonMissingPath('sources.finderslist.checkout_click');
     }
 
-    public function test_search_discovery_files_include_character_pass(): void
+    public function test_search_discovery_files_include_active_services_not_retired_offer(): void
     {
         $this->assertStringContainsString(
+            'https://revertcreations.com/services',
+            file_get_contents(public_path('sitemap.xml')),
+        );
+        $this->assertStringNotContainsString(
             'https://revertcreations.com/landing-page-design-audit',
             file_get_contents(public_path('sitemap.xml')),
         );

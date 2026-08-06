@@ -10,8 +10,8 @@ use App\Http\Controllers\AdminProjectAssetController;
 use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\AdminProjectUpdateController;
 use App\Http\Controllers\CharacterPassController;
-use App\Http\Controllers\CommercialReferralController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CommercialReferralController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PuzzleSessionController;
@@ -105,6 +105,8 @@ Route::domain($domain)->group(function () {
 
         return view('visual', compact('portfolio'));
     })->name('visual');
+
+    Route::view('/services', 'services')->name('services');
 
     Route::get('/landing-page-design-audit', [CharacterPassController::class, 'show'])->name('character-pass');
     Route::redirect('/character-pass', '/landing-page-design-audit', 301);

@@ -11,14 +11,12 @@ use Throwable;
 
 class CharacterPassController extends Controller
 {
-    private const CHECKOUT = 'https://buy.stripe.com/fZu28rdnldcb6ji0rT87K01';
-
     public function show(Request $request): View
     {
         $attribution = $this->attribution($request);
         $this->record($request, 'offer_view', $attribution);
 
-        return view('character-pass', ['attribution' => $attribution]);
+        return view('character-pass-retired');
     }
 
     public function sample(Request $request): View
@@ -37,15 +35,7 @@ class CharacterPassController extends Controller
 
     public function checkout(Request $request): RedirectResponse
     {
-        $attribution = $this->attribution($request);
-        $this->record($request, 'checkout_click', $attribution);
-
-        $checkout = self::CHECKOUT;
-        if (isset($attribution['utm_source'])) {
-            $checkout .= '?'.http_build_query(['client_reference_id' => $attribution['utm_source']]);
-        }
-
-        return redirect()->away($checkout);
+        return redirect()->route('character-pass');
     }
 
     public function evidence(): JsonResponse

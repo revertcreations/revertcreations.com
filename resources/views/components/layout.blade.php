@@ -145,10 +145,10 @@
 
         <fancy-button-element class="relative grow bg-gruvbox-green">
             <a class="relative flex h-full w-full cursor-pointer items-center justify-center p-4"
-                href="{{ route('character-pass') }}"
-                onclick="typeof gtag === 'function' && gtag('event', 'character_pass_link_clicked');">
+                href="{{ route('services') }}"
+                onclick="typeof gtag === 'function' && gtag('event', 'services_link_clicked');">
                 <h2 class="skill inline text-center text-3xl font-bold md:text-5xl"
-                    data-fancy-label>character pass</h2>
+                    data-fancy-label>services</h2>
             </a>
         </fancy-button-element>
 
