@@ -77,6 +77,9 @@ class CharacterPassController extends Controller
         if (str_contains($userAgent, 'RevertInternal') || str_contains($userAgent, 'HeadlessChrome')) {
             return;
         }
+        if ($request->cookie('revert_internal') !== null) {
+            return;
+        }
 
         try {
             $day = now()->toDateString();

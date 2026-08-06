@@ -12,6 +12,8 @@ class EncryptCookies extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        // Plain marker cookie set in the owner's and agents' browsers so
+        // internal visits are excluded from aggregate funnel counters.
+        'revert_internal',
     ];
 }

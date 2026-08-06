@@ -148,6 +148,9 @@ class CommercialReferralController extends Controller
         ) {
             return;
         }
+        if ($request->cookie('revert_internal') !== null) {
+            return;
+        }
 
         try {
             $day = now()->toDateString();
