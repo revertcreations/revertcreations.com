@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
@@ -112,6 +113,8 @@ class CharacterPassTest extends TestCase
         $this->withHeader('User-Agent', 'Mozilla test visitor')->get('/character-pass/checkout')
             ->assertRedirect(route('character-pass'));
 
+        $today = now()->toDateString();
+
         $this->get('/character-pass/evidence.json')
             ->assertOk()
             ->assertExactJson([
@@ -122,7 +125,88 @@ class CharacterPassTest extends TestCase
                 'guideViews' => 1,
                 'checkoutClicks' => 0,
                 'sources' => [],
+                'dailyWindowDays' => 90,
+                'daily' => [
+                    'totals' => [
+                        ['day' => $today, 'event' => 'guide_view', 'count' => 1],
+                        ['day' => $today, 'event' => 'offer_view', 'count' => 1],
+                        ['day' => $today, 'event' => 'sample_view', 'count' => 1],
+                    ],
+                    'sources' => [],
+                ],
             ]);
+    }
+
+    public function test_funnel_evidence_reports_the_day_each_event_arrived(): void
+    {
+        $today = now()->toDateString();
+
+        DB::table('character_pass_metrics')->insert([
+            ['day' => '2026-08-01', 'event' => 'offer_view', 'count' => 4],
+        ]);
+        DB::table('character_pass_attribution')->insert([
+            ['day' => '2026-08-01', 'source' => 'finderslist', 'event' => 'offer_view', 'count' => 4],
+        ]);
+
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get(route('character-pass', ['utm_source' => 'finderslist']))
+            ->assertOk();
+
+        $this->get('/character-pass/evidence.json')
+            ->assertOk()
+            // The cumulative total alone cannot separate these two days.
+            ->assertJsonPath('offerViews', 5)
+            ->assertJsonPath('sources.finderslist.offer_view', 5)
+            ->assertJsonFragment(['day' => '2026-08-01', 'event' => 'offer_view', 'count' => 4])
+            ->assertJsonFragment(['day' => $today, 'event' => 'offer_view', 'count' => 1])
+            ->assertJsonFragment(['day' => '2026-08-01', 'source' => 'finderslist', 'event' => 'offer_view', 'count' => 4])
+            ->assertJsonFragment(['day' => $today, 'source' => 'finderslist', 'event' => 'offer_view', 'count' => 1]);
+    }
+
+    public function test_commercial_evidence_reports_the_day_each_referral_arrived(): void
+    {
+        $today = now()->toDateString();
+
+        DB::table('commercial_referral_metrics')->insert([
+            [
+                'day' => '2026-08-01',
+                'destination' => 'shopify_storefront_audit_offer',
+                'source' => 'shopify-community-ask-offer',
+                'count' => 7,
+            ],
+            [
+                'day' => now()->subDays(120)->toDateString(),
+                'destination' => 'shopify_storefront_audit_offer',
+                'source' => 'ancient',
+                'count' => 3,
+            ],
+        ]);
+
+        $this->withHeader('User-Agent', 'Merchant browser')
+            ->get('/shopify-storefront-audit?source=holiday-guide-cta')
+            ->assertOk();
+
+        $response = $this->get('/commercial/evidence.json')->assertOk();
+
+        $response
+            ->assertJsonPath('dailyWindowDays', 90)
+            ->assertJsonFragment([
+                'day' => '2026-08-01',
+                'destination' => 'shopify_storefront_audit_offer',
+                'source' => 'shopify-community-ask-offer',
+                'count' => 7,
+            ])
+            ->assertJsonFragment([
+                'day' => $today,
+                'destination' => 'shopify_storefront_audit_offer',
+                'source' => 'holiday-guide-cta',
+                'count' => 1,
+            ]);
+
+        // Rows older than the window stay in the cumulative totals but are not
+        // repeated in the daily payload, which is bounded rather than unbounded.
+        $this->assertSame(11, $response->json('storefrontAuditOfferViews'));
+        $this->assertNotContains('ancient', array_column($response->json('daily'), 'source'));
     }
 
     public function test_source_attribution_survives_offer_to_checkout_without_identifying_visitors(): void

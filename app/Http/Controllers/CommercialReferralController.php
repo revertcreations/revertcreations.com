@@ -12,8 +12,12 @@ use Throwable;
 class CommercialReferralController extends Controller
 {
     private const BENCHCUE = 'https://maker-card.revertcreations.com/';
+
     private const PACKING_SLIP_SETUP_CHECKOUT = 'https://buy.stripe.com/3cIfZhcjhgonePO2A187K02';
+
     private const SHOPIFY_STOREFRONT_AUDIT_CHECKOUT = 'https://buy.stripe.com/14A6oH3MLfkj6ji8Yp87K03';
+
+    private const DAILY_WINDOW_DAYS = 90;
 
     public function benchcue(Request $request): RedirectResponse
     {
@@ -104,6 +108,24 @@ class CommercialReferralController extends Controller
                 ->groupBy('destination', 'source')
                 ->get();
 
+            // Cumulative totals cannot answer WHEN a view arrived, so they cannot
+            // separate a post-change delta from history, or steady crawler creep
+            // from a real arrival. The day is already stored; this exposes it.
+            $daily = DB::table('commercial_referral_metrics')
+                ->select('day', 'destination', 'source', 'count')
+                ->where('day', '>=', now()->subDays(self::DAILY_WINDOW_DAYS)->toDateString())
+                ->orderBy('day')
+                ->orderBy('destination')
+                ->orderBy('source')
+                ->get()
+                ->map(fn ($row) => [
+                    'day' => substr((string) $row->day, 0, 10),
+                    'destination' => $row->destination,
+                    'source' => $row->source,
+                    'count' => (int) $row->count,
+                ])
+                ->values();
+
             return response()->json([
                 'aggregateOnly' => true,
                 'measurement' => 'outbound referral request counts, not unique people',
@@ -137,6 +159,8 @@ class CommercialReferralController extends Controller
                 'sources' => $rows->where('destination', 'benchcue')
                     ->pluck('total', 'source')
                     ->map(fn ($total) => (int) $total),
+                'dailyWindowDays' => self::DAILY_WINDOW_DAYS,
+                'daily' => $daily,
             ]);
         } catch (Throwable) {
             return response()->json([

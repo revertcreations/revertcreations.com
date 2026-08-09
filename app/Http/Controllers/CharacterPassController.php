@@ -11,6 +11,8 @@ use Throwable;
 
 class CharacterPassController extends Controller
 {
+    private const DAILY_WINDOW_DAYS = 90;
+
     public function show(Request $request): View
     {
         $attribution = $this->attribution($request);
@@ -53,6 +55,38 @@ class CharacterPassController extends Controller
                 ->groupBy('source')
                 ->map(fn ($rows) => $rows->pluck('total', 'event')->map(fn ($total) => (int) $total));
 
+            // The day is stored but was summed away, so no reader could tell a
+            // burst of real arrivals from a crawler's steady one-a-day creep.
+            $since = now()->subDays(self::DAILY_WINDOW_DAYS)->toDateString();
+
+            $dailyTotals = DB::table('character_pass_metrics')
+                ->select('day', 'event', 'count')
+                ->where('day', '>=', $since)
+                ->orderBy('day')
+                ->orderBy('event')
+                ->get()
+                ->map(fn ($row) => [
+                    'day' => substr((string) $row->day, 0, 10),
+                    'event' => $row->event,
+                    'count' => (int) $row->count,
+                ])
+                ->values();
+
+            $dailySources = DB::table('character_pass_attribution')
+                ->select('day', 'source', 'event', 'count')
+                ->where('day', '>=', $since)
+                ->orderBy('day')
+                ->orderBy('source')
+                ->orderBy('event')
+                ->get()
+                ->map(fn ($row) => [
+                    'day' => substr((string) $row->day, 0, 10),
+                    'source' => $row->source,
+                    'event' => $row->event,
+                    'count' => (int) $row->count,
+                ])
+                ->values();
+
             return response()->json([
                 'aggregateOnly' => true,
                 'measurement' => 'request counts, not unique people',
@@ -61,6 +95,11 @@ class CharacterPassController extends Controller
                 'guideViews' => (int) ($totals['guide_view'] ?? 0),
                 'checkoutClicks' => (int) ($totals['checkout_click'] ?? 0),
                 'sources' => $sources,
+                'dailyWindowDays' => self::DAILY_WINDOW_DAYS,
+                'daily' => [
+                    'totals' => $dailyTotals,
+                    'sources' => $dailySources,
+                ],
             ]);
         } catch (Throwable) {
             return response()->json([
