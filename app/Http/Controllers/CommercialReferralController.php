@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ExcludesNonBuyerTraffic;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Throwable;
 
 class CommercialReferralController extends Controller
 {
+    use ExcludesNonBuyerTraffic;
+
     private const BENCHCUE = 'https://maker-card.revertcreations.com/';
 
     private const PACKING_SLIP_SETUP_CHECKOUT = 'https://buy.stripe.com/3cIfZhcjhgonePO2A187K02';
@@ -172,15 +175,7 @@ class CommercialReferralController extends Controller
 
     private function record(Request $request, string $destination, string $source): void
     {
-        $userAgent = (string) $request->userAgent();
-        if (
-            str_contains($userAgent, 'RevertInternal')
-            || str_contains($userAgent, 'HeadlessChrome')
-            || preg_match('/bot|spider|crawler|slurp|bingpreview/i', $userAgent)
-        ) {
-            return;
-        }
-        if ($request->cookie('revert_internal') !== null) {
+        if (! $this->isCountableVisit($request)) {
             return;
         }
 

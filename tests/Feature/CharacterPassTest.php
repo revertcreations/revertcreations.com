@@ -137,6 +137,58 @@ class CharacterPassTest extends TestCase
             ]);
     }
 
+    public function test_crawlers_and_our_own_shell_probes_are_not_counted_as_merchant_interest(): void
+    {
+        // The character-pass funnel had no crawler filter, so a directory's
+        // link-checker re-hitting a tagged URL read as outside interest.
+        $this->withHeader('User-Agent', 'Mozilla/5.0 (compatible; Googlebot/2.1)')
+            ->get(route('character-pass', ['utm_source' => 'finderslist']))
+            ->assertOk();
+
+        // curl sends no cookie, so it slipped past the revert_internal check
+        // and our own diagnostics landed in the counters as buyer behaviour.
+        $this->withHeader('User-Agent', 'curl/8.7.1')
+            ->get(route('character-pass', ['utm_source' => 'finderslist']))
+            ->assertOk();
+        $this->withHeader('User-Agent', 'curl/8.7.1')
+            ->get('/shopify-storefront-audit?source=probe-opscheck')
+            ->assertOk();
+        $this->withHeader('User-Agent', 'python-requests/2.32.3')
+            ->get('/shopify-storefront-audit/checkout?source=probe-opscheck')
+            ->assertRedirectContains('buy.stripe.com');
+
+        $this->get('/character-pass/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('offerViews', 0)
+            ->assertJsonMissingPath('sources.finderslist');
+
+        $this->get('/commercial/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('storefrontAuditOfferViews', 0)
+            ->assertJsonPath('storefrontAuditCheckoutClicks', 0)
+            ->assertJsonMissingPath('storefrontAuditSources.probe-opscheck');
+    }
+
+    public function test_a_merchant_browser_is_still_counted_on_both_funnels(): void
+    {
+        $merchant = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1';
+
+        $this->withHeader('User-Agent', $merchant)
+            ->get(route('character-pass', ['utm_source' => 'shopify-community-ask-offer']))
+            ->assertOk();
+        $this->withHeader('User-Agent', $merchant)
+            ->get('/shopify-storefront-audit?source=shopify-community-ask-offer')
+            ->assertOk();
+
+        $this->get('/character-pass/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('offerViews', 1);
+
+        $this->get('/commercial/evidence.json')
+            ->assertOk()
+            ->assertJsonPath('storefrontAuditOfferViews', 1);
+    }
+
     public function test_funnel_evidence_reports_the_day_each_event_arrived(): void
     {
         $today = now()->toDateString();

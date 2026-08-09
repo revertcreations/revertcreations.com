@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ExcludesNonBuyerTraffic;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,6 +12,8 @@ use Throwable;
 
 class CharacterPassController extends Controller
 {
+    use ExcludesNonBuyerTraffic;
+
     private const DAILY_WINDOW_DAYS = 90;
 
     public function show(Request $request): View
@@ -112,11 +115,7 @@ class CharacterPassController extends Controller
     /** @param array{utm_source?: string, utm_medium?: string, utm_campaign?: string} $attribution */
     private function record(Request $request, string $event, array $attribution = []): void
     {
-        $userAgent = (string) $request->userAgent();
-        if (str_contains($userAgent, 'RevertInternal') || str_contains($userAgent, 'HeadlessChrome')) {
-            return;
-        }
-        if ($request->cookie('revert_internal') !== null) {
+        if (! $this->isCountableVisit($request)) {
             return;
         }
 
