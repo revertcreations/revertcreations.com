@@ -45,4 +45,30 @@ trait ExcludesNonBuyerTraffic
         // browsing the live site do not register as merchant interest.
         return $request->cookie('revert_internal') === null;
     }
+
+    /**
+     * How the request was started, from the browser's own Sec-Fetch-Site
+     * header. It says nothing about who made it, so it collects no customer
+     * data — but it is the difference between a merchant clicking Buy on our
+     * offer page and something re-requesting a URL it stored days ago.
+     *
+     * The case that forced it: on 2026-08-10 two checkout clicks tagged
+     * `packing-slip-offer` arrived four days after the last view of the only
+     * page that carries that tag, with no offer view that day. In the counters
+     * as they stood, that is indistinguishable from demand.
+     *
+     * `same-origin` on a checkout route means the visitor was on our offer
+     * page and clicked through. `direct` and `unknown` on a checkout route
+     * mean the URL was fetched cold and no click happened.
+     */
+    private function visitOrigin(Request $request): string
+    {
+        return match (strtolower(trim((string) $request->headers->get('Sec-Fetch-Site')))) {
+            'same-origin' => 'same-origin',
+            'same-site' => 'same-site',
+            'cross-site' => 'cross-site',
+            'none' => 'direct',
+            default => 'unknown',
+        };
+    }
 }

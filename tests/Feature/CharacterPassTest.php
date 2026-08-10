@@ -32,8 +32,9 @@ class CharacterPassTest extends TestCase
             $table->date('day');
             $table->string('destination', 40);
             $table->string('source', 64);
+            $table->string('origin', 12)->default('unlabelled');
             $table->unsignedBigInteger('count')->default(0);
-            $table->primary(['day', 'destination', 'source']);
+            $table->primary(['day', 'destination', 'source', 'origin']);
         });
     }
 
@@ -246,12 +247,14 @@ class CharacterPassTest extends TestCase
                 'day' => '2026-08-01',
                 'destination' => 'shopify_storefront_audit_offer',
                 'source' => 'shopify-community-ask-offer',
+                'origin' => 'unlabelled',
                 'count' => 7,
             ])
             ->assertJsonFragment([
                 'day' => $today,
                 'destination' => 'shopify_storefront_audit_offer',
                 'source' => 'holiday-guide-cta',
+                'origin' => 'unknown',
                 'count' => 1,
             ]);
 
@@ -259,6 +262,47 @@ class CharacterPassTest extends TestCase
         // repeated in the daily payload, which is bounded rather than unbounded.
         $this->assertSame(11, $response->json('storefrontAuditOfferViews'));
         $this->assertNotContains('ancient', array_column($response->json('daily'), 'source'));
+    }
+
+    public function test_a_checkout_click_records_whether_it_came_from_our_own_page(): void
+    {
+        $today = now()->toDateString();
+
+        // A merchant reading the offer page and pressing Buy: the browser
+        // reports the navigation started on this site.
+        $this->withHeaders(['User-Agent' => 'Merchant browser', 'Sec-Fetch-Site' => 'same-origin'])
+            ->get('/shopify-storefront-audit/checkout?source=packing-slip-offer')
+            ->assertRedirectContains('buy.stripe.com');
+
+        // Something re-requesting a URL it captured earlier: same tag, same
+        // counter, no click. This is the 2026-08-10 case, and until now the
+        // two were the same row.
+        $this->withHeaders(['User-Agent' => 'Merchant browser', 'Sec-Fetch-Site' => 'none'])
+            ->get('/shopify-storefront-audit/checkout?source=packing-slip-offer')
+            ->assertRedirectContains('buy.stripe.com');
+
+        $response = $this->get('/commercial/evidence.json')->assertOk();
+
+        $response
+            ->assertJsonFragment([
+                'day' => $today,
+                'destination' => 'shopify_storefront_audit_checkout',
+                'source' => 'packing-slip-offer',
+                'origin' => 'same-origin',
+                'count' => 1,
+            ])
+            ->assertJsonFragment([
+                'day' => $today,
+                'destination' => 'shopify_storefront_audit_checkout',
+                'source' => 'packing-slip-offer',
+                'origin' => 'direct',
+                'count' => 1,
+            ]);
+
+        // The cumulative keys other tools already read must keep summing every
+        // origin, so adding the distinction cannot silently change a total.
+        $this->assertSame(2, $response->json('storefrontAuditCheckoutClicks'));
+        $this->assertSame(2, $response->json('storefrontAuditSources.packing-slip-offer.checkout_click'));
     }
 
     public function test_source_attribution_survives_offer_to_checkout_without_identifying_visitors(): void

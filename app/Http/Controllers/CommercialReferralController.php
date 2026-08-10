@@ -114,17 +114,22 @@ class CommercialReferralController extends Controller
             // Cumulative totals cannot answer WHEN a view arrived, so they cannot
             // separate a post-change delta from history, or steady crawler creep
             // from a real arrival. The day is already stored; this exposes it.
+            // A source tag proves only that a tagged URL was requested. `origin`
+            // adds the one thing it never carried: whether the request started
+            // from a click on our own page, or arrived cold with no click at all.
             $daily = DB::table('commercial_referral_metrics')
-                ->select('day', 'destination', 'source', 'count')
+                ->select('day', 'destination', 'source', 'origin', 'count')
                 ->where('day', '>=', now()->subDays(self::DAILY_WINDOW_DAYS)->toDateString())
                 ->orderBy('day')
                 ->orderBy('destination')
                 ->orderBy('source')
+                ->orderBy('origin')
                 ->get()
                 ->map(fn ($row) => [
                     'day' => substr((string) $row->day, 0, 10),
                     'destination' => $row->destination,
                     'source' => $row->source,
+                    'origin' => (string) $row->origin,
                     'count' => (int) $row->count,
                 ])
                 ->values();
@@ -163,6 +168,7 @@ class CommercialReferralController extends Controller
                     ->pluck('total', 'source')
                     ->map(fn ($total) => (int) $total),
                 'dailyWindowDays' => self::DAILY_WINDOW_DAYS,
+                'originMeaning' => 'how the request started (Sec-Fetch-Site): same-origin = clicked from a page on this site; cross-site/same-site = followed a link from elsewhere; direct = opened cold with no referring click; unknown = the client sent no Sec-Fetch-Site header. A checkout count that is not same-origin was not a click on the Buy button. Rows before 2026-08-10 carry origin "unlabelled": they predate this measurement and cannot be classified.',
                 'daily' => $daily,
             ]);
         } catch (Throwable) {
@@ -181,16 +187,19 @@ class CommercialReferralController extends Controller
 
         try {
             $day = now()->toDateString();
+            $origin = $this->visitOrigin($request);
             DB::table('commercial_referral_metrics')->insertOrIgnore([
                 'day' => $day,
                 'destination' => $destination,
                 'source' => $source,
+                'origin' => $origin,
                 'count' => 0,
             ]);
             DB::table('commercial_referral_metrics')
                 ->where('day', $day)
                 ->where('destination', $destination)
                 ->where('source', $source)
+                ->where('origin', $origin)
                 ->increment('count');
         } catch (Throwable) {
             // Measurement must never block a merchant from reaching the product.
